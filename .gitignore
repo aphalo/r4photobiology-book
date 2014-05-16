@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+*.tex
+*.xml
+*.synctex.gz
+*.synctex
+*.toc
+*.log
+*.bcf
+*.bak
+
