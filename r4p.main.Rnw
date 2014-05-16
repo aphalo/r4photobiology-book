@@ -71,6 +71,14 @@
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{3}
 
+\usepackage{siunitx}
+\usepackage{framed}
+\renewenvironment{shaded}{%
+  \def\FrameCommand{\fboxsep=\FrameSep \colorbox{shadecolor}}%
+  \MakeFramed{\advance\hsize-\width \FrameRestore\FrameRestore}}%
+ {\endMakeFramed}
+\definecolor{shadecolor}{gray}{0.80}
+
 \usepackage{abbrev}
 \usepackage{r4photobiology}
 
@@ -134,7 +142,7 @@ my_version <- packageVersion("photobiology")
 
 \part{Cookbook}
 
-<<child-uwirrad, child='uwirrad.Rnw', eval=FALSE>>=
+<<child-uwirrad, child='uwirrad.Rnw', eval=TRUE>>=
 @
 
 <<child-wtirrad, child='wtirrad.Rnw', eval=FALSE>>=
