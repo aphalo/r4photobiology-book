@@ -148,7 +148,7 @@ incl_chaps <- TRUE
 
 %\listoffigures
 
-%\include{preface}
+\include{preface}
 
 \include{Abbreviations_symbols}
 
