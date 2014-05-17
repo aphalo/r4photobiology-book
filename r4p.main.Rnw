@@ -121,6 +121,8 @@ my_version <- packageVersion("photobiology")
 
 %\include{preface}
 
+\include{Abbreviations_symbols}
+
 \mainmatter
 
 \part{Getting ready}
@@ -128,16 +130,16 @@ my_version <- packageVersion("photobiology")
 <<child-intro, child='introduction.Rnw'>>=
 @
 
-<<child-optics, child='optics.Rnw', eval=FALSE>>=
+<<child-optics, child='optics.Rnw', eval=TRUE>>=
 @
 
-<<child-photochemistry, child='photochemistry.Rnw', eval=FALSE>>=
+<<child-photochemistry, child='photochemistry.Rnw', eval=TRUE>>=
 @
 
-<<child-software, child='software.Rnw', eval=FALSE>>=
+<<child-software, child='software.Rnw', eval=TRUE>>=
 @
 
-<<child-suite, child='suite.Rnw', eval=FALSE>>=
+<<child-suite, child='suite.Rnw', eval=TRUE>>=
 @
 
 \part{Cookbook}
@@ -145,34 +147,34 @@ my_version <- packageVersion("photobiology")
 <<child-uwirrad, child='uwirrad.Rnw', eval=TRUE>>=
 @
 
-<<child-wtirrad, child='wtirrad.Rnw', eval=FALSE>>=
+<<child-wtirrad, child='wtirrad.Rnw', eval=TRUE>>=
 @
 
-<<child-colour, child='colour.Rnw', eval=FALSE>>=
+<<child-colour, child='colour.Rnw', eval=TRUE>>=
 @
 
-<<child-photoreceptors, child='photoreceptors.Rnw', eval=FALSE>>=
+<<child-photoreceptors, child='photoreceptors.Rnw', eval=TRUE>>=
 @
 
-<<child-sources, child='sources.Rnw', eval=FALSE>>=
+<<child-sources, child='sources.Rnw', eval=TRUE>>=
 @
 
-<<child-filters, child='filters.Rnw', eval=FALSE>>=
+<<child-filters, child='filters.Rnw', eval=TRUE>>=
 @
 
-<<child-plots, child='plots.Rnw', eval=FALSE>>=
+<<child-plots, child='plots.Rnw', eval=TRUE>>=
 @
 
-<<child-calibration, child='calibration.Rnw', eval=FALSE>>=
+<<child-calibration, child='calibration.Rnw', eval=TRUE>>=
 @
 
-<<child-simulation, child='simulation.Rnw', eval=FALSE>>=
+<<child-simulation, child='simulation.Rnw', eval=TRUE>>=
 @
 
-<<child-measurement, child='measurement.Rnw', eval=FALSE>>=
+<<child-measurement, child='measurement.Rnw', eval=TRUE>>=
 @
 
-<<child-performance, child='performance.Rnw', eval=FALSE>>=
+<<child-performance, child='performance.Rnw', eval=TRUE>>=
 @
 
 \printbibliography
