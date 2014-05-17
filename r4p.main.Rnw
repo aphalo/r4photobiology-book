@@ -108,6 +108,8 @@ A handbook}}\par
 \addbibresource{handbook.bib}
 \addbibresource{photobio.bib}
 
+\newcommand{\gls}[1]{} % until start building the glossary.
+
 \begin{document}
 
 % knitr setup
@@ -148,9 +150,9 @@ incl_chaps <- TRUE
 
 %\listoffigures
 
-\include{preface}
+\include{preface.tr}
 
-\include{Abbreviations_symbols}
+\include{abbreviations.tr}
 
 \mainmatter
 
