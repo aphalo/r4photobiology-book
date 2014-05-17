@@ -2,6 +2,8 @@
 .Rhistory
 .RData
 *.tex
+!*.tr.tex
+*.aux
 *.xml
 *.synctex.gz
 *.synctex
@@ -9,4 +11,5 @@
 *.log
 *.bcf
 *.bak
+
 

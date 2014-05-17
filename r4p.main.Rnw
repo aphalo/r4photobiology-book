@@ -1,9 +1,11 @@
-\documentclass[titlepage]{memoir}
+\documentclass[a4paper,draft,10pt]{memoir}
 
 \usepackage[utf8]{inputenc}
 
-\title{R for Photobiology: a handbook}
-\author{Pedro J. Aphalo \and others}
+% \title{R for Photobiology: a handbook}
+% \author{Pedro J. Aphalo \and others}
+% \pretitle{\begin{center}\LARGE}
+% \posttitle{\par\end{center}\vskip 0.5em}
 
 % using Lucida bright using now free package from PC TeX
 \usepackage[lucidasmallscale,nofontinfo,seriftt=true,math-style=iso]{lucimatx}
@@ -22,10 +24,10 @@
 
 \usepackage{microtype}
 \usepackage[hyperindex,bookmarks,pdfview=FitB,%backref,
-            pdftitle={The behaviour of plants},%
-            pdfkeywords={plant ecology, plant physiology, plant behaviour, botany},%
-            pdfsubject={Plant Biology},%
-            pdfauthor={Pedro J. Aphalo et al.}%
+            pdftitle={R for Photobiology},%
+            pdfkeywords={photobiology, visible radiatio, ultraviolet radiation, R, quantification, methods, calculations},%
+            pdfsubject={Photobiology},%
+            pdfauthor={Pedro J. Aphalo}%
             ]{hyperref}
 \usepackage[style=authoryear-comp,firstinits,sortcites,maxcitenames=2,%
     mincitenames=1,maxbibnames=10,minbibnames=10,backref,uniquename=mininit,%
@@ -68,6 +70,26 @@
 \makeatother
 \chapterstyle{daleif1}
 
+\newlength{\drop}
+%% Some shades
+
+\newcommand*{\titleLL}{\begingroup% Lost Languages
+\drop=0.1\textheight
+\fboxsep 0.5\baselineskip
+\sffamily
+\vspace*{\drop}
+\centering
+{\textcolor{nicegreen}{\HUGE R for Photobiology}}\par
+\vspace{0.5\drop}
+\colorbox{Dark}{\textcolor{white}{\normalfont\itshape\Large
+A handbook}}\par
+\vspace{\drop}
+{\Large Pedro J. Aphalo}\par
+\vfill
+{\footnotesize DRAFT}\par
+\vspace*{\drop}
+\endgroup}
+
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{3}
 
@@ -82,8 +104,9 @@
 \usepackage{abbrev}
 \usepackage{r4photobiology}
 
-\addbibresource{rbooks.bib,handbook.bib}
-
+\addbibresource{rbooks.bib}
+\addbibresource{handbook.bib}
+\addbibresource{photobio.bib}
 
 \begin{document}
 
@@ -106,12 +129,18 @@ library(photobiologygg)
 
 <<own-set-up, echo=FALSE, include=FALSE>>=
 my_version <- packageVersion("photobiology")
+incl_chaps <- TRUE
 @
 
+\pagestyle{empty}
+\titleLL
+\clearpage
+
 \frontmatter
-\begin{titlingpage}
-  \maketitle
-\end{titlingpage}
+%\begin{titlingpage}
+%  \maketitle
+%\titleLL
+%\end{titlingpage}
 
 \tableofcontents
 
@@ -127,54 +156,54 @@ my_version <- packageVersion("photobiology")
 
 \part{Getting ready}
 
-<<child-intro, child='introduction.Rnw'>>=
+<<child-intro, child='introduction.Rnw', eval=incl_chaps>>=
 @
 
-<<child-optics, child='optics.Rnw', eval=TRUE>>=
+<<child-optics, child='optics.Rnw', eval=incl_chaps>>=
 @
 
-<<child-photochemistry, child='photochemistry.Rnw', eval=TRUE>>=
+<<child-photochemistry, child='photochemistry.Rnw', eval=incl_chaps>>=
 @
 
-<<child-software, child='software.Rnw', eval=TRUE>>=
+<<child-software, child='software.Rnw', eval=incl_chaps>>=
 @
 
-<<child-suite, child='suite.Rnw', eval=TRUE>>=
+<<child-suite, child='suite.Rnw', eval=incl_chaps>>=
 @
 
 \part{Cookbook}
 
-<<child-uwirrad, child='uwirrad.Rnw', eval=TRUE>>=
+<<child-uwirrad, child='uwirrad.Rnw', eval=incl_chaps>>=
 @
 
-<<child-wtirrad, child='wtirrad.Rnw', eval=TRUE>>=
+<<child-wtirrad, child='wtirrad.Rnw', eval=incl_chaps>>=
 @
 
-<<child-colour, child='colour.Rnw', eval=TRUE>>=
+<<child-colour, child='colour.Rnw', eval=incl_chaps>>=
 @
 
-<<child-photoreceptors, child='photoreceptors.Rnw', eval=TRUE>>=
+<<child-photoreceptors, child='photoreceptors.Rnw', eval=incl_chaps>>=
 @
 
-<<child-sources, child='sources.Rnw', eval=TRUE>>=
+<<child-sources, child='sources.Rnw', eval=incl_chaps>>=
 @
 
-<<child-filters, child='filters.Rnw', eval=TRUE>>=
+<<child-filters, child='filters.Rnw', eval=incl_chaps>>=
 @
 
-<<child-plots, child='plots.Rnw', eval=TRUE>>=
+<<child-plots, child='plots.Rnw', eval=incl_chaps>>=
 @
 
-<<child-calibration, child='calibration.Rnw', eval=TRUE>>=
+<<child-calibration, child='calibration.Rnw', eval=incl_chaps>>=
 @
 
-<<child-simulation, child='simulation.Rnw', eval=TRUE>>=
+<<child-simulation, child='simulation.Rnw', eval=incl_chaps>>=
 @
 
-<<child-measurement, child='measurement.Rnw', eval=TRUE>>=
+<<child-measurement, child='measurement.Rnw', eval=incl_chaps>>=
 @
 
-<<child-performance, child='performance.Rnw', eval=TRUE>>=
+<<child-performance, child='performance.Rnw', eval=incl_chaps>>=
 @
 
 \printbibliography

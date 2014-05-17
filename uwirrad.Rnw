@@ -150,9 +150,11 @@ As seen above, there is a specialized \code{print} function for \code{wavebands}
 <<>>=
 red <- Red()
 red
+min(red)
+max(red)
 range(red)
+midpoint(red)
 labels(red)
-center_wl(red)
 color(red)
 @
 
@@ -197,7 +199,7 @@ with(sun.data,
 
 In photobiology sometimes we are interested in calculation the photon ratio between two wavebands. It makes more sense to calculate such ratios if both numerator and denominator wavebands have the same `width' or if the numerator waveband is fully nested in the denominator waveband. However, frequently used ratios like the \UVB to \PAR photon ratio do not comply with this. For this reason, our functions do not enforce any such restrictions.
 
-For example a ratio frequently used in plant photobiology is the read to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \cite{Morgan1981}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
+For example a ratio frequently used in plant photobiology is the read to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \cite{Morgan1981a}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
 
 \begin{equation}
 \zeta = \frac{\pfd[655 \mathrm{nm} < \lambda < 665  \mathrm{nm}]}{\pfd[725 \mathrm{nm} < \lambda < 735 \mathrm{nm}]}
