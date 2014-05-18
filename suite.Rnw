@@ -74,6 +74,19 @@ setRepositories(graphics = getOption("menu.graphics"),
 
 Be careful not to issue this command more than once per R session, otherwise the list of repos gets corrupted by having two repos with the same name.
 
+Easiest is to create a text file and name it `\code{.Rprofile}'. The commands above (and any others you would like to run at R startup) should be included, but with the addition that the package names for the functions need to be prepended. The minimum needed is.
+
+<<eval=FALSE, tidy=FALSE>>=
+utils::setRepositories(graphics = getOption("menu.graphics"),
+                ind = c(1, 6),
+                addURLs = c(photoCRAN =
+                      "http://www.mv.helsinki.fi/aphalo/R"))
+@
+
+The \code{.Rprofile} file located in the current folder is sourced at R start up. It is also possible to have such a file afecting all of the user's R sessions, but its location is operating system dependent. If you are using RStudio, after setting up this file installation and updating of the packages in the suite can take place exactly as for any other package archived at CRAN.
+
+The commands and examples below can be used at the R pormpt and in scripts whether RStudio is used or not.
+
 After adding the repo to the session, it will appear in the menu when executing this command:
 <<eval=FALSE>>=
 setRepositories()
