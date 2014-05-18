@@ -14,8 +14,8 @@ The suite consists in several packages. The main package is \code{photobiology} 
 \newcommand{\yblt}{\textcolor{yellow}{$\bullet$}}
 \newcommand{\rblt}{\textcolor{red}{$\bullet$}}
 \caption[Packages in the suite]{Packages in the \textsf{r4photobiology} suite. Packages not yet released are
-higlighted with a red bullet, and those at `beta' stage with a yellow bullet, those relativelly stable with a
-green bullet.}\label{tab:suite}
+higlighted with a red bullet \rblt, and those at `beta' stage with a yellow bullet \yblt, those relativelly stable with a
+green bullet \gblt.}\label{tab:suite}
 \begin{small}
 \begin{tabular}{c>{\ttshape}lll}
 \toprule
@@ -60,6 +60,7 @@ setRepositories(graphics = getOption("menu.graphics"),
                 addURLs = c(photoCRAN =
                       "http://www.mv.helsinki.fi/aphalo/R"))
 @
+\noindent
 which will give you a menu of additional repos to activate.
 
 If you know the indexes in the menu you can use this code, where ‘1’ and ‘6’ are the entries in the menu in the command above.
