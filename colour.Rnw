@@ -1,8 +1,102 @@
 \chapter{Colour}
 
 \begin{abstract}
-  In this chapter we explain how to .
+  In this chapter we explain how to use colours according to visual sensitivity. For example calcualting red-green-blue (RGB) values for humans.
 \end{abstract}
 
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+@
+
+\section{Introduction}
+
+The calculation of equivalent colours and colour spaces is based on the number of photoreceptors and their spectral sensitivities. For humans it is normally accepted that there are three photoreceptors in the eyes, with maximum sensitivities in the red, green, and blue regions of the spectrum.
+
+When calculating colours we can take either only the colour or both colour and apparent luminance. In our functions, in the first case one needs to provide as input `chromaticity coordinates' (CC) and in the second case `colour matching functions' (CMF). The suite includes data for humans, but the current implementation of the functions should be able to handle also calculations for other organisms with tri-chromic vision.
+
+The functions allow calculation of simulated colour of light sources as R colour definitions. Three different functions are avaialble, one for monochromatic light taking as argument wavelength values, and one for polychromatic light taking as argument spectral energy irradiances and the corresponding wave length values. The third function can be used to calculate a representative RGB colour for a band of the spectrum represented as a range of wavelengths, based on the assumption of a flat energy irradiance accross this range.
+
+By default CIE coordinates for \textit{typical} human vision are used, but the functions
+have a parameter that can be used for suppying a different chromaticity definition. The range of wavelengths used in the calculations is that in the chromaticity data.
+
+One use of these functions is to generate realistic colour for `key' on plots of spectral data. Other uses are also possible, like simulating how different, different objects would look to a certain organism.
+
+\begin{framed}
+This package is very `young' so may be to some extent buggy, and/or have rough edges.
+We plan to add at least visual data for honey bees.
+\end{framed}
+
 %%%%
-\section{Task: }\label{sec:}
+\section{Task: calculating an RGB colour from a single wavelength}\label{sec:color:wl}
+
+Function \code{w\_length2rgb} must be used in this case. If a vector of wavelengths is supplied as argument, then a vector of \code{color}s, of the same length, is returned. Here are some examples of calculation of R color definitions for monochromatic light:
+
+<<>>=
+w_length2rgb(550) # green
+w_length2rgb(630) # red
+w_length2rgb(380) # UVA
+w_length2rgb(750) # far red
+w_length2rgb(c(550, 630, 380, 750)) # vectorized
+@
+
+%%%%
+\section{Task: calculating an RGB colour for a range of wavelengths}\label{sec:color:range}
+
+Function \code{w\_length\_range2rgb} must be used in this case. This function expects as input a vector of two number, as returned by the function \code{range}. If a longer vector is supplied as argument, its range is used, with a warning. If a vector of lengths one is given as argument, then the same output as from function \code{w\_length2rgb} is returned. This function assumes a flat energy spectral irradiance curve within the range. Some examples:
+Examples for wavelength ranges:
+
+<<>>=
+w_length_range2rgb(c(400,700))
+w_length_range2rgb(400:700)
+w_length_range2rgb(sun.data$w.length)
+w_length_range2rgb(550)
+@
+
+%%%%
+\section{Task: calculating an RGB colour for spectrum}\label{sec:color:spc}
+
+Function \code{s\_e\_irrad2rgb} in contrast to those described above, when calculating the color takes into account the spectral irradiance.
+
+Examples for spectra, in this case the solar spectrum:
+
+<<>>=
+with(sun.data, s_e_irrad2rgb(w.length, s.e.irrad))
+with(sun.data, s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF2.data))
+with(sun.data, s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF10.data))
+with(sun.data, s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC2.data))
+with(sun.data, s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC10.data))
+@
+
+Except for the first example, we especificy the visual sensitivity data to use.
+
+\section{A sample of colours}
+
+Here we plot the RGB colours for the range covered by the CIE 2006 proposed standard calculated at each 1 nm step:
+
+<<>>=
+wl <- c(390, 829)
+
+my.colors <- w_length2rgb(wl[1]:wl[2])
+
+colCount <- 40 # number per row
+rowCount <- trunc(length(my.colors) / colCount)
+
+plot( c(1,colCount), c(0,rowCount), type="n", ylab="", xlab="",
+      axes=FALSE, ylim=c(rowCount,0))
+title(paste("RGB colours for", as.character(wl[1]), "to", as.character(wl[2]), "nm"))
+
+for (j in 0:(rowCount-1))
+{
+  base <- j*colCount
+  remaining <- length(my.colors) - base
+  RowSize <- ifelse(remaining < colCount, remaining, colCount)
+  rect((1:RowSize)-0.5,j-0.5, (1:RowSize)+0.5,j+0.5,
+       border="black",
+       col=my.colors[base + (1:RowSize)])
+}
+
+@
+

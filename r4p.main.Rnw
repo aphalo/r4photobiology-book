@@ -177,6 +177,9 @@ incl_apdx <- TRUE
 
 \part{Cookbook}
 
+<<child-uwirrad, child='baseoper.Rnw', eval=incl_ckbk>>=
+@
+
 <<child-uwirrad, child='uwirrad.Rnw', eval=incl_ckbk>>=
 @
 

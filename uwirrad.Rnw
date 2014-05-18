@@ -4,6 +4,15 @@
   In this chapter we explain how to calculate unweighted energy and photon irradiances from spectral irradiance.
 \end{abstract}
 
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologyVIS)
+library(photobiologyUV)
+@
+
 %%%%
 \section{Task: (energy) irradiance from spectral irradiance}\label{sec:energy:irrad}
 
@@ -48,21 +57,6 @@ with(sun.data, energy_irradiance(w.length, s.e.irrad,
 \section{Task: photon irradiance from spectral irradiance}\label{sec:photon:irrad}
 
 The task to be completed is to calculate the photon irradiance ($\pfd$) in \mol from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
-
-The energy of a quantum of radiation\index{radiation quantum}\index{photon} in a vacuum, \quantum, depends on the wavelength\index{wavelength}, $\lambda$, or frequency\index{frequency}\footnote{Wavelength and frequency are related to each other by the speed of light, according to $\nu = c / \lambda$ where $c$ is speed of light in vacuum. Consequently there are two equivalent formulations for equation \ref{equ_energy}.}, $\nu$,
-%
-\begin{equation}
-\quantum = h \cdot \nu = h \cdot \frac{c}{\lambda} \label{equ_energy}
-\end{equation}
-%
-with the Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecond and speed of light in vacuum $c=2.998\times 10^{8}$ \msecond. When dealing with numbers of photons, the equation (\ref{equ_energy}) can be extended by using Avogadro's number\index{Avogadro's number} $N_\mathrm{A}=6.022\times 10^{23}$ mol$^{-1}$. Thus, the energy of one mole of photons, \molequanta, is
-%
-\begin{equation}
-\molequanta = h' \cdot \nu = h' \cdot \frac{c}{\lambda} \label{equ_molenergy}
-\label{eq:energy:mol:photons}
-\end{equation}
-%
-with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}. Example 1: red light at 600~nm has about 200 \kjmole, therefore, 1~$\mymu$mol photons has 0.2~J. Example 2: \UVB radiation at 300~nm has about 400 \kjmole, therefore, 1~$\mymu$mol photons has 0.4~J. Equations \ref{equ_energy} and \ref{equ_molenergy} are valid for all kinds of electromagnetic waves.
 
 Combining equations \ref{eq:energy:irrad} and \ref{eq:energy:mol:photons} we obtain:
 
@@ -292,6 +286,16 @@ with(sun.data,
      split_energy_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), scale="percent"))
 @
 
+If the `limits' cover only a region of the spectral data, relative and percent values will be calculated with that region as a reference.
+
+<<>>=
+with(sun.data, split_energy_irradiance(w.length, s.e.irrad, c(400,500,600,700), scale="percent"))
+@
+
+<<>>=
+with(sun.data, split_energy_irradiance(w.length, s.e.irrad, c(400,500,600), scale="percent"))
+@
+
 A vector of two wavelengths is valid input, although not very useful for percentages:
 
 <<>>=
@@ -299,7 +303,7 @@ with(sun.data,
      split_energy_irradiance(w.length, s.e.irrad, c(400, 700), scale="percent"))
 @
 
-Although for \code{scale="absolute"}, the default, it can be used as a quick way of calculating an irradiance for a range of wavelengths without having to define a \code{waveband}:
+In contrast, for \code{scale="absolute"}, the default, it can be used as a quick way of calculating an irradiance for a range of wavelengths without having to define a \code{waveband}:
 
 <<>>=
 with(sun.data,

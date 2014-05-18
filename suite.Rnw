@@ -46,6 +46,12 @@ green bullet \gblt.}\label{tab:suite}
 \end{small}
 \end{table}
 
+One of the main difficulties when working with specral data is that one may need to operate on data sets measured at different wavelength values and steps sizes. The functions in the suite handle any mismatch by interpolation before applying operations or functions. Although by deffault functions expect spectral data on energy units, this is just a default that can be changed by setting the parameter \code{unit.in = "photon"}. Across all data sets and functions wavelength vectors have name \code{w.length}, spectral (energy) irradiance \code{s.e.irrad}, and photon spectral irradiance \code{s.q.irrad}\footnote{\code{q} derives from `quantum'.}.
+
+Wavelengths should allways be in nm, and when conversion between energy and photon based units takes place no scaling factor is used (an input in \wattnm yields an output in \molnm rather than \umolnm).
+
+The suite is still under active development. Even those packages marked as `stable' are likely to acquire new functionality. By stability, we mean that we hope to be able to make most changes backwards compatible, in other words, we hope they will not break existing user code.
+
 %%%%
 \section{\code{photoCRAN} repository}\label{sec:photoCRAN}
 
