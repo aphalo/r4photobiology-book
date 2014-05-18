@@ -52,7 +52,7 @@ green bullet \gblt.}\label{tab:suite}
 
 I have created a small repository for the packages. This repository follows the CRAN folder structure, so now package installation can be done using just the normal R commands. This means that dependencies are installed automatically, and that automatic updates are possible. The build most suitable for the current system and R version is also picked automatically if available. It is normally recommended that you do installs and updates on a clean R session (just after starting R or RStudio).For easy installation and updates of packages, the photoCRAN repo can be added to the list of repos that R knows about.
 
-Whether you use RStudio or not it is possible to add the photoCRAN repo to the current session as follows:
+Whether you use RStudio or not it is possible to add the photoCRAN repo to the current session as follows, which will give you a menu of additional repos to activate:
 
 <<eval=FALSE, tidy=FALSE>>=
 setRepositories(graphics = getOption("menu.graphics"),
@@ -60,8 +60,6 @@ setRepositories(graphics = getOption("menu.graphics"),
                 addURLs = c(photoCRAN =
                       "http://www.mv.helsinki.fi/aphalo/R"))
 @
-\noindent
-which will give you a menu of additional repos to activate.
 
 If you know the indexes in the menu you can use this code, where ‘1’ and ‘6’ are the entries in the menu in the command above.
 

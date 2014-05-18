@@ -1,4 +1,4 @@
-\documentclass[a4paper,draft,10pt]{memoir}
+\documentclass[a4paper,10pt]{memoir}
 
 \usepackage[utf8]{inputenc}
 
@@ -132,6 +132,8 @@ library(photobiologygg)
 <<own-set-up, echo=FALSE, include=FALSE>>=
 my_version <- packageVersion("photobiology")
 incl_chaps <- TRUE
+incl_ckbk <- TRUE
+incl_apdx <- TRUE
 @
 
 \pagestyle{empty}
@@ -175,38 +177,49 @@ incl_chaps <- TRUE
 
 \part{Cookbook}
 
-<<child-uwirrad, child='uwirrad.Rnw', eval=incl_chaps>>=
+<<child-uwirrad, child='uwirrad.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-wtirrad, child='wtirrad.Rnw', eval=incl_chaps>>=
+<<child-wtirrad, child='wtirrad.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-colour, child='colour.Rnw', eval=incl_chaps>>=
+<<child-colour, child='colour.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-photoreceptors, child='photoreceptors.Rnw', eval=incl_chaps>>=
+<<child-photoreceptors, child='photoreceptors.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-sources, child='sources.Rnw', eval=incl_chaps>>=
+<<child-sources, child='sources.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-filters, child='filters.Rnw', eval=incl_chaps>>=
+<<child-filters, child='filters.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-plots, child='plots.Rnw', eval=incl_chaps>>=
+<<child-plots, child='plots.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-calibration, child='calibration.Rnw', eval=incl_chaps>>=
+<<child-calibration, child='calibration.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-simulation, child='simulation.Rnw', eval=incl_chaps>>=
+<<child-simulation, child='simulation.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-measurement, child='measurement.Rnw', eval=incl_chaps>>=
+<<child-measurement, child='measurement.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-performance, child='performance.Rnw', eval=incl_chaps>>=
+<<child-performance, child='performance.Rnw', eval=incl_ckbk>>=
 @
+
+\appendix
+\part{Appendixes}
+
+<<child-r-calc, child='R.as.calculator.Rnw', eval=incl_apdx>>=
+@
+
+<<child-r-scripts, child='R.scripts.Rnw', eval=incl_apdx>>=
+@
+
+\backmatter
 
 \printbibliography
 
