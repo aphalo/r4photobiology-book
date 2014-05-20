@@ -1,0 +1,99 @@
+\chapter{Radiation physics}\label{chap:physics}
+
+\begin{abstract}
+  In this chapter we explain how to use the spectral data for light sources.
+\end{abstract}
+
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(ggplot2)
+library(photobiologygg)
+@
+
+%%%%
+\section{Introduction}\label{sec:physics:intro}
+
+%%%%
+\section{Task: black body emission}\label{sec:physics:intro}
+
+The emitted spectral radiance (\radiance[s]) is described by Planck's law of black body radiation at temperature $T$, measured in degrees Kelvin (K):%\index{Planck's law of black body radiation}\index{black body spectral radiance}
+%
+\begin{equation}
+%\radiance[s](\lambda,T) = \frac{2hc^2}{\lambda^5}\cdot\frac{1}{\exp\left\{hc/k_BT\lambda\right\}-1} \label{equ_planck}
+\radiance[s](\lambda,T) = \frac{2hc^2}{\lambda^5}\cdot\frac{1}{\mathrm{e}^{(hc/k_\mathrm{B}T\lambda)}-1} \label{equ_planck}
+\end{equation}
+%
+with Boltzmann's constant $k_\mathrm{B}=1.381\times 10^{-23}$ \Unit{J\,K^{-1}}, Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecond and speed of light in vacuum $c=2.998\times 10^{8}$ \msecond.
+
+We can easily define an R function based on the equation above, which returns \Unit{W\,sr^{−1}\,m^{−3}}:
+
+<<tidy=FALSE>>=
+h <- 6.626e-34 # J s-1
+c <- 2.998e8 # m s-1
+kB <- 1.381e-23 # J K-1
+black_body_spectrum <- function(w.length, Tabs) {
+  w.length <- w.length * 1e-9 # nm -> m
+  ((2 * h * c^2) / w.length^5) *
+    1 / (exp((h * c / (kB * Tabs * w.length))) - 1)
+}
+@
+
+We can use the function for calculating black body emmision spectra for different temperatures:
+<<>>=
+black_body_spectrum(500, 5000)
+@
+
+The fucntion is vectorized:
+<<>>=
+black_body_spectrum(c(300,400,500), 5000)
+@
+
+<<>>=
+black_body_spectrum(500, c(4500,5000))
+@
+
+We aware that if two vectors are supplied, then the elements in each one are matched and recycled\footnote{Excercise: calculate each of the four values individually to work out how the two vectors are being used.}:
+
+<<>>=
+black_body_spectrum(c(500, 500, 600, 600), c(4500,5000)) # tricky!
+@
+
+We can use the function defined above for plotting black body emmision spectra for different temperatures. We use \code{ggplot2} and directly plot a function using \code{stat\_function}, using \code{args} to pass the additional argument giving the absolute temperature to be used. We plot two lines using to different tempeartures (5600~K and 4500~K):
+
+<<tidy=FALSE>>=
+ggplot(data=data.frame(x=c(50,1000)), aes(x)) +
+  stat_function(fun=black_body_spectrum,
+                args = list(Tabs=5600),
+                colour="blue") +
+  stat_function(fun=black_body_spectrum,
+                args = list(Tabs=4500),
+                colour="red") +
+  labs(y=expression(Spectral~~radiance~~(W~sr^-1~m^-3)),
+       x="Wavelength (nm)")
+@
+
+
+Wien's displacement law, gives the peak wavelength of the radiation emitted by a blackbody as a function of its absolute temperature.
+%
+\begin{equation}
+\lambda_{max} \cdot T = 2.898 \times 10^6 \,\mathrm{nm\,K} \label{equ_wien}
+\end{equation}
+%
+A function implementing this equation takes just a few lines of code:
+<<tidy=FALSE>>=
+k.wein <- 2.8977721e6 # nm K
+black_body_peak_wl <- function(Tabs) {
+  k.wein / Tabs
+}
+@
+
+It can be used to plot the temperature dependence of the location of the wavelength at which radiance is at its maximum:
+
+<<tidy=FALSE>>=
+ggplot(data=data.frame(Tabs=c(2000,7000)), aes(x=Tabs)) +
+  stat_function(fun=black_body_peak_wl) +
+  labs(x="Temperature (K)",
+       y="Wavelength at peak of emission (nm)")
+@

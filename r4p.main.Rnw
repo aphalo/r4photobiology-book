@@ -118,6 +118,8 @@ A handbook}}\par
 library(knitr)
 opts_knit$set(child.command = 'include')
 opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf')
+opts_chunk$set(fig.width=8, fig.height=4, out.width='.95\\textwidth')
+# opts_chunk$set(tidy=FALSE)
 options(replace.assign=TRUE,width=60)
 @
 
@@ -176,6 +178,9 @@ incl_apdx <- TRUE
 @
 
 \part{Cookbook}
+
+<<child-uwirrad, child='physics.Rnw', eval=incl_ckbk>>=
+@
 
 <<child-uwirrad, child='baseoper.Rnw', eval=incl_ckbk>>=
 @

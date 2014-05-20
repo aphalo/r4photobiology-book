@@ -1,4 +1,4 @@
-\chapter{Unweighted irradiance}
+\chapter{Unweighted irradiance}\label{chap:uw:irrad}
 
 \begin{abstract}
   In this chapter we explain how to calculate unweighted energy and photon irradiances from spectral irradiance.
@@ -14,12 +14,16 @@ library(photobiologyUV)
 @
 
 %%%%
-\section{Task: (energy) irradiance from spectral irradiance}\label{sec:energy:irrad}
+\section{Introduction}\label{sec:uw:intro}
 
-The task to be completed is to calculate the (energy) irradiance ($\irr$) in \watt from spectral (energy) irradiance ($\spfd$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
+
+%%%%
+\section{Task: (energy) irradiance from spectral irradiance}\label{sec:uw:e2e}
+
+The task to be completed is to calculate the (energy) irradiance ($\irr$) in \watt from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
 \begin{equation}
-\pfd[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \mathrm{d}\ \lambda
+\irr[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \mathrm{d}\ \lambda
 \label{eq:energy:irrad}
 \end{equation}
 
@@ -54,7 +58,7 @@ with(sun.data, energy_irradiance(w.length, s.e.irrad,
 @
 
 %%%%
-\section{Task: photon irradiance from spectral irradiance}\label{sec:photon:irrad}
+\section{Task: photon irradiance from spectral irradiance}\label{sec:uw:e2q}
 
 The task to be completed is to calculate the photon irradiance ($\pfd$) in \mol from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
@@ -81,11 +85,11 @@ with(sun.data,
 \code{PAR()} is predefined in package \PBVIS as a convenience function, see section \ref{sec:energy:irrad} for an example with arbitrary values for $\lambda_1$ and $\lambda_2$.
 
 %%%%
-\section[Task: irradiance from spectral photon irradiance]{Task: calculate energy and photon irradiances from spectral photon irradiance}
+\section[Task: irradiance from spectral photon irradiance]{Task: calculate energy and photon irradiances from spectral photon irradiance}\label{sec:uw:irrad:q2e}
 
 In the case of the calculation of energy irradiance from spectral photon irradiance the calculation is:
 \begin{equation}
-I_{\lambda_1 < \lambda < \lambda_2} = \int_{\lambda_1}^{\lambda_2} Q_\lambda\ \frac{\lambda}{h' \cdot c} \mathrm{d}\ \lambda
+\irr[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \spfd\ \frac{\lambda}{h' \cdot c} \mathrm{d}\ \lambda
 \end{equation}
 
 And the code\footnote{The dataframe \code{sun.data} contains both spectral energy irradiance vales in `column' \code{s.e.irrad} and spectral photon irradiance in `column' \code{s.q.irrad}}:
@@ -101,7 +105,7 @@ with(sun.data, photon_irradiance(w.length, s.q.irrad, PAR()), unit.in="photon")
 @
 
 %%%%
-\section{Task: irradiances for more than one waveband}
+\section{Task: irradiances for more than one waveband}\label{sec:uw:mult:wb}
 
 It is possible to calculate the irradiances for several wavebands with a single function call by supplying a \code{list} of \code{wavebands} as argument:
 <<>>=
@@ -109,7 +113,7 @@ with(sun.data,
      photon_irradiance(w.length, s.e.irrad, list(Red(), Green(), Blue()))) * 1e6
 Q.RGB <- with(sun.data,
      photon_irradiance(w.length, s.e.irrad, list(Red(), Green(), Blue()))) * 1e6
-signif(Q.RGB,3)
+signif(Q.RGB, 3)
 Q.RGB[1]
 Q.RGB["Green.ISO"]
 @
@@ -232,9 +236,10 @@ with(sun.data,
 
 For this infrequently used ratio, no pre-defined function is provided.
 
+%%%%
 \section{Task: calculate average number of photons per unit energy}\label{sec:photons:energy}
 
-When comparing photo-chemical and photo-biological responses under different light sources it is of interest to calculate the photons per energy in \molwatt. In this case only one waveband definition is used to calculate the quotient:
+When comparing photo-chemical and photo-biological responses under different light sources it is of interest to calculate the photons per energy in \moljoule. In this case only one waveband definition is used to calculate the quotient:
 
 \begin{equation}
 \bar{q'} = \frac{\pfd[\lambda_1 < \lambda < \lambda_2]}{\irr[\lambda_1 < \lambda < \lambda_2]}
@@ -245,7 +250,7 @@ with(sun.data,
      photons_energy_ratio(w.length, s.e.irrad, PAR()))
 @
 
-For obtaining the same quotient in \umolwatt we just need to multiply by $10^6$. We can use such a multiplier to convert $\irr$ [\watt] into $\pfd$ [\umol], or as a divisor to convert $\pfd$ [\umol] into $\irr$ [\watt], \emph{for a given light source and waveband}:
+For obtaining the same quotient in \umoljoule we just need to multiply by $10^6$. We can use such a multiplier to convert $\irr$ [\watt] into $\pfd$ [\umol] (as \Unit{W} = \Unit{J\,s^{-1}}), or as a divisor to convert $\pfd$ [\umol] into $\irr$ [\watt], \emph{for a given light source and waveband}:
 
 <<>>=
 with(sun.data,

@@ -1,11 +1,11 @@
-\chapter{Basic operations on spectra}
+\chapter{Basic operations on spectra}\label{chap:base}
 
 \begin{abstract}
   In this chapter we describe the use of a few basic functions, which can be useful when no predifined functions are available for a given operation.
 \end{abstract}
 
 %%%%
-\section{Task: uniform scaling of a spectrum}\label{sec:binoper}
+\section{Task: uniform scaling of a spectrum}\label{sec:base:scale}
 
 In R vectorized operators are available, and `recycling' takes places when needed\footnote{Here and in many other examples \code{head} is used to limit the ammount of output to a few lines.}:
 <<>>=
@@ -17,7 +17,7 @@ head(sun.data$s.e.irrad * 2)
 Other binary operators can be used in the same way.
 
 %%%%
-\section{Task: operations between two spectra}\label{sec:binoper}
+\section{Task: operations between two spectra}\label{sec:base:binoper}
 
 If data for two spectra are available for the same wavelength values, then we can still use the built in R math operators. These operators are vectorized, which means that an addition between two vectors adds the elements at each position. A non-sensical example follows:
 
@@ -39,9 +39,9 @@ out.data <- oper_spectra(spc1$w.length, spc2$w.length, spc1$s.e.irrad, spc2$s.e.
 
 and is used to define the functions for the four basic math operators.
 
-\section{Task: trimming a spectrum}
+\section{Task: trimming a spectrum}\label{sec:base:trim}
 
-This is basically a subsetting operation, but the function \code{trim\_tails} adds a few `bells and whistles'. The trimming is based on wavelengths, by default the cut points are inserted by interpolation, so that the sspectrum returned includes the limits given as arguments. By default the trimming is done by deleting both spectral irradiance and wavelength values outside the range delinited by the limits, but through parameter \code{fill} the values outside the limits can be replaced any value desired (most commonly \code{NA}or 0.)
+This is basically a subsetting operation, but the function \code{trim\_tails} adds a few `bells and whistles'. The trimming is based on wavelengths, by default the cut points are inserted by interpolation, so that the sspectrum returned includes the limits given as arguments. By default the trimming is done by deleting both spectral irradiance and wavelength values outside the range delinited by the limits, but through parameter \code{fill} the values outside the limits can be replaced any value desired (most commonly \code{NA}or 0.) It is possible to supply only one, or both of \code{low.limit} and \code{high.limit}, depending on the desired trimming.
 
 <<>>=
 head(with(sun.data, trim_tails(w.length, s.e.irrad, low.limit=300)))
@@ -58,7 +58,7 @@ tail(with(sun.data, trim_tails(w.length, s.e.irrad, low.limit=300, high.limit=10
 tail(with(sun.data, trim_tails(w.length, s.e.irrad, low.limit=300, high.limit=1000, fill=0.0)))
 @
 
-\section{Task: conversion from energy to photon base}
+\section{Task: conversion from energy to photon base}\label{sec:base:e2q}
 
 The energy of a quantum of radiation\index{radiation quantum}\index{photon} in a vacuum, \quantum, depends on the wavelength\index{wavelength}, $\lambda$, or frequency\index{frequency}\footnote{Wavelength and frequency are related to each other by the speed of light, according to $\nu = c / \lambda$ where $c$ is speed of light in vacuum. Consequently there are two equivalent formulations for equation \ref{equ_energy}.}, $\nu$,
 %
@@ -91,7 +91,7 @@ s.q.irrad <- with(sun.data, as_quantum_mol(w.length, s.e.irrad))
 head(s.q.irrad, 10)
 @
 
-\section{Task: conversion from photon to energy base}
+\section{Task: conversion from photon to energy base}\label{sec:base:q2e}
 
 \code{as\_energy} is the inverse function of \code{as\_quantum\_mol}:
 
@@ -111,7 +111,7 @@ head(s.e.irrad, 10)
 @
 
 
-\section{Task: interpolating a spectrum}
+\section{Task: interpolating a spectrum}\label{sec:base:interpol}
 
 The function \code{interpolate\_spectrum} is used internally for interpolating spectra, and accepts spectral data measured at arbitrary wavelengths. Raw data from array spectrometers is not available with a constant wavelength step. It is always best to do any interpolation as late as possible.
 
@@ -131,7 +131,7 @@ A future version will \emph{likely} include a parameter for changing this behavi
 to averaging or smoothing.
 \end{framed}
 
-\section{Internal-use functions}
+\section{Internal-use functions}\label{sec:base:internal}
 
 The function \code{check\_spectrum} may need to be called by the user if he/she disables automatic sanity checking to increase calculation speed. The family of functions for calculating multipliers are used internally by the package.
 
