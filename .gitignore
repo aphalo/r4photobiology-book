@@ -12,3 +12,5 @@
 *.bcf
 *.bak
 framed.sty
+*.pdf
+*.blg
