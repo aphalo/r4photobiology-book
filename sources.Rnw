@@ -1,8 +1,41 @@
-\chapter{Radiation sources}
+\chapter{Radiation sources}\label{chap:sources}
 
 \begin{abstract}
-  In this chapter we explain how to .
+  In this chapter we explain how to use the spectral data for light sources.
 \end{abstract}
 
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologySun)
+library(photobiologyLamps)
+library(photobiologyLEDs)
+library(photobiologyVIS)
+library(photobiologyUV)
+library(ggplot2)
+library(ggtern)
+library(photobiologygg)
+@
+
 %%%%
-\section{Task: }\label{sec:}
+\section{Introduction}\label{sec:sources:intro}
+
+%%%%
+\section{Task: using the data}\label{sec:}
+
+%%%%
+\section{Task: extraterrestrial solar radiation spectra}\label{sec:}
+
+%%%%
+\section{Task: terrestrial  solar radiation spectra}\label{sec:}
+
+%%%%
+\section{Task: incandescent lamps}\label{sec:}
+
+%%%%
+\section{Task: discharge lamps}\label{sec:}
+
+%%%%
+\section{Task: LEDs}\label{sec:}

@@ -1,8 +1,95 @@
 \chapter{Weighted and effective irradiance}
 
 \begin{abstract}
-  In this chapter we explain how to .
+  In this chapter we explain how to calculate weighted energy and photon irradiances from spectral irradiance.
 \end{abstract}
 
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologyVIS)
+library(photobiologyUV)
+@
+
 %%%%
-\section{Task: }\label{sec:}
+\section{Introduction}\label{sec:wt:intro}
+
+Weighted irradiance is usually reported in weighted energy units, but it is possible to also use weighted photon based units. In practice the R code to use is exactly the same as for unweighted irradiances, as all the information needed is stored in the \code{waveband} object. An additional factor comes into play and it is the \emph{normalization wavelength}, which is accepted as an argument by the predefined waveband creation functions that use a biological spectral weighting function (BSWF). The focus of this chapter is on the differences between calculataions for weighted irradiances compared to those for unweighted irradiances decribed in chapter \ref{chap:uw:irrad}. In particular it is important that you read sections \ref{sec:uw:e2e}, \ref{sec:uw:e2q}, \ref{sec:uw:q2e}, and \ref{sec:uw:mult:wb} before reading the present chapter.
+
+%%%%
+\section{Task: choosing the normalization wavelength}\label{sec:wt:intro}
+
+Function \code{GEN.G()} is predefined in package \PBUV as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \cite{Green198x}:
+
+<<>>=
+with(sun.data, energy_irradiance(w.length, s.e.irrad, GEN.G()))
+@
+
+The code above uses the default normalization wavelength of 300 nm. Any arbitrary wavelength (nm), within the range of the waveband can be provided as an argument.
+
+<<>>=
+range(GEN.G())
+with(sun.data, energy_irradiance(w.length, s.e.irrad, GEN.G(280)))
+@
+
+
+%%%%
+\section{Task: use weighted wavebands}\label{sec:wt:intro}
+
+Please, consult the packages' documentation for a list of predefined functions for creating weighted wavebands. Here we will present just a few examples of their use. We usually think of weighted irradiances as being defined by the weighting function, however, in many cases different normalizations are in use, and the result of any calcualtion depends very strongly on the wavelength used for normalization. For this reason, the functions provided accept an argument that can be used to select the normalization wavelength. In general, the default, is to use the most frequently used normalization.
+
+In a few cases different mathematical formulations are available for the same spectrum, and the differences among them can be quite large. In such cases separate functions are provided for each of them (e.g. \code{GEN.N} and \code{GEN.T} for Green's and Timijan's formulations of Caldwell's GPAS).
+
+<<>>=
+GEN.G()
+GEN.G(300)
+GEN.G(280)
+@
+
+We can use one of the predefined functions to create a new \code{waveband} object, which as any other R object can be assigned to a variable:
+
+<<>>=
+cie <- CIE()
+cie
+@
+
+As seen above, there is a specialized \code{print} function for \code{wavebands}. Functions available are \code{min}, \code{max}, \code{range}, \code{center\_wl}, \code{labels}, and \code{color}.
+
+<<>>=
+min(cie)
+max(cie)
+range(cie)
+midpoint(cie)
+labels(cie)
+color(cie)
+@
+
+\begin{framed}
+A function that returns the normalization wavelength will be implemented in the future.
+\end{framed}
+
+%%%%
+\section{Task: define wavebands}\label{sec:wt:wavebands}
+
+In section \ref{sec:uw:wavebands} we briefly introduced \code{new\_waveband}, and here we describe its use in full detail, including the use of spectral weighting functions (SWFs).
+
+Defining a new weighted \code{waveband}. We start with a simple `toy' example:
+
+<<tidy=FALSE>>=
+toy.wb <- new_waveband(400, 700, "SWF",
+                       SWF.e.fun=function(wl){(wl - 400)^2},
+                       norm=550, SWF.norm=550,
+                       wb.name="TOY")
+toy.wb
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad, toy.wb))
+with(sun.data,
+     photon_irradiance(w.length, s.e.irrad, toy.wb))
+@
+
+
+%%%%
+\section{Introduction}\label{sec:wt:intro}
+
