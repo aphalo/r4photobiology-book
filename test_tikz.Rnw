@@ -5,23 +5,21 @@
 
 <<setup, include=FALSE, cache=FALSE>>=
 library(knitr)
-opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='tikz')
-opts_chunk$set(fig.width=8, fig.height=4, out.width='.95\\textwidth')
-# opts_chunk$set(tidy=FALSE)
-options(replace.assign=TRUE,width=60)
+opts_chunk$set(dev='tikz')
 @
 
-<<libraries, eval=TRUE, include=FALSE, cache=FALSE>>=
+<<eval=TRUE>>=
 library(ggplot2)
-library(photobiology)
 @
-
 
 This is a test. Does it work?
 
-<<eval=TRUE>>=
-ggplot(sun.data, aes(x=w.length, y=s.e.irrad)) + geom_line() + labs(x="Wavelength (W m$^{-2}$")
+<<eval=FALSE>>=
+plot(1:5, 1:5)
 @
 
+<<eval=TRUE>>=
+qplot(1:5, 1:5)
+@
 
 \end{document}
