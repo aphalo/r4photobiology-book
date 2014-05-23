@@ -4,17 +4,36 @@
   In this chapter we describe the use of a few basic functions, which can be useful when no predifined functions are available for a given operation.
 \end{abstract}
 
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologyFilters)
+library(photobiologyLeds)
+@
+
 %%%%
 \section{Task: uniform scaling of a spectrum}\label{sec:base:scale}
 
-In R vectorized operators are available, and `recycling' takes places when needed\footnote{Here and in many other examples \code{head} is used to limit the ammount of output to a few lines.}:
+In R vectorized operators are available for "generic.scpt", "source.spct", and "filter.spct" objects, and `recycling' takes places when needed\footnote{Here and in many other examples \code{head} is used to limit the ammount of output to a few lines.}:
+
 <<>>=
-head(sun.data$s.e.irrad)
-data(sun.data)
-head(sun.data$s.e.irrad * 2)
+head(sun.dt)
+head(sun.dt * 2)
 @
 
-Other binary operators can be used in the same way.
+All four basic binary operators (\code{+, -, *, /}) can be used in the same way, but when operating between a spectrum an a numeric value the spectrum should be the first term or factor.
+
+%%%%
+\section{Task: simple operations between two spectra}\label{sec:base:simple:opper}
+
+<<>>=
+filtered_sun.dt <- ug1.dt * sun.dt
+head(filtered_sun.dt)
+@
+
+All four basic binary operators (\code{+, -, *, /}) can be used in the same way.
 
 %%%%
 \section{Task: operations between two spectra}\label{sec:base:binoper}

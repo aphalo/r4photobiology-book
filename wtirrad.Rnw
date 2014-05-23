@@ -55,20 +55,18 @@ cie <- CIE()
 cie
 @
 
-As seen above, there is a specialized \code{print} function for \code{wavebands}. Functions available are \code{min}, \code{max}, \code{range}, \code{center\_wl}, \code{labels}, and \code{color}.
+As seen above, there is a specialized \code{print} function for \code{wavebands}. Functions available are \code{min}, \code{max}, \code{range}, \code{midpoint}, \code{labels}, and \code{color}.
 
 <<>>=
 min(cie)
 max(cie)
 range(cie)
 midpoint(cie)
+normalization(cie)
 labels(cie)
 color(cie)
 @
 
-\begin{framed}
-A function that returns the normalization wavelength will be implemented in the future.
-\end{framed}
 
 %%%%
 \section{Task: define wavebands}\label{sec:wt:wavebands}
