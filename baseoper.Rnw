@@ -10,11 +10,13 @@ For executing the examples listed in this chapter you need first to load the fol
 <<>>=
 library(photobiology)
 library(photobiologyFilters)
-library(photobiologyLeds)
+library(photobiologyLEDs)
 @
 
 %%%%
-\section{Introduction: how are example spectra stored}\label{sec:spct:objects}
+\section{Introduction}\label{sec:spct:objects}
+
+\subsection{How are example spectra stored?}
 
 The suite uses to some exent object-oriented programing. Objects are implemented using ``S3'' classes. For spectra the classes are a specialization of data.table which are in turn a specialization of data.frame. This means that they are compatible with functions that operate on these classes.
 
@@ -24,18 +26,36 @@ Objects of class ``source.spct'' have three components \code{w.length}, \code{s.
 
 Objects of class ``filter.spct'' have three components \code{w.length}, \code{Tfr} and \code{Tpc}. They are expected to contain data expresed always in the same units: nm, for \code{w.length}, a fraction of one for \code{Tfr}, and \% for \code{Tpc}. Objects have a ``comment'' attribute with a textual description.
 
+\subsection{What operators are available for operations between spectra?}
+
 Operators are defined for these objects. These are an easy and simple way of doing calcualtions, but are rather inflexible and performance is expected to be slower than with functions with additonal parameters. The operators are defined so that an operation between two "filter.spct" objects yields another "filter.spct" object, and operation between a "filter.spct" object and a "source.spct", or between two "source.spct" objects yields a "source.spct" object. The object returned contains data only for the overlapping region of wavelengths. The objects do NOT need to have values at the same wavelengths, as interpolation is handled transparently. All four basic math operations are supported with any combination of spectra, and the user is responsible for deciding which calculations make sense and which not. Operations can be concatenated and combined.
 
-The same four operators are also defined for the case when the first term or factor is a spectrum and the second one a numeric vector, possibly of length one. Recycling rules apply. Package \code{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Pacakge \code{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
+\subsection{What operators are available for operations between spectra and numeric vectors?}
+
+The same four operators plus power (`^') are defined for the case when the first term or factor is a spectrum and the second one a numeric vector, possibly of length one. Recycling rules apply. These operations do not alter \code{w.length}, just the other components such as spectral irradiance and transmittance.
+
+\subsection{What functions are available for operations between spectra?}
+
+Logarithms (\code(log, log10)), square root (\code(sqrt)) and exponentiation (\code(exp)) are defined for spectra. These functions do not alter \code{w.length}, just the other components such as spectral irradiance and transmittance.
+
+\subsection{What `summary' functions are available for spectra?}
+
+The R functions \code(summary, print) work as is, there are special verisions of \code{range, min, max} that when applied to spectra return values corresponding to wavelengths, two generic functions defined in the suite give additional summaries of spectra \code(spread, midpoint).
+
+\subsection{Examples}
+
+Package \code{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Pacakge \code{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum\footnote{Here and in many other examples \code{head} is used to limit the ammount of output to a few lines.}.
 
 <<>>=
 filtered_sun.dt <- sun.dt * gg400.dt
+head(filtered_sun.dt)
 @
 
-The GG440 data is for internal transmittance. Let's assume an uncoated filter with 9\% reflection accross all wavelength (a gross approximation):
+The GG440 data is for internal transmittance. Let's assume a filter with 9\% reflection accross all wavelengths (a coarse approximation):
 
 <<>>=
 filtered_uncoated_sun.dt <- sun.dt * gg400.dt * (100 - 9) / 100
+head(filtered_uncoated_sun.dt)
 @
 
 Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work.
@@ -43,14 +63,14 @@ Calculations related to filters will be explained in detail in chapter \ref{chap
 %%%%
 \section{Task: uniform scaling of a spectrum}\label{sec:base:scale}
 
-As noted above operators are available for "generic.scpt", "source.spct", and "filter.spct" objects, and `recycling' takes places when needed\footnote{Here and in many other examples \code{head} is used to limit the ammount of output to a few lines.}:
+As noted above operators are available for "generic.scpt", "source.spct", and "filter.spct" objects, and `recycling' takes places when needed:
 
 <<>>=
 head(sun.dt)
 head(sun.dt * 2)
 @
 
-All four basic binary operators (\code{+, -, *, /}) can be used in the same way, but when operating between a spectrum an a numeric value the spectrum should be the first term or factor.
+All four basic binary operators (\code{+, -, *, /}) can be used in the same way, but when operating between a spectrum an a numeric value the spectrum should be the first term or factor. If an operation on a ``source.spct'' would yield different values for data on energy and photon basis, only the value based on energy data is returned in \code{s.e.irrad} and \code{s.q.irrad} is set to NA.
 
 %%%%
 \section{Task: simple operations between two spectra}\label{sec:base:simple:opper}
@@ -63,7 +83,7 @@ head(filtered_sun.dt)
 All four basic binary operators (\code{+, -, *, /}) can be used in the same way.
 
 %%%%
-\section{Task: operations between two spectra}\label{sec:base:binoper}
+\section{Task: other operations between two spectra}\label{sec:base:binoper}
 
 If data for two spectra are available for the same wavelength values, then we can still use the built in R math operators. These operators are vectorized, which means that an addition between two vectors adds the elements at each position. A non-sensical example follows:
 
@@ -71,19 +91,31 @@ If data for two spectra are available for the same wavelength values, then we ca
 head(with(sun.data, s.e.irrad^2 / w.length))
 @
 
-These operators cannot be used if the walengths in two spectral data sets do not match. In this situation is where functions in package \code{photobiology} come to the rescue by transparently making the two operand spectra compatible by interpolation. The result they return includes all the invididual wavelength values (the set union of the wavelengths). The functions are \code{sum\_spectra}, \code{subt\_spectra}, \code{prod\_spectra}, \code{div\_spectra}, and \code{oper\_spectra}. Here is a very simple hypothetical example:
+Operations using built-in R operators cannot be done if the walengths in two spectral data sets do not match. In this situation is where functions in package \code{photobiology} come to the rescue by transparently making the two operand spectra compatible by interpolation. The result they return includes all the invididual wavelength values (the set union of the wavelengths). The functions are \code{sum\_spectra}, \code{subt\_spectra}, \code{prod\_spectra}, \code{div\_spectra}, and \code{oper\_spectra}. Here is a very simple hypothetical example:
 
 <<eval=FALSE>>=
-out.data <- sum_spectra(spc1$w.length, spc2$w.length, spc1$s.e.irrad, spc2$s.e.irrad)
+out1.dt <- sum_spectra(spc1$w.length, spc2$w.length, spc1$s.e.irrad, spc2$s.e.irrad)
 @
+
+This is what happens under the hood when we execute code like:
+
+<<eval=FALSE>>=
+out2.data <- spc1 + spc2
+@
+
+with the difference that in the first case only spectral energy irradiance is calculated, while in the second both spectral energy irradiance and spectral photon irradiance are returned. \code{out1.data} is a "data.table", while the second will be an spectrum of a class dependent on the classes of \code{spc1} and \code{spc2}. Obviously, the second calculation will be slower, but in most cases unnoticeably so.
 
 The function \code{oper\_spectra} takes the operator to use as an argument:
 
 <<eval=FALSE>>=
-out.data <- oper_spectra(spc1$w.length, spc2$w.length, spc1$s.e.irrad, spc2$s.e.irrad, bin.oper=`+`)
+out.data <- oper_spectra(spc1$w.length, spc2$w.length, spc1$s.e.irrad, spc2$s.e.irrad, bin.oper=`^`)
 @
 
-and is used to define the functions for the four basic math operators.
+and yields the one spectrum to a power of a second one. Such additional functions are not predifined, as I cannot think of any use for them. \code{oper\_spectra} is used internally to define the functions for the four basic math operators, and the corresponding operators.
+
+\begin{framed}
+An additonal operator between spectra and numeric vectors will be added soon: \code{^}. A few functions are also planned for a future update: \code{exp, log, log10}.
+\end{framed}
 
 \section{Task: trimming a spectrum}\label{sec:base:trim}
 
