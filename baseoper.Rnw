@@ -14,9 +14,36 @@ library(photobiologyLeds)
 @
 
 %%%%
+\section{Introduction: how are example spectra stored}\label{sec:spct:objects}
+
+The suite uses to some exent object-oriented programing. Objects are implemented using ``S3'' classes. For spectra the classes are a specialization of data.table which are in turn a specialization of data.frame. This means that they are compatible with functions that operate on these classes.
+
+The suite defines a ``generic.spct'' class, from which two specialized classes, ``filter.spct'' and ``source.spct'' are derived. Having this class structure allows us to create special methods and operators, which use the same names than the generic ones but take into account the special properties of spectra. Each spectrum object can hold only one spectrum.
+
+Objects of class ``source.spct'' have three components \code{w.length}, \code{s.e.irrad} and \code{s.q.irrad}. They are expected to contain data expresed always in the same units: nm, for \code{w.length}, \wattnm for \code{s.e.irrad}, and \molnm for \code{s.q.irrad}. Objects have a ``comment'' attribute with a textual description.
+
+Objects of class ``filter.spct'' have three components \code{w.length}, \code{Tfr} and \code{Tpc}. They are expected to contain data expresed always in the same units: nm, for \code{w.length}, a fraction of one for \code{Tfr}, and \% for \code{Tpc}. Objects have a ``comment'' attribute with a textual description.
+
+Operators are defined for these objects. These are an easy and simple way of doing calcualtions, but are rather inflexible and performance is expected to be slower than with functions with additonal parameters. The operators are defined so that an operation between two "filter.spct" objects yields another "filter.spct" object, and operation between a "filter.spct" object and a "source.spct", or between two "source.spct" objects yields a "source.spct" object. The object returned contains data only for the overlapping region of wavelengths. The objects do NOT need to have values at the same wavelengths, as interpolation is handled transparently. All four basic math operations are supported with any combination of spectra, and the user is responsible for deciding which calculations make sense and which not. Operations can be concatenated and combined.
+
+The same four operators are also defined for the case when the first term or factor is a spectrum and the second one a numeric vector, possibly of length one. Recycling rules apply. Package \code{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Pacakge \code{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
+
+<<>>=
+filtered_sun.dt <- sun.dt * gg400.dt
+@
+
+The GG440 data is for internal transmittance. Let's assume an uncoated filter with 9\% reflection accross all wavelength (a gross approximation):
+
+<<>>=
+filtered_uncoated_sun.dt <- sun.dt * gg400.dt * (100 - 9) / 100
+@
+
+Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work.
+
+%%%%
 \section{Task: uniform scaling of a spectrum}\label{sec:base:scale}
 
-In R vectorized operators are available for "generic.scpt", "source.spct", and "filter.spct" objects, and `recycling' takes places when needed\footnote{Here and in many other examples \code{head} is used to limit the ammount of output to a few lines.}:
+As noted above operators are available for "generic.scpt", "source.spct", and "filter.spct" objects, and `recycling' takes places when needed\footnote{Here and in many other examples \code{head} is used to limit the ammount of output to a few lines.}:
 
 <<>>=
 head(sun.dt)
