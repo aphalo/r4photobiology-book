@@ -3,7 +3,7 @@
 # rm(list=ls())
 @
 
-\chapter{R Scripts and Programming}
+\chapter{R Scripts and Programming}\label{chap:R:scripts}
 
 \section{What is script?}
 

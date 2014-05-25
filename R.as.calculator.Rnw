@@ -1,10 +1,10 @@
-<<echo=FALSE, eval=TRUE>>=
-# clear everything from the R environment
-# rm(list=ls())
+<<echo=FALSE, eval=FALSE>>=
+clear everything from the R environment
+rm(list=ls())
 @
 
 
-\chapter{R as a powerful calculator}
+\chapter{R as a powerful calculator}\label{chap:R:as:calc}
 
 \section{Working in the R console}
 

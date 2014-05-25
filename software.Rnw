@@ -1,8 +1,45 @@
-\chapter{Software}
+\chapter{Software}\label{chap:software}
 
 \begin{abstract}
-  In this chapter we explain how to .
+  In this chapter we describe the software we used to run the code examples and typeset this handbook, and how to install it.
 \end{abstract}
 
 %%%%
 \section{Task: }\label{sec:}
+
+%%%%
+\section{Introduction}\label{sec:}
+
+All the software used for typesetting this handbook and developing the \textsf{r4photobiology} software suite if free and open source. All the software used is available for the most common operating systems (Unix including OS X, Linux and its variants, and Windows). It is also possible to run everything on a Linux server, and access the server through a web browser.
+
+For just running the examples in the handbook, you would need only to have R installed. That would be enough as long as you as have a text editor available. This is possible, but does not give a very smooth workflow for data analyses which are beyond the very simple. The next step is to use text editor which integrates to some extent with R, but still this is not ideal. Currently the best option is to use the integrated development environment (IDE) called `RStudio'. This is an editor, but tightly integrated with R. Its advantages are especially important in the case of errors and `debugging'. We also use a \LaTeX for typesetting. Is what we used for the handbook, and what we routinely for reporting data analyses, and that PJA also uses for all `overhead' slides he writes. You, do not need to go this far to be able to profit from R and our suite, but the set up we will describe here, is what we currently use, in this by far the best one we have used in 18 years of using and teaching how to use R.
+
+We will not give software installation instructions in this handbook, but will keep a web page with up-to-date instructions. In the following sections we briefly describe the different components of a full and comfortable working environment, but there many alternatives and the only piece that you cannot replace is R itself.
+
+%%%%
+\section{The different pieces}\label{sec:}
+
+\subsection{R}
+
+You will not be able to profit from this handbook's `Cook Book' part, unless you have access to R. R (also called Gnu S) is both the name of a software system, and a dialect of the language S. The language S, although designed with data analysis and statistics in mind, is a computer language that is very powerful in its own way. It allows object oriented programming. Being based in a programming language, and being able to call and being called by programs and subroutine libraries, makes it easily extensible.
+
+R has a well defined mechanism for ``add-ons'' called packages, that are kept in the computer where R is running, in disk folders that conform the library. There is a standard mechanism for installing packages, that works across operating systems (OSs) and computer architectures. There is also a Comprehensive R Archive Network (CRAN) where released versions of packages are kept. Packages can be installed and updated from CRAN and similar repositories directly from within R.
+
+In you are not familiar with R, please, go through the Appendixes \ref{chap:R:as:calc}, \ref{chap:R:scripts}
+and \ref{chap:R:plotting}, before delving into our `Cook Book'.
+
+\subsection{RStudio}
+
+RStudio exists in two versions with identical user interface: a desktop version and a server version. The server version can be used remotely through a web browser.
+
+\subsection{Version control: Git and Subversion}
+
+Version control systems help with keeping track of the history of software development, data analysis, or even manuscript writing. They make it possible for several programmers, analysts, authors and or editors to work on the same files in parallel and then merge their edits. They also allow easy transfer of the whole `projects' between computers. Git is very popular, and Github and Bitbucket are popular hosts for repositories.
+
+\subsection{C++ compiler}
+
+Although R is an interpreted language, a few functions in our suite are written in C++ to achieve better performance. On OS X and Windows, the normal practice is to install binary packages, which are ready compiled. In other systems like Linux and Unix it is the normal practice to install source packages that are compiled at the time of installation.
+
+\subsection{\LaTeX}
+
+\LaTeX is built on top of \TeX. \TeX was frozen long ago, and there are currently a few `improved' derivatives: pdftex, xetex, and luatex. Currently the most popular in western countries is pdftex which can directly output PDF files. xetex can handle both written from left to right and right to left, even in the same document.

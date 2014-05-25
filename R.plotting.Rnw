@@ -1,0 +1,9 @@
+<<echo=FALSE, eval=TRUE>>=
+# clear everything from the R environment
+# rm(list=ls())
+@
+
+\chapter{Making publication quality plots with R}\label{chap:R:plotting}
+
+\section{Introduction}
+

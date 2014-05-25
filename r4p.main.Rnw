@@ -84,9 +84,9 @@
 \colorbox{Dark}{\textcolor{white}{\normalfont\itshape\Large
 A handbook}}\par
 \vspace{\drop}
-{\Large Pedro J. Aphalo}\par
+{\Large Pedro J. Aphalo\\ and\\ Andreas Albert}\par
 \vfill
-{\footnotesize DRAFT}\par
+{\footnotesize DRAFT\\ \today}\par
 \vspace*{\drop}
 \endgroup}
 
@@ -225,6 +225,9 @@ incl_apdx <- TRUE
 @
 
 <<child-r-scripts, child='R.scripts.Rnw', eval=incl_apdx>>=
+@
+
+<<child-r-scripts, child='R.plotting.Rnw', eval=incl_apdx>>=
 @
 
 \backmatter
