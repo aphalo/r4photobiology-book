@@ -182,6 +182,9 @@ incl_apdx <- TRUE
 <<child-uwirrad, child='physics.Rnw', eval=incl_ckbk>>=
 @
 
+<<child-uwirrad, child='astronomy.Rnw', eval=incl_ckbk>>=
+@
+
 <<child-uwirrad, child='baseoper.Rnw', eval=incl_ckbk>>=
 @
 

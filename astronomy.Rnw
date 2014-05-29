@@ -1,0 +1,148 @@
+\chapter{Astronomy}\label{chap:astronomy}
+
+\begin{abstract}
+  In this chapter we explain how to code some astronomical computations in R.
+\end{abstract}
+
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(oce)
+library(RgoogleMaps)
+library(lubridate)
+@
+
+%%%%
+\section{Introduction}\label{sec:physics:intro}
+
+%%%%
+\section{The Sun}\label{sec:physics:intro}
+
+We use function \code{sunAngle} from package \code{ode} to calculate the altitude or elevation of the sun. \code{uniroot} finds the root (the time when then elevation angle, adjusted for twilight angle, equals zero) by iteration.
+
+<<>>=
+day_night <- function(t, lon=0.0, lat=0.0, twilight="none") {
+  if (twilight=="none") {
+    twilight_angle <- 0
+  } else if (twilight=="civil") {
+    twilight_angle <- -6
+  } else if (twilight=="nautical") {
+    twilight_angle <- -12
+  } else if (twilight=="astronomical") {
+    twilight_angle <- -18
+  }
+
+  t <- as.numeric(t)
+  alt <- function(t){
+    return(sunAngle(t,
+                    longitude=lon,
+                    latitude=lat)$altitude +
+             twilight_angle)
+  }
+  rise <- try(
+    uniroot(alt, lower=t-86400/2, upper=t)$root,
+    silent=FALSE)
+  if (inherits(rise, "try-error")) {
+    rise <- NA
+  }
+  rise_time <- as.POSIXct(rise, origin="1960-01-01")
+  set <- try(
+    uniroot(alt, lower=t, upper=t+86400/2)$root,
+    silent=FALSE)
+  if (inherits(set, "try-error")) {
+    set <- NA
+  }
+  set_time <- as.POSIXct(set, origin="1960-01-01")
+  daylength=set_time - rise_time
+  return(list(sunrise = rise_time,
+              sunset = set_time,
+              daylength = daylength,
+              nightlength = 24 - daylength
+  ))
+}
+@
+
+\begin{framed}
+We will add this function definition to the suite, but may be not exactly like this.
+\end{framed}
+
+One could also use R's built-in functions for POSIXct but package \code{lubridate} makes working with dates and times, much easier. As first example, we just accept the default of zero longitude and  latitude, giving the day length at the equator:
+
+<<>>=
+day_night(ymd("2013-12-01"))
+@
+
+Package \code{lubridate} also defines other functions for dates, and each of the functions can decode dates in different formats as long as the year, month and date order in the string agrees with the name of the function:
+<<>>=
+ymd("20140320")
+ymd("2014-03-20")
+ymd("14-03-20")
+ymd("2014-3-20")
+ymd("2014/3/20")
+dmy("20032014")
+mdy("03202014")
+@
+
+In the we use \code{getGeoCode} to get the latitude and longitude of cities. \code{getGeoCode} accepts any valid Google Maps search terms, including street addresses, and postal codes within cities. We calculate the day length for Buenos Aires:
+
+<<>>=
+geo_code <- getGeoCode("Buenos Aires")
+geo_code
+day_night(ymd("2013-12-21"),
+          lon = geo_code["lon"], lat = geo_code["lat"])
+day_night(ymd("2013-06-21"),
+          lon = geo_code["lon"], lat = geo_code["lat"])
+@
+
+For Munich:
+
+<<>>=
+geo_code <- getGeoCode("Munich")
+geo_code
+day_night(ymd("2013-12-21"),
+          lon = geo_code["lon"], lat = geo_code["lat"])
+day_night(ymd("2013-06-21"),
+          lon = geo_code["lon"], lat = geo_code["lat"])
+@
+
+For Joensuu:
+
+<<>>=
+geo_code <- getGeoCode("Joensuu")
+geo_code
+day_night(ymd("2013-12-21"),
+          lon = geo_code["lon"], lat = geo_code["lat"])
+day_night(ymd("2013-06-21"),
+          lon = geo_code["lon"], lat = geo_code["lat"])
+@
+
+For Joensuu, equinox day:
+
+<<>>=
+geo_code <- getGeoCode("Joensuu")
+geo_code
+day_night(ymd("2013-09-23"),
+          lon = geo_code["lon"], lat = geo_code["lat"])
+day_night(ymd("2013-09-23"),
+          lon = geo_code["lon"], lat = geo_code["lat"],
+          twilight="civil")
+day_night(ymd("2013-09-23"),
+          lon = geo_code["lon"], lat = geo_code["lat"],
+          twilight="nautical")
+day_night(ymd("2013-09-23"),
+          lon = geo_code["lon"], lat = geo_code["lat"],
+          twilight="astronomical")
+@
+
+\code{sunAngle} not only returns solar elevation, but all the angles defining the position of the sun. The time argument to \code{sunAngle} should be in UTC (universal time coordinates, which is equal to GMT) time zone, but we can easily convert another time zone to UTC with the function \code{with\_tz} from package \code{lubridate}.
+
+<<>>=
+geo_code <- getGeoCode("Joensuu")
+geo_code
+my_time <- ymd_hms("2014-05-29 18:00:00", tz="EET")
+sunAngle(with_tz(my_time, "UTC"),
+         lon = geo_code["lon"], lat = geo_code["lat"])
+@
+
+
