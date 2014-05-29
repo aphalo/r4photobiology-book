@@ -145,4 +145,19 @@ sunAngle(with_tz(my_time, "UTC"),
          lon = geo_code["lon"], lat = geo_code["lat"])
 @
 
+Where was the sun when I run the code to generate this .PDF file?
+
+<<>>=
+geo_code <- getGeoCode("Joensuu")
+geo_code
+my_time <- now()
+sunAngle(with_tz(my_time, "UTC"),
+         lon = geo_code["lon"], lat = geo_code["lat"])
+@
+
+Just in case package \code{lubridate} interferes with package \code{data.table} we detach it:
+
+<<>>=
+detach("package:lubridate")
+@
 
