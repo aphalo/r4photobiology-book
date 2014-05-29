@@ -30,31 +30,36 @@ The task to be completed is to calculate the (energy) irradiance ($\irr$) in \wa
 Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and $\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$:
 
 <<tidy=FALSE>>=
-with(sun.data, energy_irradiance(w.length, s.e.irrad,
-                                 new_waveband(400, 700)))
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad,
+                       new_waveband(400, 700)))
 @
 
 Function \code{PAR()} is predefined in package \PBVIS as a convenience function, so the code above can be replaced by:
 
 <<>>=
-with(sun.data, energy_irradiance(w.length, s.e.irrad, PAR()))
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad, PAR()))
 @
 
 If no waveband is supplied as argument, then the whole range of wavelengths in the spectral data is used for the integration, and the `name' attribute is generated accordingly:
 <<tidy=FALSE>>=
-with(sun.data, energy_irradiance(w.length, s.e.irrad))
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad))
 @
 
 If a waveband that does not fully overlap with the data is supplied as argument, then spectral irradiance for wavelengths outside the range is assumed to be zero:
 <<tidy=FALSE>>=
-with(sun.data, energy_irradiance(w.length, s.e.irrad,
-                                 new_waveband(700,1000)))
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad,
+                       new_waveband(700,1000)))
 @
 
 If a waveband that does not overlap with the data is supplied as argument, then spectral irradiance for wavelengths outside the range is assumed to be zero:
 <<tidy=FALSE>>=
-with(sun.data, energy_irradiance(w.length, s.e.irrad,
-                                 new_waveband(100,200)))
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad,
+                       new_waveband(100,200)))
 @
 
 %%%%
@@ -95,13 +100,17 @@ In the case of the calculation of energy irradiance from spectral photon irradia
 And the code\footnote{The dataframe \code{sun.data} contains both spectral energy irradiance vales in `column' \code{s.e.irrad} and spectral photon irradiance in `column' \code{s.q.irrad}}:
 
 <<>>=
-with(sun.data, energy_irradiance(w.length, s.q.irrad, PAR()), unit.in="photon")
+with(sun.data,
+     energy_irradiance(w.length, s.q.irrad,
+                       PAR()), unit.in="photon")
 @
 
 The calculation of photon irradiance from spectral photon irradiance, is a simple integration, analogous to that in equation \ref{eq:energy:irrad}, and the code is:
 
 <<>>=
-with(sun.data, photon_irradiance(w.length, s.q.irrad, PAR()), unit.in="photon")
+with(sun.data,
+     photon_irradiance(w.length, s.q.irrad,
+                       PAR()), unit.in="photon")
 @
 
 %%%%
@@ -110,9 +119,11 @@ with(sun.data, photon_irradiance(w.length, s.q.irrad, PAR()), unit.in="photon")
 It is possible to calculate the irradiances for several wavebands with a single function call by supplying a \code{list} of \code{wavebands} as argument:
 <<>>=
 with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, list(Red(), Green(), Blue()))) * 1e6
+     photon_irradiance(w.length, s.e.irrad,
+                       list(Red(), Green(), Blue()))) * 1e6
 Q.RGB <- with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, list(Red(), Green(), Blue()))) * 1e6
+     photon_irradiance(w.length, s.e.irrad,
+                       list(Red(), Green(), Blue()))) * 1e6
 signif(Q.RGB, 3)
 Q.RGB[1]
 Q.RGB["Green.ISO"]
@@ -121,7 +132,8 @@ Q.RGB["Green.ISO"]
 A named list can be used to override the use as names for the output of the waveband names:
 <<>>=
 with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, list(R=Red(), G=Green(), B=Blue()))) * 1e6
+     photon_irradiance(w.length, s.e.irrad,
+                       list(R=Red(), G=Green(), B=Blue()))) * 1e6
 @
 
 Even when using a single waveband:
@@ -207,7 +219,8 @@ To calculate this for our example sunlight spectrum we can use the following cod
 
 <<tidy=FALSE>>=
 with(sun.data,
-     photon_ratio(w.length, s.e.irrad, Red("Smith"), Far_red("Smith")))
+     photon_ratio(w.length, s.e.irrad,
+                  Red("Smith"), Far_red("Smith")))
 @
 
 or using the predefined convenience function \code{R\_FR\_ratio}:
@@ -231,7 +244,8 @@ An energy ratio, equivalent to $\zeta$ can be calculated as follows:
 
 <<tidy=FALSE>>=
 with(sun.data,
-     energy_ratio(w.length, s.e.irrad, Red("Smith"), Far_red("Smith")))
+     energy_ratio(w.length, s.e.irrad,
+                  Red("Smith"), Far_red("Smith")))
 @
 
 For this infrequently used ratio, no pre-defined function is provided.
@@ -265,14 +279,16 @@ It can be of interest to split the total (energy) irradiance into adjacent regio
 
 <<>>=
 with(sun.data,
-     split_energy_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700)))
+     split_energy_irradiance(w.length, s.e.irrad,
+                             c(400, 500, 600, 700)))
 @
 
 Here we demonstrate that the sum of the four `split' irradiances add to the total for the range of wavelengths covered:
 
 <<>>=
 with(sun.data,
-     sum(split_energy_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700))))
+     sum(split_energy_irradiance(w.length, s.e.irrad,
+                                 c(400, 500, 600, 700))))
 with(sun.data,
      energy_irradiance(w.length, s.e.irrad, PAR()))
 @
@@ -281,38 +297,51 @@ It also possible to obtain the `split' as a vector of fractions adding up to one
 
 <<>>=
 with(sun.data,
-     split_energy_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), scale="relative"))
+     split_energy_irradiance(w.length, s.e.irrad,
+                             c(400, 500, 600, 700),
+                             scale="relative"))
 @
 
 or as percentages:
 
 <<>>=
 with(sun.data,
-     split_energy_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), scale="percent"))
+     split_energy_irradiance(w.length, s.e.irrad,
+                             c(400, 500, 600, 700),
+                             scale="percent"))
 @
 
 If the `limits' cover only a region of the spectral data, relative and percent values will be calculated with that region as a reference.
 
 <<>>=
-with(sun.data, split_energy_irradiance(w.length, s.e.irrad, c(400,500,600,700), scale="percent"))
+with(sun.data,
+     split_energy_irradiance(w.length, s.e.irrad,
+                             c(400,500,600,700),
+                             scale="percent"))
 @
 
 <<>>=
-with(sun.data, split_energy_irradiance(w.length, s.e.irrad, c(400,500,600), scale="percent"))
+with(sun.data,
+     split_energy_irradiance(w.length, s.e.irrad,
+                             c(400,500,600),
+                             scale="percent"))
 @
 
 A vector of two wavelengths is valid input, although not very useful for percentages:
 
 <<>>=
 with(sun.data,
-     split_energy_irradiance(w.length, s.e.irrad, c(400, 700), scale="percent"))
+     split_energy_irradiance(w.length, s.e.irrad,
+                             c(400, 700),
+                             scale="percent"))
 @
 
 In contrast, for \code{scale="absolute"}, the default, it can be used as a quick way of calculating an irradiance for a range of wavelengths without having to define a \code{waveband}:
 
 <<>>=
 with(sun.data,
-     split_energy_irradiance(w.length, s.e.irrad, c(400, 700)))
+     split_energy_irradiance(w.length, s.e.irrad,
+                             c(400, 700)))
 @
 
 %%%%
@@ -322,5 +351,7 @@ The function \code{split\_photon\_irradiance} takes the same arguments as the eq
 
 <<>>=
 with(sun.data,
-     split_photon_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), scale="percent"))
+     split_photon_irradiance(w.length, s.e.irrad,
+                             c(400, 500, 600, 700),
+                             scale="percent"))
 @

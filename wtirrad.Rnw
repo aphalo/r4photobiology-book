@@ -16,7 +16,7 @@ library(photobiologyUV)
 %%%%
 \section{Introduction}\label{sec:wt:intro}
 
-Weighted irradiance is usually reported in weighted energy units, but it is possible to also use weighted photon based units. In practice the R code to use is exactly the same as for unweighted irradiances, as all the information needed is stored in the \code{waveband} object. An additional factor comes into play and it is the \emph{normalization wavelength}, which is accepted as an argument by the predefined waveband creation functions that use a biological spectral weighting function (BSWF). The focus of this chapter is on the differences between calculataions for weighted irradiances compared to those for unweighted irradiances decribed in chapter \ref{chap:uw:irrad}. In particular it is important that you read sections \ref{sec:uw:e2e}, \ref{sec:uw:e2q}, \ref{sec:uw:q2e}, and \ref{sec:uw:mult:wb} before reading the present chapter.
+Weighted irradiance is usually reported in weighted energy units, but it is possible to also use weighted photon based units. In practice the R code to use is exactly the same as for unweighted irradiances, as all the information needed is stored in the \code{waveband} object. An additional factor comes into play and it is the \emph{normalization wavelength}, which is accepted as an argument by the predefined waveband creation functions that use a biological spectral weighting function (BSWF). The focus of this chapter is on the differences between calculations for weighted irradiances compared to those for unweighted irradiances described in chapter \ref{chap:uw:irrad}. In particular it is important that you read sections \ref{sec:uw:e2e}, \ref{sec:uw:e2q}, \ref{sec:uw:q2e}, and \ref{sec:uw:mult:wb} before reading the present chapter.
 
 %%%%
 \section{Task: choosing the normalization wavelength}\label{sec:wt:intro}
@@ -24,21 +24,23 @@ Weighted irradiance is usually reported in weighted energy units, but it is poss
 Function \code{GEN.G()} is predefined in package \PBUV as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \cite{Green198x}:
 
 <<>>=
-with(sun.data, energy_irradiance(w.length, s.e.irrad, GEN.G()))
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad, GEN.G()))
 @
 
 The code above uses the default normalization wavelength of 300 nm. Any arbitrary wavelength (nm), within the range of the waveband can be provided as an argument.
 
 <<>>=
 range(GEN.G())
-with(sun.data, energy_irradiance(w.length, s.e.irrad, GEN.G(280)))
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad, GEN.G(280)))
 @
 
 
 %%%%
 \section{Task: use weighted wavebands}\label{sec:wt:intro}
 
-Please, consult the packages' documentation for a list of predefined functions for creating weighted wavebands. Here we will present just a few examples of their use. We usually think of weighted irradiances as being defined by the weighting function, however, in many cases different normalizations are in use, and the result of any calcualtion depends very strongly on the wavelength used for normalization. For this reason, the functions provided accept an argument that can be used to select the normalization wavelength. In general, the default, is to use the most frequently used normalization.
+Please, consult the packages' documentation for a list of predefined functions for creating weighted wavebands. Here we will present just a few examples of their use. We usually think of weighted irradiances as being defined by the weighting function, however, in many cases different normalizations are in use, and the result of any calculation depends very strongly on the wavelength used for normalization. For this reason, the functions provided accept an argument that can be used to select the normalization wavelength. In general, the default, is to use the most frequently used normalization.
 
 In a few cases different mathematical formulations are available for the same spectrum, and the differences among them can be quite large. In such cases separate functions are provided for each of them (e.g. \code{GEN.N} and \code{GEN.T} for Green's and Timijan's formulations of Caldwell's GPAS).
 

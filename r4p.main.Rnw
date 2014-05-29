@@ -230,6 +230,20 @@ incl_apdx <- TRUE
 <<child-r-scripts, child='R.plotting.Rnw', eval=incl_apdx>>=
 @
 
+\chapter{Build information}
+
+<<>>=
+Sys.info()
+@
+
+<<eval=FALSE, echo=FALSE>>=
+R.Version()
+@
+
+<<>>=
+sessionInfo()
+@
+
 \backmatter
 
 \printbibliography

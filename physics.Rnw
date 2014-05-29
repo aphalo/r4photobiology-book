@@ -27,7 +27,7 @@ The emitted spectral radiance (\radiance[s]) is described by Planck's law of bla
 \radiance[s](\lambda,T) = \frac{2hc^2}{\lambda^5}\cdot\frac{1}{\mathrm{e}^{(hc/k_\mathrm{B}T\lambda)}-1} \label{equ_planck}
 \end{equation}
 %
-with Boltzmann's constant $k_\mathrm{B}=1.381\times 10^{-23}$ \Unit{J\,K^{-1}}, Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecond and speed of light in vacuum $c=2.998\times 10^{8}$ \msecond.
+with Boltzmann's constant $k_\mathrm{B}=1.381\times 10^{-23}$ \Unit{J\,K^{-1}}, Planck's constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecond and speed of light in vacuum $c=2.998\times 10^{8}$ \msecond.
 
 We can easily define an R function based on the equation above, which returns \Unit{W\,sr^{−1}\,m^{−3}}:
 
@@ -42,12 +42,12 @@ black_body_spectrum <- function(w.length, Tabs) {
 }
 @
 
-We can use the function for calculating black body emmision spectra for different temperatures:
+We can use the function for calculating black body emission spectra for different temperatures:
 <<>>=
 black_body_spectrum(500, 5000)
 @
 
-The fucntion is vectorized:
+The function is vectorized:
 <<>>=
 black_body_spectrum(c(300,400,500), 5000)
 @
@@ -56,13 +56,13 @@ black_body_spectrum(c(300,400,500), 5000)
 black_body_spectrum(500, c(4500,5000))
 @
 
-We aware that if two vectors are supplied, then the elements in each one are matched and recycled\footnote{Excercise: calculate each of the four values individually to work out how the two vectors are being used.}:
+We aware that if two vectors are supplied, then the elements in each one are matched and recycled\footnote{Exercise: calculate each of the four values individually to work out how the two vectors are being used.}:
 
 <<>>=
 black_body_spectrum(c(500, 500, 600, 600), c(4500,5000)) # tricky!
 @
 
-We can use the function defined above for plotting black body emmision spectra for different temperatures. We use \code{ggplot2} and directly plot a function using \code{stat\_function}, using \code{args} to pass the additional argument giving the absolute temperature to be used. We plot three lines using three different tempeartures (5600~K, 4500~K, and 3700~K):
+We can use the function defined above for plotting black body emission spectra for different temperatures. We use \code{ggplot2} and directly plot a function using \code{stat\_function}, using \code{args} to pass the additional argument giving the absolute temperature to be used. We plot three lines using three different temperatures (5600~K, 4500~K, and 3700~K):
 
 <<tidy=FALSE>>=
 ggplot(data=data.frame(x=c(50,1500)), aes(x)) +
@@ -80,7 +80,7 @@ ggplot(data=data.frame(x=c(50,1500)), aes(x)) +
 @
 
 
-Wien's displacement law, gives the peak wavelength of the radiation emitted by a blackbody as a function of its absolute temperature.
+Wien's displacement law, gives the peak wavelength of the radiation emitted by a black body as a function of its absolute temperature.
 %
 \begin{equation}
 \lambda_{max} \cdot T = 2.898 \times 10^6 \,\mathrm{nm\,K} \label{equ_wien}
@@ -154,7 +154,7 @@ which in S language is:
 A2T <- function(x) {10^-x}
 @
 
-They could be directly applied to spectra but doing this still gives "filter.spc" objects as a result, with the data labelled "T", when it has change inot Absorbance. As the spectra objects are data.tables, one can add a new column, say with transmittances to a copy of the filter data as follows.
+They could be directly applied to spectra but doing this still gives "filter.spc" objects as a result, with the data labelled "T", when it has change into absorbance. As the spectra objects are data.tables, one can add a new column, say with transmittances to a copy of the filter data as follows.
 
 <<>>=
 my.gg400.dt <- copy(gg400.dt)
