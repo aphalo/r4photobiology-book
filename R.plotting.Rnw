@@ -7,3 +7,181 @@
 
 \section{Introduction}
 
+Being R extensible, in addition to the built-in plotting functions, there are several alternatives provided by packages. Of the general purpose ones, the most extensively used are \code{Lattice} and \code{ggplot2}. There are packages that add extra functionality to these packages.
+
+In the examples in this handbook we mainly use \code{ggplot}, \code{ggmap} and \code{ggtern}, together with our own \code{photobiologygg}. In this appendix we give a very brief introduction to the `grammar of graphics' and \code{ggplot2}.
+
+The grammar of graphics is based on aesthetics (\code{aes}) as for example colour, geometric elements \code{geom\_\ldots} such as lines, and points, statistics \code{stat\_\ldots}, scales \code{scale\_\ldots}, labels \code{labs}, and themes \code{theme\_\ldots}. Plots are assembled from these elements, we start with a plot with two easthetics, and one geom:
+
+<<>>=
+ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
+  geom_line()
+@
+
+Aesthetics can be `assigned' to data variables, and to constants:
+
+<<>>=
+ggplot(sun.dt, aes(x=w.length, y=s.q.irrad, colour="red")) +
+  geom_line()
+@
+
+Data can be the `result of a calculation':
+
+<<>>=
+ggplot(sun.dt * gg400.dt, aes(x=w.length, y=s.q.irrad)) +
+  geom_line()
+@
+
+The aesthetics and data given as \code{ggplot}'s arguments become the defaults for the geoms, but geoms also take aesthetics and data as arguments, which then override the defaults:
+
+<<>>=
+ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
+  geom_line(colour="red") +
+  geom_line(data=sun.dt * gg400.dt, colour="blue")
+@
+
+Another way of plotting these data, is to first assemble a single data.frame or data.table with all the data. We will use the example data that is as data.tables:
+
+<<>>=
+unfiltered_sun.dt <- copy(sun.dt)
+unfiltered_sun.dt[ , filter := "none"]
+filtered_sun.dt <- sun.dt * gg400.dt
+filtered_sun.dt[ , filter := "GG400"]
+data4plot.dt <- rbind(unfiltered_sun.dt, filtered_sun.dt)
+data4plot.dt[ , filter := factor(filter)]
+@
+
+Now we can do the plot assigning \code{filter} to an aesthetic:
+
+<<>>=
+ggplot(data4plot.dt, aes(x=w.length, y=s.q.irrad, colour=filter)) +
+  geom_line()
+@
+
+We can assign the same variable to more than one aesthetic:
+
+<<>>=
+ggplot(data4plot.dt, aes(x=w.length, y=s.q.irrad,
+                   colour=filter, linetype=filter)) +
+  geom_line()
+@
+
+We can change the labels for the different aesthetics, and give a title:
+
+<<>>=
+ggplot(data4plot.dt,
+       aes(x=w.length, y=s.q.irrad * 1e6, colour=filter)) +
+  geom_line() +
+  labs(x="Wavelength (nm)",
+       y="Spectral photon irradiance\n(umol m-2 s-1 nm-1)",
+       colour="Filter:",
+       title="Filtered and unfiltered solar spectrum")
+@
+
+We can assign a ggplot object to a variable:
+
+<<>>=
+myplot <- ggplot(data4plot.dt,
+       aes(x=w.length, y=s.q.irrad * 1e6, colour=filter)) +
+  geom_line() +
+  labs(x="Wavelength (nm)",
+       y="Spectral photon irradiance\n(umol m-2 s-1 nm-1)",
+       colour="Filter:",
+       title="Filtered and unfiltered solar spectrum")
+@
+
+And now we can add more elements to the plot stored in the variable:
+
+<<>>=
+myplot + theme_bw()
+myplot + scale_y_log10()
+@
+
+We will now show an example of use of \code{stat\_smooth}
+
+<<>>=
+ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
+  geom_line() +
+  stat_smooth()
+@
+
+We make the spline more flexible:
+
+<<>>=
+ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
+  geom_line() +
+  stat_smooth(span=0.1)
+@
+
+We use a polynomial of order 8, fitted by lm, as smoother:
+
+<<>>=
+ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
+  geom_line() +
+  stat_smooth(method="lm", formula=y~poly(x,8))
+@
+
+We can also directly plot functions:
+
+<<>>=
+ggplot(data.frame(x=-3:3), aes(x=x)) +
+  stat_function(fun=dnorm)
+@
+
+
+We can even pass additional arguments to a function:
+
+<<>>=
+ggplot(data.frame(x=-3:3), aes(x=x)) +
+  stat_function(fun = dnorm, args = list(mean = 1, sd = .5))
+@
+
+Of course, user-defined functions (not shown), and anonymous fucntions can also be used:
+
+<<>>=
+ggplot(data.frame(x=0:1), aes(x=x)) +
+  stat_function(fun = function(x, a, b){a + b * x^2},
+                args = list(a = 1, b = 1.4))
+@
+
+Another example of a predifined funcrion, but in this case the default scale is not the best:
+
+<<>>=
+ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
+  stat_function(fun=sin)
+@
+
+In this case we need to change the x-axis scale to better suit the sin functions and the use of radians as angular units:
+
+<<>>=
+ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
+  stat_function(fun=sin) +
+  scale_x_continuous(
+    breaks=c(0, 0.5, 1, 1.5, 2) * pi,
+    labels=c("0", expression(0.5~pi), expression(pi),
+             expression(1.5~pi), expression(2~pi))) +
+  labs(y="sin(x)")
+@
+
+Finally we can add annotations. Annotations use the data coordinates of the plot, but do not `inherit' data or aesthetics from the ggplot.
+
+<<>>=
+ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
+  stat_function(fun=sin) +
+  scale_x_continuous(
+    breaks=c(0, 0.5, 1, 1.5, 2) * pi,
+    labels=c("0", expression(0.5~pi), expression(pi),
+             expression(1.5~pi), expression(2~pi))) +
+  labs(y="sin(x)") +
+  annotate(geom="text",
+           label=c("+", "-"),
+           x=c(0.5, 1.5) * pi, y=c(0.5, -0.5),
+           size=20) +
+  annotate(geom="point",
+           colour="red",
+           shape=21,
+           fill="white",
+           x=c(0, 1, 2) * pi, y=0,
+           size=6)
+@
+
