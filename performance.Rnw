@@ -1,7 +1,7 @@
 \chapter{Optimizing performance}
 
 \begin{abstract}
-  In this chapter we explain how to make your photobiology calculations execute as fast as possible. The code has been profiled and the performance bottlenecks removed in most cases the implementing some functions in C++. Furthermore copying of sppectra is minimized by uisng package \code{data.table} as the base class of all objects where spectral data is stored. However, it is possible to improve performance even more by changing some defaults and writing efficient user code. This is what is discussed in the present chapter, and should not be of concern unless several thousands of spectra need to be processed.
+  In this chapter we explain how to make your photobiology calculations execute as fast as possible. The code has been profiled and the performance bottlenecks removed in most cases the implementing some functions in C++. Furthermore copying of spectra is minimized by using package \code{data.table} as the base class of all objects where spectral data is stored. However, it is possible to improve performance even more by changing some defaults and writing efficient user code. This is what is discussed in the present chapter, and should not be of concern unless several thousands of spectra need to be processed.
 \end{abstract}
 
 \section{Packages used in this chapter}
@@ -14,7 +14,7 @@ library(photobiologyUV)
 library(microbenchmark)
 @
 
-ALthough not a recommended practice, just to keep the examples shorter, we \code{attach} a data set for the solar spectrum:
+Although not a recommended practice, just to keep the examples shorter, we \code{attach} a data set for the solar spectrum:
 <<>>=
 attach(sun.data)
 @
@@ -28,7 +28,7 @@ There is also a lot you can achieve by carefully writing the code in your own sc
 
 Being R an interpreted language, there is rather little automatic code optimization taking place, so you may find that even simple things like moving invariant calculations out of loops, and avoiding repeated calculations of the same value by storing the value in a variable can improve performance.
 
-This type of `good style' optimizations have been done throughout the suite's code, and more especific problem identified by profiling and and dealt with case by case. Of course, to achieve maximum overall performance, to should follow the same approach with your own code.
+This type of `good style' optimizations have been done throughout the suite's code, and more specific problem identified by profiling and and dealt with case by case. Of course, to achieve maximum overall performance, to should follow the same approach with your own code.
 
 %%%%
 \section{Task: avoiding repeated validation}\label{sec:perf:check}
@@ -44,7 +44,7 @@ In the case of calculating weighted irradiances on many spectra having exactly t
 \section{Task: benchmarking}\label{sec:perf:benchmark}
 
 You can use the package \code{microbenchmark} to time the code and find the parts that slow it down. I have used it, and also
-I have used profiling to optimize the code for speed. The examples below show how choosing different values from the defualts
+I have used profiling to optimize the code for speed. The examples below show how choosing different values from the defaults
 can speed up calculations when the same calculations are done repeatedly on spectra measured at exactly the same wavelengths, something which is usual when analysing spectra measured with the same instrument. The choice of defaults is based on what is
 best when processing a moderate number of spectra, say less than a few hundreds, as opposed to many thousands.
 
@@ -57,8 +57,13 @@ library(microbenchmark)
 The convenience functions are slightly slower than the generic \code{irradiance} function.
 
 <<>>=
-res1 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(irradiance(w.length, s.e.irrad, PAR(), unit.out="photon", use.cache=TRUE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  irradiance(w.length, s.e.irrad, PAR(), unit.out="photon",
+             use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
 @
 
 Using the generic reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\% if using the cache.
@@ -68,16 +73,24 @@ Using the generic reduces the median execution time from \Sexpr{med1 <- median(r
 Using the cache when repeatedly applying the same waveband has a large impact on the execution time.
 
 <<>>=
-res1 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, PAR()), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, PAR()),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
 @
-When uisng an unweighted waveband the cache reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
+When using an unweighted waveband the cache reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
 
 When using BSWFs the speed up by use of the cache is more important, and dependent on the complexity of the equation used in the calculation.
 
 <<>>=
-res1 <- microbenchmark(energy_irradiance(w.length, s.e.irrad, CIE()), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(energy_irradiance(w.length, s.e.irrad, CIE(), use.cache=TRUE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  energy_irradiance(w.length, s.e.irrad, CIE()),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  energy_irradiance(w.length, s.e.irrad, CIE(), use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
 @
 
 When using a weighted waveband, in this example, \code{CIE()}, the cache reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
@@ -87,28 +100,45 @@ When using a weighted waveband, in this example, \code{CIE()}, the cache reduces
 Disabling the checking of the spectrum halves once again the execution time for unweighted wavebands.
 
 <<>>=
-res1 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE, check.spectrum=FALSE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE,
+                    check.spectrum=FALSE),
+  times=100L, control=list(warmup = 10L))
 @
 When using an unweighted waveband, in this example, \code{PAR()}, the disabling the data validation checking reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
 
 \subsection{Using stored wavebands}
 
-Saving a waveband object and reusing it, can give an additonal speed up when all other optimizations are also used.
+Saving a waveband object and reusing it, can give an additional speed up when all other optimizations are also used.
 
 <<>>=
 myPAR <- PAR()
-res1 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE, check.spectrum=FALSE), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, myPAR, use.cache=TRUE, check.spectrum=FALSE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE,
+                    check.spectrum=FALSE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, myPAR, use.cache=TRUE,
+                    check.spectrum=FALSE),
+  times=100L, control=list(warmup = 10L))
 @
 When using an unweighted waveband, in this example, \code{PAR()}, using a saved waveband object reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
 
-Saving a waveband object that uses weighting and reusing it, gives an additonal speed up when all other optimizations are also used.
+Saving a waveband object that uses weighting and reusing it, gives an additional speed up when all other optimizations are also used.
 
 <<>>=
 myCIE <- CIE()
-res1 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, CIE(), use.cache=TRUE, check.spectrum=FALSE), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(photon_irradiance(w.length, s.e.irrad, myCIE, use.cache=TRUE, check.spectrum=FALSE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, CIE(), use.cache=TRUE,
+                    check.spectrum=FALSE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  photon_irradiance(w.length, s.e.irrad, myCIE, use.cache=TRUE,
+                    check.spectrum=FALSE),
+  times=100L, control=list(warmup = 10L))
 @
 When using a weighted waveband, in this example, \code{CIE()}, using a saved waveband object reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
 
@@ -116,11 +146,16 @@ When using a weighted waveband, in this example, \code{CIE()}, using a saved wav
 
 \subsection{Inserting hinges}
 
-Inserting `hinges' to reduce integration errors slows down the computations considerably. If the spectral data is measured with a small wavelength step, the errors are rather small. By default the use of `hinges' is automatically decided based on the average wavelength step in the spectral data. The `cost' of using hinges depends on the waveband definition, as BSWFs with discountinuities in the slope require several hinges, while un unweighted one requires at most two, one at each boundary.
+Inserting `hinges' to reduce integration errors slows down the computations considerably. If the spectral data is measured with a small wavelength step, the errors are rather small. By default the use of `hinges' is automatically decided based on the average wavelength step in the spectral data. The `cost' of using hinges depends on the waveband definition, as BSWFs with discontinuities in the slope require several hinges, while unweighted one requires at most two, one at each boundary.
 
 <<>>=
-res1 <- microbenchmark(energy_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(energy_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE, use.hinges=TRUE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  energy_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  energy_irradiance(w.length, s.e.irrad, PAR(), use.cache=TRUE,
+                    use.hinges=TRUE),
+  times=100L, control=list(warmup = 10L))
 @
 When using an uweighted waveband, in this example, \code{PAR()}, enabling use of hinges increases the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by a  factor of \Sexpr{signif(med2 / med1)}.
 
@@ -129,12 +164,17 @@ small wavelength step, the errors are rather small. By default the use of `hinge
 average wavelength step in the spectral data.
 
 <<>>=
-res1 <- microbenchmark(energy_irradiance(w.length, s.e.irrad, CIE(), use.cache=TRUE), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(energy_irradiance(w.length, s.e.irrad, CIE(), use.cache=TRUE, use.hinges=TRUE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  energy_irradiance(w.length, s.e.irrad, CIE(), use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  energy_irradiance(w.length, s.e.irrad, CIE(), use.cache=TRUE,
+                    use.hinges=TRUE),
+  times=100L, control=list(warmup = 10L))
 @
 When using an weighted waveband, in this example, \code{CIE()}, enabling use of hinges increases the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by a  factor of \Sexpr{signif(med2 / med1)}.
 
-\section{Overall speedup achievable}
+\section{Overall speed-up achievable}
 
 \subsection{\code{GEN.G}}
 
@@ -186,7 +226,7 @@ irradiance(w.length, s.e.irrad, gen.g,
            unit.out="photon")
 @
 
-These results are based on spectral data at 1 nm interval, for more densily measured data the effect of not using hinges becomes even smaller. In contrast, with data measured ar wider wvaelength steps, the errors will be larger. They also depend on the specific BSWF being used.
+These results are based on spectral data at 1 nm interval, for more densely measured data the effect of not using hinges becomes even smaller. In contrast, with data measured at wider wavelength steps, the errors will be larger. They also depend on the specific BSWF being used.
 
 \subsection{\code{CIE}}
 
@@ -238,31 +278,56 @@ irradiance(w.length, s.e.irrad, CIE,
            unit.out="photon")
 @
 
-These results are based on spectral data at 1 nm interval, for more densily measured data the effect of not using hinges becomes even smaller. In contrast, with data measured ar wider wvaelength steps, the errors will be larger. They also depend on the specific BSWF being used.
+These results are based on spectral data at 1 nm interval, for more densely measured data the effect of not using hinges becomes even smaller. In contrast, with data measured at wider wavelength steps, the errors will be larger. They also depend on the specific BSWF being used.
 
 \subsection{Using \code{split\_irradiance}}
 
 Using the cache also helps with \code{split\_irradiance}.
 
 <<>>=
-res1 <- microbenchmark(split_photon_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700)), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(split_photon_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), use.cache=TRUE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  split_photon_irradiance(w.length, s.e.irrad,
+                          c(400, 500, 600, 700)),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  split_photon_irradiance(w.length, s.e.irrad,
+                          c(400, 500, 600, 700),
+                          use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
 @
 When using \code{split\_irradiance}, the cache reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
 
 Using hinges slows down calculations:
 
 <<>>=
-res1 <- microbenchmark(split_photon_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), use.cache=TRUE), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(split_photon_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), use.cache=TRUE, use.hinges=TRUE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  split_photon_irradiance(w.length, s.e.irrad,
+                          c(400, 500, 600, 700),
+                          use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  split_photon_irradiance(w.length, s.e.irrad,
+                          c(400, 500, 600, 700),
+                          use.cache=TRUE,
+                          use.hinges=TRUE),
+  times=100L, control=list(warmup = 10L))
 @
 When using \code{split\_irradiance}, enabling use of hinges increases the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms,  by a factor of \Sexpr{signif(med2 / med1)}. There is less overhead than if calculating the same three wavebands separately, as all hinges are inserted in a single operation.
 
 Disabling checking of the spectrum reduces the execution time, but proportionally not as much as for the \code{irradiance} functions, as the spectrum is checked only once independently of the number of bands into which it is split.
 
 <<>>=
-res1 <- microbenchmark(split_photon_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), use.cache=TRUE), times=100L, control=list(warmup = 10L))
-res2 <- microbenchmark(split_photon_irradiance(w.length, s.e.irrad, c(400, 500, 600, 700), use.cache=TRUE, check.spectrum=FALSE), times=100L, control=list(warmup = 10L))
+res1 <- microbenchmark(
+  split_photon_irradiance(w.length, s.e.irrad,
+                          c(400, 500, 600, 700),
+                          use.cache=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  split_photon_irradiance(w.length, s.e.irrad,
+                          c(400, 500, 600, 700),
+                          use.cache=TRUE,
+                          check.spectrum=FALSE),
+  times=100L, control=list(warmup = 10L))
 @
 When using \code{split\_irradiance}, disabling the data validation check reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
 
@@ -271,7 +336,7 @@ As all the execution times are in milliseconds, all the optimizations discussed 
 %%%%
 \section{Profiling}\label{sec:perf:profiling}
 
-Profiling is basically fine-grained benchmarking. It provides information about in which part of your code the program spends most time when executing. Once you know this, you can try to just make those critical sections execute faster. Speed-ups can be obtained either by rewritting these parts in a compiled language like C or C++, or by use of a more efficient calcualtion algorithm. A detailed discussion is outside the scope of this handbook, so only a brief example will be shown here.
+Profiling is basically fine-grained benchmarking. It provides information about in which part of your code the program spends most time when executing. Once you know this, you can try to just make those critical sections execute faster. Speed-ups can be obtained either by rewriting these parts in a compiled language like C or C++, or by use of a more efficient calculation algorithm. A detailed discussion is outside the scope of this handbook, so only a brief example will be shown here.
 
 <<>>=
 detach(sun.data)

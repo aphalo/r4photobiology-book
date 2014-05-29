@@ -161,37 +161,40 @@ figvl
 Now an example that is more complex, and demostrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlaping. For each one we use two `geoms' and some labels are rotated and justified to keep them centred.
 
 <<fig.width=8, fig.height=6, out.width='.95\\textwidth'>>=
-figv2 <- fig_sun + annotate_waveband(UVC(), "rect", ymax=0.82) +
-                   annotate_waveband(UVC(), "text", y=0.86) +
-                   annotate_waveband(UVB(), "rect", ymax=0.82) +
-                   annotate_waveband(UVB(), "text", y=0.80, angle=90, hjust=1) +
-                   annotate_waveband(UVA(), "rect", ymax=0.82) +
-                   annotate_waveband(UVA(), "text", y=0.86) +
-                   annotate_waveband(Blue("Sellaro"), "rect", ymax=0.82) +
-                   annotate_waveband(Blue("Sellaro"), "text", y=0.5, angle=90, hjust=1) +
-                   annotate_waveband(Green("Sellaro"), "rect", ymax=0.82) +
-                   annotate_waveband(Green("Sellaro"), "text", y=0.50, angle=90, hjust=1) +
-                   annotate_waveband(Red(), "rect", ymax=0.82) +
-                   annotate_waveband(Red(), "text", y=0.86) +
-                   annotate_waveband(Red("Smith"), "rect", ymax=0.82) +
-                   annotate_waveband(Red("Smith"), "text", y=0.80, angle=90, hjust=1) +
-                   annotate_waveband(Far_red("Smith"), "rect", ymax=0.82) +
-                   annotate_waveband(Far_red("Smith"), "text", y=0.80, angle=90, hjust=1)
+figv2 <- fig_sun +
+  annotate_waveband(UVC(), "rect", ymax=0.82) +
+  annotate_waveband(UVC(), "text", y=0.86) +
+  annotate_waveband(UVB(), "rect", ymax=0.82) +
+  annotate_waveband(UVB(), "text", y=0.80, angle=90, hjust=1) +
+  annotate_waveband(UVA(), "rect", ymax=0.82) +
+  annotate_waveband(UVA(), "text", y=0.86) +
+  annotate_waveband(Blue("Sellaro"), "rect", ymax=0.82) +
+  annotate_waveband(Blue("Sellaro"), "text", y=0.5, angle=90, hjust=1) +
+  annotate_waveband(Green("Sellaro"), "rect", ymax=0.82) +
+  annotate_waveband(Green("Sellaro"), "text", y=0.50, angle=90, hjust=1) +
+  annotate_waveband(Red(), "rect", ymax=0.82) +
+  annotate_waveband(Red(), "text", y=0.86) +
+  annotate_waveband(Red("Smith"), "rect", ymax=0.82) +
+  annotate_waveband(Red("Smith"), "text", y=0.80, angle=90, hjust=1) +
+  annotate_waveband(Far_red("Smith"), "rect", ymax=0.82) +
+  annotate_waveband(Far_red("Smith"), "text", y=0.80, angle=90, hjust=1)
 figv2
 @
 
 A simple example using \code{geom\_vline}:
 
 <<fig.width=8, fig.height=6, out.width='.95\\textwidth'>>=
-figvl3 <- fig_sun + geom_vline(xintercept=range(PAR()))
+figvl3 <- fig_sun +
+  geom_vline(xintercept=range(PAR()))
 figvl3
 @
 
 And one where we change some of the aesthetics, and add a label:
 
 <<fig.width=8, fig.height=6, out.width='.95\\textwidth'>>=
-figvl4 <- fig_sun + geom_vline(xintercept=range(PAR()), linetype="dashed") +
-                    annotate_waveband(PAR(), "text", y=0.4, size=10, colour="black")
+figvl4 <- fig_sun +
+  geom_vline(xintercept=range(PAR()), linetype="dashed") +
+  annotate_waveband(PAR(), "text", y=0.4, size=10, colour="black")
 figvl4
 @
 
@@ -202,10 +205,17 @@ figvl4
 Given a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definiton for monochromatic light from its wavelength with function \code{w\_length2rgb} (see section \ref{}), from a waveband with function \code{color} (see section \ref{}), for a wavelength range with \code{w\_length\_range2rgb} (see section \ref{}), and from a spectrum with function \code{s\_e\_irrad2rgb}  (see section \ref{}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geoms, aesthetics, stats and facetting function normally in most cases. Of course, being a ternary plot, the easthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
 
 <<fig.width=6, fig.height=6>>=
-colours <- c("red", "green", "yellow", "white", "orange", "purple", "seagreen", "pink")
+colours <- c("red", "green", "yellow", "white",
+             "orange", "purple", "seagreen", "pink")
 rgb.values <- col2rgb(colours)
-test.data <- data.frame(colour=colours, R=rgb.values[1, ], G=rgb.values[2, ], B=rgb.values[3, ])
-maxwell.tern <- ggtern(data=test.data, aes(x=R, y=G, z=B, label=colour, fill=colour)) + geom_point(shape=23, size=3) + geom_text(hjust=-0.2) +
+test.data <- data.frame(colour=colours,
+                        R=rgb.values[1, ],
+                        G=rgb.values[2, ],
+                        B=rgb.values[3, ])
+maxwell.tern <- ggtern(data=test.data,
+                       aes(x=R, y=G, z=B, label=colour, fill=colour)) +
+                       geom_point(shape=23, size=3) +
+  geom_text(hjust=-0.2) +
   labs(x = "R", y="G", z="B") + scale_fill_identity()
 maxwell.tern
 @
