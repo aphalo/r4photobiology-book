@@ -25,9 +25,9 @@
 \usepackage{microtype}
 \usepackage[hyperindex,bookmarks,pdfview=FitB,%backref,
             pdftitle={R for Photobiology},%
-            pdfkeywords={photobiology, visible radiatio, ultraviolet radiation, R, quantification, methods, calculations},%
+            pdfkeywords={photobiology, visible radiation, ultraviolet radiation, R, quantification, methods, calculations},%
             pdfsubject={Photobiology},%
-            pdfauthor={Pedro J. Aphalo}%
+            pdfauthor={Pedro J. Aphalo, Andreas Albert}%
             ]{hyperref}
 \usepackage[style=authoryear-comp,firstinits,sortcites,maxcitenames=2,%
     mincitenames=1,maxbibnames=10,minbibnames=10,backref,uniquename=mininit,%
@@ -81,12 +81,12 @@
 \centering
 {\textcolor{nicegreen}{\HUGE R for Photobiology}}\par
 \vspace{0.5\drop}
-\colorbox{Dark}{\textcolor{white}{\normalfont\itshape\Large
+\colorbox{grey50}{\textcolor{yellow}{\normalfont\itshape\Large
 A handbook}}\par
 \vspace{\drop}
 {\Large Pedro J. Aphalo\\ and\\ Andreas Albert}\par
 \vfill
-{\footnotesize DRAFT\\ \today}\par
+{\footnotesize DRAFT\\ \today\\ \copyright\ 2013-2014 by the authors}\par
 \vspace*{\drop}
 \endgroup}
 

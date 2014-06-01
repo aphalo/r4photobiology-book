@@ -155,9 +155,4 @@ sunAngle(with_tz(my_time, "UTC"),
          lon = geo_code["lon"], lat = geo_code["lat"])
 @
 
-Just in case package \code{lubridate} interferes with package \code{data.table} we detach it:
-
-<<>>=
-detach("package:lubridate")
-@
 

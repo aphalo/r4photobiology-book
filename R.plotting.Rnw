@@ -11,6 +11,8 @@ Being R extensible, in addition to the built-in plotting functions, there are se
 
 In the examples in this handbook we mainly use \code{ggplot}, \code{ggmap} and \code{ggtern}, together with our own \code{photobiologygg}. In this appendix we give a very brief introduction to the `grammar of graphics' and \code{ggplot2}.
 
+\section{Plotting with \code{ggplot2}}
+
 The grammar of graphics is based on aesthetics (\code{aes}) as for example colour, geometric elements \code{geom\_\ldots} such as lines, and points, statistics \code{stat\_\ldots}, scales \code{scale\_\ldots}, labels \code{labs}, and themes \code{theme\_\ldots}. Plots are assembled from these elements, we start with a plot with two easthetics, and one geom:
 
 <<>>=
@@ -184,4 +186,37 @@ ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
            x=c(0, 1, 2) * pi, y=0,
            size=6)
 @
+
+\section{Generating output files}
+
+It is possible, when using RStudio, to directly export the displayed plot to a file. However, if the file will have to be generated again at a later time, or a series of plots need to be produced with consistent format, it is best to inlcude the commands to export the plot in the script.
+
+In R, files are created by printing to different devices. Printing is directed to a currently open device. Some devices produce screen output, others files. Devices denpend on drivers. There are both devices that or part of R, and devices that can be added through packages.
+
+A very simple example of PDF output (width and height in inches):
+
+<<eval=FALSE>>=
+fig1 <- ggplot(data.frame(x=-3:3), aes(x=x)) +
+  stat_function(fun=dnorm)
+pdf(file="fig1.pdf", width=8, height=6)
+print(fig1)
+dev.off()
+@
+
+Encapsulated Postscript output (width and height in inches):
+
+<<eval=FALSE>>=
+postscript(file="fig1.eps", width=8, height=6)
+print(fig1)
+dev.off()
+@
+
+There are Graphics devices for BMP, JPEG, PNG and TIFF format bitmap files. In this case the default units for width and height is pixels. For example we can generate TIFF output:
+
+<<eval=FALSE>>=
+tiff(file="fig1.tiff", width=1000, height=800)
+print(fig1)
+dev.off()
+@
+
 
