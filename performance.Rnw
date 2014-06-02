@@ -45,7 +45,7 @@ In the case of calculating weighted irradiances on many spectra having exactly t
 
 You can use the package \code{microbenchmark} to time the code and find the parts that slow it down. I have used it, and also
 I have used profiling to optimize the code for speed. The examples below show how choosing different values from the defaults
-can speed up calculations when the same calculations are done repeatedly on spectra measured at exactly the same wavelengths, something which is usual when analysing spectra measured with the same instrument. The choice of defaults is based on what is
+can speed up calculations when the same calculations are done repeatedly on spectra measured at exactly the same wavelengths, something which is usual when analyzing spectra measured with the same instrument. The choice of defaults is based on what is
 best when processing a moderate number of spectra, say less than a few hundreds, as opposed to many thousands.
 
 <<>>=

@@ -5,15 +5,25 @@
 
 \chapter{Making publication quality plots with R}\label{chap:R:plotting}
 
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(ggplot2)
+library(ggtern)
+library(ggmap)
+library(photobiologygg)
+@
+
 \section{Introduction}
 
 Being R extensible, in addition to the built-in plotting functions, there are several alternatives provided by packages. Of the general purpose ones, the most extensively used are \code{Lattice} and \code{ggplot2}. There are packages that add extra functionality to these packages.
 
 In the examples in this handbook we mainly use \code{ggplot}, \code{ggmap} and \code{ggtern}, together with our own \code{photobiologygg}. In this appendix we give a very brief introduction to the `grammar of graphics' and \code{ggplot2}.
 
-\section{Plotting with \code{ggplot2}}
+\section{Bases of plotting with \code{ggplot2}}
 
-The grammar of graphics is based on aesthetics (\code{aes}) as for example colour, geometric elements \code{geom\_\ldots} such as lines, and points, statistics \code{stat\_\ldots}, scales \code{scale\_\ldots}, labels \code{labs}, and themes \code{theme\_\ldots}. Plots are assembled from these elements, we start with a plot with two easthetics, and one geom:
+The grammar of graphics is based on aesthetics (\code{aes}) as for example colour, geometric elements \code{geom\_\ldots} such as lines, and points, statistics \code{stat\_\ldots}, scales \code{scale\_\ldots}, labels \code{labs}, and themes \code{theme\_\ldots}. Plots are assembled from these elements, we start with a plot with two aesthetics, and one geom:
 
 <<>>=
 ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
@@ -99,7 +109,9 @@ myplot + theme_bw()
 myplot + scale_y_log10()
 @
 
-We will now show an example of use of \code{stat\_smooth}
+\section{Adding fitted curves, including splines}
+
+We will now show an example of use of \code{stat\_smooth} using the default spline smoothing.
 
 <<>>=
 ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
@@ -107,7 +119,7 @@ ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
   stat_smooth()
 @
 
-We make the spline more flexible:
+By adjusting one of its parameters, \code{span}, we make the spline more ``flexible'':
 
 <<>>=
 ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
@@ -115,7 +127,7 @@ ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
   stat_smooth(span=0.1)
 @
 
-We use a polynomial of order 8, fitted by lm, as smoother:
+Instead of using the default spline, we can use a linear model fit. In this example we use a polynomial of order 8, fitted by lm, as smoother:
 
 <<>>=
 ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
@@ -123,13 +135,99 @@ ggplot(sun.dt, aes(x=w.length, y=s.q.irrad)) +
   stat_smooth(method="lm", formula=y~poly(x,8))
 @
 
-We can also directly plot functions:
+It is possible to use other types of models, including GAM and GLM, as smoothers, but we will not give examples of the use these more advanced models.
+
+\section{Adding statistical ``summaries''}
+
+It is also possible to summarize data on-the-fly when plotting, but before showing this we will generate some normally distributed artificial data:
+
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(fig.width=4, fig.height=4, out.width='.47\\textwidth')
+@
+
+<<>>=
+fake.data <- data.frame(
+  y = c(rnorm(20, mean=2, sd=0.5), rnorm(20, mean=4, sd=0.7)),
+  group = factor(c(rep("A", 20), rep("B", 20)))
+  )
+@
+
+Now we use these data to plot means and confidence intervals by group:
+
+<<>>=
+fig2 <- ggplot(data=fake.data, aes(y=y, x=group)) + geom_point()
+fig2
+@
+
+We have saved the base figure in \code{fig2}, so now we can play with different summaries. We first add just the mean. In this case we need to add as argument to \code{stat\_summary} the geom to use, as the default one expects data for plotting error bars, in later examples, this is not needed.
+
+<<>>=
+fig2 + stat_summary(fun.y = "mean", geom="point",
+                    colour="red", shape="-", size=20)
+@
+
+<<>>=
+fig2 + stat_summary(fun.y = "median", geom="point",
+                    colour="red", shape="-", size=20)
+@
+
+We can add the means and $p = 0.95$ confidence intervals not assuming normality (using the actual distribution of the data by bootstrapping):
+
+<<>>=
+fig2 + stat_summary(fun.data = "mean_cl_boot",
+                    colour="red", size=1, alpha=0.7)
+@
+
+We can instead add the means and $p = 0.90$ confidence intervals, by supplying a value to parameter \code{conf.int}:
+
+<<>>=
+fig2 + stat_summary(fun.data = "mean_cl_boot", conf.int=0.90,
+                    colour="red", size=1, alpha=0.7)
+@
+
+We can add the mean and $p = 0.95$ confidence intervals assuming normality (using the $t$ distribution):
+
+<<>>=
+fig2 + stat_summary(fun.data = "mean_cl_normal",
+                    colour="red", size=1, alpha=0.7)
+@
+
+In this case the multiplier \code{mult} is by default is calculated from the $t$ distribution according to degrees of freedom, but if we force the multiplier to 1, then we get error bars corresponding to $\pm$s.e. (standard errors).
+
+<<>>=
+fig2 + stat_summary(fun.data = "mean_cl_normal", mult=1,
+                    colour="red", size=1, alpha=0.7)
+@
+
+Finally we can plot error bars showing $\pm$s.d. (standard deviation). The default value for \code{mult} is 2, giving error bars $\pm 2$ s.d., we use 1 as multiplier instead.
+
+<<>>=
+fig2 + stat_summary(fun.data = "mean_sdl", mult=1,
+                    colour="red", size=1, alpha=0.7)
+@
+
+We do not show it here, but instead of using these functions (from package \code{Hmisc}) it is possible to define one's one functions.
+
+Finally we plot the means in a bar plot, with the observations superimposed and $p$ = 0.95 C.I. (the order in which the geoms are added is important: by having \code{geom\_point} last it is plotted on top of the bars. In this case we set fill, colour and alpha (transparency) to constants, but in more complex data sets they can be assigned to factors in the data set.
+
+<<>>=
+ggplot(data=fake.data, aes(y=y, x=group)) +
+  stat_summary(fun.y = "mean", geom = "bar",
+               fill="yellow", colour="black") +
+  stat_summary(fun.data = "mean_cl_normal",
+               geom = "errorbar",
+               width=0.1, size=1, colour="red") +
+  geom_point(size=3, alpha=0.3)
+@
+
+\section{Plotting functions}
+
+We can also directly plot functions, without need to generate data beforehand:
 
 <<>>=
 ggplot(data.frame(x=-3:3), aes(x=x)) +
   stat_function(fun=dnorm)
 @
-
 
 We can even pass additional arguments to a function:
 
@@ -138,7 +236,7 @@ ggplot(data.frame(x=-3:3), aes(x=x)) +
   stat_function(fun = dnorm, args = list(mean = 1, sd = .5))
 @
 
-Of course, user-defined functions (not shown), and anonymous fucntions can also be used:
+Of course, user-defined functions (not shown), and anonymous functions can also be used:
 
 <<>>=
 ggplot(data.frame(x=0:1), aes(x=x)) +
@@ -146,14 +244,14 @@ ggplot(data.frame(x=0:1), aes(x=x)) +
                 args = list(a = 1, b = 1.4))
 @
 
-Another example of a predifined funcrion, but in this case the default scale is not the best:
+Here is another example of a predefined function, but in this case the default scale is not the best:
 
 <<>>=
 ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
   stat_function(fun=sin)
 @
 
-In this case we need to change the x-axis scale to better suit the sin functions and the use of radians as angular units:
+In this case we need to change the x-axis scale to better suit the sin function and the use of radians as angular units:
 
 <<>>=
 ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
@@ -189,9 +287,9 @@ ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
 
 \section{Generating output files}
 
-It is possible, when using RStudio, to directly export the displayed plot to a file. However, if the file will have to be generated again at a later time, or a series of plots need to be produced with consistent format, it is best to inlcude the commands to export the plot in the script.
+It is possible, when using RStudio, to directly export the displayed plot to a file. However, if the file will have to be generated again at a later time, or a series of plots need to be produced with consistent format, it is best to include the commands to export the plot in the script.
 
-In R, files are created by printing to different devices. Printing is directed to a currently open device. Some devices produce screen output, others files. Devices denpend on drivers. There are both devices that or part of R, and devices that can be added through packages.
+In R, files are created by printing to different devices. Printing is directed to a currently open device. Some devices produce screen output, others files. Devices depend on drivers. There are both devices that or part of R, and devices that can be added through packages.
 
 A very simple example of PDF output (width and height in inches):
 

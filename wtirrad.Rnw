@@ -42,7 +42,7 @@ with(sun.data,
 
 Please, consult the packages' documentation for a list of predefined functions for creating weighted wavebands. Here we will present just a few examples of their use. We usually think of weighted irradiances as being defined by the weighting function, however, in many cases different normalizations are in use, and the result of any calculation depends very strongly on the wavelength used for normalization. For this reason, the functions provided accept an argument that can be used to select the normalization wavelength. In general, the default, is to use the most frequently used normalization.
 
-In a few cases different mathematical formulations are available for the same spectrum, and the differences among them can be quite large. In such cases separate functions are provided for each of them (e.g. \code{GEN.N} and \code{GEN.T} for Green's and Timijan's formulations of Caldwell's GPAS).
+In a few cases different mathematical formulations are available for the same spectrum, and the differences among them can be quite large. In such cases separate functions are provided for each of them (e.g. \code{GEN.N} and \code{GEN.T} for Green's and Thimijan's formulations of Caldwell's GPAS).
 
 <<>>=
 GEN.G()

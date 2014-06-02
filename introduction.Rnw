@@ -1,7 +1,7 @@
 \chapter{Introduction}
 
 \begin{abstract}
-  In this chapter we explain the physical basis of optics and photochemisatry.
+  In this chapter we explain the physical basis of optics and photochemistry.
 \end{abstract}
 
 \section{Radiation and molecules}

@@ -299,7 +299,7 @@ b <- 'He said "hello" when he came in'
 b
 @
 
-The outer quotes are not part of the string, they are `delimiters' used to mark the boundaries. As you can see when \texttt{b} is printed special characters can be represented using `scape sequences'. There are several of them, and here we will show just a few.
+The outer quotes are not part of the string, they are `delimiters' used to mark the boundaries. As you can see when \texttt{b} is printed special characters can be represented using `escape sequences'. There are several of them, and here we will show just a few.
 <<char-4>>=
 c <- "abc\ndef\txyz"
 c

@@ -38,7 +38,7 @@ And then source this file:
 source("my.first.script.r")
 @
 
-The results of executing the staements contained in the file will appear in the console. The commands themselves are not shown (the sourced file is not echoed) and the results will not be printed unless you include an explicit \texttt{print} command. This also applies in many cases also to plots. A fig created with \texttt{ggplot} needs to be printed if we want to see it when the script is run.
+The results of executing the statements contained in the file will appear in the console. The commands themselves are not shown (the sourced file is not echoed) and the results will not be printed unless you include an explicit \texttt{print} command. This also applies in many cases also to plots. A fig created with \texttt{ggplot} needs to be printed if we want to see it when the script is run.
 
 From within RStudio, if you have an R script open in the editor, there will a ``source'' drop box ($\neq$ DropBox) visible from where you can choose ``source'' as described above, or ``source with echo'' for the currently open file.
 
@@ -109,7 +109,7 @@ my.change(a)
 a
 @
 
-Any result that needs to be made available outside the funtion must be returned by the function. If the function \texttt{return} is not explicitly used, the value returned by the last statement within the body of the function will be returned.
+Any result that needs to be made available outside the function must be returned by the function. If the function \texttt{return} is not explicitly used, the value returned by the last statement within the body of the function will be returned.
 
 <<fun-02>>=
 print.x.1 <- function(x){print(x)}
@@ -124,7 +124,7 @@ print.x.4("test")
 
 We can assign to a variable defined outside a function with operator \texttt{<<-} but the usual recommendation is to avoid its use. This type of effects of calling a function are frequently called `side-effects'.
 
-Now we will define a usefull function: a fucntion for calculating the standard error of the mean from a numeric vector.
+Now we will define a useful function: a function for calculating the standard error of the mean from a numeric vector.
 
 <<fun-1>>=
 SEM <- function(x){sqrt(var(x)/length(x))}
@@ -316,7 +316,7 @@ If you do not understand how the three vectors are built, or you cannot guess th
 
 \subsection{Why using vectorized functions and operators is important}
 
-If you have written programs in other languages, it would feel to you natural to use loops (for, repeat while, repeat until) for many of the things for which we have been using vectorization. When using the R language it is best to use vectorization whenever possible, because it keeps the listing of scripts and programmes shorter and easier to understand (at least for those with experience in R). However, there is another very important reason: execution speed. The reason behind this is that R is an interpreted language. In current versions of R it is possible to byte-compile functions, but this is rarely used for scripts, and even byte-compiled loops are much slower and vectorized functions.
+If you have written programs in other languages, it would feel to you natural to use loops (for, repeat while, repeat until) for many of the things for which we have been using vectorization. When using the R language it is best to use vectorization whenever possible, because it keeps the listing of scripts and programs shorter and easier to understand (at least for those with experience in R). However, there is another very important reason: execution speed. The reason behind this is that R is an interpreted language. In current versions of R it is possible to byte-compile functions, but this is rarely used for scripts, and even byte-compiled loops are much slower and vectorized functions.
 
 However, there are cases were we need to repeatedly execute statements in a way that cannot be vectorized, or when we do not need to maximize execution speed. The R language does have loop constructs, and we will describe them next.
 

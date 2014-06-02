@@ -1,7 +1,7 @@
 \chapter{Colour}
 
 \begin{abstract}
-  In this chapter we explain how to use colours according to visual sensitivity. For example calcualting red-green-blue (RGB) values for humans.
+  In this chapter we explain how to use colours according to visual sensitivity. For example calculating red-green-blue (RGB) values for humans.
 \end{abstract}
 
 \section{Packages used in this chapter}
@@ -17,10 +17,10 @@ The calculation of equivalent colours and colour spaces is based on the number o
 
 When calculating colours we can take either only the colour or both colour and apparent luminance. In our functions, in the first case one needs to provide as input `chromaticity coordinates' (CC) and in the second case `colour matching functions' (CMF). The suite includes data for humans, but the current implementation of the functions should be able to handle also calculations for other organisms with tri-chromic vision.
 
-The functions allow calculation of simulated colour of light sources as R colour definitions. Three different functions are avaialble, one for monochromatic light taking as argument wavelength values, and one for polychromatic light taking as argument spectral energy irradiances and the corresponding wave length values. The third function can be used to calculate a representative RGB colour for a band of the spectrum represented as a range of wavelengths, based on the assumption of a flat energy irradiance accross this range.
+The functions allow calculation of simulated colour of light sources as R colour definitions. Three different functions are available, one for monochromatic light taking as argument wavelength values, and one for polychromatic light taking as argument spectral energy irradiances and the corresponding wave length values. The third function can be used to calculate a representative RGB colour for a band of the spectrum represented as a range of wavelengths, based on the assumption of a flat energy irradiance across this range.
 
 By default CIE coordinates for \textit{typical} human vision are used, but the functions
-have a parameter that can be used for suppying a different chromaticity definition. The range of wavelengths used in the calculations is that in the chromaticity data.
+have a parameter that can be used for supplying a different chromaticity definition. The range of wavelengths used in the calculations is that in the chromaticity data.
 
 One use of these functions is to generate realistic colour for `key' on plots of spectral data. Other uses are also possible, like simulating how different, different objects would look to a certain organism.
 
@@ -75,7 +75,7 @@ with(sun.data,
      s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC10.data))
 @
 
-Except for the first example, we especificy the visual sensitivity data to use.
+Except for the first example, we specificity the visual sensitivity data to use.
 
 \section{A sample of colours}
 
