@@ -263,7 +263,22 @@ ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
   labs(y="sin(x)")
 @
 
-Finally we can add annotations. Annotations use the data coordinates of the plot, but do not `inherit' data or aesthetics from the ggplot.
+\section{Plotting text}
+
+One can use \code{geom\_text} to add text labels to observations. The aesthetic \code{label} gives text and the usual aesthetics \code{x} and \code{y} the location of the labels. As one would expect the \code{colour} aesthetic can be also used for text. In addition \code{angle} and \code{vjust} and \code{hjust} can be used to rotate the label, and adjust its position. The default value of zero for both \code{hjust} and \code{vjust} centres the label. The centre of the text is at the supplied \code{x} and \code{y} coordinates. `Vertical' and `horizontal' for justification refer to the text, not the plot. This is important when \code{angle} is different from zero. Negative justification values, shift the labe left or down, and positive values right or up. A value of 1 or -1 sets the text so that its edge is at the supplied coordinate. Values outside the range $-1\ldots 1$ sift the text even further away.
+
+<<>>=
+my.data <- data.frame(x=1:10, y=rep(2, 10), label=paste(letters[1:10], " "))
+ggplot(my.data, aes(x,y,label=label)) + geom_text(angle=45, hjust=1) + geom_point()
+@
+
+In this example we use \code{paste} (which uses recycling here) to add a space at the end of each label. Justification values outside the range $-1\ldots 1$ are allowed, but are relative to the with of the label. As the default font used in this case has variable with characters, the justification would be inconsistent (e.g. try the code above but using \code{hjust} set to 3 instead of to 1 without pasting a space character to the labels.)
+
+\section{Scales}
+
+\section{Adding annotations}
+
+Annotations use the data coordinates of the plot, but do not `inherit' data or aesthetics from the ggplot.
 
 <<>>=
 ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
