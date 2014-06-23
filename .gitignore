@@ -11,12 +11,7 @@
 *.log
 *.bcf
 *.bak
-<<<<<<< HEAD
-framed.sty
-*.pdf
 *.blg
-=======
-figure
-
-
->>>>>>> 9478c1a42cf37b109d8f361cf56c9f4b9ac2fdfa
+ggmapFileDrawer/
+cache/
+figure/

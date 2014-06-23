@@ -15,6 +15,3 @@ RootDocument: r4p.main.Rnw
 
 AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
-
-BuildType: Custom
-CustomScriptPath: C:/Program Files (x86)/arara/arara.exe

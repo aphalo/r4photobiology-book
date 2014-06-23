@@ -1,8 +1,13 @@
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide)
+@
+
 \chapter{Plotting spectra and colours}
 
 \begin{abstract}
   In this chapter we explain how to plot spectra and colours, using packages \code{ggplot2}, \code{ggtern}, and the functions in our package \code{photobiologygg}. Both \code{ggtern} for ternary plots and \code{photobiologygg} for annotating spectra build new functionality on top of the \code{ggplot2} package.
 \end{abstract}
+
 
 \section{Packages used in this chapter}
 
@@ -14,6 +19,7 @@ library(photobiologyUV)
 library(ggplot2)
 library(ggtern)
 library(photobiologygg)
+library(gridExtra)
 @
 
 %%%%
@@ -21,22 +27,34 @@ library(photobiologygg)
 
 We show in this chapter examples of how one can plot spectra. All the examples
 are done with package \code{ggplot2}, sometimes using in addition other packages.
+\code{ggplot2} provides the most recent type plotting functionality in R, and is
+what we use here for most examples. Both \code{base} graphic functions, part of
+R itself and `trellis' graphics provided by package \code{lattice} are other popular
+alternatives. Several of the functions used in this chapter are extensions to
+package \code{ggplot2}\footnote{\code{ggplot2} is feature-frozen. Consequently
+it is a good basis for adding application specific functionality through separate
+packages. \code{ggplot2} uses the \emph{grammar
+of graphics} for describing the plots. This grammar, because it is consistent,
+tends to be easier to understand, and makes it easier to design new functionality
+that uses extensions based on the same `language grammar' as used by the original package.}
 
-\code{ggplot2} is feature-frozen. Consequently is a good basis for adding
-application specific functionality on separate packages. It uses the grammar
-of graphics for describing the plots. This grammar, because it is consistent,
-tends to be easier to understand, and it is easier to design no functionality
-that uses similar `language' to that used by the original package.
+If you are not familiar with \code{ggplot2} plotting, please read Appendix
+\ref{chap:R:plotting} on page \pageref{chap:R:plotting} before reading the
+present chapter.
 
 %%%%
 \section{Task: plotting spectra with \code{ggplot2}}\label{sec:plot:spc}
 
-We create a simple line plot, assign it a variable called \code{fig\_sun} and then on the next line \code{print} it.
+We create a simple line plot, assign it a variable called \code{fig\_sun.e} and then on the next line \code{print} it. We use \code{labs} to set nice axis labels.
 
 <<>>=
-fig_sun <- ggplot(data=sun.data, aes(x=w.length, y=s.e.irrad)) +
-           geom_line()
-fig_sun
+fig_sun.e <-
+  ggplot(data=sun.data, aes(x=w.length, y=s.e.irrad)) +
+  geom_line()  +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.e
 @
 
 %%%%
@@ -45,24 +63,69 @@ fig_sun
 Here without need to recreate the figure, we add a logarithmic scale for the y-axis and print on the fly the result. In this case we override the automatic limits of the scale.
 
 <<>>=
-fig_sun + scale_y_log10(limits=c(1e-3, 1e0))
+fig_sun.e + scale_y_log10(limits=c(1e-3, 1e0))
 @
 
 %%%%
+
+\section{Task: compare energy and photon spectral units}\label{sec:plot:phot:energy}
+
+We can use function \code{grid.arrange} to make a single plot from two separate ggplots, and put them side by or on top of each other.
+
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide_square)
+@
+
+<<>>=
+theme_stack_opts <-
+  list(theme(axis.text.x = element_blank(),
+             axis.ticks = element_blank(),
+             axis.title.x = element_blank()))
+num_one_dec <- function(x, ...)
+  format(x, nsmall=1, trim=FALSE, width=4, ...)
+fig_sun.q <-
+  ggplot(data=sun.data, aes(x=w.length, y=s.q.irrad * 1e6)) +
+  geom_line() +
+  scale_y_continuous(labels = num_one_dec) +
+  labs(y = expression(atop(Spectral~~photon~~irradiance,
+                           (mu*mol~m^{-2}~s^{-1}~nm^{-1})))) +
+  theme_stack_opts
+fig_sun.e1 <- fig_sun.e +
+  labs(y = expression(atop(Spectral~~energy~~irradiance,
+                           (W~m^{-2}~nm^{-1}))),
+       x = "Wavelength (nm)")
+grid.arrange(fig_sun.q, fig_sun.e1, nrow=2)
+@
+
+To make sure that the widths of booth plots are the same, we need to make sure that the tick labels in both plots have the same format. For this we define a formatting function \code{num\_one\_dec} and then use it a the scale definition. We also add \code{atop} to the expression to set the spectral irradiance units on a second line in the axis label.
+
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide)
+@
+
 \section{Task: finding peaks and valleys in spectra}\label{sec:get:pk:vly}
 
-We first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_thershold} the fraction of the total span along the irradiance is taken into account (a value of 0.5, that only peaks in the upper half of the curve are returned; a value of -0.5 works similarly but for the lower half of the y-range):
+We first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_threshold} the fraction of the total span along the irradiance that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.data$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.data$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.  It is good to mention that \code{head} returns the first six rows of its argument, and we use it here just to reduce the length of the output, if you run these examples yourself, you can remove \code{head} from the code. In the output, $x$ corresponds to wavelength, and $y$ to spectral irradiance, while \code{label} is a character string with the wavelngth, possibly formatted.
 
 <<>>=
 head(with(sun.data,
-          get_peaks(w.length, s.e.irrad, span=51)))
+          get_peaks(w.length, s.e.irrad, span=31)))
 head(with(sun.data,
-          get_peaks(w.length, s.e.irrad, span=51,
-                    ignore_threshold=0.5)))
+          get_peaks(w.length, s.e.irrad, span=31,
+                    ignore_threshold=0.75)))
+@
+
+The parameter span, indicates the size in number of observations (e.g.\ number of discrete wavelength values) included in the window used to find local maxima (peaks) or minima (valleys). By providing different values for this argument
+we can `adjust' how \emph{fine} or \emph{coarse} is the structure described by the peaks returned by the function. The window is always defined using an odd number of observations, if an even number is provided as argument, it is increased by one, with a warning.
+
+<<>>=
+head(with(sun.data,
+          get_peaks(w.length, s.e.irrad, span=21)))
+head(with(sun.data,
+          get_peaks(w.length, s.e.irrad, span=51)))
 @
 
 The equivalent function for finding valleys is \code{get\_valleys} taking the same parameters as \code{get\_peaks} but returning the wavelengths at which the valleys are located.
-
 
 <<>>=
 head(with(sun.data,
@@ -72,26 +135,19 @@ head(with(sun.data,
                       ignore_threshold=0.5)))
 @
 
+In the next section, we plot spectra and annotate them with peaks and valleys. If you find the meaning of the
+parameters \code{span} and \code{ignore\_threshold} difficult to grasp from the explanation given above, please, study the code and plots in section \ref{sec:stat:pk:vly}.
+
 %%%%
 \section{Task: annotating peaks and valleys in spectra}\label{sec:stat:pk:vly}
 
-Here we show the an example of the use the new \code{ggplot} `statistics' \code{stat\_peaks}
+Here we show an example of the use the new \code{ggplot} `statistics' \code{stat\_peaks}
 from our package \code{photobiologygg}. It uses the same parameter names and take the
 same arguments as the \code{get\_peaks} function described in section \ref{sec:get:pk:vly}.
-We reuse once more \code{fig\_sun} saved in section \ref{sec:plot:spc}.
+We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc}.
 
 <<>>=
-fig_sun + stat_peaks(span=31)
-@
-
-<<>>=
-fig_sun + stat_valleys(span=51)
-@
-
-Here we use the stats together with a logarithmic scale.
-<<>>=
-fig_sun + stat_peaks(span=41, ignore_threshold=1e-2) +
-          scale_y_log10(limits=c(1e-3, 1e0))
+fig_sun.e + stat_peaks(span=31)
 @
 
 \sloppy
@@ -99,38 +155,37 @@ Now we play with \texttt{ggplot2} to show different ways of plotting the peaks a
 It behaves as a \code{ggplot2} \code{stat\_xxxx} function accepting a \code{geom} argument
 and all the aesthetics valid for the chosen geom. By default \code{geom\_text} is used.
 
-We can change for example the colour:
+We can change aesthetics, for example the colour:
 <<>>=
-fig_sun + stat_peaks(colour="red", span=51) +
-          stat_valleys(colour="blue", span=51)
+fig_sun.e + stat_peaks(colour="red", span=31) +
+            stat_valleys(colour="blue", span=51)
 @
 
-We can also use a different geom, in this case \code{geom\_point}, however, be aware that the \code{geom} parameter takes as argument a character string giving the name of the geom, in this case \code{"point"}. To keep the code simpler, we will use a single stat in in the next two figures.
-
-<<>>=
-fig_sun + stat_peaks(colour="red", geom="point", span=51)
-@
-
+We can also use a different geom, in this case \code{geom\_point}, however, be aware that the \code{geom} parameter takes as argument a character string giving the name of the geom, in this case \code{"point"}.
 We change a few additional aesthetics of the points: we set \code{shape} to a character, and set its size to 6.
 
 <<>>=
-fig_sun + stat_peaks(colour="red", geom="point",
-                     shape="|", size=6, span=51)
+fig_sun.e +
+  stat_peaks(colour="red", geom="point",
+             shape="|", size=6, span=31)
 @
 
-We can add the same stat twice, each time with a different geom in the next example. First we add points to mark the peaks, and afterwards add labels using geom "text". For the shape we use one that supports `fill', and set the fill to "white" but keep the border of the symbol "red" by setting \code{color}, we also change the \code{size}. With the labels we use \code{vjust} to `justify' the text moving the labels vertically. In addition we expand the y-axis scale so that the labels fall within the plotting area.
+We can add the same \code{stat} two or more times to a ggplot, in this example, each time with a different \code{geom}. First we add points to mark the peaks, and afterwards add labels showing the wavelengths at which they are located using geom \code{"text"}. For the \code{shape}, or type of symbol, we use one that supports `fill', and set the \code{fill} to \code{"white"} but keep the border of the symbol \code{"red"} by setting \code{colour}, we also change the \code{size}. With the labels we use \code{vjust} to `justify' the text moving the labels vertically, so that they do not overlap the line depicting the spectrum\footnote{The default position of labels is to have them centred on the coordinates of the peak or valley. Unless we rotate the label, \code{vjust} can be used to shift the label along the $y$-axis, however, justification is a property of the text, not the plot, so the vertical direction is referenced to the position of the text of the label. A value of 0.5 indicates centering, a negative value `up' and a positive value `down'. For example a value of -1 puts the $x, y$ coordinates of the peak or valley at the lower edge of the `bounding box' of the text. For \code{hjust} values of -1 and 1 right and left justify the label with respect to the $x, y$ coordinates supplied. Values other than -1, 0.5, and 1, are valid input, but are rather tricky to use for \code{hjust} as the displacement is computed relative to the width of the bounding box of the label, the displacement being different for the same numerical value depending on the length of the label text.}
+In addition we expand the $y$-axis scale so that all labels fall within the plotting area.
 
 <<>>=
-fig_sun + stat_peaks(colour="red", geom="point", shape=23,
-                     fill="white", size=3, span=51) +
-          stat_peaks(colour="red", vjust=-1, span=51) +
-          expand_limits(y=0.9)
+fig_sun.e +
+  stat_peaks(colour="red", geom="point", shape=23,
+             fill="white", size=3, span=31) +
+  stat_peaks(colour="red", vjust=-1, span=31) +
+  expand_limits(y=0.9)
 @
 
-Finally an example with rotated labels, using different colours for peaks and valleys. Be aware that the `justification' direction is referenced to the position of the text, and for this reason to mode the labels upwards we use \code{hjust} because the displacement is horizontal with respect to the text of the label.
+Finally an example with rotated labels, using different colours for peaks and valleys. Be aware that the `justification' direction, as discussed in the footnote, is referenced to the position of the text, and for this reason to move the rotated labels upwards we need to use \code{hjust} as the desired displacement is horizontal with respect to the orientation of the text of the label. As we put peak labels above the spectrum and valleys bellow it, we need to use \code{hjust} values of opposite sign, but the exact values used were simply adjusted by trial and error until the figure looked as desired.
 
 <<>>=
-fig_sun + stat_peaks(angle=90, hjust=-0.5, colour="red", span=51) +
+fig_sun.e +
+  stat_peaks(angle=90, hjust=-0.5, colour="red", span=31) +
   stat_valleys(angle=90, hjust=1, color="blue", span=51) +
   expand_limits(y=1.0)
 @
@@ -144,57 +199,77 @@ The function \code{annotate\_waveband} can be used to highlight a waveband in a 
 
 Here is an example for \PAR using defaults, and with arguments supplied only for parameters with no defaults. The example does the annotation using two different `geoms', \code{"rect"} for marking the region, and \code{"text"} for the labels.
 
-<<fig.width=8, fig.height=6, out.width='.95\\textwidth'>>=
-figvl <- fig_sun + annotate_waveband(PAR(), "rect", ymax=0.82) +
-                   annotate_waveband(PAR(), "text", y=0.86)
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide)
+@
+
+<<>>=
+figvl <- fig_sun.e + annotate_waveband(PAR(), "rect", ymax=0.82) +
+                     annotate_waveband(PAR(), "text", y=0.86)
 figvl
 @
 
 This example annotates a narrow waveband.
 
-<<fig.width=8, fig.height=6, out.width='.95\\textwidth'>>=
-figvl <- fig_sun + annotate_waveband(Yellow(), "rect", ymax=0.82) +
-                   annotate_waveband(Yellow(), "text", y=0.86)
+<<>>=
+figvl <- fig_sun.e + annotate_waveband(Yellow(), "rect", ymax=0.82) +
+                     annotate_waveband(Yellow(), "text", y=0.86)
 figvl
 @
 
-Now an example that is more complex, and demonstrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two `geoms' and some labels are rotated and justified to keep them centred.
+Now an example that is more complex, and demonstrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two `geoms' and some labels are rotated and justified.
 
-<<fig.width=8, fig.height=6, out.width='.95\\textwidth'>>=
-figv2 <- fig_sun +
-  annotate_waveband(UVC(), "rect", ymax=0.82) +
-  annotate_waveband(UVC(), "text", y=0.86) +
-  annotate_waveband(UVB(), "rect", ymax=0.82) +
-  annotate_waveband(UVB(), "text", y=0.80, angle=90, hjust=1) +
-  annotate_waveband(UVA(), "rect", ymax=0.82) +
-  annotate_waveband(UVA(), "text", y=0.86) +
-  annotate_waveband(Blue("Sellaro"), "rect", ymax=0.82) +
-  annotate_waveband(Blue("Sellaro"), "text", y=0.5, angle=90, hjust=1) +
-  annotate_waveband(Green("Sellaro"), "rect", ymax=0.82) +
-  annotate_waveband(Green("Sellaro"), "text", y=0.50, angle=90, hjust=1) +
-  annotate_waveband(Red(), "rect", ymax=0.82) +
-  annotate_waveband(Red(), "text", y=0.86) +
-  annotate_waveband(Red("Smith"), "rect", ymax=0.82) +
-  annotate_waveband(Red("Smith"), "text", y=0.80, angle=90, hjust=1) +
-  annotate_waveband(Far_red("Smith"), "rect", ymax=0.82) +
-  annotate_waveband(Far_red("Smith"), "text", y=0.80, angle=90, hjust=1)
+<<>>=
+figv2 <- fig_sun.e +
+  annotate_waveband(UVC(), "rect",
+                    ymax=0.82) +
+  annotate_waveband(UVC(), "text",
+                    y=0.86) +
+  annotate_waveband(UVB(), "rect",
+                    ymax=0.82) +
+  annotate_waveband(UVB(), "text",
+                    y=0.80, angle=90, hjust=1) +
+  annotate_waveband(UVA(), "rect",
+                    ymax=0.82) +
+  annotate_waveband(UVA(), "text",
+                    y=0.86) +
+  annotate_waveband(Blue("Sellaro"), "rect",
+                    ymax=0.82) +
+  annotate_waveband(Blue("Sellaro"), "text",
+                    y=0.5, angle=90, hjust=1) +
+  annotate_waveband(Green("Sellaro"), "rect",
+                    ymax=0.82) +
+  annotate_waveband(Green("Sellaro"), "text",
+                    y=0.50, angle=90, hjust=1) +
+  annotate_waveband(Red(), "rect",
+                    ymax=0.82) +
+  annotate_waveband(Red(), "text",
+                    y=0.86) +
+  annotate_waveband(Red("Smith"), "rect",
+                    ymax=0.82) +
+  annotate_waveband(Red("Smith"), "text",
+                    y=0.80, angle=90, hjust=1) +
+  annotate_waveband(Far_red("Smith"), "rect",
+                    ymax=0.82) +
+  annotate_waveband(Far_red("Smith"), "text",
+                    y=0.80, angle=90, hjust=1)
 figv2
 @
 
 A simple example using \code{geom\_vline}:
 
-<<fig.width=8, fig.height=6, out.width='.95\\textwidth'>>=
-figvl3 <- fig_sun +
+<<>>=
+figvl3 <- fig_sun.q +
   geom_vline(xintercept=range(PAR()))
 figvl3
 @
 
 And one where we change some of the aesthetics, and add a label:
 
-<<fig.width=8, fig.height=6, out.width='.95\\textwidth'>>=
-figvl4 <- fig_sun +
+<<>>=
+figvl4 <- fig_sun.q +
   geom_vline(xintercept=range(PAR()), linetype="dashed") +
-  annotate_waveband(PAR(), "text", y=0.4, size=10, colour="black")
+  annotate_waveband(PAR(), "text", y=1.4, size=10, colour="black")
 figvl4
 @
 
@@ -204,7 +279,11 @@ figvl4
 
 Given a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with function \code{w\_length2rgb} (see section \ref{}), from a waveband with function \code{color} (see section \ref{}), for a wavelength range with \code{w\_length\_range2rgb} (see section \ref{}), and from a spectrum with function \code{s\_e\_irrad2rgb}  (see section \ref{}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geoms, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
 
-<<fig.width=6, fig.height=6>>=
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide_square)
+@
+
+<<>>=
 colours <- c("red", "green", "yellow", "white",
              "orange", "purple", "seagreen", "pink")
 rgb.values <- col2rgb(colours)
