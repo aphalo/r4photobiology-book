@@ -1,4 +1,4 @@
-\chapter{Calculations related to transmission and reflection}
+\chapter{Transmission and reflection}
 
 \begin{abstract}
 In this chapter we explain how to do calculations related to the description of absortion and reflection of UV and VIS radiation.
