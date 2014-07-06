@@ -48,15 +48,15 @@ The R functions \code{summary, print} work in their predefined form, however, th
 Package \code{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \code{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum\footnote{Here and in many other examples \code{head} is used to limit the amount of output to a few lines.}.
 
 <<>>=
-filtered_sun.dt <- sun.dt * gg400.dt
-head(filtered_sun.dt)
+filtered_sun.spct <- sun.spct * gg400.dt
+head(filtered_sun.spct)
 @
 
 The GG440 data is for internal transmittance. Let's assume a filter with 9\% reflection across all wavelengths (a coarse approximation):
 
 <<>>=
-filtered_uncoated_sun.dt <- sun.dt * gg400.dt * (100 - 9) / 100
-head(filtered_uncoated_sun.dt)
+filtered_uncoated_sun.spct <- sun.spct * gg400.dt * (100 - 9) / 100
+head(filtered_uncoated_sun.spct)
 @
 
 Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work.
@@ -67,8 +67,8 @@ Calculations related to filters will be explained in detail in chapter \ref{chap
 As noted above operators are available for "generic.scpt", "source.spct", and "filter.spct" objects, and `recycling' takes places when needed:
 
 <<>>=
-head(sun.dt)
-head(sun.dt * 2)
+head(sun.spct)
+head(sun.spct * 2)
 @
 
 All four basic binary operators (\code{+, -, *, /}) can be used in the same way, but when operating between a spectrum an a numeric value the spectrum should be the first term or factor. If an operation on a ``source.spct'' would yield different values for data on energy and photon basis, only the value based on energy data is returned in \code{s.e.irrad} and \code{s.q.irrad} is set to NA.
@@ -77,8 +77,8 @@ All four basic binary operators (\code{+, -, *, /}) can be used in the same way,
 \section{Task: simple operations between two spectra}\label{sec:base:simple:opper}
 
 <<>>=
-filtered_sun.dt <- ug1.dt * sun.dt
-head(filtered_sun.dt)
+filtered_sun.spct <- ug1.dt * sun.spct
+head(filtered_sun.spct)
 @
 
 All four basic binary operators (\code{+, -, *, /}) can be used in the same way.
@@ -102,7 +102,7 @@ out1.dt <- sum_spectra(spc1$w.length, spc2$w.length,
 This is what happens under the hood when we execute code like:
 
 <<eval=FALSE>>=
-out2.data <- spc1 + spc2
+out2.spct <- spc1 + spc2
 @
 
 with the difference that in the first case only spectral energy irradiance is calculated, while in the second both spectral energy irradiance and spectral photon irradiance are returned. \code{out1.data} is a "data.table", while the second will be an spectrum of a class dependent on the classes of \code{spc1} and \code{spc2}. Obviously, the second calculation will be slower, but in most cases unnoticeable so.
@@ -115,7 +115,7 @@ out.data <- oper_spectra(spc1$w.length, spc2$w.length,
                          bin.oper=`^`)
 @
 
-and yields the one spectrum to a power of a second one. Such additional functions are not predefined, as I cannot think of any use for them. \code{oper\_spectra} is used internally to define the functions for the four basic maths operators, and the corresponding operators.
+and yields one spectrum to a power of a second one. Such additional functions are not predefined, as I cannot think of any use for them. \code{oper\_spectra} is used internally to define the functions for the four basic maths operators, and the corresponding operators.
 
 \section{Task: trimming a spectrum}\label{sec:base:trim}
 

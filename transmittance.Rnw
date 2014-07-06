@@ -35,7 +35,7 @@ tau <- spc_above / spc_below
 Absorptance is just $1 - \tau(\lambda)$, but should be distinguished from absorbance ($A(\lambda)$) which is measured on a logarithmic scale:
 
 \begin{equation}
-A(\lambda) = -{\log}_10 \frac{I}{I_0}
+A(\lambda) = -{\log}_{10} \frac{I}{I_0}
 \end{equation}
 
 In chemistry 10 is always used as the base of the logarithm, but in other contexts sometimes $\mathrm{e}$ is used as base.
@@ -45,7 +45,7 @@ Given the simple equation, $A(\lambda)$ can be also easily calculated using the 
 The conversion between $\tau(\lambda)$ and $A(\lambda)$ is:
 
 \begin{equation}
-A(\lambda) = -{\log}_10 \tau(\lambda)
+A(\lambda) = -{\log}_{10} \tau(\lambda)
 \end{equation}
 
 which in S language is:
