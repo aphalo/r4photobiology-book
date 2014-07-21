@@ -5,7 +5,7 @@
 
 \chapter{R Scripts and Programming}\label{chap:R:scripts}
 
-\section{What is script?}
+\section{What is a script?}
 
 We call \textit{script} to a text file that contains the same commands that you would type at the console prompt. A true script is not for example an MS-Word file where you have pasted or typed some R commands. A script file has the following characteristics.
 \begin{itemize}
