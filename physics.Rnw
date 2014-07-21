@@ -14,6 +14,10 @@ library(photobiology)
 library(photobiologyFilters)
 @
 
+<<eval=TRUE, cache=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_medium)
+@
+
 %%%%
 \section{Introduction}\label{sec:physics:intro}
 
