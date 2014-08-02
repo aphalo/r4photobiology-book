@@ -10,6 +10,8 @@ For executing the examples listed in this chapter you need first to load the fol
 <<>>=
 library(photobiology)
 library(photobiologyFilters)
+library(photobiologyLEDs)
+rm(sun.spct)
 @
 
 %%%%
@@ -69,28 +71,66 @@ A2T <- function(x) {10^-x}
 They could be directly applied to spectra but doing this still gives "filter.spc" objects as a result, with the data labelled "T", when it has changed into absorbance. As the spectra objects are data.tables, one can add a new column, say with transmittances to a copy of the filter data as follows.
 
 <<>>=
-my.gg400.dt <- copy(gg400.dt)
-my.gg400.dt[ , A := T2A(Tfr)]
-head(gg400.dt)
+my.gg400.spct <- copy(gg400.spct)
+my.gg400.spct[ , A := T2A(Tfr)]
+gg400.spct
 @
 
 %%%%
 \section{Task: spectral absorbance from spectral transmittance}\label{sec:}
 
+Using \code{filter.spct} objects, the calculations become very simple.
+
+<<>>=
+T2A(gg400.spct)
+a.gg400.spct <- T2A(gg400.spct, "replace")
+@
+
 %%%%
 \section{Task: spectral transmittance from spectral absorbance}\label{sec:}
 
-%%%%
-\section{Task: absorbance from spectral asorbance and spectral irradiance}\label{sec:}
+<<>>=
+A2T(a.gg400.spct)
+A2T(a.gg400.spct, "replace")
+@
 
 %%%%
-\section{Task: reflected spectrum from spectral reflectance and spectral irradiance}\label{sec:}
+\section{Task: reflected or transmitted spectrum from spectral reflectance and spectral irradiance}\label{sec:}
 
-%%%%
-\section{Task: transmitted irradiance}\label{sec:}
+When we multiply a \code{source.spct} by a \code{filter.spct} or by a \code{reflector.spct} we obtain as a result a new \code{source.spct}.
 
-%%%%
-\section{Task: reflected radiance}\label{sec:}
+<<>>=
+sun.spct * gg400.spct
+@
+
+The result of the calculation can be directly used as an argument, for example, when calulating irradiance.
+
+<<>>=
+q_irrad_spct(sun.spct, UV()) * 1e6
+q_irrad_spct(sun.spct * gg400.spct, UV()) * 1e6
+q_irrad_spct(sun.spct * ug1.spct, UV()) * 1e6
+@
+
+<<>>=
+q_irrad_spct(sun.spct * gg400.spct) * 1e6
+q_irrad_spct(sun.spct * gg400.spct, new_waveband(min(sun.spct), max(sun.spct))) * 1e6
+@
+
+Remember, thet if we want to predict the output of a light source composed of different lamps or LEDs we can add the individual spectral irradiance, but using data measured from the target positions of each individaul light source. If we want then to add the effect of a filter we must multiply by the filter transmittance.
+
+\begin{framed}
+In the current version of package \code{photobiology} the operator is ``chosen'' based on the first operand. For this reason, when including a numeric operand, it should always be the second operand of binary operators for spectra.
+\end{framed}
+
+<<>>=
+# not working
+my_luminaire <- ( 0.5 * Norlux_B.spct + Norlux_R.spct) * PLX0A000_XT.spct
+# works fine
+my_luminaire <- ( Norlux_B.spct * 0.5 + Norlux_R.spct) * PLX0A000_XT.spct
+
+q_ratio_spct(my_luminaire, list(Red(), Blue(), Green()), PAR())
+q_irrad_spct(my_luminaire, list(PAR(), Red(), Blue(), Green())) * 1e6
+@
 
 %%%%
 \section{Task: total spectral transmittance from internal spectral transmittance and spectral reflectance}\label{sec:}
@@ -99,6 +139,7 @@ head(gg400.dt)
 \section{Task: combined spectral transmittance of two or more filters}\label{sec:}
 
 \subsection{Ignoring reflectance}
+
 
 \subsection{Considering reflectance}
 

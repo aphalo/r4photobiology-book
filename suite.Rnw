@@ -21,7 +21,8 @@ green bullet \gblt.}\label{tab:suite}
 \toprule
  & Package           &  Type        & Contents \\
 \midrule
-\gblt & photobiology      &  functions   & basic functions and example data \\
+\gblt & photobiology      &  funs + classes & basic functions, class definitions,\\
+      &                   &                 & class methods and example data \\
 \midrule
 \gblt & photobiologyVIS   &  definitions & quantification of VIS radiation \\
 \gblt & photobiologyUV    &  definitions & quantification of UV radiation \\
@@ -29,7 +30,7 @@ green bullet \gblt.}\label{tab:suite}
 \gblt & photobiologySun   &  data        & spectral data for solar radiation \\
 \gblt & photobiologyLamps &  data        & spectral data for lamps \\
 \gblt & photobiologyLEDs  &  data        & spectral data for LEDs \\
-\yblt & photobiologyFilters  &  data     & transmittance data for filters \\
+\gblt & photobiologyFilters  &  data     & transmittance data for filters \\
 \yblt & photobiologySensors  &  data     & response data for broadband sensors \\
 \midrule
 \yblt & photobiologyPhy  & funs + data & phytochromes \\
@@ -40,7 +41,7 @@ green bullet \gblt.}\label{tab:suite}
 \gblt & photobiologygg  & funtions       & extensions to package \code{ggplot2} \\
 \midrule
 \rblt & rTUV             & funs + data & TUV model interface \\
-\yblt & rOmniDriver      & functions   & control of Ocean Optics spectrometers \\
+\gblt & rOmniDriver      & functions   & control of Ocean Optics spectrometers \\
 \bottomrule
 \end{tabular}
 \end{small}
@@ -63,7 +64,7 @@ Whether you use RStudio or not it is possible to add the r4photo repository to t
 <<eval=FALSE, tidy=FALSE>>=
 setRepositories(graphics = getOption("menu.graphics"),
                 ind = NULL,
-                addURLs = c(photoCRAN =
+                addURLs = c(r4photo =
                       "http://www.mv.helsinki.fi/aphalo/R"))
 @
 
@@ -72,7 +73,7 @@ If you know the indexes in the menu you can use this code, where ‘1’ and ‘
 <<eval=FALSE, tidy=FALSE>>=
 setRepositories(graphics = getOption("menu.graphics"),
                 ind = c(1, 6),
-                addURLs = c(photoCRAN =
+                addURLs = c(r4photo =
                       "http://www.mv.helsinki.fi/aphalo/R"))
 @
 
@@ -83,7 +84,7 @@ Easiest is to create a text file and name it `\code{.Rprofile}'. The commands ab
 <<eval=FALSE, tidy=FALSE>>=
 utils::setRepositories(graphics = getOption("menu.graphics"),
                 ind = c(1, 6),
-                addURLs = c(photoCRAN =
+                addURLs = c(r4photo =
                       "http://www.mv.helsinki.fi/aphalo/R"))
 @
 
@@ -133,7 +134,7 @@ update.packages(repos = "http://www.mv.helsinki.fi/aphalo/R")
 The best way to install the packages is to specify both the r4photo repository and a normal CRAN repository, then all dependencies will be automatically installed. The package photobiolgyAll just loads and imports all the packages in the suite, except for photobiolygg. Because of this dependency all the packages are installed unless already installedby issuing this command.
 <<eval=FALSE, tidy=FALSE>>=
 install.packages(c("photobiologyAll", "photobiologygg"),
-         repos = c(photoCRAN =
+         repos = c(r4photo =
                      "http://www.mv.helsinki.fi/aphalo/R",
                    CRAN =
                      "http://cran.rstudio.com"))
@@ -149,7 +150,7 @@ photobiology_packages <- c("photobiology",
     "photobiologyFilters",  "photobiologySensors")
 
 install.packages(photobiology_packages,
-         repos = c(photoCRAN =
+         repos = c(r4photo =
                      "http://www.mv.helsinki.fi/aphalo/R",
                    CRAN =
                      "http://cran.rstudio.com"))
@@ -159,7 +160,7 @@ The commands above install all packages in the suite and all their dependencies 
 
 <<eval=FALSE, tidy=FALSE>>=
 update.packages(repos =
-                  c(photoCRAN =
+                  c(r4photo =
                       "http://www.mv.helsinki.fi/aphalo/R",
                     CRAN =
                       "http://cran.rstudio.com"))

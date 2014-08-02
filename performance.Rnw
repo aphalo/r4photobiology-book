@@ -332,13 +332,91 @@ res2 <- microbenchmark(
 When using \code{split\_irradiance}, disabling the data validation check reduces the median execution time from \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms to  \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med1 - med2) / med1 * 100, 2)}\%.
 
 As all the execution times are in milliseconds, all the optimizations discussed above are totally irrelevant unless you are planning to repeat similar calculations on thousands of spectra. They apply only to the machine, OS and version of R and packages used when building this typeset output.
+<<>>=
+detach(sun.data)
+@
+
+%%%%
+\section{Preliminary tests of spectral objects}
+
+<<warning=FALSE>>=
+res1 <- microbenchmark(
+  q_irrad_spct(sun.spct, PAR(), use.cached.mult=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  q_irrad_spct(sun.spct, list(UVC(), UVB(), UVA(), PAR()), use.cached.mult=TRUE),
+  times=100L, control=list(warmup = 10L))
+@
+When using \code{q\_irrad\_spct} with one waveband the time is \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms and it increases to \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif(med2 / med1, 3)} times when with four wavebands.
+
+<<warning=FALSE>>=
+res1 <- microbenchmark(
+  q_irrad_spct(sun.spct),
+  times=100L, control=list(warmup = 10L))
+@
+When using \code{q\_irrad\_spct} time  is \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms.
+
+<<warning=FALSE>>=
+res1 <- microbenchmark(
+  q_irrad_spct(sun.spct, PAR(), use.cached.mult=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  q_irrad_spct(sun.spct, PAR(), use.cached.mult=FALSE),
+  times=100L, control=list(warmup = 10L))
+@
+When using \code{q\_irrad\_spct} with cache enabled is \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms and it increases to \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif(med2 / med1, 3)} times when with cacheing disabled.
+
+<<warning=FALSE>>=
+res1 <- microbenchmark(
+  q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  q_irrad_spct(sun.spct, CIE(), use.cached.mult=FALSE),
+  times=100L, control=list(warmup = 10L))
+@
+When using \code{q\_irrad\_spct} with cache enabled is \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms and it increases to \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif(med2 / med1, 3)} times when with cacheing disabled.
+
+<<warning=FALSE>>=
+res1 <- microbenchmark(
+  q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE),
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE, use.hinges=FALSE),
+  times=100L, control=list(warmup = 10L))
+@
+When using \code{q\_irrad\_spct} with hinges enabled is \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms and it decreases to \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif(med2 / med1, 3)} of the time used when with hinges enabled.
+
+<<warning=FALSE>>=
+q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE)
+q_irrad_spct(sun.spct, CIE(), use.cached.mult=FALSE)
+q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE, use.hinges=FALSE)
+@
+
+The differnces in the result are small.
+
+<<warning=FALSE>>=
+cp_sun.spct <- copy(sun.spct)
+res1 <- microbenchmark(
+  sun_out.spct <- cp_sun.spct * 2 + cp_sun.spct,
+  times=100L, control=list(warmup = 10L))
+res2 <- microbenchmark(
+  sun_out.spct <- with(sun.data, s.e.irrad * 2 + s.e.irrad),
+  times=100L, control=list(warmup = 10L))
+res3 <- microbenchmark(
+  sun_out.spct <- with(sun.dt, s.e.irrad * 2 + s.e.irrad),
+  times=100L, control=list(warmup = 10L))
+res4 <- microbenchmark(
+  sun_out.spct <- with(cp_sun.spct, s.e.irrad * 2 + s.e.irrad),
+  times=100L, control=list(warmup = 10L))
+res5 <- microbenchmark(
+  sun_out.spct <- cp_sun.spct[ , s.e.irrad := s.e.irrad * 2 + s.e.irrad],
+  times=100L, control=list(warmup = 10L))
+@
+When using operators with spectral objects execution time is \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms and it decreases to \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, to \Sexpr{signif(med2 / med1 * 100, 3)} \% when using operators on vectors in a data frame, to \Sexpr{med3 <- median(res3$time) * 1e-6; signif(med3, 3)} ms, to \Sexpr{signif(med3 / med1 * 100, 3)} \% when using operators on vectors in a data table, to \Sexpr{med4 <- median(res4$time) * 1e-6; signif(med4, 3)} ms, to \Sexpr{signif(med4 / med1 * 100, 3)} \% when using operators on vectors in a \texttt{source.spct}, and to \Sexpr{med5 <- median(res5$time) * 1e-6; signif(med5, 3)} ms, to \Sexpr{signif(med5 / med1 * 100, 3)} \% when using data table syntax in a \texttt{source.spct}.
 
 %%%%
 \section{Profiling}\label{sec:perf:profiling}
 
 Profiling is basically fine-grained benchmarking. It provides information about in which part of your code the program spends most time when executing. Once you know this, you can try to just make those critical sections execute faster. Speed-ups can be obtained either by rewriting these parts in a compiled language like C or C++, or by use of a more efficient calculation algorithm. A detailed discussion is outside the scope of this handbook, so only a brief example will be shown here.
 
-<<>>=
-detach(sun.data)
-@
 

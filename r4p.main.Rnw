@@ -119,7 +119,7 @@ A handbook}}\par
 <<setup, include=FALSE, cache=FALSE>>=
 library(knitr)
 opts_knit$set(child.command = 'include')
-opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf')
+opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=FALSE)
 # opts_chunk$set(tidy=FALSE)
 options(replace.assign=TRUE,width=50)
 @
