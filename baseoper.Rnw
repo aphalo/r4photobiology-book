@@ -199,10 +199,10 @@ and yields one spectrum to a power of a second one. Such additional functions ar
 This is basically a subsetting operation, but our functions operate only based on wavelengths, while R \code{subset} is more general. On the other hand, our functions \code{trim\_spct} and \code{trim\_tails} add a few `bells and whistles'. The trimming is based on wavelengths and by default the cut points are inserted by interpolation, so that the spectrum returned includes the limits given as arguments. In addition, by default the trimming is done by deleting both spectral irradiance and wavelength values outside the range delimited by the limits (just like \code{subset} does), but through parameter \code{fill} the values outside the limits can be replaced by any value desired (most commonly \code{NA} or 0.) It is possible to supply only one, or both of \code{low.limit} and \code{high.limit}, depending on the desired trimming, or use a \code{waveband} definition. If the limits are outside the original data set, then the output spectrum is expanded and the tails filled with the value given as argument for \code{fill}.
 
 <<>>=
-trim_spct(sun.spct, UV())
-trim_spct(sun.spct, UV(), fill=0)
-trim_spct(sun.spct, low.limit=400)
-trim_spct(sun.spct, low.limit=250, fill=0.0)
+trim_spct(my_sun.spct, UV())
+trim_spct(my_sun.spct, UV(), fill=0)
+trim_spct(my_sun.spct, low.limit=400)
+trim_spct(my_sun.spct, low.limit=250, fill=0.0)
 @
 
 \code{trim\_tails} can be used for trimming spectra when data is available as vectors. We here present different examples for both functions, we encourage readers to try to reproduce all examples using both functions.
@@ -275,13 +275,18 @@ head(s.q.irrad, 10)
 Once again, easiest is to use spectral objects. The default is to add \code{s.q.irrad} to the source spectrum, unless it is already present in the object in which case values are not recalculated.
 
 <<>>=
-e2q(sun.spct)
+sun.spct
+my_sun.spct <- copy(sun.spct)
+e2q(my_sun.spct)
 @
 
 \code{e2q} has a parameter \code{action}, with default \code{"add"}. Another valid argument value is \code{"replace"}, but it should be used with extreme care, as the returned object, is no longer a \code{source.spct} object and is not compatible with all operators and functions defined for \code{source.spct} objects.
 
 <<>>=
-e2q(sun.spct, "replace")
+sun.spct
+my_sun.spct <- copy(sun.spct)
+e2q(my_sun.spct, "replace")
+my_sun.spct
 @
 
 \section{Task: conversion from photon to energy base}\label{sec:base:q2e}
@@ -304,13 +309,32 @@ s.e.irrad <- with(sun.data, as_energy(w.length, s.q.irrad))
 Function \code{q2e} is the reverse of \code{e2q}, it is rarely needed in user code and \code{source.spct} objects almost always contain \code{s.e.irrad}. It can also be used as a roundabout way of removing a \code{s.q.irrad} column, which cloud be usefull when some objects may be missing spectral energy itrradiance data.
 
 <<>>=
-q2e(sun.spct, "replace")
+sun.spct
+my_sun.spct <- copy(sun.spct)
+q2e(my_sun.spct, "replace")
 @
 
 Otherwise it feels more natural to use the following data.table syntax:
 
 <<>>=
-sun.spct[ , s.q.irrad := NULL]
+sun.spct
+my_sun.spct <- copy(sun.spct)
+my_sun.spct[ , s.q.irrad := NULL]
+@
+
+As we have seen above by default \code{q2e} and \code{e2q} return a modified copy of the spectrum as a new object. This is safe, but inefficient in use of memory and computing resources. We first copy the data to a new object, and delete the \code{s.e.irrad} variable, so that we can test the use of the functions by reference.
+
+<<>>=
+sun.spct
+my_sun.spct <- copy(sun.spct)
+my_sun.spct[ , s.e.irrad := NULL]
+@
+
+When parameter \code{byref} is given \code{TRUE} as argument the original spectrum is modified.
+
+<<>>=
+q2e(my_sun.spct, byref=TRUE)
+my_sun.spct
 @
 
 \section{Task: interpolating a spectrum}\label{sec:base:interpol}

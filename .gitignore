@@ -12,6 +12,7 @@
 *.bcf
 *.bak
 *.blg
+Rprof.out
 ggmapFileDrawer/
 cache/
 figure/

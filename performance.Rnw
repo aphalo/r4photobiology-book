@@ -419,4 +419,31 @@ When using operators with spectral objects execution time is \Sexpr{med1 <- medi
 
 Profiling is basically fine-grained benchmarking. It provides information about in which part of your code the program spends most time when executing. Once you know this, you can try to just make those critical sections execute faster. Speed-ups can be obtained either by rewriting these parts in a compiled language like C or C++, or by use of a more efficient calculation algorithm. A detailed discussion is outside the scope of this handbook, so only a brief example will be shown here.
 
+<<>>=
+Rprof()
+for (i in 1:1000) {
+q_irrad_spct(sun.spct)
+}
+Rprof(NULL)
+summaryRprof()
+@
 
+<<>>=
+my_PAR <- PAR()
+Rprof()
+for (i in 1:1000) {
+q_irrad_spct(sun.spct, my_PAR, use.hinges=TRUE)
+}
+Rprof(NULL)
+summaryRprof()
+@
+
+<<>>=
+my_PAR <- PAR()
+Rprof()
+for (i in 1:1000) {
+q_irrad_spct(sun.spct, my_PAR, use.hinges=FALSE)
+}
+Rprof(NULL)
+summaryRprof()
+@
