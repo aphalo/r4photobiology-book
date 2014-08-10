@@ -35,54 +35,55 @@ In the examples in this handbook we mainly use \code{ggplot}, \code{ggmap} and \
 The grammar of graphics is based on aesthetics (\code{aes}) as for example colour, geometric elements \code{geom\_\ldots} such as lines, and points, statistics \code{stat\_\ldots}, scales \code{scale\_\ldots}, labels \code{labs}, and themes \code{theme\_\ldots}. Plots are assembled from these elements, we start with a plot with two aesthetics, and one geom:
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
+ggplot(sun.spct, aes(x=w.length, y=s.e.irrad)) +
   geom_line()
 @
 
 Aesthetics can be `assigned' to data variables, and to constants:
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad, colour="red")) +
+ggplot(sun.spct, aes(x=w.length, y=s.e.irrad, colour="red")) +
   geom_line()
 @
 
 Data can be the `result of a calculation':
 
 <<>>=
-ggplot(sun.spc * gg400.spc, aes(x=w.length, y=s.q.irrad)) +
+ggplot(sun.spct * gg400.spct, aes(x=w.length, y=s.e.irrad)) +
   geom_line()
 @
 
 The aesthetics and data given as \code{ggplot}'s arguments become the defaults for the geoms, but geoms also take aesthetics and data as arguments, which then override the defaults:
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
+ggplot(sun.spct, aes(x=w.length, y=s.e.irrad)) +
   geom_line(colour="red") +
-  geom_line(data=sun.spc * gg400.spc, colour="blue")
+  geom_line(data=sun.spct * gg400.spct, colour="blue")
 @
 
-Another way of plotting these data, is to first assemble a single data.frame or data.table with all the data. We will use the example data that is as data.tables:
+Another way of plotting these data, is to first assemble a single data.frame or data.table with all the data. We will use the example data that is as \code{source.spct} objects. After the operations we need to use \code{e2q} to add the spectral photon irradiance values to plot.
 
 <<>>=
-unfiltered_sun.spc <- copy(sun.spc)
-unfiltered_sun.spc[ , filter := "none"]
-filtered_sun.spc <- sun.spc * gg400.spc
-filtered_sun.spc[ , filter := "GG400"]
-data4plot.spc <- rbind(unfiltered_sun.spc, filtered_sun.spc)
-data4plot.spc[ , filter := factor(filter)]
+unfiltered_sun.spct <- copy(sun.spct)
+unfiltered_sun.spct[ , filter := "none"]
+filtered_sun.spct <- sun.spct * gg400.spct
+e2q(filtered_sun.spct, byref=TRUE)
+filtered_sun.spct[ , filter := "GG400"]
+data4plot.spct <- rbind(unfiltered_sun.spct, filtered_sun.spct)
+data4plot.spct[ , filter := factor(filter)]
 @
 
 Now we can do the plot assigning \code{filter} to an aesthetic:
 
 <<>>=
-ggplot(data4plot.spc, aes(x=w.length, y=s.q.irrad, colour=filter)) +
+ggplot(data4plot.spct, aes(x=w.length, y=s.q.irrad, colour=filter)) +
   geom_line()
 @
 
 We can assign the same variable to more than one aesthetic:
 
 <<>>=
-ggplot(data4plot.spc, aes(x=w.length, y=s.q.irrad,
+ggplot(data4plot.spct, aes(x=w.length, y=s.q.irrad,
                    colour=filter, linetype=filter)) +
   geom_line()
 @
@@ -90,7 +91,7 @@ ggplot(data4plot.spc, aes(x=w.length, y=s.q.irrad,
 We can change the labels for the different aesthetics, and give a title:
 
 <<>>=
-ggplot(data4plot.spc,
+ggplot(data4plot.spct,
        aes(x=w.length, y=s.q.irrad * 1e6, colour=filter)) +
   geom_line() +
   labs(x="Wavelength (nm)",
@@ -102,7 +103,7 @@ ggplot(data4plot.spc,
 We can assign a ggplot object to a variable:
 
 <<>>=
-myplot <- ggplot(data4plot.spc,
+myplot <- ggplot(data4plot.spct,
        aes(x=w.length, y=s.q.irrad * 1e6, colour=filter)) +
   geom_line() +
   labs(x="Wavelength (nm)",
@@ -123,7 +124,7 @@ myplot + scale_y_log10()
 We will now show an example of use of \code{stat\_smooth} using the default spline smoothing.
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
+ggplot(sun.spct, aes(x=w.length, y=s.q.irrad)) +
   geom_line() +
   stat_smooth()
 @
@@ -131,7 +132,7 @@ ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
 By adjusting one of its parameters, \code{span}, we make the spline more ``flexible'':
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
+ggplot(sun.spct, aes(x=w.length, y=s.q.irrad)) +
   geom_line() +
   stat_smooth(span=0.1)
 @
@@ -139,7 +140,7 @@ ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
 Instead of using the default spline, we can use a linear model fit. In this example we use a polynomial of order 8, fitted by lm, as smoother:
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
+ggplot(sun.spct, aes(x=w.length, y=s.q.irrad)) +
   geom_line() +
   stat_smooth(method="lm", formula=y~poly(x,8))
 @

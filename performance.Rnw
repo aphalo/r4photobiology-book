@@ -381,18 +381,18 @@ res1 <- microbenchmark(
   q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE),
   times=100L, control=list(warmup = 10L))
 res2 <- microbenchmark(
-  q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE, use.hinges=FALSE),
+  q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE, use.hinges=TRUE),
   times=100L, control=list(warmup = 10L))
 @
-When using \code{q\_irrad\_spct} with hinges enabled is \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms and it decreases to \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif(med2 / med1, 3)} of the time used when with hinges enabled.
+\code{q\_irrad\_spct} without hinges enabled (the default when the wavelength step $\Delta \lambda < 1.1 \Unit{nm}$) takes \Sexpr{med1 <- median(res1$time) * 1e-6; signif(med1, 3)} ms but the execution time increases to \Sexpr{med2 <- median(res2$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med2 - med1)  / med1, 3)} times with use of hinges enabled.
 
 <<warning=FALSE>>=
 q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE)
 q_irrad_spct(sun.spct, CIE(), use.cached.mult=FALSE)
-q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE, use.hinges=FALSE)
+q_irrad_spct(sun.spct, CIE(), use.cached.mult=TRUE, use.hinges=TRUE)
 @
 
-The differnces in the result are small.
+The differnce in the returned value is rather small.
 
 <<warning=FALSE>>=
 cp_sun.spct <- copy(sun.spct)
