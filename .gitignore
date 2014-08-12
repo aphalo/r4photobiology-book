@@ -16,3 +16,4 @@ Rprof.out
 ggmapFileDrawer/
 cache/
 figure/
+*.gin

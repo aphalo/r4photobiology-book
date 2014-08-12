@@ -272,6 +272,55 @@ figvl4 <- fig_sun.q +
 figvl4
 @
 
+\section{Task: automating plotting}
+
+<<>>=
+fig_sun.z <-
+  ggplot(data=sun.spct, aes(x=w.length, y=s.e.irrad)) +
+  geom_line()  +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.z
+@
+
+\section{Task: using colour as data in plots}
+
+<<>>=
+tg.sun.spct <- copy(sun.spct)
+tg.sun.spct <- interpolate_spct(tg.sun.spct, length.out=8000)
+tag(tg.sun.spct, VIS_bands())
+@
+
+<<>>=
+fig_sun.z <-
+  ggplot(data=tg.sun.spct, aes(x=w.length, y=s.e.irrad, color=wb.color)) + scale_color_identity() +
+  geom_point()  +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.z
+@
+
+<<>>=
+fig_sun.y <-
+  ggplot(data=tg.sun.spct, aes(x=w.length, y=s.e.irrad, color=wl.color)) + scale_color_identity() +
+  geom_point()  +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.y
+@
+
+<<>>=
+fig_sun.x <-
+  ggplot(data=tg.sun.spct, aes(x=w.length, y=s.e.irrad, color=irrad.color)) + scale_color_identity() +
+  geom_point()  +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.x
+@
 
 %%%%
 \section{Task: plotting colours in Maxwell's triangle}\label{sec:max:tri}
