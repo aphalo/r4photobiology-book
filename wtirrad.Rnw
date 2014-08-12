@@ -9,8 +9,7 @@
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
-library(photobiologyVIS)
-library(photobiologyUV)
+library(photobiologyWavebands)
 @
 
 %%%%
@@ -21,7 +20,7 @@ Weighted irradiance is usually reported in weighted energy units, but it is poss
 %%%%
 \section{Task: choosing the normalization wavelength}\label{sec:wt:intro}
 
-Function \code{GEN.G()} is predefined in package \PBUV as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \cite{Green198x}:
+Function \code{GEN.G()} is predefined in package \PBWB as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \cite{Green198x}:
 
 <<>>=
 with(sun.data,

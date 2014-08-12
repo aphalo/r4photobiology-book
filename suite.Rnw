@@ -24,8 +24,7 @@ green bullet \gblt.}\label{tab:suite}
 \gblt & photobiology      &  funs + classes & basic functions, class definitions,\\
       &                   &                 & class methods and example data \\
 \midrule
-\gblt & photobiologyVIS   &  definitions & quantification of VIS radiation \\
-\gblt & photobiologyUV    &  definitions & quantification of UV radiation \\
+\gblt & photobiologyWavebands   &  definitions & quantification of radiation \\
 \midrule
 \gblt & photobiologySun   &  data        & spectral data for solar radiation \\
 \gblt & photobiologyLamps &  data        & spectral data for lamps \\
@@ -36,9 +35,9 @@ green bullet \gblt.}\label{tab:suite}
 \yblt & photobiologyPhy  & funs + data & phytochromes \\
 \yblt & photobiologyCry  & funs + data & cryptochromes \\
 \rblt & photobiologyPhot & funs + data & phototropins \\
-\rblt & photobiologyUVR8 & funs + data & phototropins \\
+\rblt & photobiologyUVR8 & funs + data & UVR8 \\
 \midrule
-\gblt & photobiologygg  & funtions       & extensions to package \code{ggplot2} \\
+\gblt & photobiologygg  & functions       & extensions to package \code{ggplot2} \\
 \midrule
 \rblt & rTUV             & funs + data & TUV model interface \\
 \gblt & rOmniDriver      & functions   & control of Ocean Optics spectrometers \\
@@ -100,7 +99,7 @@ and can be enabled and disabled.
 
 In RStudio, after adding the r4photo repository as shown above, the photobiology packages can be installed and uninstalled through the normal RStudio menus and dialogues, and will listed after typing the first few characters of their names. For example when you type ‘photob’ in the packages field, all the packages with names starting with ‘photob’ will be listed.
 
-They can be also installed at the R command prompt with the followwing command:
+They can be also installed at the R command prompt with the following command:
 <<eval=FALSE>>=
 install.packages(c("photobiologyAll", "photobiologygg"))
 @
@@ -116,7 +115,7 @@ The added repository will persist only during the current R session. Adding it p
 
 \section{How to install the packages}
 
-The examples given in this page assume that ‘r4photo’ is not in the list of repositories known to the current R session. See the section \ref{sec:photoCRAN} on the r4photo repository for a better alternative to the approach given here. We mention these other comands because they may be useful in cases when the user does not have write access to his/hers home directory, or just wants to try the packages.
+The examples given in this page assume that ‘r4photo’ is not in the list of repositories known to the current R session. See the section \ref{sec:photoCRAN} on the r4photo repository for a better alternative to the approach given here. We mention these other commands because they may be useful in cases when the user does not have write access to his/hers home directory, or just wants to try the packages.
 
 To install the latest version of one package (photobiology used as example) you just need to indicate the repository. However this simple command will only install the dependencies between the different photobiology packages.
 <<eval=FALSE, tidy=FALSE>>=
@@ -131,7 +130,7 @@ update.packages(repos = "http://www.mv.helsinki.fi/aphalo/R")
 @
 
 
-The best way to install the packages is to specify both the r4photo repository and a normal CRAN repository, then all dependencies will be automatically installed. The package photobiolgyAll just loads and imports all the packages in the suite, except for photobiolygg. Because of this dependency all the packages are installed unless already installedby issuing this command.
+The best way to install the packages is to specify both the r4photo repository and a normal CRAN repository, then all dependencies will be automatically installed. The package photobiolgyAll just loads and imports all the packages in the suite, except for photobiolygg. Because of this dependency all the packages are installed unless already installed by issuing this command.
 <<eval=FALSE, tidy=FALSE>>=
 install.packages(c("photobiologyAll", "photobiologygg"),
          repos = c(r4photo =
@@ -143,7 +142,7 @@ install.packages(c("photobiologyAll", "photobiologygg"),
 This example also shows how one can use an array of package names (in this example all currently available “photobiology” packages) in the call to the function install.packages, this is useful if you want to install only a subset of the files, or if you want to make sure that any older install of the packages is overwritten:
 <<eval=FALSE, tidy=FALSE>>=
 photobiology_packages <- c("photobiology",
-    "photobiologyVIS", "photobiologyUV",
+    "photobiologyWavebands",
     "photobiologyCry", "photobiologyPhy",
     "photobiologyLamps", "photobiologyLEDs",
     "photobiologySun", "photobiologygg",

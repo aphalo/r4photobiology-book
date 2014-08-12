@@ -9,8 +9,7 @@
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
-library(photobiologyVIS)
-library(photobiologyUV)
+library(photobiologyWavebands)
 library(microbenchmark)
 @
 
