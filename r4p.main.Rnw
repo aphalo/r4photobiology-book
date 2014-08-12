@@ -90,7 +90,7 @@ A handbook}}\par
 \vspace{\drop}
 {\Large Pedro J. Aphalo\\ and\\ Andreas Albert}\par
 \vfill
-{\footnotesize DRAFT\\ \today\\ \copyright\ 2013-2014 by the authors}\par
+{\footnotesize Git \gitVtag of \gitAuthorIsoDate by\ \gitAuthorName \\Printed \today\\ \copyright\ 2013-2014 by the authors}\par
 \vspace*{\drop}
 \endgroup}
 
@@ -144,7 +144,6 @@ library(photobiologygg)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE>>=
-my_version <-
 incl_chaps <- TRUE
 incl_ckbk <- TRUE
 incl_apdx <- TRUE
