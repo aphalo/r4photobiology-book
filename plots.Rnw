@@ -372,27 +372,64 @@ fig_sun.z <-
 fig_sun.z
 @
 
-We add colour and waveband information to the spectral data object, but before that we increase the number of `observations' in the spectrum by interpolation. You can play with \code{length.out} and the \code{size} of points until you get the result you like.
+We add colour and waveband information to the spectral data object, but before that we increase the number of `observations' in the spectrum by interpolation (here commented out). You can play with \code{length.out} and the \code{size} of points until you get the result you like. We here tag the solar spectrum with human vision colours as defined by CIE.
 
 <<>>=
 tg.sun.spct <- copy(sun.spct)
-tg.sun.spct <- interpolate_spct(tg.sun.spct, length.out=1000)
+# tg.sun.spct <- interpolate_spct(tg.sun.spct, length.out=1000)
 tag(tg.sun.spct, VIS_bands())
 @
 
-Here we plot using colours by waveband.
+Here we plot using colours by waveband using the colour definitions by CIE, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.
 
 <<>>=
 fig_sun.z <-
   ggplot(data=tg.sun.spct,
          aes(x=w.length, y=s.e.irrad)) +
   geom_line() +
-  scale_color_identity() +
-  geom_point(aes(color=wb.color))  +
+  scale_fill_identity() +
+  geom_point(aes(fill=wb.color), shape=21)  +
   labs(
     y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
     x = "Wavelength (nm)")
 fig_sun.z
+@
+
+Using \code{geom\_area} we can fill the area under the curve according to the colour of different wavebands, we set the fill only for this geom, so that the \code{NA}s do not affect other ploting. To get a single black curve for the spectrum we use \code{geom\_line}.
+
+<<>>=
+fig_sun.zz <-
+ggplot(tg.sun.spct,
+       aes(x=w.length, y=s.e.irrad)) +
+  geom_area(aes(fill=wb.color), alpha=0.5) +
+  scale_fill_identity() +
+  geom_line() +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.zz + theme_bw()
+@
+
+We can instead tag the solar spectrum with colours using the definitions of plant sensory `colours'.
+
+<<>>=
+pl.sun.spct <- copy(sun.spct)
+tag(pl.sun.spct, Plant_bands())
+@
+
+Here we plot using colours by waveband using the defineitions of plant sensory `colours'.
+
+<<>>=
+fig_sun.pl <-
+ggplot(pl.sun.spct,
+       aes(x=w.length, y=s.e.irrad)) +
+  geom_area(aes(fill=wb.color), alpha=0.5) +
+  scale_fill_identity() +
+  geom_line() +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.pl + theme_bw()
 @
 
 In contrast here we use the colour calculated for each individual wavelength value.
