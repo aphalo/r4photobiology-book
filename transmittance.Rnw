@@ -9,6 +9,7 @@ In this chapter we explain how to do calculations related to the description of 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
+library(photobiologyWavebands)
 library(photobiologyFilters)
 library(photobiologyLEDs)
 @
@@ -149,4 +150,11 @@ q_irrad_spct(my_luminaire, list(PAR(), Red(), Blue(), Green())) * 1e6
 
 %%%%
 \section{Task: light scattering media (natural waters, plant and animal tissues)}\label{sec:}
+
+<<>>=
+detach(package:photobiologyFilters)
+detach(package:photobiologyLEDs)
+detach(package:photobiologyWavebands)
+detach(package:photobiology)
+@
 

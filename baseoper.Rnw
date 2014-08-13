@@ -9,6 +9,7 @@
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
+library(photobiologyWavebands)
 library(photobiologyFilters)
 library(photobiologyLEDs)
 @
@@ -375,3 +376,9 @@ The function \code{insert\_hinges} is used internally to insert individual inter
 
 The function \code{integrate\_irradiance} is used internally for integrating spectra, and accepts spectral data measured at arbitrary wavelengths. Raw data from array spectrometers is not available with a constant wavelength step. It is always best to do any interpolation as late as possible, or never. This function makes it possible to work with spectral data on the original pixel wavelengths.
 
+<<>>=
+detach(package:photobiologyFilters)
+detach(package:photobiologyLEDs)
+detach(package:photobiologyWavebands)
+detach(package:photobiology)
+@

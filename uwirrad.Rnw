@@ -354,3 +354,8 @@ with(sun.data,
                              c(400, 500, 600, 700),
                              scale="percent"))
 @
+
+<<>>=
+detach(package:photobiologyWavebands)
+detach(package:photobiology)
+@

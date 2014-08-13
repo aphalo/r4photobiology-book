@@ -92,3 +92,8 @@ with(sun.data,
 %%%%
 \section{Introduction}\label{sec:wt:intro}
 
+<<>>=
+detach(package:photobiologyWavebands)
+detach(package:photobiology)
+@
+

@@ -109,3 +109,6 @@ for (j in 0:(rowCount-1))
 
 @
 
+<<>>=
+detach(package:photobiology)
+@

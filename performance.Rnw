@@ -419,30 +419,53 @@ When using operators with spectral objects execution time is \Sexpr{med1 <- medi
 Profiling is basically fine-grained benchmarking. It provides information about in which part of your code the program spends most time when executing. Once you know this, you can try to just make those critical sections execute faster. Speed-ups can be obtained either by rewriting these parts in a compiled language like C or C++, or by use of a more efficient calculation algorithm. A detailed discussion is outside the scope of this handbook, so only a brief example will be shown here.
 
 <<>>=
-Rprof()
-for (i in 1:1000) {
-q_irrad_spct(sun.spct)
-}
-Rprof(NULL)
-summaryRprof()
+library(ggplot2)
+library(profr)
+@
+
+<<eval=FALSE>>=
+profr.df <- profr({q_irrad_spct(sun.spct)},
+                  interval = 0.0005, quiet = TRUE)
+head(profr.df)
+ggplot(profr.df)
+@
+
+<<eval=FALSE>>=
+profr.df <- profr({q_irrad_spct(sun.spct, my_PAR, use.hinges=TRUE)},
+                  interval = 0.0001, quiet = TRUE)
+head(profr.df)
+ggplot(profr.df)
+@
+
+<<eval=FALSE>>=
+profr.df <- profr({q_irrad_spct(sun.spct, my_PAR, use.hinges=FALSE)},
+                  interval = 0.0001, quiet = TRUE)
+head(profr.df)
+ggplot(profr.df)
 @
 
 <<>>=
-my_PAR <- PAR()
-Rprof()
-for (i in 1:1000) {
-q_irrad_spct(sun.spct, my_PAR, use.hinges=TRUE)
-}
-Rprof(NULL)
-summaryRprof()
+profr.df <- profr({tag(my_sun.spct)},
+                  interval = 0.005, quiet = TRUE)
+head(profr.df)
+ggplot(profr.df)
 @
 
 <<>>=
-my_PAR <- PAR()
-Rprof()
-for (i in 1:1000) {
-q_irrad_spct(sun.spct, my_PAR, use.hinges=FALSE)
-}
+my_sun.spct <- copy(sun.spct)
+Rprof("profile1.out", line.profiling=TRUE, interval = 0.002)
+tag(my_sun.spct)
 Rprof(NULL)
-summaryRprof()
+summaryRprof("profile1.out", lines = "show")[["by.line"]]
+# profr.df <- parse_rprof("profile1.out")
+# head(profr.df)
+# ggplot(profr.df)
+@
+
+<<>>=
+detach(package:profr)
+detach(package:photobiologyWavebands)
+detach(package:photobiology)
+detach(package:microbenchmark)
+detach(package:ggplot2)
 @

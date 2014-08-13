@@ -107,3 +107,9 @@ ggplot(data=data.frame(Tabs=c(2000,7000)), aes(x=Tabs)) +
        y="Wavelength at peak of emission (nm)")
 @
 
+<<>>=
+detach(package:photobiologyFilters)
+detach(package:photobiologygg)
+detach(package:photobiology)
+detach(package:ggplot2)
+@
