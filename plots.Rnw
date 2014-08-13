@@ -216,7 +216,7 @@ figvl <- fig_sun.e + annotate_waveband(Yellow(), "rect", ymax=0.82) +
 figvl
 @
 
-Now an example that is more complex, and demonstrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two `geoms' and some labels are rotated and justified.
+Now an example that is more complex, and demonstrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two `geoms' and some labels are rotated and justified. We can also see in this example that the annotations look nicier on a white background, which can be obtained with \code{theme\_bw}.
 
 <<>>=
 figv2 <- fig_sun.e +
@@ -252,7 +252,7 @@ figv2 <- fig_sun.e +
                     ymax=0.82) +
   annotate_waveband(Far_red("Smith"), "text",
                     y=0.80, angle=90, hjust=1)
-figv2
+figv2 + theme_bw()
 @
 
 A simple example using \code{geom\_vline}:
@@ -272,6 +272,70 @@ figvl4 <- fig_sun.q +
 figvl4
 @
 
+Now including calculated values in the labels. Because of using expressions to obtain superscripts we need to add \code{parse=TRUE} to the call.
+
+<<>>=
+fig_sun <- ggplot(data=sun.spct,
+                  aes(x=w.length, y=s.e.irrad)) +
+  geom_line() +
+  labs(y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+       x = "Wavelength (nm)")
+uvb <- e_irrad_spct(sun.spct, UVB())
+uva <- e_irrad_spct(sun.spct, UVA())
+par <- q_irrad_spct(sun.spct, PAR()) * 1e6
+fig_sun2 <- fig_sun +
+  annotate_waveband(UVB(), "rect", ymax=0.82) +
+  annotate_waveband(UVB(), "text",
+                    label=paste("UVB:~", signif(uvb, digits=2),
+                                "*~W~m^{-2}~nm^{-1}", sep=""),
+                    y=0.2, hjust=0, angle=90, colour="black",
+                    parse=TRUE) +
+  annotate_waveband(UVA(), "rect", ymax=0.82) +
+  annotate_waveband(UVA(), "text",
+                    label=paste("UVA:~", signif(uva, digits=2),
+                                "*~W~m^{-2}~nm^{-1}", sep=""),
+                    y=0.86, colour="black", parse=TRUE) +
+  annotate_waveband(PAR(), "rect", ymax=0.82) +
+  annotate_waveband(PAR(), "text",
+                    label=paste("PAR:~", signif(par,digits=2),
+                                "*~mu*mol~m^{-2}~s^{-1}", sep=""),
+                    y=0.86, colour="black", parse=TRUE)
+fig_sun2 + theme_bw()
+@
+
+This also works for effective exposures or doses, in this case as we position the annotations manually, we can use ggplot2's `normal' \code{annotate}.
+
+<<warning=FALSE>>=
+fig_dsun <- ggplot(data=sun.daily.spct * polythene.new.spct,
+                   aes(x=w.length, y=s.e.irrad * 1e-3)) + geom_line() +
+  geom_line(data=sun.daily.spct * polyester.new.spct, colour="red") +
+  geom_line(data=sun.daily.spct * PC.spct, colour="blue") +
+  labs(y = expression(Spectral~~energy~~exposure~~(kJ~m^{-2}~d^{-1}~nm^{-1})),
+       x = "Wavelength (nm)") + xlim(290, 425) + ylim(0, 25)
+cie.pe <- e_irrad_spct(sun.daily.spct * polythene.new.spct, CIE()) * 1e-3
+cie.ps <- e_irrad_spct(sun.daily.spct * polyester.new.spct, CIE()) * 1e-3
+cie.pc <- e_irrad_spct(sun.daily.spct * PC.spct, CIE()) * 1e-3
+y.pos = 22.5
+fig_dsun2 <- fig_dsun +
+  annotate("text",
+           label=paste("Polythene~~filter~~CIE:~",
+                       signif(cie.pe, digits=3),
+                       "*~kJ~m^{-2}~d^{-1}", sep=""),
+                    y=y.pos+2, x=300, hjust=0, colour="black",
+           parse=TRUE) +
+  annotate("text", label=paste("Polyester~~filter~~CIE:~",
+                               signif(cie.ps, digits=3),
+                               "*~kJ~m^{-2}~d^{-1}", sep=""),
+                    y=y.pos, x=300,  hjust=0,  colour="red",
+           parse=TRUE) +
+  annotate("text", label=paste("Polycarbonate~~filter~~CIE:~",
+                               signif(cie.pc, digits=3),
+                               "*~kJ~m^{-2}~d^{-1}", sep=""),
+                    y=y.pos-2, x=300, hjust=0,  colour="blue",
+           parse=TRUE)
+fig_dsun2 + theme_bw()
+@
+
 \section{Task: automating plotting}
 
 <<>>=
@@ -286,40 +350,63 @@ fig_sun.z
 
 \section{Task: using colour as data in plots}
 
+We add colour and waveband information to the spectral data object.
+
 <<>>=
-tg.sun.spct <- copy(sun.spct)
-tg.sun.spct <- interpolate_spct(tg.sun.spct, length.out=8000)
-tag(tg.sun.spct, VIS_bands())
+par.sun.spct <- copy(sun.spct)
+tag(par.sun.spct, PAR())
 @
+
+Here we use the \code{wb.f} factor that was added as part of the tagging.
 
 <<>>=
 fig_sun.z <-
-  ggplot(data=tg.sun.spct, aes(x=w.length, y=s.e.irrad, color=wb.color)) + scale_color_identity() +
-  geom_point()  +
+  ggplot(data=par.sun.spct,
+         aes(x=w.length, y=s.e.irrad)) +
+  geom_line() +
+  geom_point(aes(color=wb.f)) +
   labs(
     y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
     x = "Wavelength (nm)")
 fig_sun.z
 @
 
+We add colour and waveband information to the spectral data object, but before that we increase the number of `observations' in the spectrum by interpolation. You can play with \code{length.out} and the \code{size} of points until you get the result you like.
+
+<<>>=
+tg.sun.spct <- copy(sun.spct)
+tg.sun.spct <- interpolate_spct(tg.sun.spct, length.out=1000)
+tag(tg.sun.spct, VIS_bands())
+@
+
+Here we plot using colours by waveband.
+
+<<>>=
+fig_sun.z <-
+  ggplot(data=tg.sun.spct,
+         aes(x=w.length, y=s.e.irrad)) +
+  geom_line() +
+  scale_color_identity() +
+  geom_point(aes(color=wb.color))  +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.z
+@
+
+In contrast here we use the colour calculated for each individual wavelength value.
+
 <<>>=
 fig_sun.y <-
-  ggplot(data=tg.sun.spct, aes(x=w.length, y=s.e.irrad, color=wl.color)) + scale_color_identity() +
-  geom_point()  +
+  ggplot(data=tg.sun.spct,
+         aes(x=w.length, y=s.e.irrad)) +
+  geom_line() +
+  scale_color_identity() +
+  geom_point(aes(color=wl.color))  +
   labs(
     y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
     x = "Wavelength (nm)")
 fig_sun.y
-@
-
-<<>>=
-fig_sun.x <-
-  ggplot(data=tg.sun.spct, aes(x=w.length, y=s.e.irrad, color=irrad.color)) + scale_color_identity() +
-  geom_point()  +
-  labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
-    x = "Wavelength (nm)")
-fig_sun.x
 @
 
 %%%%
