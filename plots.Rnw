@@ -432,7 +432,24 @@ ggplot(pl.sun.spct,
 fig_sun.pl + theme_bw()
 @
 
-In contrast here we use the colour calculated for each individual wavelength value.
+We can also use the factor \code{wb.f} which has value \code{NA} outside the wavebands, changing the colour used for \code{NA} to \code{NA} which renders it invisible.
+
+<<>>=
+fig_sun.pl <-
+ggplot(pl.sun.spct,
+       aes(x=w.length, y=s.e.irrad)) +
+  geom_area(aes(fill=wb.f)) +
+  scale_fill_grey(na.value=NA) +
+  geom_line() +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)")
+fig_sun.pl + theme_bw()
+@
+
+When using a factor we can play with the scale definitions and represent the wavebands in any way we may want.
+
+We may instead want to plot the colour calculated for each individual wavelength value, which \code{tag} adds to the spectrum, whether a waveband definition is supplied or not.
 
 <<>>=
 fig_sun.y <-
