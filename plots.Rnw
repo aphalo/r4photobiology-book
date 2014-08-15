@@ -57,6 +57,22 @@ fig_sun.e <-
 fig_sun.e
 @
 
+As we are going to re-use the same axis-labels, it is handy to save their defintion to a variable.
+
+<<>>=
+ylab_watt <-
+  expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1}))
+ylab_watt_atop <-
+  expression(atop(Spectral~~energy~~irradiance,
+                  (W~m^{-2}~nm^{-1})))
+ylab_umol <-
+  expression(Spectral~~photon~~irradiance~~(mu*mol~m^{-2}~s^{-1}~nm^{-1}))
+ylab_umol_atop <-
+  expression(atop(Spectral~~photon~~irradiance,
+                  (mu*mol~m^{-2}~s^{-1}~nm^{-1})))
+@
+
+
 %%%%
 \section{Task: using a log scale}\label{sec:plot:log}
 
@@ -87,12 +103,10 @@ fig_sun.q <-
   ggplot(data=sun.data, aes(x=w.length, y=s.q.irrad * 1e6)) +
   geom_line() +
   scale_y_continuous(labels = num_one_dec) +
-  labs(y = expression(atop(Spectral~~photon~~irradiance,
-                           (mu*mol~m^{-2}~s^{-1}~nm^{-1})))) +
+  labs(y = ylab_umol_atop) +
   theme_stack_opts
 fig_sun.e1 <- fig_sun.e +
-  labs(y = expression(atop(Spectral~~energy~~irradiance,
-                           (W~m^{-2}~nm^{-1}))),
+  labs(y = ylab_watt_atop,
        x = "Wavelength (nm)")
 grid.arrange(fig_sun.q, fig_sun.e1, nrow=2)
 @
@@ -279,7 +293,7 @@ Now including calculated values in the labels. Because of using expressions to o
 fig_sun <- ggplot(data=sun.spct,
                   aes(x=w.length, y=s.e.irrad)) +
   geom_line() +
-  labs(y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+  labs(y = ylab_watt,
        x = "Wavelength (nm)")
 uvb <- e_irrad_spct(sun.spct, UVB())
 uva <- e_irrad_spct(sun.spct, UVA())
@@ -337,19 +351,78 @@ fig_dsun2 <- fig_dsun +
 fig_dsun2 + theme_bw()
 @
 
-\section{Task: automating plotting}
-
-<<>>=
-fig_sun.z <-
-  ggplot(data=sun.spct, aes(x=w.length, y=s.e.irrad)) +
-  geom_line()  +
-  labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
-    x = "Wavelength (nm)")
-fig_sun.z
-@
+% \section{Task: automating plotting}
+%
+% <<>>=
+% fig_sun.z <-
+%   ggplot(data=sun.spct, aes(x=w.length, y=s.e.irrad)) +
+%   geom_line()  +
+%   labs(
+%     y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+%     x = "Wavelength (nm)")
+% fig_sun.z
+% @
 
 \section{Task: using colour as data in plots}
+
+First some new scales.
+
+<<>>=
+scale_colour_tgspct <-
+  function(...,
+           tg.spct,
+           labels = NULL,
+           guide = NULL,
+           na.value=NA) {
+    spct.tags <- attr(tg.spct, "spct.tags", exact=TRUE)
+    if (is.null(guide)){
+      if (spct.tags$wb.num > 12) {
+        guide = "none"
+      } else {
+        guide = guide_legend(title=NULL)
+      }
+    }
+    values <- as.character(spct.tags$wb.colors)
+    if (is.null(labels)) {
+      labels <- spct.tags$wb.names
+    }
+    ggplot2:::manual_scale("colour",
+                           values = values,
+                           labels = labels,
+                           guide = guide,
+                           na.value = na.value,
+                           ...)
+}
+@
+
+<<>>=
+scale_fill_tgspct <-
+  function(...,
+           tg.spct,
+           labels = NULL,
+           guide = NULL,
+           na.value=NA) {
+    spct.tags <- attr(tg.spct, "spct.tags", exact=TRUE)
+    if (is.null(guide)){
+      if (spct.tags$wb.num > 12) {
+        guide = "none"
+      } else {
+        guide = guide_legend(title=NULL)
+      }
+    }
+    values <- as.character(spct.tags$wb.colors)
+    if (is.null(labels)) {
+      labels <- spct.tags$wb.names
+    }
+
+    ggplot2:::manual_scale("fill",
+                           values = values,
+                           labels = labels,
+                           guide = guide,
+                           na.value = na.value,
+                           ...)
+}
+@
 
 We add wavelength-dependent colour and waveband information to the spectral data object.
 
@@ -367,7 +440,7 @@ fig_sun.z <-
   geom_line() +
   geom_point(aes(color=wb.f)) +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.z
 @
@@ -386,25 +459,26 @@ fig_sun.z <-
   ggplot(data=tg.sun.spct,
          aes(x=w.length, y=s.e.irrad)) +
   geom_line() +
-  scale_fill_identity(na.value=NA) +
-  geom_point(aes(fill=wb.color), shape=21)  +
+  scale_fill_tgspct(tg.spct=tg.sun.spct) +
+  geom_point(aes(fill=wb.f), shape=21)  +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.z
 @
 
 Using \code{geom\_area} we can fill the area under the curve according to the colour of different wavebands, we set the fill only for this geom, so that the \code{NA}s do not affect other ploting. To get a single black curve for the spectrum we use \code{geom\_line}. This approach works as long as not two wavebands share the same value for the color, which means that it is not suitable either wwhen more than one band is outside the visible range, or when using many narrow wavebands.
 
+
 <<>>=
 fig_sun.zz <-
 ggplot(tg.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
-  geom_area(aes(fill=wb.color), alpha=0.5) +
-  scale_fill_identity() +
+  scale_fill_tgspct(tg.spct=tg.sun.spct) +
   geom_line() +
+  geom_area(aes(fill=wb.f), alpha=0.5) +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.zz + theme_bw()
 @
@@ -422,11 +496,11 @@ Here we plot using colours by waveband using the definitions of plant sensory `c
 fig_sun.pl <-
 ggplot(pl.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
-  scale_fill_identity(na.value=NA) +
-  geom_area(aes(fill=as.character(wb.color))) +
+  scale_fill_tgspct(tg.spct=pl.sun.spct) +
   geom_line() +
+  geom_area(aes(fill=wb.f)) +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.pl + theme_bw()
 @
@@ -438,37 +512,17 @@ fig_sun.pl <-
 ggplot(pl.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
   geom_area(aes(fill=wb.f)) +
-  scale_fill_grey(na.value=NA, name="", labels=c("UVB", "UVA", "Blue", "Green", "Red", "Far red")) +
+  scale_fill_grey(na.value=NA, name="",
+                  labels=c("UVB", "UVA", "Blue", "Green", "Red", "Far red")) +
   geom_line() +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.pl + theme_bw()
 @
 
 When using a factor we can play with the scale definitions and represent the wavebands in any way we may want. For example we can use \code{split\_bands} into many smaller bands and get an almost conitnuous gradient, but get around the problem of repeated colours by using the factor and redefining the scale.
 
-First some new scales.
-
-<<>>=
-scale_fill_wavelength <-
-  function(...,
-           tg.spct,
-           guide = "none", na.value=NA) {
-    values=as.character(color(split_bands(tg.spct, length.out=length(levels(tg.spct$wb.f)))))
-    ggplot2:::manual_scale("fill", values, guide = guide, na.value = NA, ...)
-}
-@
-
-<<>>=
-scale_colour_wavelength <-
-  function(...,
-           tg.spct,
-           guide = "none", na.value=NA) {
-    values=as.character(color(split_bands(tg.spct, length.out=length(levels(tg.spct$wb.f)))))
-    ggplot2:::manual_scale("colour", values, guide = guide, na.value = NA, ...)
-}
-@
 
 Then we tag the VIS region of the spectrum with 150 narrow wavebands. As `hinges' are inserted there is no gap, and usually there is no need to increase the length of the spectrum by intepolation. If needed one could try something
 like.
@@ -488,11 +542,11 @@ tag(splt.sun.spct, split_bands(VIS(), length.out=150))
 fig_sun.splt <-
 ggplot(splt.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
-  scale_fill_wavelength(tg.spct=splt.sun.spct) +
+  scale_fill_tgspct(tg.spct=splt.sun.spct) +
   geom_area(aes(fill=wb.f), alpha=0.67) +
   geom_line() +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.splt + theme_bw()
 @
@@ -511,11 +565,11 @@ We use \code{geom\_area} and \code{fill}.
 fig_sun.splt1 <-
 ggplot(splt1.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
-  scale_fill_wavelength(tg.spct=splt1.sun.spct) +
-  geom_area(aes(fill=wb.f), alpha=0.8) +
+  scale_fill_tgspct(tg.spct=splt1.sun.spct) +
+  geom_area(aes(fill=wb.f)) +
   geom_line() +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.splt1 + theme_bw()
 @
@@ -524,11 +578,11 @@ fig_sun.splt1 + theme_bw()
 fig_sun.splt1 <-
 ggplot(splt1.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
-  scale_fill_wavelength(tg.spct=splt1.sun.spct) +
-  geom_area(aes(fill=wb.f), alpha=0.8) +
+  scale_fill_tgspct(tg.spct=splt1.sun.spct) +
+  geom_area(aes(fill=wb.f), alpha=0.5) +
   geom_line() +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.splt1 + theme_bw()
 @
@@ -540,11 +594,11 @@ This example uses \code{geom\_point} and \code{colour}.
 fig_sun.splt1 <-
 ggplot(splt1.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
-  scale_colour_wavelength(tg.spct=splt1.sun.spct) +
+  scale_colour_tgspct(tg.spct=splt1.sun.spct) +
   geom_line() +
   geom_point(aes(colour=wb.f)) +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.splt1 + theme_bw()
 @
@@ -560,7 +614,7 @@ fig_sun.y <-
   scale_color_identity() +
   geom_point(aes(color=wl.color))  +
   labs(
-    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    y = ylab_watt,
     x = "Wavelength (nm)")
 fig_sun.y  + theme_bw()
 @
