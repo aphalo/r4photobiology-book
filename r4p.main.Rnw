@@ -41,6 +41,7 @@
 
 \usepackage{color,calc,soul}%,graphicx,fourier
 \definecolor{nicegreen}{rgb}{.129,.647,.149}
+\definecolor{grey50}{rgb}{.5,.5,.5}
 \makeatletter
 \newlength\dlf@normtxtw
 \setlength\dlf@normtxtw{\textwidth}
@@ -119,10 +120,11 @@ A handbook}}\par
 % knitr setup
 
 <<setup, include=FALSE, cache=FALSE>>=
-library(knitr)
+opts_knit$set(self.contained=FALSE)
+opts_knit$set(concordance=TRUE)
 opts_knit$set(child.command = 'include')
 opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=FALSE)
-# opts_chunk$set(tidy=FALSE)
+opts_chunk$set(tidy=FALSE)
 options(replace.assign=TRUE,width=50)
 @
 
@@ -245,7 +247,7 @@ incl_apdx <- TRUE
 <<child-r-scripts, child='R.scripts.Rnw', eval=incl_apdx>>=
 @
 
-<<child-r-scripts, child='R.plotting.Rnw', eval=incl_apdx>>=
+<<child-r-plotting, child='R.plotting.Rnw', eval=incl_apdx>>=
 @
 
 \chapter{Build information}

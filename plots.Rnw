@@ -47,7 +47,7 @@ present chapter.
 
 We create a simple line plot, assign it a variable called \code{fig\_sun.e} and then on the next line \code{print} it. We use \code{labs} to set nice axis labels.
 
-<<>>=
+<<sun-e-0>>=
 fig_sun.e <-
   ggplot(data=sun.data, aes(x=w.length, y=s.e.irrad)) +
   geom_line()  +
@@ -59,7 +59,7 @@ fig_sun.e
 
 As we are going to re-use the same axis-labels, it is handy to save their defintion to a variable.
 
-<<>>=
+<<axis-labs>>=
 ylab_watt <-
   expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1}))
 ylab_watt_atop <-
@@ -78,7 +78,7 @@ ylab_umol_atop <-
 
 Here without need to recreate the figure, we add a logarithmic scale for the y-axis and print on the fly the result. In this case we override the automatic limits of the scale.
 
-<<>>=
+<<plot-fig-sun-e-1>>=
 fig_sun.e + scale_y_log10(limits=c(1e-3, 1e0))
 @
 
@@ -92,7 +92,7 @@ We can use function \code{grid.arrange} to make a single plot from two separate 
 opts_chunk$set(opts_fig_wide_square)
 @
 
-<<>>=
+<<theme-stack>>=
 theme_stack_opts <-
   list(theme(axis.text.x = element_blank(),
              axis.ticks = element_blank(),
@@ -121,7 +121,7 @@ opts_chunk$set(opts_fig_wide)
 
 We first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_threshold} the fraction of the total span along the irradiance that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.data$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.data$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.  It is good to mention that \code{head} returns the first six rows of its argument, and we use it here just to reduce the length of the output, if you run these examples yourself, you can remove \code{head} from the code. In the output, $x$ corresponds to wavelength, and $y$ to spectral irradiance, while \code{label} is a character string with the wavelngth, possibly formatted.
 
-<<>>=
+<<peaks-1>>=
 head(with(sun.data,
           get_peaks(w.length, s.e.irrad, span=31)))
 head(with(sun.data,
@@ -132,7 +132,7 @@ head(with(sun.data,
 The parameter span, indicates the size in number of observations (e.g.\ number of discrete wavelength values) included in the window used to find local maxima (peaks) or minima (valleys). By providing different values for this argument
 we can `adjust' how \emph{fine} or \emph{coarse} is the structure described by the peaks returned by the function. The window is always defined using an odd number of observations, if an even number is provided as argument, it is increased by one, with a warning.
 
-<<>>=
+<<peaks-2>>=
 head(with(sun.data,
           get_peaks(w.length, s.e.irrad, span=21)))
 head(with(sun.data,
@@ -141,7 +141,7 @@ head(with(sun.data,
 
 The equivalent function for finding valleys is \code{get\_valleys} taking the same parameters as \code{get\_peaks} but returning the wavelengths at which the valleys are located.
 
-<<>>=
+<<valleys-1>>=
 head(with(sun.data,
           get_valleys(w.length, s.e.irrad, span=51)))
 head(with(sun.data,
@@ -160,7 +160,7 @@ from our package \code{photobiologygg}. It uses the same parameter names and tak
 same arguments as the \code{get\_peaks} function described in section \ref{sec:get:pk:vly}.
 We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc}.
 
-<<>>=
+<<fig-sun-e-2>>=
 fig_sun.e + stat_peaks(span=31)
 @
 
@@ -170,7 +170,7 @@ It behaves as a \code{ggplot2} \code{stat\_xxxx} function accepting a \code{geom
 and all the aesthetics valid for the chosen geom. By default \code{geom\_text} is used.
 
 We can change aesthetics, for example the colour:
-<<>>=
+<<fig-sun-e-3>>=
 fig_sun.e + stat_peaks(colour="red", span=31) +
             stat_valleys(colour="blue", span=51)
 @
@@ -178,7 +178,7 @@ fig_sun.e + stat_peaks(colour="red", span=31) +
 We can also use a different geom, in this case \code{geom\_point}, however, be aware that the \code{geom} parameter takes as argument a character string giving the name of the geom, in this case \code{"point"}.
 We change a few additional aesthetics of the points: we set \code{shape} to a character, and set its size to 6.
 
-<<>>=
+<<fig-sun-e-4>>=
 fig_sun.e +
   stat_peaks(colour="red", geom="point",
              shape="|", size=6, span=31)
@@ -187,7 +187,7 @@ fig_sun.e +
 We can add the same \code{stat} two or more times to a ggplot, in this example, each time with a different \code{geom}. First we add points to mark the peaks, and afterwards add labels showing the wavelengths at which they are located using geom \code{"text"}. For the \code{shape}, or type of symbol, we use one that supports `fill', and set the \code{fill} to \code{"white"} but keep the border of the symbol \code{"red"} by setting \code{colour}, we also change the \code{size}. With the labels we use \code{vjust} to `justify' the text moving the labels vertically, so that they do not overlap the line depicting the spectrum\footnote{The default position of labels is to have them centred on the coordinates of the peak or valley. Unless we rotate the label, \code{vjust} can be used to shift the label along the $y$-axis, however, justification is a property of the text, not the plot, so the vertical direction is referenced to the position of the text of the label. A value of 0.5 indicates centering, a negative value `up' and a positive value `down'. For example a value of -1 puts the $x, y$ coordinates of the peak or valley at the lower edge of the `bounding box' of the text. For \code{hjust} values of -1 and 1 right and left justify the label with respect to the $x, y$ coordinates supplied. Values other than -1, 0.5, and 1, are valid input, but are rather tricky to use for \code{hjust} as the displacement is computed relative to the width of the bounding box of the label, the displacement being different for the same numerical value depending on the length of the label text.}
 In addition we expand the $y$-axis scale so that all labels fall within the plotting area.
 
-<<>>=
+<<fig-sun-e-5>>=
 fig_sun.e +
   stat_peaks(colour="red", geom="point", shape=23,
              fill="white", size=3, span=31) +
@@ -197,7 +197,7 @@ fig_sun.e +
 
 Finally an example with rotated labels, using different colours for peaks and valleys. Be aware that the `justification' direction, as discussed in the footnote, is referenced to the position of the text, and for this reason to move the rotated labels upwards we need to use \code{hjust} as the desired displacement is horizontal with respect to the orientation of the text of the label. As we put peak labels above the spectrum and valleys bellow it, we need to use \code{hjust} values of opposite sign, but the exact values used were simply adjusted by trial and error until the figure looked as desired.
 
-<<>>=
+<<fig-sun-e-6>>=
 fig_sun.e +
   stat_peaks(angle=90, hjust=-0.5, colour="red", span=31) +
   stat_valleys(angle=90, hjust=1, color="blue", span=51) +
@@ -217,7 +217,7 @@ Here is an example for \PAR using defaults, and with arguments supplied only for
 opts_chunk$set(opts_fig_wide)
 @
 
-<<>>=
+<<figvl-1>>=
 figvl <- fig_sun.e + annotate_waveband(PAR(), "rect", ymax=0.82) +
                      annotate_waveband(PAR(), "text", y=0.86)
 figvl + theme_bw()
@@ -225,7 +225,7 @@ figvl + theme_bw()
 
 This example annotates a narrow waveband.
 
-<<>>=
+<<figvl-2>>=
 figvl <- fig_sun.e + annotate_waveband(Yellow(), "rect", ymax=0.82) +
                      annotate_waveband(Yellow(), "text", y=0.86)
 figvl + theme_bw()
@@ -233,7 +233,7 @@ figvl + theme_bw()
 
 Now an example that is more complex, and demonstrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two `geoms' and some labels are rotated and justified. We can also see in this example that the annotations look nicier on a white background, which can be obtained with \code{theme\_bw}.
 
-<<>>=
+<<figv2>>=
 figv2 <- fig_sun.e +
   annotate_waveband(UVC(), "rect",
                     ymax=0.82) +
@@ -272,7 +272,7 @@ figv2 + theme_bw()
 
 A simple example using \code{geom\_vline}:
 
-<<>>=
+<<figvl-3>>=
 figvl3 <- fig_sun.q +
   geom_vline(xintercept=range(PAR()))
 figvl3
@@ -280,7 +280,7 @@ figvl3
 
 And one where we change some of the aesthetics, and add a label:
 
-<<>>=
+<<figvl-4>>=
 figvl4 <- fig_sun.q +
   geom_vline(xintercept=range(PAR()), linetype="dashed") +
   annotate_waveband(PAR(), "text", y=1.4, size=10, colour="black")
@@ -289,7 +289,7 @@ figvl4
 
 Now including calculated values in the labels. Because of using expressions to obtain superscripts we need to add \code{parse=TRUE} to the call.
 
-<<>>=
+<<sun-0>>=
 fig_sun <- ggplot(data=sun.spct,
                   aes(x=w.length, y=s.e.irrad)) +
   geom_line() +
@@ -320,7 +320,7 @@ fig_sun2 + theme_bw()
 
 This also works for effective exposures or doses, in this case as we position the annotations manually, we can use ggplot2's `normal' \code{annotate}.
 
-<<warning=FALSE>>=
+<<fig-dsun, warning=FALSE>>=
 fig_dsun <- ggplot(data=sun.daily.spct * polythene.new.spct,
                    aes(x=w.length, y=s.e.irrad * 1e-3)) + geom_line() +
   geom_line(data=sun.daily.spct * polyester.new.spct, colour="red") +
@@ -367,7 +367,7 @@ fig_dsun2 + theme_bw()
 
 First some new scales.
 
-<<>>=
+<<scales-1>>=
 scale_colour_tgspct <-
   function(...,
            tg.spct,
@@ -395,7 +395,7 @@ scale_colour_tgspct <-
 }
 @
 
-<<>>=
+<<scales-2>>=
 scale_fill_tgspct <-
   function(...,
            tg.spct,
@@ -426,14 +426,14 @@ scale_fill_tgspct <-
 
 We add wavelength-dependent colour and waveband information to the spectral data object.
 
-<<>>=
+<<tag-par-1>>=
 par.sun.spct <- copy(sun.spct)
 tag(par.sun.spct, PAR())
 @
 
 Here we use the \code{wb.f} factor that was added as part of the tagging, whcih results in a palette unrelated to the real colour of the different wavelengths.
 
-<<>>=
+<<tag-par-2>>=
 fig_sun.z <-
   ggplot(data=par.sun.spct,
          aes(x=w.length, y=s.e.irrad)) +
@@ -447,14 +447,14 @@ fig_sun.z
 
 As part of the tagging colour information was also added to the spectral data object (we may want to increase the number of `observations' in the spectrum by interpolation if there are too few observations for smooth colour gradient. You can play with \code{length.out} and the \code{size} of points until you get the result you like. We tag each observation in the solar spectrum with human vision colours as defined by CIE.
 
-<<>>=
+<<tag-vis-1>>=
 tg.sun.spct <- copy(sun.spct)
 tag(tg.sun.spct, VIS_bands())
 @
 
 We first plot using colours by waveband---using the colour definitions by CIE---, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.
 
-<<>>=
+<<tag-vis-2>>=
 fig_sun.z <-
   ggplot(data=tg.sun.spct,
          aes(x=w.length, y=s.e.irrad)) +
@@ -470,7 +470,7 @@ fig_sun.z
 Using \code{geom\_area} we can fill the area under the curve according to the colour of different wavebands, we set the fill only for this geom, so that the \code{NA}s do not affect other ploting. To get a single black curve for the spectrum we use \code{geom\_line}. This approach works as long as not two wavebands share the same value for the color, which means that it is not suitable either wwhen more than one band is outside the visible range, or when using many narrow wavebands.
 
 
-<<>>=
+<<tag-vis-3>>=
 fig_sun.zz <-
 ggplot(tg.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
@@ -485,14 +485,14 @@ fig_sun.zz + theme_bw()
 
 We can instead tag the solar spectrum with colours using the definitions of plant sensory `colours'.
 
-<<>>=
+<<tag-plants-1>>=
 pl.sun.spct <- copy(sun.spct)
 tag(pl.sun.spct, Plant_bands())
 @
 
 Here we plot using colours by waveband using the definitions of plant sensory `colours'.
 
-<<>>=
+<<tag-plants-2>>=
 fig_sun.pl <-
 ggplot(pl.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
@@ -507,7 +507,7 @@ fig_sun.pl + theme_bw()
 
 We can also use the factor \code{wb.f} which has value \code{NA} outside the wavebands, changing the colour used for \code{NA} to \code{NA} which renders it invisible. We can change the labels in the scale, or when tagging the spectrum.
 
-<<>>=
+<<tag-plants-3>>=
 fig_sun.pl <-
 ggplot(pl.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
@@ -527,18 +527,18 @@ When using a factor we can play with the scale definitions and represent the wav
 Then we tag the VIS region of the spectrum with 150 narrow wavebands. As `hinges' are inserted there is no gap, and usually there is no need to increase the length of the spectrum by intepolation. If needed one could try something
 like.
 
-<<eval=FALSE>>=
+<<interpolate, eval=FALSE>>=
 interpolate_spct(sun.spct, length.out=800)
 @
 
 We just use the example spectrum as is, and this time tag the VIS region of the spectrum.
 
-<<>>=
+<<split-VIS-1>>=
 splt.sun.spct <- copy(sun.spct)
 tag(splt.sun.spct, split_bands(VIS(), length.out=150))
 @
 
-<<>>=
+<<split-VIS-2>>=
 fig_sun.splt <-
 ggplot(splt.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
@@ -553,7 +553,7 @@ fig_sun.splt + theme_bw()
 
 In this other example we tag the whole spectrum, dividing it into 200 wavebands.
 
-<<>>=
+<<split-all-1>>=
 splt1.sun.spct <- copy(sun.spct)
 # splt1.sun.spct <- interpolate_spct(splt1.sun.spct, length.out=1000)
 tag(splt1.sun.spct, split_bands(sun.spct, length.out=200))
@@ -561,7 +561,7 @@ tag(splt1.sun.spct, split_bands(sun.spct, length.out=200))
 
 We use \code{geom\_area} and \code{fill}.
 
-<<>>=
+<<split-all-2>>=
 fig_sun.splt1 <-
 ggplot(splt1.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
@@ -574,7 +574,7 @@ ggplot(splt1.sun.spct,
 fig_sun.splt1 + theme_bw()
 @
 
-<<>>=
+<<split-all-3>>=
 fig_sun.splt1 <-
 ggplot(splt1.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
@@ -590,7 +590,7 @@ fig_sun.splt1 + theme_bw()
 
 This example uses \code{geom\_point} and \code{colour}.
 
-<<>>=
+<<split-all-4>>=
 fig_sun.splt1 <-
 ggplot(splt1.sun.spct,
        aes(x=w.length, y=s.e.irrad)) +
@@ -606,7 +606,7 @@ fig_sun.splt1 + theme_bw()
 When ploting points, rather than an area we may instead want to plot the colour calculated for each individual wavelength value, which \code{tag} adds to the spectrum, whether a waveband definition is supplied or not. In
 this case we need to use \code{scale\_color\_identity}.
 
-<<>>=
+<<split-all-5>>=
 fig_sun.y <-
   ggplot(data=tg.sun.spct,
          aes(x=w.length, y=s.e.irrad)) +
@@ -630,7 +630,7 @@ Given a color definition, we can convert it to RGB values by means of R's functi
 opts_chunk$set(opts_fig_wide_square)
 @
 
-<<>>=
+<<tern-1>>=
 colours <- c("red", "green", "yellow", "white",
              "orange", "purple", "seagreen", "pink")
 rgb.values <- col2rgb(colours)
@@ -650,7 +650,7 @@ maxwell.tern
 
 In this case we start with the spectral responsiveness of the photoreceptors present in the eyes of honey bees. Bees, as humans have three photoreceptors, but instead of red, green and blue (RGB), bees see green, blue and UV-A (GBU). To plot colours seen by bees one can still use a ternary plot, but the axes represent different photoreceptors than for humans, and the colour space is shifted towards shorter wavelengths.
 
-The calculations we will demonstrate here, in addition are geared to compare a background to a foreground object (foliage vs.\ flower). We have followed xxxxx \cite{chitka?} in this example, but be aware that calculations presented in this reference do not match the equations presented. In the original published example, the calculations have been simplified by leaving out $\delta \lambda$. Although not affecting the final result for their example, intermediate results are different (wrong?). We have further generalized the calculations and equations to make the calculations also valid for spectra measured using $\delte \lambda$ that itself varies along the wavelength axis. This is the usual situation with array spectrometers, nowadays frequently used when measuring reflectance.
+The calculations we will demonstrate here, in addition are geared to compare a background to a foreground object (foliage vs.\ flower). We have followed xxxxx \cite{chitka?} in this example, but be aware that calculations presented in this reference do not match the equations presented. In the original published example, the calculations have been simplified by leaving out $\delta \lambda$. Although not affecting the final result for their example, intermediate results are different (wrong?). We have further generalized the calculations and equations to make the calculations also valid for spectra measured using $\delta \lambda$ that itself varies along the wavelength axis. This is the usual situation with array spectrometers, nowadays frequently used when measuring reflectance.
 
 The assessment of the perceived `colour difference' between background and foreground objects requires taking into consideration several spectra: the incident `light' spectrum, the reflectance spectra of the two objects, and the sensitivity spectra of three photoreceptors in the case of trichromic vision. In addition to these data, we need to take into consideration the shape of the dose response of the photoreceptors.
 

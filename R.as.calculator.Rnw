@@ -116,7 +116,7 @@ z <- numeric(0)
 z
 ls(pattern="^z$")
 rm(z)
-z
+try(z)
 ls(pattern="^z$")
 @
 
@@ -305,7 +305,7 @@ d
 e <- c(a, b, "c")
 e
 h <- "1"
-h + 2
+try(h + 2)
 @
 
 Vectors of characters are not the same as character strings.
