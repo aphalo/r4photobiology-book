@@ -1,3 +1,7 @@
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide)
+opts_knit$set(concordance=TRUE)
+@
 
 \chapter{R as a powerful calculator}\label{chap:R:as:calc}
 
@@ -131,7 +135,7 @@ Inf / Inf
 Inf + 4
 @
 
-One thing to be aware of, and which we will discuss again later, is that numbers in computers are almost always stored with finite precision. This means that they not always behave as Real numbers as defined in mathematics. In R the usual numbers are stored as \textt{double-precision floats}, which means that there are limits to the largest and smallest numbers that can be represented (approx. $-1 \cdot 10^{308}$ and $1 \cdot 10^{308})$, and the number of significant digits that can be stored (usually described as $\epsilon$ (epsilon, abbreviated \texttt{eps}, defined as the largest number for which $ 1 + \epsilon = 1$)). This can be sometimes important, and can generate unexpected results in some cases, especially when testing for equality. In the example below, the result of the subtraction is still exactly 1. \label{par:float}
+One thing to be aware of, and which we will discuss again later, is that numbers in computers are almost always stored with finite precision. This means that they not always behave as Real numbers as defined in mathematics. In R the usual numbers are stored as \texttt{double-precision floats}, which means that there are limits to the largest and smallest numbers that can be represented (approx. $-1 \cdot 10^{308}$ and $1 \cdot 10^{308})$, and the number of significant digits that can be stored (usually described as $\epsilon$ (epsilon, abbreviated \texttt{eps}, defined as the largest number for which $ 1 + \epsilon = 1$)). This can be sometimes important, and can generate unexpected results in some cases, especially when testing for equality. In the example below, the result of the subtraction is still exactly 1. \label{par:float}
 
 <<numbers-9>>=
 1 - 1e-20

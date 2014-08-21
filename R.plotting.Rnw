@@ -1,10 +1,8 @@
-<<echo=FALSE, eval=TRUE>>=
-# clear everything from the R environment
-# rm(list=ls())
-@
+% !Rnw root = r4p.main.Rnw
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide)
+opts_knit$set(concordance=TRUE)
 @
 
 \chapter{Making publication quality plots with R}\label{chap:R:plotting}
@@ -24,11 +22,17 @@ library(scales)
 # library(GGally)
 @
 
+<<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
+opts_knit$get()
+search()
+getwd()
+@
+
 \section{Introduction}
 
 Being R extensible, in addition to the built-in plotting functions, there are several alternatives provided by packages. Of the general purpose ones, the most extensively used are \code{Lattice} and \code{ggplot2}. There are packages that add extra functionality to these packages.
 
-In the examples in this handbook we mainly use \code{ggplot}, \code{ggmap} and \code{ggtern}. In this appendix we give an introduction to the `grammar of graphics' and \code{ggplot2}. There is ample literature on the use of ggplot2, starting with very good reference documentation at \http{ggplot2.org}. The book `R Graphics Cookbook' \cite{Chang2013} is very useful and should be always near you, when using the package, as it contains many worked out examples. There is some overlap between this appendix and the documents mentioned above. There is little well-organized literature on packages extending ggplot2, and as we make use of several of them in this handbook, we have included some examples of their use in this appendix.
+In the examples in this handbook we mainly use \code{ggplot}, \code{ggmap} and \code{ggtern}. In this appendix we give an introduction to the `grammar of graphics' and \code{ggplot2}. There is ample literature on the use of ggplot2, starting with very good reference documentation at \url{http://ggplot2.org/}. The book `R Graphics Cookbook' \cite{Chang2013} is very useful and should be always near you, when using the package, as it contains many worked out examples. There is some overlap between this appendix and the documents mentioned above. There is little well-organized literature on packages extending ggplot2, and as we make use of several of them in this handbook, we have included some examples of their use in this appendix.
 
 \section{Bases of plotting with \code{ggplot2}}
 
@@ -82,7 +86,7 @@ ggplot(mtcars, aes(x=disp, y=hp, colour=factor(cyl), shape=factor(cyl))) +
   geom_point()
 @
 
-We can change the labels for the different aesthetics, and give a title\footnote{\protect{\verb!\n1!} means `new line' and can be used to continua a label in the next line.}. In this case, if two aesthetic are linked to the same variable, the labels supplied should be identical, otherwise two separate keys will be produced.
+We can change the labels for the different aesthetics, and give a title (\verb!\n! means `new line' and can be used to continue a label in the next line). In this case, if two aesthetics are linked to the same variable, the labels supplied should be identical, otherwise two separate keys will be produced.
 
 <<>>=
 ggplot(mtcars, aes(x=disp, y=hp, colour=factor(cyl), shape=factor(cyl))) +
@@ -236,7 +240,7 @@ fig2 + stat_summary(fun.data = "mean_sdl",
                     colour="red", size=1, alpha=0.7)
 @
 
-We do not show it here, but instead of using these functions (from package \codet{Hmisc}) it is possible to define one's own functions.
+We do not show it here, but instead of using these functions (from package \code{Hmisc}) it is possible to define one's own functions.
 
 Finally we plot the means in a bar plot, with the observations superimposed and $p = 0.95$ C.I. (the order in which the geoms are added is important: by having \code{geom\_point} last it is plotted on top of the bars. In this case we set fill, colour and alpha (transparency) to constants, but in more complex data sets they can be assigned to factors in the data set.
 
@@ -461,7 +465,7 @@ pm
 @
 
 <<>>=
-detach(package:GGally)
+try(detach(package:GGally))
 @
 
 <<echo=FALSE, include=FALSE>>=
@@ -724,7 +728,7 @@ ggplot(data = USDA, aes(y=Clay, x=Sand, z=Silt,
 @
 
 <<>>=
-detach(package:ggtern)
+try(detach(package:ggtern))
 @
 
 \section{Plotting data onto maps}
@@ -974,8 +978,8 @@ ggplot(bbox_robin.data, aes(long,lat, group=group)) +
 @
 
 <<>>=
-detach(package:ggmap)
-detach(package:rgdal)
+try(detach(package:ggmap))
+try(detach(package:rgdal))
 @
 
 \section{Advanced topics}
@@ -1089,10 +1093,10 @@ dev.off()
 
 
 <<>>=
-detach(package:scales)
-detach(package:plyr)
-detach(package:Hmisc)
-detach(package:ggplot2)
-detach(package:grid)
+try(detach(package:scales))
+try(detach(package:plyr))
+try(detach(package:Hmisc))
+try(detach(package:ggplot2))
+try(detach(package:grid))
 @
 

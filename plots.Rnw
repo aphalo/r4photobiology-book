@@ -1,8 +1,18 @@
-<<echo=FALSE, include=FALSE>>=
-opts_chunk$set(opts_fig_wide)
+% !Rnw root = r4p.main.Rnw
+
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(self.contained=FALSE)
+opts_knit$set(concordance=TRUE)
 @
 
 \chapter{Plotting spectra and colours}
+
+<<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
+opts_knit$get()
+search()
+getwd()
+@
 
 \begin{abstract}
   In this chapter we explain how to plot spectra and colours, using packages \code{ggplot2}, \code{ggtern}, and the functions in our package \code{photobiologygg}. Both \code{ggtern} for ternary plots and \code{photobiologygg} for annotating spectra build new functionality on top of the \code{ggplot2} package.
@@ -12,7 +22,7 @@ opts_chunk$set(opts_fig_wide)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<cache=FALSE>>=
 library(ggplot2)
 library(ggtern)
 library(gridExtra)
@@ -21,6 +31,12 @@ library(photobiologyFilters)
 library(photobiologyWavebands)
 library(photobiologygg)
 @
+
+<<echo=FALSE, include=FALSE, cache=FALSE>>=
+opts_chunk$set(opts_fig_wide)
+opts_chunk$set(cache=TRUE)
+@
+
 
 %%%%
 \section{Introduction to plotting spectra}\label{sec:plot:intro}
@@ -43,13 +59,13 @@ If you are not familiar with \code{ggplot2} plotting, please read Appendix
 present chapter.
 
 %%%%
-\section{Task: plotting spectra with \code{ggplot2}}\label{sec:plot:spc}
+\section[Task: plotting spectra with ggplot2]{Task: plotting spectra with \code{ggplot2}}\label{sec:plot:spc}
 
 We create a simple line plot, assign it a variable called \code{fig\_sun.e} and then on the next line \code{print} it. We use \code{labs} to set nice axis labels.
 
 <<sun-e-0>>=
 fig_sun.e <-
-  ggplot(data=sun.data, aes(x=w.length, y=s.e.irrad)) +
+  ggplot(data=sun.spct, aes(x=w.length, y=s.e.irrad)) +
   geom_line()  +
   labs(
     y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
@@ -57,7 +73,7 @@ fig_sun.e <-
 fig_sun.e
 @
 
-As we are going to re-use the same axis-labels, it is handy to save their defintion to a variable.
+As we are going to re-use the same axis-labels, it is handy to save their definition to a variable. These defintions are used later on in this chapter's example code.
 
 <<axis-labs>>=
 ylab_watt <-
@@ -97,10 +113,11 @@ theme_stack_opts <-
   list(theme(axis.text.x = element_blank(),
              axis.ticks = element_blank(),
              axis.title.x = element_blank()))
-num_one_dec <- function(x, ...)
+num_one_dec <- function(x, ...) {
   format(x, nsmall=1, trim=FALSE, width=4, ...)
+  }
 fig_sun.q <-
-  ggplot(data=sun.data, aes(x=w.length, y=s.q.irrad * 1e6)) +
+  ggplot(data=sun.spct, aes(x=w.length, y=s.q.irrad * 1e6)) +
   geom_line() +
   scale_y_continuous(labels = num_one_dec) +
   labs(y = ylab_umol_atop) +
@@ -119,12 +136,12 @@ opts_chunk$set(opts_fig_wide)
 
 \section{Task: finding peaks and valleys in spectra}\label{sec:get:pk:vly}
 
-We first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_threshold} the fraction of the total span along the irradiance that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.data$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.data$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.  It is good to mention that \code{head} returns the first six rows of its argument, and we use it here just to reduce the length of the output, if you run these examples yourself, you can remove \code{head} from the code. In the output, $x$ corresponds to wavelength, and $y$ to spectral irradiance, while \code{label} is a character string with the wavelngth, possibly formatted.
+We first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_threshold} the fraction of the total span along the irradiance that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.spct$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.spct$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.  It is good to mention that \code{head} returns the first six rows of its argument, and we use it here just to reduce the length of the output, if you run these examples yourself, you can remove \code{head} from the code. In the output, $x$ corresponds to wavelength, and $y$ to spectral irradiance, while \code{label} is a character string with the wavelngth, possibly formatted.
 
 <<peaks-1>>=
-head(with(sun.data,
+head(with(sun.spct,
           get_peaks(w.length, s.e.irrad, span=31)))
-head(with(sun.data,
+head(with(sun.spct,
           get_peaks(w.length, s.e.irrad, span=31,
                     ignore_threshold=0.75)))
 @
@@ -133,18 +150,18 @@ The parameter span, indicates the size in number of observations (e.g.\ number o
 we can `adjust' how \emph{fine} or \emph{coarse} is the structure described by the peaks returned by the function. The window is always defined using an odd number of observations, if an even number is provided as argument, it is increased by one, with a warning.
 
 <<peaks-2>>=
-head(with(sun.data,
+head(with(sun.spct,
           get_peaks(w.length, s.e.irrad, span=21)))
-head(with(sun.data,
+head(with(sun.spct,
           get_peaks(w.length, s.e.irrad, span=51)))
 @
 
 The equivalent function for finding valleys is \code{get\_valleys} taking the same parameters as \code{get\_peaks} but returning the wavelengths at which the valleys are located.
 
 <<valleys-1>>=
-head(with(sun.data,
+head(with(sun.spct,
           get_valleys(w.length, s.e.irrad, span=51)))
-head(with(sun.data,
+head(with(sun.spct,
           get_valleys(w.length, s.e.irrad, span=51,
                       ignore_threshold=0.5)))
 @
@@ -365,6 +382,7 @@ fig_dsun2 + theme_bw()
 
 \section{Task: using colour as data in plots}
 
+\subsection{Scale definitions}\label{sec:plot:scales}
 First some new scales.
 
 <<scales-1>>=
@@ -424,6 +442,8 @@ scale_fill_tgspct <-
 }
 @
 
+\subsection{Plots}
+
 We add wavelength-dependent colour and waveband information to the spectral data object.
 
 <<tag-par-1>>=
@@ -452,7 +472,7 @@ tg.sun.spct <- copy(sun.spct)
 tag(tg.sun.spct, VIS_bands())
 @
 
-We first plot using colours by waveband---using the colour definitions by CIE---, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.
+We first plot using colours by waveband---using the colour definitions by CIE---, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.  See section \ref{sec:plot:scales} on page \pageref{sec:plot:scales} for the definition of the colour and fill scales for tagged spectra. These definitions are needed for most of the plots in the remaining of this section.
 
 <<tag-vis-2>>=
 fig_sun.z <-
@@ -468,7 +488,6 @@ fig_sun.z
 @
 
 Using \code{geom\_area} we can fill the area under the curve according to the colour of different wavebands, we set the fill only for this geom, so that the \code{NA}s do not affect other ploting. To get a single black curve for the spectrum we use \code{geom\_line}. This approach works as long as not two wavebands share the same value for the color, which means that it is not suitable either wwhen more than one band is outside the visible range, or when using many narrow wavebands.
-
 
 <<tag-vis-3>>=
 fig_sun.zz <-
@@ -619,6 +638,56 @@ fig_sun.y <-
 fig_sun.y  + theme_bw()
 @
 
+We can also add one colour bar as key. We here prepare data for an almost continuous colour reference guide, one for colours perceived by plants and one for ISO colour definitions. These are quick and dirty examples for the discrete bands, but they get the job done. A better approach would be just to generate the data for the rectangles with function  \code{tag}, say if supplied only with a list of wavebands as argument, because having a single rectangle for each waveband would allow setting the border of rectangle as needed, or just plot empty rectangles with text labels inside.
+
+<<>>=
+x <- seq(278.5,798.5, length.out=200)
+wl.guide.data <- data.frame(w.length = x, s.e.irrad = NA,
+                            xmin = x - 1.5, xmax = x +1.5, ymin = 0.85, ymax = 0.9)
+setGenSpct(wl.guide.data)
+plant.guide.data <- copy(wl.guide.data)
+iso.guide.data <- copy(wl.guide.data)
+tag(wl.guide.data, split_bands(wl.guide.data, length.out=200))
+tag(plant.guide.data, Plant_bands())
+tag(iso.guide.data, VIS_bands())
+@
+
+The continuous colour bar.
+
+<<>>=
+fig_sun.yy <- fig_sun.y +
+geom_rect(data=wl.guide.data,
+       aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+           y = 0, fill=wb.f),
+       color = NA) +
+  scale_fill_tgspct(tg.spct=wl.guide.data)
+fig_sun.yy
+@
+
+We just replace the data, both in \code{geom\_rect} and in \code{scale\_fill\_tgspct} for the iso colours,
+
+<<>>=
+fig_sun.yyy <- fig_sun.y +
+geom_rect(data=iso.guide.data,
+       aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+           y = 0, fill=wb.f),
+       color = NA) +
+  scale_fill_tgspct(tg.spct=iso.guide.data)
+fig_sun.yyy
+@
+
+or the plant's sensory colours.
+
+<<>>=
+fig_sun.yyy <- fig_sun.y +
+geom_rect(data=plant.guide.data,
+       aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+           y = 0, fill=wb.f),
+       color = NA) +
+  scale_fill_tgspct(tg.spct=plant.guide.data)
+fig_sun.yyy
+@
+
 
 %%%%
 \section{Task: plotting colours in Maxwell's triangle}\label{sec:max:tri}
@@ -655,13 +724,13 @@ The calculations we will demonstrate here, in addition are geared to compare a b
 The assessment of the perceived `colour difference' between background and foreground objects requires taking into consideration several spectra: the incident `light' spectrum, the reflectance spectra of the two objects, and the sensitivity spectra of three photoreceptors in the case of trichromic vision. In addition to these data, we need to take into consideration the shape of the dose response of the photoreceptors.
 
 <<>>=
-detach(package:photobiologygg)
-detach(package:ggtern)
-detach(package:ggplot2)
-detach(package:gridExtra)
-detach(package:photobiologyFilters)
-detach(package:photobiologyWavebands)
-detach(package:photobiology)
+try(detach(package:photobiologygg))
+try(detach(package:ggtern))
+try(detach(package:ggplot2))
+try(detach(package:gridExtra))
+try(detach(package:photobiologyFilters))
+try(detach(package:photobiologyWavebands))
+try(detach(package:photobiology))
 @
 
 

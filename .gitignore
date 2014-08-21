@@ -18,3 +18,4 @@ cache/
 figure/
 *.gin
 profile1.out
+knitr_test/

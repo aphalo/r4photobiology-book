@@ -1,3 +1,8 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
 \chapter{Transmission and reflection}
 
 \begin{abstract}
@@ -78,8 +83,9 @@ my_gg400.spct
 Using \code{filter.spct} objects, the calculations become very simple.
 
 <<>>=
-T2A(gg400.spct)
-a.gg400.spct <- T2A(gg400.spct, action="replace")
+my_gg400.spct <- copy(gg400.spct)
+T2A(my_gg400.spct)
+a.gg400.spct <- T2A(my_gg400.spct, action="replace")
 @
 
 %%%%
@@ -100,23 +106,28 @@ class(sun.spct)
 class(gg400.spct)
 @
 
-<<cache=FALSE>>=
+<<>>=
+my_sun.spct <- copy(sun.spct)
+my_gg400.spct <- copy(gg400.spct)
 filtered_sun.spct <- sun.spct * gg400.spct
 class(filtered_sun.spct)
-filtered_sun.spct
+head(filtered_sun.spct)
 @
 
 The result of the calculation can be directly used as an argument, for example, when calulating irradiance.
 
-<<cache=FALSE>>=
+<<>>=
 q_irrad_spct(sun.spct, UV()) * 1e6
+q_irrad_spct(my_sun.spct, UV()) * 1e6
+q_irrad_spct(filtered_sun.spct, UV()) * 1e6
 q_irrad_spct(sun.spct * gg400.spct, UV()) * 1e6
-q_irrad_spct(sun.spct * ug1.spct, UV()) * 1e6
+q_irrad_spct(my_sun.spct * my_gg400.spct, UV()) * 1e6
 @
 
-<<cache=FALSE>>=
-q_irrad_spct(sun.spct * gg400.spct) * 1e6
-q_irrad_spct(sun.spct * gg400.spct, new_waveband(min(sun.spct), max(sun.spct))) * 1e6
+<<>>=
+q_irrad_spct(my_sun.spct * my_gg400.spct) * 1e6
+q_irrad_spct(my_sun.spct * my_gg400.spct,
+             new_waveband(min(sun.spct), max(sun.spct))) * 1e6
 @
 
 Remember, thet if we want to predict the output of a light source composed of different lamps or LEDs we can add the individual spectral irradiance, but using data measured from the target positions of each individaul light source. If we want then to add the effect of a filter we must multiply by the filter transmittance.
@@ -127,14 +138,18 @@ In the current version of package \code{photobiology} the operator is ``chosen''
 
 <<>>=
 # not working
-my_luminaire <- (0.5 * Norlux_B.spct + Norlux_R.spct) * PLX0A000_XT.spct
+my_luminaire <-
+  (0.5 * Norlux_B.spct + Norlux_R.spct) *  PLX0A000_XT.spct
 my_luminaire
 # works fine
-my_luminaire <- (Norlux_B.spct * 0.5 + Norlux_R.spct) * PLX0A000_XT.spct
+my_luminaire <-
+  (Norlux_B.spct * 0.5 + Norlux_R.spct) *  PLX0A000_XT.spct
 my_luminaire
 
-q_ratio_spct(my_luminaire, list(Red(), Blue(), Green()), PAR())
-q_irrad_spct(my_luminaire, list(PAR(), Red(), Blue(), Green())) * 1e6
+q_ratio_spct(my_luminaire,
+             list(Red(), Blue(), Green()), PAR())
+q_irrad_spct(my_luminaire,
+             list(PAR(), Red(), Blue(), Green())) *  1e6
 @
 
 %%%%
@@ -152,9 +167,9 @@ q_irrad_spct(my_luminaire, list(PAR(), Red(), Blue(), Green())) * 1e6
 \section{Task: light scattering media (natural waters, plant and animal tissues)}\label{sec:}
 
 <<>>=
-detach(package:photobiologyFilters)
-detach(package:photobiologyLEDs)
-detach(package:photobiologyWavebands)
-detach(package:photobiology)
+try(detach(package:photobiologyFilters))
+try(detach(package:photobiologyLEDs))
+try(detach(package:photobiologyWavebands))
+try(detach(package:photobiology))
 @
 

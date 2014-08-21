@@ -1,3 +1,14 @@
+<<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
+opts_knit$get()
+search()
+getwd()
+@
+
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
 \chapter{Photobiology R packages}
 
 \begin{abstract}
@@ -13,11 +24,14 @@ The suite consists in several packages. The main package is \code{photobiology} 
 \newcommand{\gblt}{\textcolor{green}{$\bullet$}}
 \newcommand{\yblt}{\textcolor{yellow}{$\bullet$}}
 \newcommand{\rblt}{\textcolor{red}{$\bullet$}}
+%\newcommand{\gblt}{{$\bullet$}}
+%\newcommand{\yblt}{{$\bullet$}}
+%\newcommand{\rblt}{{$\bullet$}}
 \caption[Packages in the suite]{Packages in the \textsf{r4photobiology} suite. Packages not yet released are
 highlighted with a red bullet \rblt, and those at `beta' stage with a yellow bullet \yblt, those relatively stable with a
 green bullet \gblt.}\label{tab:suite}
 \begin{small}
-\begin{tabular}{c>{\ttshape}lll}
+\begin{tabular}{clll}
 \toprule
  & Package           &  Type        & Contents \\
 \midrule

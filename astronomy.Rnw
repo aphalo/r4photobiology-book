@@ -1,3 +1,8 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
 \chapter{Astronomy}\label{chap:astronomy}
 
 \begin{abstract}
@@ -238,8 +243,8 @@ ggplot(daylengths,
 @
 
 <<>>=
-detach(package:photobiology)
-detach(package:lubridate)
-detach(package:ggmap)
-detach(package:ggplot2)
+try(detach(package:photobiology))
+try(detach(package:lubridate))
+try(detach(package:ggmap))
+try(detach(package:ggplot2))
 @
