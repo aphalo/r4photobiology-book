@@ -1,4 +1,4 @@
-<<echo=FALSE, cache=FALSE>>=
+<<echo=FALSE>>=
 set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @

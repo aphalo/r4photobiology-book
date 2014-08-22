@@ -341,10 +341,23 @@ cat(c)
 
 Above, you will not see any effect of these escapes when using \code{print}: \verb|\n| represents `new line' and \verb|\t| means `tab' (tabulator). The \textit{scape codes} work only in some contexts, as when using \code{cat} to generate the output. They also are very useful when one wants to split an axis-label, title or label in a plot into two or more lines.
 
+\section{Finding the `mode' of objects}
+
+Variables have \emph{mode} that determines what can be stored in them. But differently to other languages, assignment of a variable of a different mode is allowed. However, there is a restriction that all elements in a vector, array or matrix, must be of the same mode, while this is not required for lists. Functions with names starting with \code{is.} are tests returning \code{TRUE}, \code{FALSE} or \code{NA}.
+
+<<mode-1>>=
+my_var <- 1:5
+mode(my_var)
+is.numeric(my_var)
+is.logical(my_var)
+is.character(my_var)
+my_var <- "abc"
+mode(my_var)
+@
 
 \section{Type conversions}
 
-The least intuitive ones are those related to logical values. All others are as one would expect.
+The least intuitive ones are those related to logical values. All others are as one would expect. By convention, functions used to convert objects from one mode to a different one have names starting with \code{as.}.
 
 <<convert-1>>=
 as.character(1)
@@ -452,6 +465,49 @@ b <- 1:10
 b[selector]
 b[indexes]
 @
+
+\section{Lists}
+
+Elements of a \code{list} are not ordered, and can be of different type. Lists can be also nested. Elements in list are named, and normally are accessed by name. List are defined using function \code{list}.
+
+<<lists-1>>=
+a.list <- list(x = 1:6, y = "a", z = c(TRUE, FALSE))
+a.list
+str(a.list)
+a.list$x
+a.list[["x"]]
+a.list[[1]]
+a.list[1]
+@
+
+\section{Data frames}
+
+Data frames are a special type of list, in which each element is a vector or a factor of the same length. The are crested with function \code{data.frame} with a syntax similar to that used for lists. When a shorter vector is supplied as argument, it is recycled, until the full length of the variable is filled. This is very different to what we obtained in the previous section when we created a list.
+
+<<data-frames-1>>=
+a.df <- data.frame(x = 1:6, y = "a", z = c(TRUE, FALSE))
+a.df
+str(a.df)
+a.df$x
+a.df[["x"]]
+a.df[[1]]
+a.df[ , 1]
+a.df[1:2, ]
+class(a.df)
+@
+
+R is an object oriented language, and objects belong to classes. With function \code{class} we can query the class of an object. As we saw in the two previous chunks lists and data frames objects belong to two different classes.
+
+We can add also to lists and data frames.
+
+<<data-frames-2>>=
+a.df$x2 <- 6:1
+a.df$x3 <- "b"
+a.df
+@
+
+We have added two columns to the data frame, and in the case of column \code{x3} recycling took place.
+
 
 \section{Simple built-in statistical functions}
 

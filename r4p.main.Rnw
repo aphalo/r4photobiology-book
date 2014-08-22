@@ -130,7 +130,7 @@ A handbook}}\par
 opts_knit$set(child.command = 'include')
 opts_knit$set(self.contained=FALSE)
 opts_knit$set(concordance=TRUE)
-opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=TRUE)
+opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=FALSE)
 opts_chunk$set(tidy=FALSE)
 options(replace.assign=TRUE,width=50)
 @
@@ -145,9 +145,9 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_chaps <- FALSE
+incl_chaps <- TRUE
 incl_ckbk <- TRUE
-incl_apdx <- FALSE
+incl_apdx <- TRUE
 eval_diag <- FALSE
 @
 
@@ -261,7 +261,12 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-measurement, child='measurement.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-performance, child='performance.Rnw', eval=incl_ckbk>>=
+<<echo=FALSE, include=FALSE>>=
+current_ls <- ls()
+rm(list = setdiff(current_ls, main_ls))
+@
+
+<<child-performance, child='performance.Rnw', eval=FALSE>>=
 @
 
 \printbibliography
