@@ -224,7 +224,7 @@ fig_sun.e +
 See section \ref{?} in chapter \ref{chap:sources} for an example these stats together with facets.
 
 %%%%
-\section{Task: annotating wavebands}\label{sec:plot:wdband}
+\section{Task: annotating wavebands}\label{sec:plot:ann:wband}
 
 The function \code{annotate\_waveband} can be used to highlight a waveband in a plot of spectral data. Its first argument should be a \code{waveband} object, and the second argument a \code{geom} as a character string. The positions on the x-axis are calculated automatically by default, but they can be overridden by explicit arguments. The vertical positions have no default, except for \code{ymin} which is equal to zero by default. The colour has a default value calculated from waveband definition, in addition x is by default set to the midpoint of the waveband along the wavelength limits. The default value of the labels is the `name' of the waveband as returned by \code{labels.waveband}.
 
@@ -248,7 +248,7 @@ figvl <- fig_sun.e + annotate_waveband(Yellow(), "rect", ymax=0.82) +
 figvl + theme_bw()
 @
 
-Now an example that is more complex, and demonstrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two `geoms' and some labels are rotated and justified. We can also see in this example that the annotations look nicier on a white background, which can be obtained with \code{theme\_bw}.
+Now an example that is more complex, and demonstrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two `geoms' and some labels are rotated and justified. We can also see in this example that the annotations look nicier on a white background, which can be obtained with \code{theme\_bw}. A much simpler, but less fexible approach for adding annotations for several wavedands is decribed on page \pageref{chunk:plot:ann:tag}.
 
 <<figv2>>=
 figv2 <- fig_sun.e +
@@ -382,8 +382,13 @@ fig_dsun2 + theme_bw()
 
 \section{Task: using colour as data in plots}
 
+The examples in this section use a single spectrum, \code{sun.spct}, but all functions used are methods for \code{generiic.spct} objects, so are equally applicable to the plotting of other spectra like transmittance, reflectance or response ones.
+
+When we want to colour-label individual spectral values, for example, by plotting the individual data points with the colour corresponding to it's wavelength, or fill the area below a plotted spectral curve with colours, we need to first \code{tag} the spectral data set using a waveband defintion or a list of waveband definitions. If we just want to add a guide or labels to the plot, we can create new data instead of tagging the spectral data to be plotted. In section \ref{sec:plot:tag} we show code based on tagging spectral data, and sectio \ref{sec:plot:guide} the case of using different data for plotting the guide or key.
+
 \subsection{Scale definitions}\label{sec:plot:scales}
-First some new scales.
+
+First we define some new scales for use for plotting with \code{ggplot}. In the future something equivalent may be inclided in package \code{photobiologygg}.
 
 <<scales-1>>=
 scale_colour_tgspct <-
@@ -442,7 +447,9 @@ scale_fill_tgspct <-
 }
 @
 
-\subsection{Plots}
+\subsection{Plots using colour for the spectral data}\label{sec:plot:tag}
+
+
 
 We add wavelength-dependent colour and waveband information to the spectral data object.
 
@@ -540,22 +547,23 @@ ggplot(pl.sun.spct,
 fig_sun.pl + theme_bw()
 @
 
-When using a factor we can play with the scale definitions and represent the wavebands in any way we may want. For example we can use \code{split\_bands} into many smaller bands and get an almost conitnuous gradient, but get around the problem of repeated colours by using the factor and redefining the scale.
+When using a factor we can play with the scale definitions and represent the wavebands in any way we may want. For example we can use \code{split\_bands} to split a waveband or spectrum into many adjacent narrow bands and get an almost conitnuous gradient, but we need to get around the problem of repeated colours by using the factor and redefining the scale.
 
-
-Then we tag the VIS region of the spectrum with 150 narrow wavebands. As `hinges' are inserted there is no gap, and usually there is no need to increase the length of the spectrum by intepolation. If needed one could try something
-like.
+When an spectrum has very few observations we can `fake' a longer spectrum by interpolation as a way of getting a more even fill. The example below is not not, in later examples we just use the example spectral data as is.
 
 <<interpolate, eval=FALSE>>=
 interpolate_spct(sun.spct, length.out=800)
 @
 
-We just use the example spectrum as is, and this time tag the VIS region of the spectrum.
+We tag the VIS region of the spectrum with 150 narrow wavebands. As `hinges' are inserted, there is no gap, and usually there is no need to increase the length of the spectrum by intepolation. If needed one could try something
+like. However, the longer spectrum should not be used for statistical calculations, not even plotting using \code{geom\_smooth}.
 
 <<split-VIS-1>>=
 splt.sun.spct <- copy(sun.spct)
 tag(splt.sun.spct, split_bands(VIS(), length.out=150))
 @
+
+In the code above, we made a copy of \code{sun.spct} because being part of the package, it is write protected, and \code{tag} works by modifying its argument.
 
 <<split-VIS-2>>=
 fig_sun.splt <-
@@ -578,7 +586,7 @@ splt1.sun.spct <- copy(sun.spct)
 tag(splt1.sun.spct, split_bands(sun.spct, length.out=200))
 @
 
-We use \code{geom\_area} and \code{fill}.
+We use \code{geom\_area} and \code{fill}, and colour the area under the curve. This does not work with \code{geom\_line} because there would not be anything to fill, here we use \code{geom\_area} instead.
 
 <<split-all-2>>=
 fig_sun.splt1 <-
@@ -593,6 +601,8 @@ ggplot(splt1.sun.spct,
 fig_sun.splt1 + theme_bw()
 @
 
+We can use \code{alpha} to add transparency to the fill.
+
 <<split-all-3>>=
 fig_sun.splt1 <-
 ggplot(splt1.sun.spct,
@@ -605,7 +615,6 @@ ggplot(splt1.sun.spct,
     x = "Wavelength (nm)")
 fig_sun.splt1 + theme_bw()
 @
-
 
 This example uses \code{geom\_point} and \code{colour}.
 
@@ -638,56 +647,163 @@ fig_sun.y <-
 fig_sun.y  + theme_bw()
 @
 
-We can also add one colour bar as key. We here prepare data for an almost continuous colour reference guide, one for colours perceived by plants and one for ISO colour definitions. These are quick and dirty examples for the discrete bands, but they get the job done. A better approach would be just to generate the data for the rectangles with function  \code{tag}, say if supplied only with a list of wavebands as argument, because having a single rectangle for each waveband would allow setting the border of rectangle as needed, or just plot empty rectangles with text labels inside.
+Other possibilities are for example, using one of the symbols that can be filled, and then for example for symbols with a black border and a colour matching its wavelength as a fill aesthetic. It is also possible to use \code{alpha} with points.
+
+\subsection{Plots using colour for the waveband definitions}\label{sec:plot:guide}
+
+
+We can also add a colour bar as key. In this case we do not need to tag our spectral data, but we can instead create new data for use in what is closer to the concept of annotation that to plotting. In each of the examples below we use wavevand definitions to create tagged spectral data for use in plotting the guide using \code{geom\_rect}. We present three cases: an almost continuous colour reference guide, a reference guide for colours perceived by plants and one for ISO colour definitions. We also add labels to the bar with \code{geom\_text} and show some examples of how to change the color of the line enclosing the rectangles and of text labels. Finally we show how to use \code{fill} and \code{alpha} to adjust how the guides look.
+
+First we add to our earlier plot a continuous colour bar fo the visible range,
 
 <<>>=
-x <- seq(278.5,798.5, length.out=200)
-wl.guide.data <- data.frame(w.length = x, s.e.irrad = NA,
-                            xmin = x - 1.5, xmax = x +1.5, ymin = 0.85, ymax = 0.9)
-setGenSpct(wl.guide.data)
-plant.guide.data <- copy(wl.guide.data)
-iso.guide.data <- copy(wl.guide.data)
-tag(wl.guide.data, split_bands(wl.guide.data, length.out=200))
-tag(plant.guide.data, Plant_bands())
-tag(iso.guide.data, VIS_bands())
-@
-
-The continuous colour bar.
-
-<<>>=
+wl.guide.spct <- wb2rect_spct(split_bands(VIS(), length.out=200))
 fig_sun.yy <- fig_sun.y +
-geom_rect(data=wl.guide.data,
-       aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+geom_rect(data=wl.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y + 0.85, ymax = y + 0.9,
            y = 0, fill=wb.f),
        color = NA) +
-  scale_fill_tgspct(tg.spct=wl.guide.data)
+  scale_fill_tgspct(tg.spct=wl.guide.spct)
 fig_sun.yy
 @
 
-We just replace the data, both in \code{geom\_rect} and in \code{scale\_fill\_tgspct} for the iso colours,
+or for the whole range of the spectral data.
 
 <<>>=
-fig_sun.yyy <- fig_sun.y +
-geom_rect(data=iso.guide.data,
-       aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+wl.guide.spct <-
+  wb2rect_spct(split_bands(new_waveband(min(sun.spct), max(sun.spct)),
+                           length.out=200))
+fig_sun.yy <- fig_sun.y +
+geom_rect(data=wl.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y + 0.85, ymax = y + 0.9,
            y = 0, fill=wb.f),
        color = NA) +
-  scale_fill_tgspct(tg.spct=iso.guide.data)
-fig_sun.yyy
+  scale_fill_tgspct(tg.spct=wl.guide.spct)
+fig_sun.yy
 @
 
-or the plant's sensory colours.
+We just replace the tagged spectrum with one based on ISO colours, both in \code{geom\_rect} and in \code{scale\_fill\_tgspct}.
 
 <<>>=
-fig_sun.yyy <- fig_sun.y +
-geom_rect(data=plant.guide.data,
-       aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+iso.guide.spct <- wb2rect_spct(VIS_bands())
+fig_sun.yy <- fig_sun.y +
+geom_rect(data=iso.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y + 0.85, ymax = y + 0.9,
            y = 0, fill=wb.f),
        color = NA) +
-  scale_fill_tgspct(tg.spct=plant.guide.data)
-fig_sun.yyy
+  scale_fill_tgspct(tg.spct=iso.guide.spct)
+fig_sun.yy
 @
 
+or on plant's sensory colours.
+
+<<>>=
+plant.guide.spct <- wb2rect_spct(Plant_bands())
+fig_sun.yy <- fig_sun.y +
+geom_rect(data=plant.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y + 0.85, ymax = y + 0.9,
+           y = 0, fill=wb.f),
+       color = "white") +
+  scale_fill_tgspct(tg.spct=plant.guide.spct)
+fig_sun.yy
+@
+
+We add text labels on top of the guide, and make the rectangle borders white to make the separation between the different `invisible' wavebands clear. As we are adding labels, the `guide' or key becomes redundant and we remove it by adding \code{guide="none"} to the fill scale.
+
+<<>>=
+plant.guide.spct <- wb2rect_spct(Plant_bands())
+fig_sun.yy <- fig_sun.y +
+geom_rect(data=plant.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y + 0.85, ymax = y + 0.9,
+           y = 0, fill=wb.f),
+       color = "white") +
+  geom_text(data=plant.guide.spct,
+       aes(y = y + 0.875, label = as.character(wb.f), fill=wb.f),
+       color = "white") +
+  scale_fill_tgspct(tg.spct=plant.guide.spct, guide="none")
+fig_sun.yy
+@
+
+Here we add \code{alpha} or transparency to make the colours paler, and use black text and lines.
+
+<<>>=
+plant.guide.spct <- wb2rect_spct(Plant_bands())
+fig_sun.yy <- fig_sun.y +
+  geom_rect(data=plant.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y + 0.85, ymax = y + 0.9,
+           y = 0, fill=wb.f),
+       color = "black", alpha=0.4) +
+  geom_text(data=plant.guide.spct,
+       aes(y = y + 0.875, label = as.character(wb.f), fill=wb.f),
+       color = "black") +
+  scale_fill_tgspct(tg.spct=plant.guide.spct, guide="none")
+fig_sun.yy + theme_bw()
+@
+
+We change the guide so that all rectangles are filled with the same shade of grey by moving \code{fill} out of \code{aes} and setting it to a constant. We print this new figure using the black and white theme.
+
+<<>>=
+plant.guide.spct <- wb2rect_spct(Plant_bands())
+fig_sun.yy <- fig_sun.y +
+geom_rect(data=plant.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y + 0.85, ymax = y + 0.9,
+           y = 0),
+       color = "black", fill="grey90") +
+  geom_text(data=plant.guide.spct,
+       aes(y = y + 0.875, label = as.character(wb.f), fill=wb.f),
+       color = "black") +
+  scale_fill_tgspct(tg.spct=plant.guide.spct, guide="none")
+fig_sun.yy + theme_bw()
+@
+
+We can obtain annotations similar to those in \ref{sec:plot:ann:wban} in page \pageref{sec:plot:ann:wban} created with \code{annotate\_waveband} using geoms.\label{chunk:plot:ann:tag}
+
+<<>>=
+plant.guide.spct <- wb2rect_spct(Plant_bands())
+fig_sun.yy <- fig_sun.y +
+  geom_rect(data=plant.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y, ymax = y + 0.85,
+           y = 0, fill=wb.f),
+       color = "white", alpha=0.3) +
+  geom_text(data=plant.guide.spct,
+       aes(y = y + 0.88, label = as.character(wb.f), fill=wb.f),
+       color = "black") +
+  scale_fill_tgspct(tg.spct=plant.guide.spct, guide="none")
+fig_sun.yy + theme_bw()
+@
+
+In the examples above we used predefined lists of wavebands, but one can, of course, use any list of waveband defintions, for example explicitly created with \code{list} and \code{new\_waveband}, or \code{list} and any combination of user-defined and predefined wavebands. Even single waveband definitions are allowed.
+
+<<>>=
+par.guide.spct <- wb2rect_spct(PAR())
+fig_sun.yy <- fig_sun.y +
+geom_rect(data=par.guide.spct,
+       aes(xmin = xmin, xmax = xmax, ymin = y - 0.1, ymax = y,
+           y = 0),
+       color = "black", fill="grey90") +
+  geom_text(data=par.guide.spct,
+       aes(y = y - 0.05, label = as.character(wb.f), fill=wb.f),
+       color = "black") +
+  scale_fill_tgspct(tg.spct=par.guide.spct, guide="none")
+fig_sun.yy + theme_bw()
+@
+
+We can also use \code{geom\_segment} to draw lines, including arrows. In this example we also set a different font \code{family} and label text. We can replace the label in the waveband defintion by assigning a name to the waveband as member of the list. We use single quotes so that the long name containg space characters is accepted by \code{list}.
+
+<<>>=
+par.guide.spct <- wb2rect_spct(list('Photosynthetically active radiation' = PAR()))
+fig_sun.yy <- fig_sun.y +
+  geom_segment(data=par.guide.spct,
+       aes(x = xmin, xend = xmax, y = y, yend = y),
+       size = 1.5, color = "black") +
+  geom_text(data=par.guide.spct,
+       aes(y = y + 0.05, label = as.character(wb.f), fill=wb.f),
+       color = "black", family="serif") +
+  scale_fill_tgspct(tg.spct=par.guide.spct, guide="none")
+fig_sun.yy + theme_bw()
+@
+
+Possible variations are almost endless, so we invite the reader to continue exploring how the functions from package \code{photobiology} can be used together with \code{ggplot}, to obtain beautiful plots of spectra.
 
 %%%%
 \section{Task: plotting colours in Maxwell's triangle}\label{sec:max:tri}
