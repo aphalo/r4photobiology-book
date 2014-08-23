@@ -5,7 +5,7 @@ opts_chunk$set(opts_fig_wide)
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Storing and manipulating data in R}\label{chap:R:data}
+\chapter{Storing and manipulating data with R}\label{chap:R:data}
 
 \section{Packages used in this chapter}
 

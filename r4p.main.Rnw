@@ -145,9 +145,11 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_chaps <- FALSE
+incl_chaps <- TRUE
 incl_ckbk <- TRUE
-incl_apdx <- FALSE
+incl_data <- TRUE
+incl_acq <- TRUE
+incl_apdx <- TRUE
 eval_diag <- FALSE
 @
 
@@ -185,7 +187,7 @@ main_ls <- c(ls(), "main_ls")
 
 \mainmatter
 
-\part{Getting ready}
+\part{Preliminaries}
 
 <<child-intro, child='introduction.Rnw', eval=incl_chaps>>=
 @
@@ -207,7 +209,7 @@ current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
 
-\part{Cookbook}
+\part{Cookbook of calculations}
 
 <<child-uwirrad, child='physics.Rnw', eval=incl_ckbk>>=
 @
@@ -235,13 +237,18 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-colour, child='colour.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-photoreceptors, child='photoreceptors.Rnw', eval=incl_ckbk>>=
+<<child-plots, child='plots.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-sources, child='sources.Rnw', eval=incl_ckbk>>=
+\part{Catalogue of data sources}
+
+<<child-sources, child='sources.Rnw', eval=incl_data>>=
 @
 
-<<child-filters, child='filters.Rnw', eval=incl_ckbk>>=
+<<child-filters, child='filters.Rnw', eval=incl_data>>=
+@
+
+<<child-photoreceptors, child='photoreceptors.Rnw', eval=incl_data>>=
 @
 
 <<echo=FALSE, include=FALSE>>=
@@ -249,16 +256,15 @@ current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
 
-<<child-plots, child='plots.Rnw', eval=incl_ckbk>>=
+\part{Data acquisition and modelling}
+
+<<child-calibration, child='calibration.Rnw', eval=incl_acq>>=
 @
 
-<<child-calibration, child='calibration.Rnw', eval=incl_ckbk>>=
+<<child-simulation, child='simulation.Rnw', eval=incl_acq>>=
 @
 
-<<child-simulation, child='simulation.Rnw', eval=incl_ckbk>>=
-@
-
-<<child-measurement, child='measurement.Rnw', eval=incl_ckbk>>=
+<<child-measurement, child='measurement.Rnw', eval=incl_acq>>=
 @
 
 <<echo=FALSE, include=FALSE>>=
@@ -272,6 +278,7 @@ rm(list = setdiff(current_ls, main_ls))
 \printbibliography
 
 \appendix
+
 \part{Appendixes}
 
 <<child-r-calc, child='R.as.calculator.Rnw', eval=incl_apdx>>=
@@ -280,10 +287,10 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-r-scripts, child='R.scripts.Rnw', eval=incl_apdx>>=
 @
 
-<<child-r-plotting, child='R.plotting.Rnw', eval=incl_apdx>>=
+<<child-r-data, child='R.data.Rnw', eval=incl_apdx>>=
 @
 
-<<child-r-data, child='R.data.Rnw', eval=incl_apdx>>=
+<<child-r-plotting, child='R.plotting.Rnw', eval=incl_apdx>>=
 @
 
 <<child-r-data, child='R.readings.Rnw', eval=incl_apdx>>=

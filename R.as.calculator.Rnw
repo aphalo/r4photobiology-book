@@ -466,6 +466,29 @@ b[selector]
 b[indexes]
 @
 
+\section{Factors}
+
+Factors are used for indicating categories, most frequently the factors describing the treatments in an experiment, or categories in a survey. They can be created either from numerical or character vectors. The different possible values are called \emph{levels}. Normal factors created with \code{factor} are unordered or categorical. R has ordered factors, that can be created with function \code{ordered}.
+
+<<facors-1>>=
+my.vector <- c("treated", "treated", "control", "control", "control", "treated")
+my.factor <- factor(my.vector)
+my.factor <- factor(my.vector, levels=c("treatment", "control"))
+@
+
+It is always preferable to use meaningful names for levels, although it is possible to use numbers. The order of levels becomes important when plotting data, as it affects the order of the levels along the axes, or in legends. Converting factors to numbers, even if the levels look like numbers when displayed, they are just character strings.
+
+<<factors-2>>=
+my.vector2 <- rep(3:5, 4)
+my.factor2 <- factor(my.vector2)
+as.numeric(my.factor2)
+as.numeric(as.character(my.factor2))
+@
+
+Internally factor levels are stored as running numbers starting from zero, and those are the numbers returned by \code{as.numeric} applied to a factor.
+
+Factors are very important in R. In contrast to other statistical software in which the role of a variable is set when defining a model to be fitted or setting up a test, in R models are specified exactly in the same way for ANOVA and regression analysis, as linear models. What `decides' what type of model is fitted is whether the explanatory variable is a factor (giving ANOVA) or a numerical variable (giving regression). This makes a lot of sense, as in most cases, considering an explanatory variable as categorical or not, depends on the design of the experiment or survey, in other words, is a property of the data rather than of the analysis.
+
 \section{Lists}
 
 Elements of a \code{list} are not ordered, and can be of different type. Lists can be also nested. Elements in list are named, and normally are accessed by name. List are defined using function \code{list}.
@@ -478,7 +501,11 @@ a.list$x
 a.list[["x"]]
 a.list[[1]]
 a.list[1]
+a.list[c(1,3)]
+try(a.list[[c(1,3)]])
 @
+
+Using double square brackets for indexing gives the element stored in the list, in its original mode, in the example above, \code{a.list[["x"]]} returns a numeric vector, while \code{a.list[1]} returns a list containing the numeric vector \code{x}. \code{a.list\$x} returns the same value as \code{a.list[["x"]]}, a numeric vector. While \code{a.list[c(1,3)]} returns a list of length two, \code{a.list[[c(1,3)]]}.
 
 \section{Data frames}
 
@@ -491,8 +518,6 @@ str(a.df)
 a.df$x
 a.df[["x"]]
 a.df[[1]]
-a.df[ , 1]
-a.df[1:2, ]
 class(a.df)
 @
 
@@ -506,7 +531,48 @@ a.df$x3 <- "b"
 a.df
 @
 
-We have added two columns to the data frame, and in the case of column \code{x3} recycling took place.
+We have added two columns to the data frame, and in the case of column \code{x3} recycling took place. Data frames are extremely important to anyone analysing or plotting data in R. One can think of data frames as tightly structured work-sheets, or as lists. As you may have guessed from the examples earlier in this section, there several different ways of accessing columns, rows, and individual observations stored in a data frame. The columns can to some extent be treated as elements in a list, and can be accessed both by name or index (position). When accessed by name, using \code{\$} or double square brackets a single column is returned as a vector or factor. In contrast to lists, data frames are `rectangular' and for this reason the values stored can be also accessed in a way similar to how elements in a matrix are accessed, using two indexes. As we saw for vectors indexes can be vectors of integer numbers or vectors of logical values. For columns they can be vectors of character strings matching the names of the columns. When using indexes it is extremely important to remember that the indexes are always given \textbf{row first}.
+
+<<data-frames-3>>=
+a.df[ , 1]   # first column
+a.df[ , "x"] # first column
+a.df[1, ]    # first row
+a.df[1:2, c(FALSE, FALSE, TRUE, FALSE, FALSE)] 
+             # first two rows of the third column
+a.df[a.df$z , ] # the rows for which z is true
+a.df[a.df$x > 3, -3] # the rows for which x > 3 for
+                 # all columns except the third one 
+@
+
+When the names of data frames are long, complex conditions become awkward to write. In such cases \code{subset} is handy because evaluation is done in the `environment' of the data frame, i.e.\ the names of the columns are recognized if entered directly.
+
+<<data-frames-4>>=
+subset(a.df, x > 3)
+@  
+
+When calling functions that return a vector, data farme, or other structure, the square brackets can be appended to the rightmost parenthesis of the function call, in the same way as to the name of a variable holding the same data.
+
+<<data-frames-5>>=
+subset(a.df, x > 3)[ , -3]
+subset(a.df, x > 3)$x
+@
+
+None of the examples in the last three code chunks alter the original data frame \code{a.df}. We can store the returned value using a new name, if we want to preserve \code{a.df} unchanged, or we can assign the result to \code{a.df} deleting in the process the original \code{a.df}. The next to examples do assignment to \code{a.df}, but either to only one columns, or by indexing the individual values in both the `right side' and `left side' of the assignment.
+Another way to delete a column from a data frame is to assign \code{NULL} to it.
+
+<<data-frames-6>>=
+a.df[["x2"]] <- NULL
+a.df$x3 <- NULL
+a.df
+@
+
+In the previous code chuck we deleted the last two columns of the data frame \code{a.df}.
+Finally an esoteric trick for you think about.
+
+<<data-frames-7>>=
+a.df[1:6, c(1,3)] <- a.df[6:1, c(3,1)]
+a.df
+@
 
 
 \section{Simple built-in statistical functions}
@@ -528,5 +594,5 @@ length(x)
 
 \section{Functions and execution flow control}
 
-Although functions can be defined and used at the command prompt, we will discuss them when looking at scripts. We will do the same in the case of flow-control statements (e.g. repetition and conditional execution).
+Although functions can be defined and used at the command prompt, we will discuss them when looking at scripts. We will do the same in the case of flow-control statements (e.g.\ repetition and conditional execution).
 
