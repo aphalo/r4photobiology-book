@@ -1085,6 +1085,34 @@ fig_sun.z12 <- fig_sun.z0 +
 fig_sun.z12 + theme_bw()
 @
 
+Of course it is possible to combine tagged data spectra and tagged spectra created from wavebands. The tagging is consistent, so, as demonstrated in the next figure, the same aesthetic `link' works for both spectra. In this case the fill scale and the setting of fill to \code{wb.f} work accross different `data' and yield a consistent look. This figure also shows that when assigning a constant to an aesthetic, it is possible to use a vector, which in the present example, saves us some work compared to adding a column to the data and using an identity scale. Contrary to earleir examples where we have added layers to a previously saved plot, here we show the whole code needed to build the figure.
+
+<<>>=
+my.sun.spct <- sun.daily.spct
+tag(my.sun.spct, list(UVB(), UVA()))
+annotation.spct <- wb2rect_spct(list(UVB(), UVA()))
+fig_sun.uv1 <- ggplot(my.sun.spct,
+                      aes(x=w.length,
+                          y=s.e.irrad * 1e-3,
+                          fill=wb.f)) +
+  scale_fill_grey(na.value=NA, guide="none") +
+  geom_area() + geom_line() +
+  labs(x = "Wvelength (nm)",
+       y =  expression(atop(Spectral~~daily~~exposure,
+                       (kJ~~m^{-2}~d^{-1}~nm^{-1}))),
+       fill = "",
+       title =
+   "Unweighted solar radiation (daily accumulated spectrum)") +
+  geom_rect(data=annotation.spct,
+            aes(xmin=wl.low, xmax=wl.high, ymin=30, ymax=32)) +
+  geom_text(data=annotation.spct,
+            aes(label=as.character(wb.f), y=31),
+            color=c("white","black"), size=4) +
+  theme_bw()
+
+fig_sun.uv1
+@
+
 Possible variations are almost endless, so we invite the reader to continue exploring how the functions from package \code{photobiology} can be used together with \code{ggplot}, to obtain beautiful plots of spectra. As an example here we show new versions of two plots from the previous section, one using a filled area to label the PAR region, and another one using symbols with colours according to their wavelength, to which we add a guide for PAR.
 
 <<plot-par-tag-annotate>>=
@@ -1181,7 +1209,7 @@ opts_chunk$set(opts_fig_narrow)
 
 In this task we aim at creating bar plots depicting the contributions of the UVB and UVA bands to the total erythemal effective irradiance in sunlight filtered with different plastic films. First we calculate the effective energy irradiance using the waveband definition for erythemal BSWF (CIE98) separately for the estimated solar spectral irradiance under each filter type.
 
-<<>>=
+<<plot-bar-cie-0>>=
 cie.nf.irrad <- e_irrad(sun.spct * CIE(),
                         list(UVB(), UVA()))
 cie.pe.irrad <- e_irrad(sun.spct * polyester.new.spct * CIE(),
@@ -1193,7 +1221,7 @@ cie.226.irrad <- e_irrad(sun.spct * uv.226.new.spct * CIE(),
 We assemble a data table by concatenating the irradiance and adding factors for filter type and wave bands. When
 defining the factors, we use \code{levels} to make sure that the levels are ordered as we would like to plot them.
 
-<<>>=
+<<plot-bar-cie-1>>=
 cie.dt <- data.table(
   cie.irrad = c(cie.nf.irrad, cie.pe.irrad, cie.226.irrad),
   filter = factor(rep(c('none', 'polyester', 'Rosco #226'), c(2,2,2)),
@@ -1204,7 +1232,7 @@ cie.dt <- data.table(
 
 Now we plot stacked bars using \code{geom\_bar}, however as the default \code{stat} of this geom is not suitable for our data, we specify \code{stat="identity"} to have the data plotted as is. We set a specific palette for fill, and add a black border to the bars by means of \code{color="black"}, we remove the grid lines corresponding to the $x$-axis, and also position the legend within the plotting region.
 
-<<>>=
+<<plot-bar-cie-2>>=
 fig_cie_bars0 <- ggplot(data=cie.dt,
                         aes(y = cie.irrad * 1e3,
                             x = filter,
@@ -1225,7 +1253,7 @@ fig_cie_bars0
 
 The figure above is good for showing the relative contribution of UVB and UVA radiation to the total effect, and the size of the total effect. On the other hand if we would like to show how much the effective irradiance in the UVB and UVA decreases under each of the filters is better to avoid stacking of the bars, plotting them side by side using \code{position=position\_dodge()}. In addition we swap the aesthetics to which the two factors are linked.
 
-<<>>=
+<<plot-bar-cie-3>>=
 fig_cie_bars1 <- ggplot(data=cie.dt,
                         aes(y = cie.irrad * 1e3,
                             x = w.band,
@@ -1254,7 +1282,7 @@ opts_chunk$set(opts_fig_wide)
 
 We show now the last example, related to the ones above, but creating a bar plot with more bars. First we calculate photon irradiance for different equally spaced bands within PAR using function \code{split\_bands}. The code is written so that by changing the first two lines you can adjust the output.
 
-<<>>=
+<<plot-bar-qirrad-bands-0>>=
 wl.range <- range(PAR())
 num.bands <- 15
 many.bands <- split_bands(wl.range, length.out=num.bands)
@@ -1276,7 +1304,7 @@ q.irrad.sun.dt <- data.table(q.irrad = q.irrad.bands.sun,
 
 Now we can plot the data as bars, filling each bar with the corresponding colour. In this case we plot the bars using a continuous variable, wavelength, for the $x$-axis.
 
-<<>>=
+<<plot-bar-qirrad-bands-1>>=
 fig_qirrad_bar <- ggplot(data=q.irrad.sun.dt,
                         aes(y = q.irrad * 1e6,
                             x = w.length,

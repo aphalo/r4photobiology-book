@@ -95,8 +95,8 @@ A handbook}}\par
 \vspace*{\drop}
 \endgroup}
 
-\setcounter{tocdepth}{2}
-\setcounter{secnumdepth}{3}
+\maxsecnumdepth{subsection}
+\maxtocdepth{section}
 
 \usepackage{siunitx}
 \usepackage{framed}
@@ -186,6 +186,8 @@ main_ls <- c(ls(), "main_ls")
 \include{abbreviations.tr}
 
 \mainmatter
+
+\setsecnumdepth{subsection}
 
 \part{Preliminaries}
 

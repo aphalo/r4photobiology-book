@@ -16,6 +16,22 @@ opts_knit$set(concordance=TRUE)
 \end{abstract}
 
 %%%%
+\section{The design of the user interface}
+
+The design of the `high level' interface is based on the idea of achieving simplicity of use by hiding the computational difficulties and exposing objects, functions and operators that map directly to physical concepts. Computations and plotting of spectral data centers on two types of objects: \emph{spectra} and \emph{wavebands}. Al spectra have in common that all observations are referenced to a wavelength value, there are different types spectral objects, e.g. for light sources and responses. Waveband objects include much more than information about a range of wavelengths, they can also include information about a transformation of the spectral data, like a biological spectral weighting function (BSWF). In addition to functions for calculating summary quantities like irradiance from spectral irradiance, the packages define operators for spectra and wavebands. The use of operators simplifies the syntax and makes the interface easier to use. 
+
+<<suite-design-example, eval=FALSE>>=
+e_irrad(sun.spct * polyester.new.spc, CIE())
+@
+
+Is all what is needed to obtain the CIE98-weigthed energy irradiance simulating the effect of a polyester filter on the example solar spectrum, which of course, can be substituted by other spectral data.
+
+When we say that we hide the computational difficulties what we mean, is that in the example above, the data for the two spectra do not need to be available at the same wavelengths values, and the BSWF is defined as a function. Interpolation of the spectral data and calculation of weighting factors takes place automatically and invisibly. All functions and operators function without error with spectra with varying (even arbitrarily and randomly varying) wavelength steps. Integration is always used rather than summation for summarizing the spectral data.
+
+There is lower layer of functions, used internally, but also exported, which allow improved performance at the expense of more complex scripts and commands. This user interface is not meant for the casual user, but for the user who has to analyse thousands of spectra and uses scripts for this. For such users performance is the main concern rather than easy of use and easy to remember syntax. Also these functions handle any wavelength mismatch by interpolation before applying operations or functions.
+
+The suite also includes data for the users to try options and ideas, and helper functions for plotting spectra using other R packages available from CRAN, in particular \code{ggplot2}. There are some packages, not part of the suite itself, for data acquisition from Ocean Optics spectrometers, and application of special calibration and correction procedures to those data. A package will provide an interface to the TUV model to allow easy simulation of the solar spectrum. 
+
 \section{The suite}
 
 The suite consists in several packages. The main package is \code{photobiology} which contains all the generally useful functions, including many used in the other, more specialized, packages (Table \ref{tab:suite}).
@@ -60,7 +76,7 @@ green bullet \gblt.}\label{tab:suite}
 \end{small}
 \end{table}
 
-One of the main difficulties when working with spectral data is that one may need to operate on data sets measured at different wavelength values and steps sizes. The functions in the suite handle any mismatch by interpolation before applying operations or functions. Although by default functions expect spectral data on energy units, this is just a default that can be changed by setting the parameter \code{unit.in = "photon"}. Across all data sets and functions wavelength vectors have name \code{w.length}, spectral (energy) irradiance \code{s.e.irrad}, photon spectral irradiance \code{s.q.irrad}\footnote{\code{q} derives from `quantum'.}, absorbance ($\log_{10}$-based) \code{A}, transmittance (fraction of one) \code{Tfr}, transmittance (\%) \code{Tpc}, reflectance (fraction of one) \code{Rfr}, and reflectance (\%) \code{Rpc}.
+Although by default functions expect spectral data on energy units, this is just a default that can be changed by setting the parameter \code{unit.in = "photon"}. Across all data sets and functions wavelength vectors have name \code{w.length}, spectral (energy) irradiance \code{s.e.irrad}, photon spectral irradiance \code{s.q.irrad}\footnote{\code{q} derives from `quantum'.}, absorbance ($\log_{10}$-based) \code{A}, transmittance (fraction of one) \code{Tfr}, transmittance (\%) \code{Tpc}, reflectance (fraction of one) \code{Rfr}, and reflectance (\%) \code{Rpc}.
 
 Wavelengths should always be in nm, and when conversion between energy and photon based units takes place no scaling factor is used (an input in \wattnm yields an output in \molnm rather than \umolnm).
 
