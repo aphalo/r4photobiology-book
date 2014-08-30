@@ -3,7 +3,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Weighted and effective irradiance}
+\chapter{Weighted and effective irradiance}\label{chap:wt:irrad}
 
 \begin{abstract}
   In this chapter we explain how to calculate weighted energy and photon irradiances from spectral irradiance.
@@ -75,23 +75,23 @@ color(cie)
 
 
 %%%%
-\section{Task: define wavebands}\label{sec:wt:wavebands}
-
-In section \ref{sec:uw:wavebands} we briefly introduced \code{new\_waveband}, and here we describe its use in full detail, including the use of spectral weighting functions (SWFs).
-
-Defining a new weighted \code{waveband}. We start with a simple `toy' example:
-
-<<tidy=FALSE>>=
-toy.wb <- new_waveband(400, 700, "SWF",
-                       SWF.e.fun=function(wl){(wl - 400)^2},
-                       norm=550, SWF.norm=550,
-                       wb.name="TOY")
-toy.wb
-with(sun.data,
-     energy_irradiance(w.length, s.e.irrad, toy.wb))
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, toy.wb))
-@
+%\section{Task: define wavebands}\label{sec:wt:wavebands}
+%
+%In section \ref{sec:uw:wavebands} we briefly introduced \code{new\_waveband}, and here we describe its use in full detail, including the use of spectral weighting functions (SWFs).
+%
+%Defining a new weighted \code{waveband}. We start with a simple `toy' example:
+%
+%<<tidy=FALSE>>=
+%toy.wb <- new_waveband(400, 700, "SWF",
+%                       SWF.e.fun=function(wl){(wl - 400)^2},
+%                       norm=550, SWF.norm=550,
+%                       wb.name="TOY")
+%toy.wb
+%with(sun.data,
+%     energy_irradiance(w.length, s.e.irrad, toy.wb))
+%with(sun.data,
+%     photon_irradiance(w.length, s.e.irrad, toy.wb))
+%@
 
 
 %%%%

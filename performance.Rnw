@@ -1,7 +1,31 @@
-<<echo=FALSE>>=
-set_parent('r4p.main.Rnw')
+\documentclass[a4paper,10pt]{memoir}
+
+\usepackage[utf8]{inputenc}
+\usepackage{abbrev}
+\usepackage{r4photobiology}
+
+\begin{document}
+
+% knitr setup
+
+<<setup, include=FALSE, cache=FALSE>>=
+opts_knit$set(child.command = 'include')
+opts_knit$set(self.contained=FALSE)
 opts_knit$set(concordance=TRUE)
+opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=FALSE)
+opts_chunk$set(tidy=FALSE)
+options(replace.assign=TRUE,width=50)
 @
+
+<<fig-setup, include=FALSE, cache=FALSE>>=
+opts_fig_wide <- list(fig.width=8, fig.height=4, out.width='.95\\textwidth')
+opts_fig_wide_square <- list(fig.width=6, fig.height=6, out.width='.95\\textwidth')
+opts_fig_narrow <- list(fig.width=4, fig.height=4, out.width='.47\\textwidth')
+opts_fig_very_narrow <- list(fig.width=3, fig.height=3, out.width='.32\\textwidth')
+opts_fig_medium <- list(fig.width=6, fig.height=4, out.width='.64\\textwidth')
+opts_chunk$set(opts_fig_narrow)
+@
+
 
 \chapter{Optimizing performance}
 
@@ -425,30 +449,32 @@ library(ggplot2)
 library(profr)
 @
 
-<<eval=FALSE>>=
+<<>>=
 profr.df <- profr({q_irrad_spct(sun.spct)},
                   interval = 0.0005, quiet = TRUE)
 head(profr.df)
 ggplot(profr.df)
 @
 
-<<eval=FALSE>>=
+<<>>=
 profr.df <- profr({q_irrad_spct(sun.spct, my_PAR, use.hinges=TRUE)},
                   interval = 0.0001, quiet = TRUE)
 head(profr.df)
 ggplot(profr.df)
 @
 
-<<eval=FALSE>>=
-profr.df <- profr({q_irrad_spct(sun.spct, my_PAR, use.hinges=FALSE)},
+<<>>=
+my_sun.spct <- copy(sun.spct)
+profr.df <- profr({q_irrad_spct(my_sun.spct, my_PAR, use.hinges=FALSE)},
                   interval = 0.0001, quiet = TRUE)
 head(profr.df)
 ggplot(profr.df)
 @
 
-<<eval=FALSE>>=
+<<>>=
+my_sun.spct <- copy(sun.spct)
 profr.df <- profr({tag(my_sun.spct)},
-                  interval = 0.005, quiet = TRUE)
+                  interval = 0.001, quiet = TRUE)
 head(profr.df)
 ggplot(profr.df)
 @
@@ -471,3 +497,5 @@ try(detach(package:photobiology))
 try(detach(package:microbenchmark))
 try(detach(package:ggplot2))
 @
+
+\end{document}
