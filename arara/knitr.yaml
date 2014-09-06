@@ -1,0 +1,10 @@
+!config
+# knitr rule for arara
+# author: Pedro Aphalo
+# requires arara 3.0+
+identifier: knitr
+name: knitr
+command: <arara> biber @{options} "@{getBasename(file)}"
+arguments: 
+- identifier: options
+  flag: <arara> @{parameters.options}

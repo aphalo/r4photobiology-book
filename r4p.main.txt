@@ -1,0 +1,628 @@
+\documentclass[a4paper,10pt]{memoir}\usepackage{knitr}
+
+\usepackage[utf8]{inputenc}
+
+% \title{R for Photobiology: a handbook}
+% \author{Pedro J. Aphalo \and others}
+% \pretitle{\begin{center}\LARGE}
+% \posttitle{\par\end{center}\vskip 0.5em}
+
+% using Lucida bright using now free package from PC TeX
+\usepackage[lucidasmallscale,nofontinfo,seriftt=true,math-style=iso]{lucimatx}
+% replace option altbullet
+\renewcommand{\labelitemi}{%
+ {\UseTextSymbol{OMS}\textbullet}}
+% needed for Lucida
+\linespread{1.04}
+
+\usepackage[footinfo, missing={`none'}]{gitinfo} % remember to setup Git hooks
+
+\usepackage{hologo}
+
+\usepackage[british]{babel}
+\usepackage{csquotes}
+
+%\chapterstyle{ell}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.jpg,.pdf}
+
+\usepackage{microtype}
+\usepackage[hyperindex,bookmarks,pdfview=FitB,%backref,
+            pdftitle={R for Photobiology},%
+            pdfkeywords={photobiology, visible radiation, ultraviolet radiation, R, quantification, methods, calculations},%
+            pdfsubject={Photobiology},%
+            pdfauthor={Pedro J. Aphalo, Andreas Albert}%
+            ]{hyperref}
+\usepackage[style=authoryear-comp,firstinits,sortcites,maxcitenames=2,%
+    mincitenames=1,maxbibnames=10,minbibnames=10,backref,uniquename=mininit,%
+    uniquelist=minyear,sortfirstinits=true]{biblatex}%,refsection=chapter
+
+%\chapterstyle{veelo}
+
+\usepackage{color,calc,soul}%,graphicx,fourier
+\definecolor{nicegreen}{rgb}{.129,.647,.149}
+\definecolor{grey50}{rgb}{.5,.5,.5}
+\makeatletter
+\newlength\dlf@normtxtw
+\setlength\dlf@normtxtw{\textwidth}
+%\def\myhelvetfont{\def\sfdefault{mdput}}
+\newsavebox{\feline@chapter}
+\newcommand\feline@chapter@marker[1][4cm]{%
+\sbox\feline@chapter{%
+\resizebox{!}{#1}{\fboxsep=1pt%
+\colorbox{nicegreen}{\color{white}\normalfont\bfseries\thechapter}%\sffamily
+}}%
+\rotatebox{90}{%
+\resizebox{%
+\heightof{\usebox{\feline@chapter}}+\depthof{\usebox{\feline@chapter}}}%
+{!}{\scshape\so\@chapapp}}\quad%
+\raisebox{\depthof{\usebox{\feline@chapter}}}{\usebox{\feline@chapter}}%
+}
+\newcommand\feline@chm[1][4cm]{%
+\sbox\feline@chapter{\feline@chapter@marker[#1]}%
+\makebox[0pt][l]{% aka \rlap
+\makebox[1cm][r]{\usebox\feline@chapter}%
+}}
+\makechapterstyle{daleif1}{
+\renewcommand\chapnamefont{\normalfont\Large\scshape\raggedleft\so}
+\renewcommand\chaptitlefont{\normalfont\huge\bfseries\upshape\color{nicegreen}}%\sffamily
+\renewcommand\chapternamenum{}
+\renewcommand\printchaptername{}
+\renewcommand\printchapternum{\null\hfill\feline@chm[2.5cm]\par}
+\renewcommand\afterchapternum{\par\vskip\midchapskip}
+\renewcommand\printchaptertitle[1]{\chaptitlefont\raggedleft ##1\par}
+}
+\makeatother
+\chapterstyle{daleif1}
+
+\newlength{\drop}
+%% Some shades
+
+\newcommand*{\titleLL}{\begingroup% Lost Languages
+\drop=0.1\textheight
+\fboxsep 0.5\baselineskip
+\sffamily
+\vspace*{\drop}
+\centering
+{\textcolor{nicegreen}{\HUGE R for Photobiology}}\par
+\vspace{0.5\drop}
+\colorbox{grey50}{\textcolor{yellow}{\normalfont\itshape\Large
+A handbook}}\par
+\vspace{\drop}
+{\Large Pedro J. Aphalo\\ and\\ Andreas Albert}\par
+\vfill
+{\footnotesize Git: tag\gitVtagn , committed with hash \gitAbbrevHash\ on \gitAuthorIsoDate\\ by\ \gitAuthorName \\PDF created \today\\ \copyright\ 2013-2014 by the authors}\par
+\vspace*{\drop}
+\endgroup}
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+\usepackage{siunitx}
+\usepackage{framed}
+\renewenvironment{shaded}{%
+  \def\FrameCommand{\fboxsep=\FrameSep \colorbox{shadecolor}}%
+  \MakeFramed{\advance\hsize-\width \FrameRestore\FrameRestore}}%
+ {\endMakeFramed}
+\definecolor{shadecolor}{gray}{0.80}
+
+\usepackage{abbrev}
+\usepackage{r4photobiology}
+%\usepackage{glossaries}
+%\usepackage{imakeidx}
+
+\addbibresource{rbooks.bib}
+\addbibresource{handbook.bib}
+\addbibresource{photobio.bib}
+
+%\makeindex
+%\makeglossaries
+%\loadglsentries{gp_glossary}
+
+
+\newcommand{\gls}[1]{} % until start building the glossary.
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+% knitr setup
+
+
+
+
+
+
+
+
+
+\thispagestyle{empty}
+\titleLL
+\clearpage
+
+
+\frontmatter
+%\begin{titlingpage}
+%  \maketitle
+%\titleLL
+%\end{titlingpage}
+
+\tableofcontents
+
+%\listoftables
+
+%\listoffigures
+
+\include{preface.tr}
+
+\include{abbreviations.tr}
+
+\mainmatter
+
+\part{Getting ready}
+
+
+
+
+\chapter{Introduction}
+
+\begin{abstract}
+  In this chapter we explain the physical basis of optics and photochemistry.
+\end{abstract}
+
+\section{Radiation and molecules}
+
+
+
+
+\chapter{Optics}
+
+\begin{abstract}
+  In this chapter we explain how to .
+\end{abstract}
+
+%%%%
+\section{Task: }\label{sec:}
+
+
+
+
+\chapter{Photochemistry}
+
+\begin{abstract}
+  In this chapter we explain how to .
+\end{abstract}
+
+%%%%
+\section{Task: }\label{sec:}
+
+
+
+
+\chapter{Software}\label{chap:software}
+
+\begin{abstract}
+  In this chapter we describe the software we used to run the code examples and typeset this handbook, and how to install it.
+\end{abstract}
+
+%%%%
+\section{Task: }\label{sec:}
+
+%%%%
+\section{Introduction}\label{sec:}
+\sloppy
+The software used for typesetting this handbook and developing the \textsf{r4photobiology} suite is free and open source. All of it is available for the most common operating systems (Unix including OS X, Linux and its variants, and Windows). It is also possible to run everything described here on a Linux server running the server version of RStudio, and access the server through a web browser.
+
+For just running the examples in the handbook, you would need only to have R installed. That would be enough as long as you also have a text editor available. This is possible, but does not give a very smooth workflow for data analyses which are beyond the very simple. The next stage is to use a text editor which integrates to some extent with R, but still this is not ideal, specially for writing packages or long scrips. Currently the best option is to use the integrated development environment (IDE) called `RStudio'. This is an editor, but tightly integrated with R. Its advantages are especially noticeable in the case of errors and `debugging'. We also use a \hologo{LaTeX} for typesetting. Is what we used for the first handbook (Aphalo2012), and what we routinely for reporting data analyses, and that PJA also uses for all `overhead' slides he writes for lectures. You, do not need to go this far to be able to profit from R and our suite, but the set up we will describe here, is what we currently use, it is by far the best one we have encountered in 18 years of using and teaching how to use R.
+
+We will not give software installation instructions in this handbook, but will keep a web page with up-to-date instructions. In the following sections we briefly describe the different components of a full and comfortable working environment, but there many alternatives and the only piece that you cannot replace is R itself.
+
+%%%%
+\section{The different pieces}\label{sec:software:pieces}
+
+\subsection{R}
+
+You will not be able to profit from this handbook's `Cook Book' part, unless you have access to R. R (also called Gnu S) is both the name of a software system, and a dialect of the language S. The language S, although designed with data analysis and statistics in mind, is a computer language that is very powerful in its own way. It allows object oriented programming. Being based in a programming language, and being able to call and being called by programs and subroutine libraries written in several other programming languages, makes it easily extensible.
+
+R has a well defined mechanism for ``add-ons'' called packages, that are kept in the computer where R is running, in disk folders that conform the library. There is a standard mechanism for installing packages, that works across operating systems (OSs) and computer architectures. There is also a Comprehensive R Archive Network (CRAN) where publicly released versions of packages are kept. Packages can be installed and updated from CRAN and similar repositories directly from within R.
+
+If you are not familiar with R, please, go through the Appendixes \ref{chap:R:as:calc}, \ref{chap:R:scripts}
+and \ref{chap:R:plotting}, before delving into our `Cook Book'.
+
+\subsection{RStudio}
+
+RStudio exists in two versions with identical user interface: a desktop version and a server version. The server version can be used remotely through a web browser. It can be for example run in the 'cloud', for example, as an AWS instance (Amazon Web Services) quite easily and cheaply, or on one's own server hardware.
+
+\subsection{Version control: Git and Subversion}
+
+Version control systems help with keeping track of the history of software development, data analysis, or even manuscript writing. They make it possible for several programmers, data analysts, authors and or editors to work on the same files in parallel and then merge their edits. They also allow easy transfer of whole `projects' between computers. Git is very popular, and Github and Bitbucket are popular hosts for repositories. Git itself is free software, and can be also run locally, or as one's own private server, either as an AWS instance or on other hosting service, or on your own hardware.
+
+\subsection{C++ compiler}
+
+Although R is an interpreted language, a few functions in our suite are written in C++ to achieve better performance. On OS X and Windows, the normal practice is to install binary packages, which are ready compiled. In other systems like Linux and Unix it is the normal practice to install source packages that are compiled at the time of installation.
+
+\subsection{\LaTeX}
+
+\hologo{LaTeX} is built on top of \hologo{TeX}. \hologo{TeX} code and features were `frozen' (only bugs are fixed) long ago. There are currently a few `improved' derivatives: \hologo{pdfTeX}, \hologo{XeTeX}, and \hologo{LuaTeX}. Currently the most popular \hologo{TeX} in western countries is pdftex which can directly output PDF files. \hologo{XeTeX} can handle text both written from left to right and right to left, even in the same document, and is the most popular \hologo{TeX} engine in China and other Asian countries.
+
+
+
+
+\chapter{Photobiology R packages}
+
+\begin{abstract}
+  In this chapter we describe the suite of R packages for photobiological calculations `\textsf{r4photobiology}', and explain how to install them.
+\end{abstract}
+
+%%%%
+\section{The suite}
+
+The suite consists in several packages. The main package is \code{photobiology} which contains all the generally useful functions, including many used in the other, more specialized, packages (Table \ref{tab:suite}).
+
+\begin{table}
+\newcommand{\gblt}{\textcolor{green}{$\bullet$}}
+\newcommand{\yblt}{\textcolor{yellow}{$\bullet$}}
+\newcommand{\rblt}{\textcolor{red}{$\bullet$}}
+%\newcommand{\gblt}{{$\bullet$}}
+%\newcommand{\yblt}{{$\bullet$}}
+%\newcommand{\rblt}{{$\bullet$}}
+\caption[Packages in the suite]{Packages in the \textsf{r4photobiology} suite. Packages not yet released are
+highlighted with a red bullet \rblt, and those at `beta' stage with a yellow bullet \yblt, those relatively stable with a
+green bullet \gblt.}\label{tab:suite}
+\begin{small}
+\begin{tabular}{clll}
+\toprule
+ & Package           &  Type        & Contents \\
+\midrule
+\gblt & photobiology      &  funs + classes & basic functions, class definitions,\\
+      &                   &                 & class methods and example data \\
+\midrule
+\gblt & photobiologyWavebands   &  definitions & quantification of radiation \\
+\midrule
+\gblt & photobiologySun   &  data        & spectral data for solar radiation \\
+\gblt & photobiologyLamps &  data        & spectral data for lamps \\
+\gblt & photobiologyLEDs  &  data        & spectral data for LEDs \\
+\gblt & photobiologyFilters  &  data     & transmittance data for filters \\
+\yblt & photobiologySensors  &  data     & response data for broadband sensors \\
+\midrule
+\yblt & photobiologyPhy  & funs + data & phytochromes \\
+\yblt & photobiologyCry  & funs + data & cryptochromes \\
+\rblt & photobiologyPhot & funs + data & phototropins \\
+\rblt & photobiologyUVR8 & funs + data & UVR8 \\
+\midrule
+\gblt & photobiologygg  & functions       & extensions to package \code{ggplot2} \\
+\midrule
+\rblt & rTUV             & funs + data & TUV model interface \\
+\gblt & rOmniDriver      & functions   & control of Ocean Optics spectrometers \\
+\bottomrule
+\end{tabular}
+\end{small}
+\end{table}
+
+One of the main difficulties when working with spectral data is that one may need to operate on data sets measured at different wavelength values and steps sizes. The functions in the suite handle any mismatch by interpolation before applying operations or functions. Although by default functions expect spectral data on energy units, this is just a default that can be changed by setting the parameter \code{unit.in = "photon"}. Across all data sets and functions wavelength vectors have name \code{w.length}, spectral (energy) irradiance \code{s.e.irrad}, photon spectral irradiance \code{s.q.irrad}\footnote{\code{q} derives from `quantum'.}, absorbance ($\log_{10}$-based) \code{A}, transmittance (fraction of one) \code{Tfr}, transmittance (\%) \code{Tpc}, reflectance (fraction of one) \code{Rfr}, and reflectance (\%) \code{Rpc}.
+
+Wavelengths should always be in nm, and when conversion between energy and photon based units takes place no scaling factor is used (an input in \wattnm yields an output in \molnm rather than \umolnm).
+
+The suite is still under active development. Even those packages marked as `stable' are likely to acquire new functionality. By stability, we mean that we hope to be able to make most changes backwards compatible, in other words, we hope they will not break existing user code.
+
+%%%%
+\section{\lowercase{\code{r4photo}} repository}\label{sec:photoCRAN}
+% \lowercase needed for page headers
+
+I have created a small repository for the packages. This repository follows the CRAN folder structure, so now package installation can be done using just the normal R commands. This means that dependencies are installed automatically, and that automatic updates are possible. The build most suitable for the current system and R version is also picked automatically if available. It is normally recommended that you do installs and updates on a clean R session (just after starting R or RStudio).For easy installation and updates of packages, the r4photo repository can be added to the list of repositories that R knows about.
+
+Whether you use RStudio or not it is possible to add the r4photo repository to the current session as follows, which will give you a menu of additional repositories to activate:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{setRepositories}\hlstd{(}\hlkwc{graphics} \hlstd{=} \hlkwd{getOption}\hlstd{(}\hlstr{"menu.graphics"}\hlstd{),}
+                \hlkwc{ind} \hlstd{=} \hlkwa{NULL}\hlstd{,}
+                \hlkwc{addURLs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwc{r4photo} \hlstd{=}
+                      \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+If you know the indexes in the menu you can use this code, where ‘1’ and ‘6’ are the entries in the menu in the command above.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{setRepositories}\hlstd{(}\hlkwc{graphics} \hlstd{=} \hlkwd{getOption}\hlstd{(}\hlstr{"menu.graphics"}\hlstd{),}
+                \hlkwc{ind} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{6}\hlstd{),}
+                \hlkwc{addURLs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwc{r4photo} \hlstd{=}
+                      \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Be careful not to issue this command more than once per R session, otherwise the list of repositories gets corrupted by having two repositories with the same name.
+
+Easiest is to create a text file and name it `\code{.Rprofile}'. The commands above (and any others you would like to run at R start up) should be included, but with the addition that the package names for the functions need to be prepended. The minimum needed is.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{utils::}\hlkwd{setRepositories}\hlstd{(}\hlkwc{graphics} \hlstd{=} \hlkwd{getOption}\hlstd{(}\hlstr{"menu.graphics"}\hlstd{),}
+                \hlkwc{ind} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{6}\hlstd{),}
+                \hlkwc{addURLs} \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwc{r4photo} \hlstd{=}
+                      \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+The \code{.Rprofile} file located in the current folder is sourced at R start up. It is also possible to have such a file affecting all of the user's R sessions, but its location is operating system dependent, it is in most cases the what the OS considers the current user's \textit{HOME} directory or folder (e.g. `My Documents' in recent versions of MS-Windows). If you are using RStudio, after setting up this file, installation and updating of the packages in the suite can take place exactly as for any other package archived at CRAN.
+
+The commands and examples below can be used at the R prompt and in scripts whether RStudio is used or not.
+
+After adding the repository to the session, it will appear in the menu when executing this command:
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{setRepositories}\hlstd{()}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+and can be enabled and disabled.
+
+In RStudio, after adding the r4photo repository as shown above, the photobiology packages can be installed and uninstalled through the normal RStudio menus and dialogues, and will listed after typing the first few characters of their names. For example when you type ‘photob’ in the packages field, all the packages with names starting with ‘photob’ will be listed.
+
+They can be also installed at the R command prompt with the following command:
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{install.packages}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"photobiologyAll"}\hlstd{,} \hlstr{"photobiologygg"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+and updated with:
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{update.packages}\hlstd{()}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+The added repository will persist only during the current R session. Adding it permanently requires editing the R configuration file, as discussed above. Take into consideration that .Rprofile is read by R itself, and will take effect whether you use RStudio or not. It is possible to have a user wide .Rprofile file, and a different one on those folders needing different settings. There many options that can be modified by means of commands in the .Rprofile file.
+
+\section{How to install the packages}
+
+The examples given in this page assume that ‘r4photo’ is not in the list of repositories known to the current R session. See the section \ref{sec:photoCRAN} on the r4photo repository for a better alternative to the approach given here. We mention these other commands because they may be useful in cases when the user does not have write access to his/hers home directory, or just wants to try the packages.
+
+To install the latest version of one package (photobiology used as example) you just need to indicate the repository. However this simple command will only install the dependencies between the different photobiology packages.
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{install.packages}\hlstd{(}\hlstr{"photobiology"}\hlstd{,}
+                 \hlkwc{repos} \hlstd{=} \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+To update what is already installed, this command is enough (even if the packages have been installed manually before):
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{update.packages}\hlstd{(}\hlkwc{repos} \hlstd{=} \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+The best way to install the packages is to specify both the r4photo repository and a normal CRAN repository, then all dependencies will be automatically installed. The package photobiolgyAll just loads and imports all the packages in the suite, except for photobiolygg. Because of this dependency all the packages are installed unless already installed by issuing this command.
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{install.packages}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"photobiologyAll"}\hlstd{,} \hlstr{"photobiologygg"}\hlstd{),}
+         \hlkwc{repos} \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwc{r4photo} \hlstd{=}
+                     \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{,}
+                   \hlkwc{CRAN} \hlstd{=}
+                     \hlstr{"http://cran.rstudio.com"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+This example also shows how one can use an array of package names (in this example all currently available “photobiology” packages) in the call to the function install.packages, this is useful if you want to install only a subset of the files, or if you want to make sure that any older install of the packages is overwritten:
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{photobiology_packages} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"photobiology"}\hlstd{,}
+    \hlstr{"photobiologyWavebands"}\hlstd{,}
+    \hlstr{"photobiologyCry"}\hlstd{,} \hlstr{"photobiologyPhy"}\hlstd{,}
+    \hlstr{"photobiologyLamps"}\hlstd{,} \hlstr{"photobiologyLEDs"}\hlstd{,}
+    \hlstr{"photobiologySun"}\hlstd{,} \hlstr{"photobiologygg"}\hlstd{,}
+    \hlstr{"photobiologyFilters"}\hlstd{,}  \hlstr{"photobiologySensors"}\hlstd{)}
+
+\hlkwd{install.packages}\hlstd{(photobiology_packages,}
+         \hlkwc{repos} \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwc{r4photo} \hlstd{=}
+                     \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{,}
+                   \hlkwc{CRAN} \hlstd{=}
+                     \hlstr{"http://cran.rstudio.com"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+The commands above install all packages in the suite and all their dependencies from CRAN if needed. The following command will update all the packages currently installed (if new versions are available) and install any new dependencies.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{update.packages}\hlstd{(}\hlkwc{repos} \hlstd{=}
+                  \hlkwd{c}\hlstd{(}\hlkwc{r4photo} \hlstd{=}
+                      \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{,}
+                    \hlkwc{CRAN} \hlstd{=}
+                      \hlstr{"http://cran.rstudio.com"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+The instructions above should work under Windows as long as you have a supported version of R (3.0.0 or later) because I have built suitable binaries, under other OSs you may need to add type="source" unless this is already the default. We will try to build OS X binaries for Mac so that installation is easier. Meanwhile if installation fails try adding type="source" to the commands given above. For example the first one would become:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{install.packages}\hlstd{(}\hlstr{"photobiology"}\hlstd{,}
+                 \hlkwc{repos} \hlstd{=} \hlstr{"http://www.mv.helsinki.fi/aphalo/R"}\hlstd{,}
+                 \hlkwc{type}\hlstd{=}\hlstr{"source"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+When using type=”source” you may need to install some dependencies like the splus2R package beforehand from CRAN if building it from sources fails.
+
+\part{Cookbook}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\printbibliography
+
+\appendix
+\part{Appendixes}
+
+
+
+
+
+
+
+\chapter{Build information}
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{Sys.info}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+##                      sysname 
+##                    "Windows" 
+##                      release 
+##                      "7 x64" 
+##                      version 
+## "build 7601, Service Pack 1" 
+##                     nodename 
+##                      "MUSTI" 
+##                      machine 
+##                     "x86-64" 
+##                        login 
+##                     "aphalo" 
+##                         user 
+##                     "aphalo" 
+##               effective_user 
+##                     "aphalo"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{sessionInfo}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## R version 3.1.1 Patched (2014-08-14 r66373)
+## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## 
+## locale:
+## [1] LC_COLLATE=English_United Kingdom.1252 
+## [2] LC_CTYPE=English_United Kingdom.1252   
+## [3] LC_MONETARY=English_United Kingdom.1252
+## [4] LC_NUMERIC=C                           
+## [5] LC_TIME=English_United Kingdom.1252    
+## 
+## attached base packages:
+##  [1] splines   grid      methods   tools    
+##  [5] stats     graphics  grDevices utils    
+##  [9] datasets  base     
+## 
+## other attached packages:
+##  [1] scales_0.2.4               
+##  [2] RgoogleMaps_1.2.0.6        
+##  [3] rgdal_0.8-16               
+##  [4] sp_1.0-15                  
+##  [5] profr_0.3.1                
+##  [6] photobiologyVIS_0.2.0      
+##  [7] photobiologyUV_0.3.0       
+##  [8] photobiologygg_0.1.10      
+##  [9] plyr_1.8.1                 
+## [10] splus2R_1.2-0              
+## [11] proto_0.3-10               
+## [12] photobiologyAll_0.2.0      
+## [13] photobiologySun_0.1.2      
+## [14] photobiologyCry_0.1.2      
+## [15] photobiologyPhy_0.2.5      
+## [16] photobiologySensors_0.1.6  
+## [17] photobiologyLEDs_0.1.2     
+## [18] photobiologyLamps_0.1.12   
+## [19] photobiologyFilters_0.1.12 
+## [20] photobiologyWavebands_0.1.0
+## [21] photobiology_0.3.10        
+## [22] microbenchmark_1.3-0       
+## [23] mapproj_1.2-2              
+## [24] maps_2.3-7                 
+## [25] lubridate_1.3.3            
+## [26] Hmisc_3.14-4               
+## [27] survival_2.37-7            
+## [28] lattice_0.20-29            
+## [29] gridExtra_0.9.1            
+## [30] ggtern_1.0.3.2             
+## [31] ggmap_2.3                  
+## [32] ggplot2_1.0.0              
+## [33] GGally_0.4.7               
+## [34] Formula_1.1-2              
+## [35] data.table_1.9.3           
+## [36] stringr_0.6.2              
+## [37] knitr_1.6                  
+## 
+## loaded via a namespace (and not attached):
+##  [1] cluster_1.15.2      codetools_0.2-8    
+##  [3] colorspace_1.2-4    digest_0.6.4       
+##  [5] evaluate_0.5.5      formatR_0.10       
+##  [7] gtable_0.1.2        highr_0.3          
+##  [9] latticeExtra_0.6-26 MASS_7.3-33        
+## [11] memoise_0.2.1       munsell_0.4.2      
+## [13] png_0.1-7           RColorBrewer_1.0-5 
+## [15] Rcpp_0.11.2         reshape_0.8.5      
+## [17] reshape2_1.4        rjson_0.2.14       
+## [19] RJSONIO_1.3-0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\backmatter
+
+\end{document}

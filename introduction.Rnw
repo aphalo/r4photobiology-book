@@ -1,3 +1,14 @@
+<<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
+opts_knit$get()
+search()
+getwd()
+@
+
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
 \chapter{Introduction}
 
 \begin{abstract}

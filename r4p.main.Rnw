@@ -15,6 +15,8 @@
 % needed for Lucida
 \linespread{1.04}
 
+\usepackage[footinfo, missing={`none'}]{gitinfo} % remember to setup Git hooks
+
 \usepackage{hologo}
 
 \usepackage[british]{babel}
@@ -25,20 +27,21 @@
 \DeclareGraphicsExtensions{.jpg,.pdf}
 
 \usepackage{microtype}
+\usepackage[style=authoryear-comp,firstinits,sortcites,maxcitenames=2,%
+    mincitenames=1,maxbibnames=10,minbibnames=10,backref,uniquename=mininit,%
+    uniquelist=minyear,sortfirstinits=true]{biblatex}%,refsection=chapter
+
 \usepackage[hyperindex,bookmarks,pdfview=FitB,%backref,
             pdftitle={R for Photobiology},%
             pdfkeywords={photobiology, visible radiation, ultraviolet radiation, R, quantification, methods, calculations},%
             pdfsubject={Photobiology},%
             pdfauthor={Pedro J. Aphalo, Andreas Albert}%
             ]{hyperref}
-\usepackage[style=authoryear-comp,firstinits,sortcites,maxcitenames=2,%
-    mincitenames=1,maxbibnames=10,minbibnames=10,backref,uniquename=mininit,%
-    uniquelist=minyear,sortfirstinits=true]{biblatex}%,refsection=chapter
-
 %\chapterstyle{veelo}
 
 \usepackage{color,calc,soul}%,graphicx,fourier
 \definecolor{nicegreen}{rgb}{.129,.647,.149}
+\definecolor{grey50}{rgb}{.5,.5,.5}
 \makeatletter
 \newlength\dlf@normtxtw
 \setlength\dlf@normtxtw{\textwidth}
@@ -88,12 +91,12 @@ A handbook}}\par
 \vspace{\drop}
 {\Large Pedro J. Aphalo\\ and\\ Andreas Albert}\par
 \vfill
-{\footnotesize DRAFT\\ \today\\ \copyright\ 2013-2014 by the authors}\par
+{\footnotesize Git: tag\gitVtagn , committed with hash \gitAbbrevHash\ on \gitAuthorIsoDate\\ by\ \gitAuthorName \\PDF created \today\\ \copyright\ 2013-2014 by the authors}\par
 \vspace*{\drop}
 \endgroup}
 
-\setcounter{tocdepth}{2}
-\setcounter{secnumdepth}{3}
+\maxsecnumdepth{subsection}
+\maxtocdepth{section}
 
 \usepackage{siunitx}
 \usepackage{framed}
@@ -105,10 +108,17 @@ A handbook}}\par
 
 \usepackage{abbrev}
 \usepackage{r4photobiology}
+%\usepackage{glossaries}
+%\usepackage{imakeidx}
 
 \addbibresource{rbooks.bib}
 \addbibresource{handbook.bib}
-\addbibresource{photobio.bib}
+\addbibresource{guidelines.bib}
+
+%\makeindex
+%\makeglossaries
+%\loadglsentries{gp_glossary}
+
 
 \newcommand{\gls}[1]{} % until start building the glossary.
 
@@ -117,10 +127,11 @@ A handbook}}\par
 % knitr setup
 
 <<setup, include=FALSE, cache=FALSE>>=
-library(knitr)
 opts_knit$set(child.command = 'include')
-opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf')
-# opts_chunk$set(tidy=FALSE)
+opts_knit$set(self.contained=FALSE)
+opts_knit$set(concordance=TRUE)
+opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=FALSE)
+opts_chunk$set(tidy=FALSE)
 options(replace.assign=TRUE,width=50)
 @
 
@@ -133,19 +144,24 @@ opts_fig_medium <- list(fig.width=6, fig.height=4, out.width='.64\\textwidth')
 opts_chunk$set(opts_fig_narrow)
 @
 
-<<libraries, eval=TRUE, include=FALSE, cache=FALSE>>=
-library(ggplot2)
-# library(ggmap)
-# library(gtern)
-library(photobiologyAll)
-library(photobiologygg)
-@
-
-<<own-set-up, echo=FALSE, include=FALSE>>=
-my_version <- packageVersion("photobiology")
+<<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
 incl_chaps <- TRUE
 incl_ckbk <- TRUE
+incl_data <- TRUE
+incl_acq <- TRUE
 incl_apdx <- TRUE
+eval_diag <- FALSE
+@
+
+<<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
+opts_knit$get()
+search()
+getwd()
+@
+
+<<save-current-ls, echo=FALSE, include=FALSE>>=
+# objects not to delete
+main_ls <- c(ls(), "main_ls")
 @
 
 \thispagestyle{empty}
@@ -171,7 +187,9 @@ incl_apdx <- TRUE
 
 \mainmatter
 
-\part{Getting ready}
+\setsecnumdepth{subsection}
+
+\part{Preliminaries}
 
 <<child-intro, child='introduction.Rnw', eval=incl_chaps>>=
 @
@@ -188,7 +206,12 @@ incl_apdx <- TRUE
 <<child-suite, child='suite.Rnw', eval=incl_chaps>>=
 @
 
-\part{Cookbook}
+<<echo=FALSE, include=FALSE>>=
+current_ls <- ls()
+rm(list = setdiff(current_ls, main_ls))
+@
+
+\part{Cookbook of calculations}
 
 <<child-uwirrad, child='physics.Rnw', eval=incl_ckbk>>=
 @
@@ -205,37 +228,59 @@ incl_apdx <- TRUE
 <<child-wtirrad, child='wtirrad.Rnw', eval=incl_ckbk>>=
 @
 
+<<echo=FALSE, include=FALSE>>=
+current_ls <- ls()
+rm(list = setdiff(current_ls, main_ls))
+@
+
 <<child-wtirrad, child='transmittance.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-colour, child='colour.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-photoreceptors, child='photoreceptors.Rnw', eval=incl_ckbk>>=
-@
-
-<<child-sources, child='sources.Rnw', eval=incl_ckbk>>=
-@
-
-<<child-filters, child='filters.Rnw', eval=incl_ckbk>>=
-@
-
 <<child-plots, child='plots.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-calibration, child='calibration.Rnw', eval=incl_ckbk>>=
+\part{Catalogue of data sources}
+
+<<child-sources, child='sources.Rnw', eval=incl_data>>=
 @
 
-<<child-simulation, child='simulation.Rnw', eval=incl_ckbk>>=
+<<child-filters, child='filters.Rnw', eval=incl_data>>=
 @
 
-<<child-measurement, child='measurement.Rnw', eval=incl_ckbk>>=
+<<child-photoreceptors, child='photoreceptors.Rnw', eval=incl_data>>=
 @
 
-<<child-performance, child='performance.Rnw', eval=incl_ckbk>>=
+<<echo=FALSE, include=FALSE>>=
+current_ls <- ls()
+rm(list = setdiff(current_ls, main_ls))
 @
+
+\part{Data acquisition and modelling}
+
+<<child-calibration, child='calibration.Rnw', eval=incl_acq>>=
+@
+
+<<child-simulation, child='simulation.Rnw', eval=incl_acq>>=
+@
+
+<<child-measurement, child='measurement.Rnw', eval=incl_acq>>=
+@
+
+<<echo=FALSE, include=FALSE>>=
+current_ls <- ls()
+rm(list = setdiff(current_ls, main_ls))
+@
+
+<<child-performance, child='performance.Rnw', eval=FALSE>>=
+@
+
+\printbibliography
 
 \appendix
+
 \part{Appendixes}
 
 <<child-r-calc, child='R.as.calculator.Rnw', eval=incl_apdx>>=
@@ -244,8 +289,15 @@ incl_apdx <- TRUE
 <<child-r-scripts, child='R.scripts.Rnw', eval=incl_apdx>>=
 @
 
-<<child-r-scripts, child='R.plotting.Rnw', eval=incl_apdx>>=
+<<child-r-data, child='R.data.Rnw', eval=incl_apdx>>=
 @
+
+<<child-r-plotting, child='R.plotting.Rnw', eval=incl_apdx>>=
+@
+
+<<child-r-data, child='R.readings.Rnw', eval=incl_apdx>>=
+@
+
 
 \chapter{Build information}
 
@@ -262,7 +314,5 @@ sessionInfo()
 @
 
 \backmatter
-
-\printbibliography
 
 \end{document}

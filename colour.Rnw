@@ -1,3 +1,8 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
 \chapter{Colour}
 
 \begin{abstract}
@@ -66,13 +71,13 @@ Examples for spectra, in this case the solar spectrum:
 with(sun.data,
      s_e_irrad2rgb(w.length, s.e.irrad))
 with(sun.data,
-     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF2.data))
+     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF2.spct))
 with(sun.data,
-     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF10.data))
+     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF10.spct))
 with(sun.data,
-     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC2.data))
+     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC2.spct))
 with(sun.data,
-     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC10.data))
+     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC10.spct))
 @
 
 Except for the first example, we specificity the visual sensitivity data to use.
@@ -109,3 +114,6 @@ for (j in 0:(rowCount-1))
 
 @
 
+<<>>=
+try(detach(package:photobiology))
+@

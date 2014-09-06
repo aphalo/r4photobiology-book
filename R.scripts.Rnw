@@ -1,6 +1,6 @@
-<<echo=FALSE, eval=TRUE>>=
-# clear everything from the R environment
-# rm(list=ls())
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
 @
 
 \chapter{R Scripts and Programming}\label{chap:R:scripts}
@@ -288,7 +288,7 @@ Play with the use conditional execution, with both simple and compound statement
 
 There is in R a \texttt{switch} statement, that we will not describe here, that can be used to select among ``cases'', or several alternative statements, based on an expression evaluating to a number or a character string.
 
-\subsusbsection{Vectorized}
+\subsubsection{Vectorized}
 
 The vectorized conditional execution is coded by means of a \textbf{function} called \texttt{ifelse} (one word). This function takes three arguments: a logical vector, a result vector for TRUE, a result vector for FALSE. All three can be any construct giving the necessary argument as their result. In the case of result vectors, recycling will apply if they are not of the correct length. \textcolor{red}{The length of the result is determined by the length of the logical vector in the first argument!}.
 

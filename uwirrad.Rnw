@@ -1,3 +1,14 @@
+<<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
+opts_knit$get()
+search()
+getwd()
+@
+
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
 \chapter{Unweighted irradiance}\label{chap:uw:irrad}
 
 \begin{abstract}
@@ -9,12 +20,12 @@
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
-library(photobiologyVIS)
-library(photobiologyUV)
+library(photobiologyWavebands)
 @
 
 %%%%
 \section{Introduction}\label{sec:uw:intro}
+
 
 
 %%%%
@@ -35,7 +46,7 @@ with(sun.data,
                        new_waveband(400, 700)))
 @
 
-Function \code{PAR()} is predefined in package \PBVIS as a convenience function, so the code above can be replaced by:
+Function \code{PAR()} is predefined in package \PBWB as a convenience function, so the code above can be replaced by:
 
 <<>>=
 with(sun.data,
@@ -87,7 +98,7 @@ with(sun.data,
      photon_irradiance(w.length, s.e.irrad, PAR())) * 1e6
 @
 
-\code{PAR()} is predefined in package \PBVIS as a convenience function, see section \ref{sec:energy:irrad} for an example with arbitrary values for $\lambda_1$ and $\lambda_2$.
+\code{PAR()} is predefined in package \PBWB as a convenience function, see section \ref{sec:energy:irrad} for an example with arbitrary values for $\lambda_1$ and $\lambda_2$.
 
 %%%%
 \section[Task: irradiance from spectral photon irradiance]{Task: calculate energy and photon irradiances from spectral photon irradiance}\label{sec:uw:irrad:q2e}
@@ -354,4 +365,9 @@ with(sun.data,
      split_photon_irradiance(w.length, s.e.irrad,
                              c(400, 500, 600, 700),
                              scale="percent"))
+@
+
+<<>>=
+try(detach(package:photobiologyWavebands))
+try(detach(package:photobiology))
 @

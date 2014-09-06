@@ -12,7 +12,10 @@
 *.bcf
 *.bak
 *.blg
+Rprof.out
 ggmapFileDrawer/
 cache/
 figure/
-ggmapTemp.png
+*.gin
+profile1.out
+knitr_test/

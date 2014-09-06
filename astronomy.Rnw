@@ -1,3 +1,8 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
 \chapter{Astronomy}\label{chap:astronomy}
 
 \begin{abstract}
@@ -235,4 +240,11 @@ ggplot(daylengths,
   geom_line() +
   scale_y_continuous(breaks=c(0,6,12,18,24), limits=c(0,24)) +
   labs(x = "Date", y = "Daylength (h)", colour="Location")
+@
+
+<<>>=
+try(detach(package:photobiology))
+try(detach(package:lubridate))
+try(detach(package:ggmap))
+try(detach(package:ggplot2))
 @

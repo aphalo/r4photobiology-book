@@ -1,3 +1,8 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
 \chapter{Radiation sources}\label{chap:sources}
 
 \begin{abstract}
@@ -7,13 +12,12 @@
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<eval=FALSE>>=
 library(photobiology)
 library(photobiologySun)
 library(photobiologyLamps)
 library(photobiologyLEDs)
-library(photobiologyVIS)
-library(photobiologyUV)
+library(photobiologyWavebands)
 library(ggplot2)
 library(ggtern)
 library(photobiologygg)

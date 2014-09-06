@@ -1,121 +1,150 @@
-<<echo=FALSE, eval=TRUE>>=
-# clear everything from the R environment
-# rm(list=ls())
-@
+% !Rnw root = r4p.main.Rnw
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide)
+opts_knit$set(concordance=TRUE)
 @
 
 \chapter{Making publication quality plots with R}\label{chap:R:plotting}
 
 \section{Packages used in this chapter}
 
-For executing the examples listed in this chapter you need first to load the following packages from the library:
+For executing the examples listed in this chapter you need first to load the following packages from the library, the last three packages seem to interfere with each other, in particular GGally does not function in ggtern is loaded, so the are loaded only in the sections where they are used:
 <<>>=
-library(ggplot2)
-library(scales)
-library(ggtern)
-library(ggmap)
-library(rgdal)
-library(Hmisc)
 library(plyr)
 library(grid)
-library(photobiologygg)
+library(Hmisc)
+library(ggplot2)
+library(scales)
+# library(rgdal)
+# library(ggtern)
+# library(ggmap)
+# library(GGally)
+@
+
+<<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
+opts_knit$get()
+search()
+getwd()
 @
 
 \section{Introduction}
 
 Being R extensible, in addition to the built-in plotting functions, there are several alternatives provided by packages. Of the general purpose ones, the most extensively used are \code{Lattice} and \code{ggplot2}. There are packages that add extra functionality to these packages.
 
-In the examples in this handbook we mainly use \code{ggplot}, \code{ggmap} and \code{ggtern}, together with our own \code{photobiologygg}. In this appendix we give a very brief introduction to the `grammar of graphics' and \code{ggplot2}.
+In the examples in this handbook we mainly use \code{ggplot}, \code{ggmap} and \code{ggtern}. In this appendix we give an introduction to the `grammar of graphics' and \code{ggplot2}. There is ample literature on the use of ggplot2, starting with very good reference documentation at \url{http://ggplot2.org/}. The book `R Graphics Cookbook' \cite{Chang2013} is very useful and should be always near you, when using the package, as it contains many worked out examples. There is some overlap between this appendix and the documents mentioned above. There is little well-organized literature on packages extending ggplot2, and as we make use of several of them in this handbook, we have included some examples of their use in this appendix.
 
 \section{Bases of plotting with \code{ggplot2}}
 
-The grammar of graphics is based on aesthetics (\code{aes}) as for example colour, geometric elements \code{geom\_\ldots} such as lines, and points, statistics \code{stat\_\ldots}, scales \code{scale\_\ldots}, labels \code{labs}, and themes \code{theme\_\ldots}. Plots are assembled from these elements, we start with a plot with two aesthetics, and one geom:
+The grammar of graphics is based on aesthetics (\code{aes}) as for example color, geometric elements \code{geom\_\ldots} such as lines, and points, statistics \code{stat\_\ldots}, scales \code{scale\_\ldots}, labels \code{labs}, and themes \code{theme\_\ldots}. Plots are assembled from these elements, we start with a plot with two aesthetics, and one geometry. In the examples that follow we will use the \code{mtcars} data set included in R.
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
-  geom_line()
+ggplot(mtcars, aes(x=disp, y=mpg)) +
+  geom_point()
 @
 
-Aesthetics can be `assigned' to data variables, and to constants:
+Aesthetics can be `linked' to data variables, either continuous (numeric) or categorical (factor). Variable \code{cyl} is encoded in the \code{mtcars} dataframe as numeric values. Even though only three values are present, a continuous color scale is used.
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad, colour="red")) +
-  geom_line()
+ggplot(mtcars, aes(x=disp, y=mpg, colour=cyl)) +
+  geom_point()
 @
 
-Data can be the `result of a calculation':
+We can convert \code{cyl} in a factor `on-the-fly' to force the use of a discrete color scale.
 
 <<>>=
-ggplot(sun.spc * gg400.spc, aes(x=w.length, y=s.q.irrad)) +
-  geom_line()
+ggplot(mtcars, aes(x=disp, y=mpg, colour=factor(cyl))) +
+  geom_point()
 @
 
-The aesthetics and data given as \code{ggplot}'s arguments become the defaults for the geoms, but geoms also take aesthetics and data as arguments, which then override the defaults:
+Data assigned to an aesthetic can be the `result of a calculation'.
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
-  geom_line(colour="red") +
-  geom_line(data=sun.spc * gg400.spc, colour="blue")
+ggplot(mtcars, aes(x=factor(cyl), y=mpg / disp)) +
+  geom_point()
 @
 
-Another way of plotting these data, is to first assemble a single data.frame or data.table with all the data. We will use the example data that is as data.tables:
+Within \code{aes} the aesthetics are interpreted as being a function of the values in the data. If given outside \code{aes} they are interpreted as constants, which apply to one geom if given within the call to \code{geom\_xxx} but outside \code{aes} or to the whole plot if given within \code{ggplot} but outside \code{aes}. The aesthetics and data given as \code{ggplot}'s arguments become the defaults for all the geoms, but geoms also take aesthetics and data as arguments, which then override the defaults.
 
 <<>>=
-unfiltered_sun.spc <- copy(sun.spc)
-unfiltered_sun.spc[ , filter := "none"]
-filtered_sun.spc <- sun.spc * gg400.spc
-filtered_sun.spc[ , filter := "GG400"]
-data4plot.spc <- rbind(unfiltered_sun.spc, filtered_sun.spc)
-data4plot.spc[ , filter := factor(filter)]
+ggplot(mtcars, aes(x=disp, y=hp, fill=factor(cyl))) +
+  geom_point(shape=21, colour="grey10")
 @
 
-Now we can do the plot assigning \code{filter} to an aesthetic:
+In the next example we override the \code{color} aesthetic in \code{geom\_smooth}\footnote{Smoothing and curve fitted is discussed in more detail in section \ref{sec:???}.}, causing all the data to be fitted together
 
 <<>>=
-ggplot(data4plot.spc, aes(x=w.length, y=s.q.irrad, colour=filter)) +
-  geom_line()
+ggplot(mtcars, aes(x=disp, y=hp, colour=factor(cyl))) +
+  geom_point() +
+  geom_smooth(colour="black")
 @
 
-We can assign the same variable to more than one aesthetic:
+We can assign the same variable to more than one aesthetic, and the combined key will be produced automatically.
 
 <<>>=
-ggplot(data4plot.spc, aes(x=w.length, y=s.q.irrad,
-                   colour=filter, linetype=filter)) +
-  geom_line()
+ggplot(mtcars, aes(x=disp, y=hp, colour=factor(cyl), shape=factor(cyl))) +
+  geom_point()
 @
 
-We can change the labels for the different aesthetics, and give a title:
+We can change the labels for the different aesthetics, and give a title (\verb!\n! means `new line' and can be used to continue a label in the next line). In this case, if two aesthetics are linked to the same variable, the labels supplied should be identical, otherwise two separate keys will be produced.
 
 <<>>=
-ggplot(data4plot.spc,
-       aes(x=w.length, y=s.q.irrad * 1e6, colour=filter)) +
-  geom_line() +
-  labs(x="Wavelength (nm)",
-       y="Spectral photon irradiance\n(umol m-2 s-1 nm-1)",
-       colour="Filter:",
-       title="Filtered and unfiltered solar spectrum")
+ggplot(mtcars, aes(x=disp, y=hp, colour=factor(cyl), shape=factor(cyl))) +
+  geom_point() +
+    labs(x="Engine displacement)",
+       y="Gross horsepower",
+       colour="Number of\ncylinders",
+       shape="Number of\ncylinders",
+       title="Motor Trend Car Road Tests (1973-74 models)")
 @
 
-We can assign a ggplot object to a variable:
+We can assign a ggplot object or a part of it to a variable, and then assemble a new plot from the different pieces.
 
 <<>>=
-myplot <- ggplot(data4plot.spc,
-       aes(x=w.length, y=s.q.irrad * 1e6, colour=filter)) +
-  geom_line() +
-  labs(x="Wavelength (nm)",
-       y="Spectral photon irradiance\n(umol m-2 s-1 nm-1)",
-       colour="Filter:",
-       title="Filtered and unfiltered solar spectrum")
+myplot <- ggplot(mtcars, aes(x=disp, y=mpg, colour=factor(cyl))) +
+  geom_point()
+mylabs <- labs(x="Engine displacement)",
+       y="Gross horsepower",
+       colour="Number of\ncylinders",
+       shape="Number of\ncylinders",
+       title="Motor Trend Car Road Tests (1973-74 models)")
+myplot
+myplot + mylabs
 @
 
-And now we can add more elements to the plot stored in the variable:
+And now we can assemble them into plots.
 
 <<>>=
-myplot + theme_bw()
-myplot + scale_y_log10()
+myplot + mylabs + theme_bw()
+myplot + mylabs + theme_bw() + ylim(0, NA)
+@
+
+We can also save intermediate results.
+
+<<>>=
+mylogplot <- myplot + scale_y_log10(breaks=c(10,20,40), limits=c(8,45))
+mylogplot + mylabs + theme_bw()
+@
+
+The are a few predefined themes, even the default \code{theme\_grey} can come in handy because the first parameter to themes is the point size used as reference to calculate all other font sizes. You can see in the two examples bellow, that the size of all text elements changes proportionally.
+
+<<>>=
+myplot + mylabs + theme_grey(10)
+myplot + mylabs + theme_grey(16)
+@
+
+Be aware that the different geoms and elements can be added in almost any order to a ggplot object, but they will be plotted in the order that they are added. We use the \code{alpha} aesthetic to make the confidence band less transparent so that the example is easier to see in print.
+
+<<>>=
+ggplot(mtcars, aes(x=disp, y=mpg, colour=factor(cyl))) +
+  geom_point() + geom_smooth(colour="black", alpha=0.7)
+@
+
+The plot looks different if the order of the geoms is swapped. The data points overlapping the confidence band are more clearly visible in this second example because they are above the shaded area instead of bellow it.
+
+<<>>=
+ggplot(mtcars, aes(x=disp, y=mpg, colour=factor(cyl))) +
+   geom_smooth(colour="black", alpha=0.7) + geom_point()
 @
 
 \section{Adding fitted curves, including splines}
@@ -123,25 +152,25 @@ myplot + scale_y_log10()
 We will now show an example of use of \code{stat\_smooth} using the default spline smoothing.
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
-  geom_line() +
-  stat_smooth()
+myplot + stat_smooth(colour="black")
 @
 
-By adjusting one of its parameters, \code{span}, we make the spline more ``flexible'':
+Instead of using the default spline, we can use a linear model fit. In this example we use a linear model, fitted by lm, as smoother:
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
-  geom_line() +
-  stat_smooth(span=0.1)
+myplot + stat_smooth(method="lm", colour="black")
 @
 
-Instead of using the default spline, we can use a linear model fit. In this example we use a polynomial of order 8, fitted by lm, as smoother:
+Instead of using the default linear regression as smoother, we can use a linear model fit. In this example we use a polynomial of order 2 fitted by lm.
 
 <<>>=
-ggplot(sun.spc, aes(x=w.length, y=s.q.irrad)) +
-  geom_line() +
-  stat_smooth(method="lm", formula=y~poly(x,8))
+myplot + stat_smooth(method="lm", formula=y~poly(x,2), colour="black")
+@
+
+If we do not use \code{colour="black"} then the colour aesthetics supplied to \code{ggplot} is used, and splits the data into three groups to which the model is fitted separately.
+
+<<>>=
+myplot + stat_smooth(method="lm")
 @
 
 It is possible to use other types of models, including GAM and GLM, as smoothers, but we will not give examples of the use these more advanced models.
@@ -211,7 +240,7 @@ fig2 + stat_summary(fun.data = "mean_sdl",
                     colour="red", size=1, alpha=0.7)
 @
 
-We do not show it here, but instead of using these functions (from package \codet{Hmisc}) it is possible to define one's own functions.
+We do not show it here, but instead of using these functions (from package \code{Hmisc}) it is possible to define one's own functions.
 
 Finally we plot the means in a bar plot, with the observations superimposed and $p = 0.95$ C.I. (the order in which the geoms are added is important: by having \code{geom\_point} last it is plotted on top of the bars. In this case we set fill, colour and alpha (transparency) to constants, but in more complex data sets they can be assigned to factors in the data set.
 
@@ -256,7 +285,7 @@ ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
   stat_function(fun=sin)
 @
 
-In this case we need to change the x-axis scale to better suit the sin function and the use of radians as angular units:
+In this case we need to change the x-axis scale to better suit the sin function and the use of radians as angular units\footnote{The use of \code{expression} is explained in detail in section \ref{sec:??}, an the use of \code{scales} in section \ref{sec:???}.}.
 
 <<>>=
 ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
@@ -270,20 +299,23 @@ ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
 
 \section{Plotting text}
 
-One can use \code{geom\_text} to add text labels to observations. The aesthetic \code{label} gives text and the usual aesthetics \code{x} and \code{y} the location of the labels. As one would expect the \code{colour} aesthetic can be also used for text. In addition \code{angle} and \code{vjust} and \code{hjust} can be used to rotate the label, and adjust its position. The default value of zero for both \code{hjust} and \code{vjust} centres the label. The centre of the text is at the supplied \code{x} and \code{y} coordinates. `Vertical' and `horizontal' for justification refer to the text, not the plot. This is important when \code{angle} is different from zero. Negative justification values, shift the labe left or down, and positive values right or up. A value of 1 or -1 sets the text so that its edge is at the supplied coordinate. Values outside the range $-1\ldots 1$ sift the text even further away.
+One can use \code{geom\_text} to add text labels to observations. The aesthetic \code{label} gives text and the usual aesthetics \code{x} and \code{y} the location of the labels. As one would expect the \code{colour} aesthetic can be also used for text. In addition \code{angle} and \code{vjust} and \code{hjust} can be used to rotate the label, and adjust its position. The default value of zero for both \code{hjust} and \code{vjust} centres the label. The centre of the text is at the supplied \code{x} and \code{y} coordinates. `Vertical' and `horizontal' for justification refer to the text, not the plot. This is important when \code{angle} is different from zero. Negative justification values, shift the label left or down, and positive values right or up. A value of 1 or -1 sets the text so that its edge is at the supplied coordinate. Values outside the range $-1\ldots 1$ sift the text even further away.
 
 <<>>=
-my.data <- data.frame(x=1:10, y=rep(2, 10), label=paste(letters[1:10], " "))
-ggplot(my.data, aes(x,y,label=label)) + geom_text(angle=45, hjust=1) + geom_point()
+my.data <-
+  data.frame(x=1:5, y=rep(2, 5), label=paste(letters[1:5], " "))
+ggplot(my.data, aes(x,y,label=label)) +
+  geom_text(angle=45, hjust=1) + geom_point()
 @
 
 In this example we use \code{paste} (which uses recycling here) to add a space at the end of each label. Justification values outside the range $-1\ldots 1$ are allowed, but are relative to the with of the label. As the default font used in this case has variable with characters, the justification would be inconsistent (e.g. try the code above but using \code{hjust} set to 3 instead of to 1 without pasting a space character to the labels.)
 
+
 \section{Scales}
 
-Scales map data onto aesthetics. There are different types of scales depending on the characteristics of the data being mapped: scales can be continuous or discrete. And of course, there are scales for different attributes of the plotted object, such as \code{colour}, \code{size}, posititon (\code{x, y, z}), \code{alpha} or transparency, \code{angle}, justification, etc. This means that many properties of, for example, the symbols used in a plot can be either set by a constant, or mapped to data. The most elemental mapping is \code{identity}, which means that the data is taken at its face value. In a numerical scale, say \code{scale\_x\_continuous}, this means that for example a `5' in the data is plotted at a posiiton in the plot corresponding to the value `5' along the x-axis. A simple mapping could be a log10 transformation, that we can easily achieve with the pre-defined \code{scale\_x\_log10} in which case the position on the x-axis will be based on the logarithm of the original data. A continuous data variable can, if we think it useful for describing our data, be mapped to continuous scale either using an identity mapping or transformation, which for example could be useful if we want to map the value of a variable to the area of the symbol rather than its diameter.
+Scales map data onto aesthetics. There are different types of scales depending on the characteristics of the data being mapped: scales can be continuous or discrete. And of course, there are scales for different attributes of the plotted object, such as \code{colour}, \code{size}, position (\code{x, y, z}), \code{alpha} or transparency, \code{angle}, justification, etc. This means that many properties of, for example, the symbols used in a plot can be either set by a constant, or mapped to data. The most elemental mapping is \code{identity}, which means that the data is taken at its face value. In a numerical scale, say \code{scale\_x\_continuous}, this means that for example a `5' in the data is plotted at a position in the plot corresponding to the value `5' along the x-axis. A simple mapping could be a log10 transformation, that we can easily achieve with the pre-defined \code{scale\_x\_log10} in which case the position on the x-axis will be based on the logarithm of the original data. A continuous data variable can, if we think it useful for describing our data, be mapped to continuous scale either using an identity mapping or transformation, which for example could be useful if we want to map the value of a variable to the area of the symbol rather than its diameter.
 
-Discrete scales work in a similar way. We can use \code{scale\_colour\_identity} and have in our data a variable with values that are valid colour names like "red" or "blue". However we can also assign the \code{colour} aesthtic to a factor with levels like "control", and "treatment", an these levels will be mapped to colours from the default palette, unless we chose a different one, or even use \code{scale\_colour\_manual} to assign whatever colour we want to each level to be mapped. The same is true for other discrete scales like symbol \code{shape} and \code{linetype}. Be aware that for example for colour, and `numbers' there are both discrete and continuous scales available.
+Discrete scales work in a similar way. We can use \code{scale\_colour\_identity} and have in our data a variable with values that are valid colour names like "red" or "blue". However we can also assign the \code{colour} aesthetic to a factor with levels like "control", and "treatment", an these levels will be mapped to colours from the default palette, unless we chose a different one, or even use \code{scale\_colour\_manual} to assign whatever colour we want to each level to be mapped. The same is true for other discrete scales like symbol \code{shape} and \code{linetype}. Be aware that for example for colour, and `numbers' there are both discrete and continuous scales available.
 
 Advanced scale manipulation requires the package \code{scales} to be loaded. Some simple examples follow.
 
@@ -336,6 +368,108 @@ ggplot(data.frame(x=c(0, 2 * pi)), aes(x=x)) +
            fill="white",
            x=c(0, 1, 2) * pi, y=0,
            size=6)
+@
+
+\section{Using facets}
+
+Sets of coordinated plots are a very useful tool for visualizing data. These became popular through the \code{trellis} graphs in S, and the \code{lattice} package in R. The basic idea is to have row and/or columns of plots with common scales, all plots showing values for the same response variable. This is useful when there are multiple classification factors in a data set. Similarly looking plots but with free scales or with the same scale but a `floating' intercept are sometimes also useful. In \code{ggplot2} there are two possible types of facets: facets organized in a grid, and facets on along a single `axis' but wrapped into several rows. In the examples below we use \code{geom\_point} but faceting can be used with any geom, and even with maps and ternary plots.
+
+<<>>=
+p <- ggplot(mtcars, aes(mpg, wt)) + geom_point()
+# With one variable
+p + facet_grid(. ~ cyl)
+@
+
+<<>>=
+p + facet_grid(cyl ~ .)
+@
+
+<<>>=
+p + facet_grid(. ~ cyl, scales = "free")
+@
+
+<<>>=
+p + facet_grid(. ~ cyl, scales = "free", space = "free")
+@
+
+<<>>=
+p + facet_grid(vs ~ am)
+@
+
+<<>>=
+p + facet_grid(vs ~ am, margins=TRUE)
+@
+
+<<>>=
+p + facet_grid(. ~ vs + am)
+@
+
+<<>>=
+p + facet_grid(. ~ vs + am, labeller = label_both)
+@
+
+<<>>=
+p + facet_grid(. ~ vs + am, margins=TRUE)
+@
+
+<<>>=
+p + facet_grid(cyl ~ vs, labeller = label_both)
+@
+
+<<>>=
+mtcars$cyl12 <- factor(mtcars$cyl, labels = c("alpha", "beta", "sqrt(x, y)"))
+p1 <- ggplot(mtcars, aes(mpg, wt)) + geom_point()
+p1 + facet_grid(. ~ cyl12, labeller = label_parsed)
+@
+
+<<>>=
+p + facet_grid(. ~ vs, labeller = label_bquote(alpha ^ .(x)))
+@
+
+<<>>=
+p + facet_wrap(~ cyl)
+@
+
+<<>>=
+p + facet_wrap(~ vs + am, ncol=2)
+@
+
+At the current time, \code{facet\_wrap} does not accept labellers, so neither expressions nor including the name of the variable in the labels can be done automatically.
+
+\section{Plot matrices}
+
+In this type of plot a set of several variables are plotted against each other, forming all possible pairs.
+There is a function \code{plotmatrix} in ggplot2, but it is deprecated. Function \code{ggpairs} from package GGally provides this type of plots as an extension to ggplot.
+
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide_square)
+@
+
+<<>>=
+library(GGally)
+@
+
+<<>>=
+# Use sample of the diamonds data
+data(diamonds, package="ggplot2")
+diamonds.samp <- diamonds[sample(1:dim(diamonds)[1],200),]
+# Custom Example
+pm <- ggpairs(
+diamonds.samp[,1:3],
+upper = list(continuous = "density", combo = "box"),
+lower = list(continuous = "points", combo = "dot"),
+color = "cut",
+title = "Diamonds"
+)
+pm
+@
+
+<<>>=
+try(detach(package:GGally))
+@
+
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide)
 @
 
 \section{Circular plots}
@@ -470,7 +604,7 @@ ggplot(my.anscombe, aes(x,y)) +
   facet_wrap(~case, ncol=2)
 @
 
-It is not much more difficult to make it look simlar to the original
+It is not much more difficult to make it look similar to the original
 
 <<>>=
 ggplot(my.anscombe, aes(x,y)) +
@@ -496,6 +630,7 @@ This classical example form Anscombe \cite{xxx} demonstrates four very different
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_narrow)
+library(ggtern)
 @
 
 Being an extension to \code{ggplot2} the main difference is that a ternary plot can be created using \code{coord\_tern} and that the three aesthetics \code{x, y, z} are required. By default the values of the variables mapped to these aesthetics are re-expressed as percentages or fractions. We present here only a few examples, and we encourage the readers to check the package's web site at \url{http://www.ggtern.com}.
@@ -592,7 +727,17 @@ ggplot(data = USDA, aes(y=Clay, x=Sand, z=Silt,
        color = 'Textural Class')
 @
 
+<<>>=
+try(detach(package:ggtern))
+@
+
 \section{Plotting data onto maps}
+
+<<>>=
+library(ggmap)
+library(rgdal)
+@
+
 
 Another extension to package \code{ggplot2} is package \code{ggmap}. Package \code{ggmap} makes it possible to plot data using normal \code{ggplot2} syntax on top of a map. Maps can be easily retrieved from the internet through different services. Some of these services require the user to register and obtain a key for access. As Google Maps do not require such a key for normal resolution maps, we use this service in the examples.
 
@@ -627,7 +772,7 @@ ggmap(Europe1, extent = "normal")
 
 @
 
-To demostrate the option to fetch a map in black and white instead of the default colour version, we use a map of Europe of type \code{terrain}.
+To demonstrate the option to fetch a map in black and white instead of the default colour version, we use a map of Europe of type \code{terrain}.
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_narrow)
@@ -664,7 +809,7 @@ BIO3 <- get_map("Viikinkaari 1, 00790 Helsinki",
 ggmap(BIO3)
 @
 
-We will now show a simple example of plotting data on a map, first by expliciply giving the coordinates, and in the second example we show how to fetch from Google Maps coordinate values that can be then plotted. We use function \code{geocode}. In one example we use \code{geom\_point} and \code{geom\_text}, while in the second example we use \code{annotate}, but either approach could have been used for both plots:
+We will now show a simple example of plotting data on a map, first by explicitly giving the coordinates, and in the second example we show how to fetch from Google Maps coordinate values that can be then plotted. We use function \code{geocode}. In one example we use \code{geom\_point} and \code{geom\_text}, while in the second example we use \code{annotate}, but either approach could have been used for both plots:
 
 <<plot-maps-6, message=FALSE, cache=TRUE>>=
 viikki <- get_map("Viikki",
@@ -690,7 +835,7 @@ ggmap(viikki, extent = "normal") +
            label="BIO3", hjust=-0.3, colour="yellow")
 @
 
-Using \code{get\_map} from package \code{ggmap} for drawing a world map is not possible at the time of writting. In addition a worked out example of how to plot shape files, and how to dowload them from a repository is suitable as our final example. We also show how to change the map projection. The example is adapted from a blog post at \url{http://rpsychologist.com/working-with-shapefiles-projections-and-world-maps-in-ggplot}.
+Using \code{get\_map} from package \code{ggmap} for drawing a world map is not possible at the time of writing. In addition a worked out example of how to plot shape files, and how to download them from a repository is suitable as our final example. We also show how to change the map projection. The example is adapted from a blog post at \url{http://rpsychologist.com/working-with-shapefiles-projections-and-world-maps-in-ggplot}.
 
 We start by downloading the map data archive files from \url{http://www.naturalearthdata.com} which is available in different layers. We only use three of the available layers: `physical' which describes the coastlines and a grid and bounding box, and `cultural' which gives country borders. We save them in a folder with name `maps', which is expected to already exist. After downloading each file, we unzip it.
 
@@ -809,7 +954,7 @@ theme_map_opts <-
              axis.title.y = element_blank()))
 @
 
-Finally we plot all the layers using the Robinson projection. This is still a \code{ggplot} and consequently one can plot data on top of the map, being aware of the transfromation of the scale needed to make the data location match locations in a map using a certain projection.
+Finally we plot all the layers using the Robinson projection. This is still a \code{ggplot} and consequently one can plot data on top of the map, being aware of the transformation of the scale needed to make the data location match locations in a map using a certain projection.
 
 <<>>=
 ggplot(bbox_robin.data, aes(long,lat, group=group)) +
@@ -832,7 +977,49 @@ ggplot(bbox_robin.data, aes(long,lat, group=group)) +
                     guide="none")
 @
 
-\section{Inset plots using same data}
+<<>>=
+try(detach(package:ggmap))
+try(detach(package:rgdal))
+@
+
+\section{Advanced topics}
+
+\section{Using \code{plotmath} expressions}
+
+Expressions are very useful but rather tricky to use because the syntax is unusual. In \code{ggplot} one can either use expressions explicitly, or supply them as character string labels, and tell \code{ggplot} to parse them. For titles, axis-labels, etc. (anything that is defined with \code{labs}) the expressions have to entered explicitly, or saved as such into a variable, and the variable supplied as argument. When plotting expressions using \code{geom\_text} expression arguments should be supplied as character strings and the optional argument \code{parse=TRUE} used to tell the geom to interpret the labels as expressions. We will go through a few useful examples.
+
+We will revisit the example from the previous section, but now using subscripted Greek $\alpha$ for labels. In this example we use as subscripts numeric values from another variable in the same dataframe.
+
+<<>>=
+my.data$greek.label <- paste("alpha[", my.data$x, "]", sep="")
+(fig <- ggplot(my.data, aes(x,y,label=greek.label)) +
+   geom_text(angle=45, hjust=1.2, parse=TRUE) + geom_point())
+@
+
+Setting an axis label with superscripts. The easiest way to deal with spaces is to use `~' or `~~'. One can connect pieces that would otherwise cause errors using `*'. If we
+
+<<>>=
+fig + labs(x=expression(alpha), y=expression(Speed~~(m~s^{-1})))
+@
+
+It is possible to store expressions in variables.
+
+<<>>=
+my.title <- expression(sqrt(alpha[1] + frac(beta, gamma)))
+fig + labs(title=my.title)
+@
+
+Annotations are plotted ignoring the default aesthetics, but still make use of geoms, so labels for annotations also have to be supplied as character strings and parsed.
+
+<<>>=
+fig + ylim(1,3) +
+  annotate("text", label="sqrt(alpha[1] + frac(beta, gamma))",
+           y=2.5, x=3, size=8, colour="red", parse=TRUE)
+@
+
+We discuss how to use expressions as facet labels in section \ref{sec:facet}.
+
+\subsection{Inset plots using same data}
 
 Example from \url{http://stackoverflow.com/questions/20708012/embedding-a-subplot-in-ggplot-ggsubplot}, authored by Baptiste Auguié \url{http://baptiste.github.io/}.
 
@@ -858,7 +1045,7 @@ main +
   scale_y_continuous(limits=c(0, 4))
 @
 
-\section{Adding elements using \code{grid}}
+\subsection{Adding elements using \code{grid}}
 
 \code{ggplot2} creates the plots using package \code{grid}, consequently it is possible to manipulate \code{ggplot} objects using \code{grid} functions. Here we present a very simple example. For more information on using \code{grid} together with \code{ggplot2} please see \cite{Murriel2009}
 
@@ -904,4 +1091,12 @@ print(fig1)
 dev.off()
 @
 
+
+<<>>=
+try(detach(package:scales))
+try(detach(package:plyr))
+try(detach(package:Hmisc))
+try(detach(package:ggplot2))
+try(detach(package:grid))
+@
 

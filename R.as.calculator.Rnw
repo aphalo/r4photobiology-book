@@ -1,3 +1,7 @@
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide)
+opts_knit$set(concordance=TRUE)
+@
 
 \chapter{R as a powerful calculator}\label{chap:R:as:calc}
 
@@ -116,7 +120,7 @@ z <- numeric(0)
 z
 ls(pattern="^z$")
 rm(z)
-z
+try(z)
 ls(pattern="^z$")
 @
 
@@ -131,7 +135,7 @@ Inf / Inf
 Inf + 4
 @
 
-One thing to be aware of, and which we will discuss again later, is that numbers in computers are almost always stored with finite precision. This means that they not always behave as Real numbers as defined in mathematics. In R the usual numbers are stored as \textt{double-precision floats}, which means that there are limits to the largest and smallest numbers that can be represented (approx. $-1 \cdot 10^{308}$ and $1 \cdot 10^{308})$, and the number of significant digits that can be stored (usually described as $\epsilon$ (epsilon, abbreviated \texttt{eps}, defined as the largest number for which $ 1 + \epsilon = 1$)). This can be sometimes important, and can generate unexpected results in some cases, especially when testing for equality. In the example below, the result of the subtraction is still exactly 1. \label{par:float}
+One thing to be aware of, and which we will discuss again later, is that numbers in computers are almost always stored with finite precision. This means that they not always behave as Real numbers as defined in mathematics. In R the usual numbers are stored as \texttt{double-precision floats}, which means that there are limits to the largest and smallest numbers that can be represented (approx. $-1 \cdot 10^{308}$ and $1 \cdot 10^{308})$, and the number of significant digits that can be stored (usually described as $\epsilon$ (epsilon, abbreviated \texttt{eps}, defined as the largest number for which $ 1 + \epsilon = 1$)). This can be sometimes important, and can generate unexpected results in some cases, especially when testing for equality. In the example below, the result of the subtraction is still exactly 1. \label{par:float}
 
 <<numbers-9>>=
 1 - 1e-20
@@ -305,7 +309,7 @@ d
 e <- c(a, b, "c")
 e
 h <- "1"
-h + 2
+try(h + 2)
 @
 
 Vectors of characters are not the same as character strings.
@@ -337,10 +341,23 @@ cat(c)
 
 Above, you will not see any effect of these escapes when using \code{print}: \verb|\n| represents `new line' and \verb|\t| means `tab' (tabulator). The \textit{scape codes} work only in some contexts, as when using \code{cat} to generate the output. They also are very useful when one wants to split an axis-label, title or label in a plot into two or more lines.
 
+\section{Finding the `mode' of objects}
+
+Variables have \emph{mode} that determines what can be stored in them. But differently to other languages, assignment of a variable of a different mode is allowed. However, there is a restriction that all elements in a vector, array or matrix, must be of the same mode, while this is not required for lists. Functions with names starting with \code{is.} are tests returning \code{TRUE}, \code{FALSE} or \code{NA}.
+
+<<mode-1>>=
+my_var <- 1:5
+mode(my_var)
+is.numeric(my_var)
+is.logical(my_var)
+is.character(my_var)
+my_var <- "abc"
+mode(my_var)
+@
 
 \section{Type conversions}
 
-The least intuitive ones are those related to logical values. All others are as one would expect.
+The least intuitive ones are those related to logical values. All others are as one would expect. By convention, functions used to convert objects from one mode to a different one have names starting with \code{as.}.
 
 <<convert-1>>=
 as.character(1)
@@ -449,6 +466,115 @@ b[selector]
 b[indexes]
 @
 
+\section{Factors}
+
+Factors are used for indicating categories, most frequently the factors describing the treatments in an experiment, or categories in a survey. They can be created either from numerical or character vectors. The different possible values are called \emph{levels}. Normal factors created with \code{factor} are unordered or categorical. R has ordered factors, that can be created with function \code{ordered}.
+
+<<facors-1>>=
+my.vector <- c("treated", "treated", "control", "control", "control", "treated")
+my.factor <- factor(my.vector)
+my.factor <- factor(my.vector, levels=c("treatment", "control"))
+@
+
+It is always preferable to use meaningful names for levels, although it is possible to use numbers. The order of levels becomes important when plotting data, as it affects the order of the levels along the axes, or in legends. Converting factors to numbers, even if the levels look like numbers when displayed, they are just character strings.
+
+<<factors-2>>=
+my.vector2 <- rep(3:5, 4)
+my.factor2 <- factor(my.vector2)
+as.numeric(my.factor2)
+as.numeric(as.character(my.factor2))
+@
+
+Internally factor levels are stored as running numbers starting from zero, and those are the numbers returned by \code{as.numeric} applied to a factor.
+
+Factors are very important in R. In contrast to other statistical software in which the role of a variable is set when defining a model to be fitted or setting up a test, in R models are specified exactly in the same way for ANOVA and regression analysis, as linear models. What `decides' what type of model is fitted is whether the explanatory variable is a factor (giving ANOVA) or a numerical variable (giving regression). This makes a lot of sense, as in most cases, considering an explanatory variable as categorical or not, depends on the design of the experiment or survey, in other words, is a property of the data rather than of the analysis.
+
+\section{Lists}
+
+Elements of a \code{list} are not ordered, and can be of different type. Lists can be also nested. Elements in list are named, and normally are accessed by name. List are defined using function \code{list}.
+
+<<lists-1>>=
+a.list <- list(x = 1:6, y = "a", z = c(TRUE, FALSE))
+a.list
+str(a.list)
+a.list$x
+a.list[["x"]]
+a.list[[1]]
+a.list[1]
+a.list[c(1,3)]
+try(a.list[[c(1,3)]])
+@
+
+Using double square brackets for indexing gives the element stored in the list, in its original mode, in the example above, \code{a.list[["x"]]} returns a numeric vector, while \code{a.list[1]} returns a list containing the numeric vector \code{x}. \code{a.list\$x} returns the same value as \code{a.list[["x"]]}, a numeric vector. While \code{a.list[c(1,3)]} returns a list of length two, \code{a.list[[c(1,3)]]}.
+
+\section{Data frames}
+
+Data frames are a special type of list, in which each element is a vector or a factor of the same length. The are crested with function \code{data.frame} with a syntax similar to that used for lists. When a shorter vector is supplied as argument, it is recycled, until the full length of the variable is filled. This is very different to what we obtained in the previous section when we created a list.
+
+<<data-frames-1>>=
+a.df <- data.frame(x = 1:6, y = "a", z = c(TRUE, FALSE))
+a.df
+str(a.df)
+a.df$x
+a.df[["x"]]
+a.df[[1]]
+class(a.df)
+@
+
+R is an object oriented language, and objects belong to classes. With function \code{class} we can query the class of an object. As we saw in the two previous chunks lists and data frames objects belong to two different classes.
+
+We can add also to lists and data frames.
+
+<<data-frames-2>>=
+a.df$x2 <- 6:1
+a.df$x3 <- "b"
+a.df
+@
+
+We have added two columns to the data frame, and in the case of column \code{x3} recycling took place. Data frames are extremely important to anyone analysing or plotting data in R. One can think of data frames as tightly structured work-sheets, or as lists. As you may have guessed from the examples earlier in this section, there several different ways of accessing columns, rows, and individual observations stored in a data frame. The columns can to some extent be treated as elements in a list, and can be accessed both by name or index (position). When accessed by name, using \code{\$} or double square brackets a single column is returned as a vector or factor. In contrast to lists, data frames are `rectangular' and for this reason the values stored can be also accessed in a way similar to how elements in a matrix are accessed, using two indexes. As we saw for vectors indexes can be vectors of integer numbers or vectors of logical values. For columns they can be vectors of character strings matching the names of the columns. When using indexes it is extremely important to remember that the indexes are always given \textbf{row first}.
+
+<<data-frames-3>>=
+a.df[ , 1]   # first column
+a.df[ , "x"] # first column
+a.df[1, ]    # first row
+a.df[1:2, c(FALSE, FALSE, TRUE, FALSE, FALSE)] 
+             # first two rows of the third column
+a.df[a.df$z , ] # the rows for which z is true
+a.df[a.df$x > 3, -3] # the rows for which x > 3 for
+                 # all columns except the third one 
+@
+
+When the names of data frames are long, complex conditions become awkward to write. In such cases \code{subset} is handy because evaluation is done in the `environment' of the data frame, i.e.\ the names of the columns are recognized if entered directly.
+
+<<data-frames-4>>=
+subset(a.df, x > 3)
+@  
+
+When calling functions that return a vector, data farme, or other structure, the square brackets can be appended to the rightmost parenthesis of the function call, in the same way as to the name of a variable holding the same data.
+
+<<data-frames-5>>=
+subset(a.df, x > 3)[ , -3]
+subset(a.df, x > 3)$x
+@
+
+None of the examples in the last three code chunks alter the original data frame \code{a.df}. We can store the returned value using a new name, if we want to preserve \code{a.df} unchanged, or we can assign the result to \code{a.df} deleting in the process the original \code{a.df}. The next to examples do assignment to \code{a.df}, but either to only one columns, or by indexing the individual values in both the `right side' and `left side' of the assignment.
+Another way to delete a column from a data frame is to assign \code{NULL} to it.
+
+<<data-frames-6>>=
+a.df[["x2"]] <- NULL
+a.df$x3 <- NULL
+a.df
+@
+
+In the previous code chuck we deleted the last two columns of the data frame \code{a.df}.
+Finally an esoteric trick for you think about.
+
+<<data-frames-7>>=
+a.df[1:6, c(1,3)] <- a.df[6:1, c(3,1)]
+a.df
+@
+
+
 \section{Simple built-in statistical functions}
 
 Being R's main focus in statistics, it provides functions for both simple and complex calculations, going from means and variances to fitting very complex models. we will start with the simple ones.
@@ -468,5 +594,5 @@ length(x)
 
 \section{Functions and execution flow control}
 
-Although functions can be defined and used at the command prompt, we will discuss them when looking at scripts. We will do the same in the case of flow-control statements (e.g. repetition and conditional execution).
+Although functions can be defined and used at the command prompt, we will discuss them when looking at scripts. We will do the same in the case of flow-control statements (e.g.\ repetition and conditional execution).
 
