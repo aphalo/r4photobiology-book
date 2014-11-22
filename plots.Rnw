@@ -61,9 +61,9 @@ information we want to highlight. A line plot of a spectrum with peaks and/or va
 highlights the shape of the spectrum, while a spectrum plotted with the area below the curve
 filled highlights the total energy irradiance (or photon irradiance) for a given region
 of the spectrum. Adding a bar with the colours corresponding to the different
-wavelengths, facilitates the reading of the plot for people not very familiar with the
+wavelengths, facilitates the reading of the plot for people not familiar with the
 interpretation on wavelengths expressed in nanometres. Labeling regions of the spectrum
-with waveband names also tends to facilitate the understanding of plotted spectral data.
+with waveband names also facilitates the understanding of plotted spectral data.
 A basic line plot of spectral data can be easily done with \code{ggplot2} or any of the
 other plotting functions in R. In this chapter we focus on how to add to basic line and
 dot plots all the `fancy decorations' that can so much facilitate their reading and
@@ -77,6 +77,63 @@ of a background.
 If you are not familiar with \code{ggplot2} and \code{ggtern} plotting, please read Appendix
 \ref{chap:R:plotting} on page \pageref{chap:R:plotting} before continuing reading the
 present chapter.
+
+%%%%
+\section{Task: simple plotting of spectra}\label{sec:simple:plot:spc}
+
+Pakage \code{photobiologygg} defines specializations of the generic \code{plot} function of R. These functions are available for spectral objects. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows. As the spectral objects have spectral irradiance expressed in known energy or photon units, and an attribute indicating the time unit, the axis labels are produced automatically. The two plots that follow show spectral irradiance, and spectral daily exposure, respectively.
+
+<<plot-sun-default-0>>=
+plot(sun.spct)
+@
+
+<<plot-sun-default-1>>=
+plot(sun.daily.spct)
+@
+
+The parameter \code{unit} can be set to \code{"photon"} to obtain a plot depicting spectral photon irradiance. This works irrespective of whether the \code{source.spct} object contains the spectral data in photon or energy units.
+
+<<plot-sun-default-2>>=
+plot(sun.spct, unit="photon")
+@
+
+A list of wave bands, or a single wave band, to be used for annotation can be supplied through the \code{bands} parameter. A \code{NULL} waveband results in no waveband labels, while the next example shows how to obtain the total irradiance.
+
+<<plot-sun-default-3>>=
+plot(sun.spct, bands=PAR(), unit="photon")
+@
+
+<<plot-sun-default-4>>=
+plot(sun.spct, bands=NULL)
+@
+
+<<plot-sun-default-5>>=
+plot(sun.spct, bands=waveband(sun.spct))
+@
+
+Of course the arguments to these parameters can be supplied in different combinations, and combined with other functions as need. This last example shows how to plot using photon-based units, selecting only a specific region of the spectrum, annotated with the red and far-red photon irradiances, using Prof.\ Harry Smith's definitions for these two wavebands.
+
+<<plot-sun-default-6>>=
+plot(trim_spct(sun.spct, waveband(c(600,800))),
+     bands=list(Red("Smith"), Far_red("Smith")), unit="photon")
+@
+
+Two final examples show how to annotate a spectrum plot by equal sized wavebands.
+
+<<plot-sun-default-7>>=
+plot(sun.spct,
+     bands=split_bands(c(300,800), length.out=5), unit="photon")
+@
+
+<<plot-sun-default-8>>=
+plot(trim_spct(sun.spct, PAR()),
+     bands=split_bands(PAR(), length.out=6), unit="photon")
+@
+
+\begin{framed}
+\noindent
+As the current implementation uses annotations rather than a \code{ggplot} `statistic', waveband irradiance annotations ignore global aesthetics and facets. If used for simultaneous plotting of several spectra (stored in a single R object), then parameter \code{bands} should given \code{NULL} as argument.
+\end{framed}
 
 %%%%
 \section[Task: plotting spectra with ggplot2]{Task: plotting spectra with \code{ggplot2}}\label{sec:plot:spc}

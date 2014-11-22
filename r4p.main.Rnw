@@ -136,11 +136,11 @@ options(replace.assign=TRUE,width=50)
 @
 
 <<fig-setup, include=FALSE, cache=FALSE>>=
-opts_fig_wide <- list(fig.width=8, fig.height=4, out.width='.95\\textwidth')
-opts_fig_wide_square <- list(fig.width=6, fig.height=6, out.width='.95\\textwidth')
-opts_fig_narrow <- list(fig.width=4, fig.height=4, out.width='.47\\textwidth')
-opts_fig_very_narrow <- list(fig.width=3, fig.height=3, out.width='.32\\textwidth')
-opts_fig_medium <- list(fig.width=6, fig.height=4, out.width='.64\\textwidth')
+opts_fig_wide <- list(fig.width=8, fig.height=5, out.width='.95\\textwidth')
+opts_fig_wide_square <- list(fig.width=7, fig.height=7, out.width='.95\\textwidth')
+opts_fig_narrow <- list(fig.width=5, fig.height=5, out.width='.47\\textwidth')
+opts_fig_very_narrow <- list(fig.width=4, fig.height=4, out.width='.32\\textwidth')
+opts_fig_medium <- list(fig.width=6, fig.height=5, out.width='.64\\textwidth')
 opts_chunk$set(opts_fig_narrow)
 @
 
