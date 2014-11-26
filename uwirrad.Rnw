@@ -38,7 +38,32 @@ The task to be completed is to calculate the (energy) irradiance ($\irr$) in \wa
 \label{eq:energy:irrad}
 \end{equation}
 
-Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and $\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$:
+Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and 
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The functions available for this task when working with spectral objects are \code{e\_irrad} and \code{q\_irrad}, returning energy- and photon irradiance, respectively. The "names" of the returned valued is set according to the waveband used.
+
+<<>>=
+e_irrad(sun.spct, waveband(c(400,700)))
+@
+
+or using the built-in \code{PAR} waveband constructor, predefined in package \PBWB as a convenience function,
+
+<<>>=
+e_irrad(sun.spct, PAR())
+@
+
+or if no waveband is supplied as argument, then irradiance is computed for the whole range of wavelengths in the spectral data, and the `name' attribute is generated accordingly.
+
+<<>>=
+e_irrad(sun.spct)
+@
+
+Both \code{e\_irrad} and \code{q\_irrad} accept, in addition to a waveband as second argument, a list of wavebands. In this case, the returned value is a numeric vector of the same length as the list.
+
+<<>>=
+e_irrad(sun.spct, list(UVB(), UVA()))
+@
+
+If you are not using spectral objects, then function \code{energy\_irradiance}, which accepts the spectral data as vectors, can be used instead, at the cost of less concise code.
 
 <<tidy=FALSE>>=
 with(sun.data,
@@ -46,7 +71,7 @@ with(sun.data,
                        new_waveband(400, 700)))
 @
 
-Function \code{PAR()} is predefined in package \PBWB as a convenience function, so the code above can be replaced by:
+Using function \code{PAR()}, the code above becomes:
 
 <<>>=
 with(sun.data,

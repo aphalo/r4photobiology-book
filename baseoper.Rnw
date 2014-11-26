@@ -22,7 +22,7 @@ library(photobiologyLEDs)
 %%%%
 \section{Introduction}
 
-The suite uses object-oriented programming for its higher level `user-friendly' syntax. Objects are implemented using ``S3'' classes. The two main distinct kinds of objects are different types of spectra, and wavebands. Spectral objects contain, as their name implies, spectral data. Wavebands contain the information needed to calculate irradiance, non-weighted or weighted (effective), and a name and a label to be used in output printing. Functions and operators are defined for operations on these objects, alone and in combination. We will first describe spectra, and then wavebands, in each case describing operators and functions. Towards the end of the chapter we describe  
+The suite uses object-oriented programming for its higher level `user-friendly' syntax. Objects are implemented using ``S3'' classes. The two main distinct kinds of objects are different types of spectra, and wavebands. Spectral objects contain, as their name implies, spectral data. Wavebands contain the information needed to calculate irradiance, non-weighted or weighted (effective), and a name and a label to be used in output printing. Functions and operators are defined for operations on these objects, alone and in combination. We will first describe spectra, and then wavebands, in each case describing operators and functions. Towards the end of the chapter we describe
 
 \section{Spectra}\label{sec:spct:objects}
 
@@ -33,7 +33,7 @@ For spectra the classes are a specialization of \code{data.table} which are in t
 \sloppy
 The suite defines a \code{generic.spct} class, from which two specialized classes, `\code{filter.spct}, \code{reflector.spct}, \code{source.spct}, \code{response.spct} and \code{chroma.spct} are derived. Having this class structure allows us to create special methods and operators, which use the same names than the generic ones defined by R itself, but take into account the special properties of spectra. Each spectrum object can hold only one spectrum.
 
-Objects of class \code{generic.spct} one one mandatory component \code{w.length}, containing wavelength values in \Unit{nm}. 
+Objects of class \code{generic.spct} one one mandatory component \code{w.length}, containing wavelength values in \Unit{nm}.
 
 Objects of class \code{source.spct} have two mandatory components \code{w.length}, and \code{s.e.irrad}, and an optional one, \code{s.q.irrad}. They are expected to contain data expressed always in the same units: nm, for \code{w.length}, \wattnm for \code{s.e.irrad}, and \molnm for \code{s.q.irrad}. Objects can have a ``comment'' attribute with a textual description. Additional columns are ignored, but not deleted, unless the operation applied could invalidate them.
 
@@ -49,6 +49,20 @@ Objects of class \code{response.spct} have two mandatory components \code{w.leng
 
 If the data is already stored in a data frame or data table, or even a list, and if the components have one of the recognized ``standard'' names, specific \code{setGenericSpct}, \code{setSourceSpct}, \code{setFilterSpct}, \code{setReflectorSpct} commands can be used to change the class attribute and check that the object is valid. These functions have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}, they modify their argument directly---the argument is passed by \emph{reference} instead of by \emph{copy} as is usual in R. As \code{sun.data} is part of the package, we need to make a copy before modifying it, with one's own data frames or data tables this step is not need.
 
+We can create a new object from two vectors,
+
+<<>>=
+source.spct(sun.data$w.length, s.e.irrad = sun.data$s.e.irrad)
+@
+
+or make a copy of a data frame or a data table and convert it into a source spectrum,
+
+<<>>=
+as.source.spct(sun.data)
+@
+
+or convert an existing data frame or data table into a source spectrum\footnote{In this case we need to copy sun.data because this data frame is protected as a member of the package. This is rarely needed with user's data.}.
+
 <<>>=
 my_sun.spct <- sun.data
 setSourceSpct(my_sun.spct)
@@ -58,10 +72,13 @@ We can query the class of an object.
 
 <<>>=
 class(my_sun.spct)
-is(my_sun.spct, "source.spct")
+is.source.spct(my_sun.spct)
 @
 
-Table \ref{tab:obj:components} lists the different `names' understood by these functions, and the required and optional components of the different object classes.
+Similar functions are available for filter, reflector and response spectral objects.
+
+
+Table \ref{tab:obj:components} lists the different `names' understood by the constructor functions which take a data frame as argument, and the required and optional components of the different spectral object classes.
 
 \begin{table}
 \caption{Names of spectral object components, and the additional names recognized during automatic spectral object creation, and the units of expression.}\label{tab:obj:components}
@@ -98,17 +115,33 @@ chroma.spct & w.length & --- & wl, wavelength & nm\\
 
 \subsection{What operators are available for operations between spectra?}
 
-All operations with spectral objects affect only the required components listed in Table \ref{tab:obj:components}, all optional components are deleted, while unrecognized components are left alone. There will be seldom need to add numerical components, and the user should take into account that the paradigm of the suite is that each spectrum is stored as a separate object. However, it is allowed, and possibly useful to have factors as components with levels identifying different bands, or color vectors with RGB values. Ancilary information information useful for presentation and plotting might sometimes be useful.
+All operations with spectral objects affect only the required components listed in Table \ref{tab:obj:components}, all optional components are deleted, while unrecognized components are left alone. There will be seldom need to add numerical components, and the user should take into account that the paradigm of the suite is that each spectrum is stored as a separate object. However, it is allowed, and possibly useful to have factors as components with levels identifying different bands, or color vectors with RGB values. Ancillary information information useful for presentation and plotting might sometimes be useful.
 
-Several operators are defined for spectral objects. Using operators is an easy and familiar way of doing calculations, but operators are rather inflexible (they can take at most two arguments, the operands) and performance is slower than with functions with additional parameters that allow optimizing the algorithm. The operators are defined so that an operation between two \code{filter.spct} objects yields another \code{filter.spct} object, an operation between two \code{reflector.spct} yields a \code{reflector.spct} object, and operations between a \code{filter.spct} object and a \code{source.spct}, between a \code{reflector.spct} and a \code{source.spct}, or between two \code{source.spct} objects yields a \code{source.spct} object. The object returned contains data only for the overlapping region of wavelengths. The objects do NOT need to have values at the same wavelengths, as interpolation is handled transparently. All four basic maths operations are supported with any combination of spectra, and the user is responsible for deciding which calculations make sense and which not. Operations can be concatenated and combined. The unary negation operator is also implemented.
+Several operators are defined for spectral objects. Using operators is an easy and familiar way of doing calculations, but operators are rather inflexible (they can take at most two arguments, the operands) and performance is slower than with functions with additional parameters that allow optimizing the algorithm. The operators are defined so that an operation between two \code{filter.spct} objects yields another \code{filter.spct} object, an operation between two \code{reflector.spct} yields a \code{reflector.spct} object, and operations between a \code{filter.spct} object and a \code{source.spct}, between a \code{reflector.spct} and a \code{source.spct}, or between two \code{source.spct} objects yield \code{source.spct} objects. The object returned contains data only for the overlapping region of wavelengths. The objects do NOT need to have values at the same wavelengths, as interpolation is handled transparently. All four basic maths operations are supported with any combination of spectra, and the user is responsible for deciding which calculations make sense and which not. Operations can be concatenated and combined. The unary negation operator is also implemented.
+
+For example we can convolute the emission spectrum of a light source and the transmittance spectrum of a filter.
+
+<<>>=
+sun.spct * polyester.new.spct
+@
 
 \subsection{What operators are available for operations between spectra and numeric vectors?}
 
 The same four basic math operators plus power (`\verb|^|') are defined for the case when the first term or factor is a spectrum and the second one a numeric vector, possibly of length one. Recycling rules apply. These operations do not alter \code{w.length}, just the other \textit{required} components such as spectral irradiance and transmittance. The optional components are deleted as they can be recalculated if needed. Unrecognized `user' components are left unchanged.
 
-\subsection{What math functions are available for operations on spectra?}
+For example we can divide an spectrum by a numeric value (a vector of length 1, which gets recycle). The value returned is a spectral object of the same type as the firt argument.
+
+<<>>=
+sun.spct / 2
+@
+
+\subsection{What unary math functions are available for spectra?}
 
 Logarithms (\code{log, log10}), square root (\code{sqrt}) and exponentiation (\code{exp}) are defined for spectra. These functions are not applied on \code{w.length}, but instead to the other mandatory component \code{s.e.irrad}, \code{Rfr} or \code{Tfr}. Any optional numeric components are discarded. (Other user-supplied components should remain unchanged, but this needs further checking!)
+
+<<>>=
+log10(sun.spct)
+@
 
 \subsection{What `summary' functions are available for spectra?}
 
@@ -299,6 +332,7 @@ my_sun.spct <- copy(sun.spct)
 e2q(my_sun.spct)
 @
 
+%%%%%% CHECK THIS  and/or fix the code if needed
 \code{e2q} has a parameter \code{action}, with default \code{"add"}. Another valid argument value is \code{"replace"}, but it should be used with extreme care, as the returned object, is no longer a \code{source.spct} object and is not compatible with all operators and functions defined for \code{source.spct} objects.
 
 <<>>=
@@ -367,7 +401,7 @@ interpolate_spct(sun.spct, seq(290, 300, by=0.1))
 interpolate_spct(sun.spct, seq(290, 300, by=0.1), fill=0.0)
 @
 
-\code{interpolate\_spct} takes any \code{\_\_.spct} object, and returns an object of the same type as its imput. It can be used to interpolate source spectra as well as transmittance, reflectance, response, and even generic spectra.
+\code{interpolate\_spct} takes any \code{\_\_.spct} object, and returns an object of the same type as its input. It can be used to interpolate source spectra as well as transmittance, reflectance, response, and even generic spectra.
 
 \code{interpolate\_spectrum} takes numeric vectors as arguments, but is otherwise functionally equivalent.
 
@@ -394,13 +428,28 @@ Wavebands are derived from R lists. All valid R operations for lists can be also
 
 Wavebands are created by means of function \code{new\_waveband} which has several arguments, but except for the first two they have default values.
 
-The most simple \code{waveband} creation call is one supplying as arguments just the wavelength limits of the band.
+The simplest \code{waveband} creation call is one supplying as argument just any R object for which the \code{range} function returns the wavelength limits of the desired band.
+
+Any numeric vector of at least two elements, any spectral object or any waveband object is valid input.
+<<>>=
+waveband(c(300, 400))
+@
+
+As you can see above, a name and label are created automatically for the new wavebenad. The user can also supply these as arguments, but must be careful not to duplicate existing names.
+
+<<>>=
+waveband(c(300, 400), wb.name="a.name")
+@
+
+<<>>=
+waveband(c(300, 400), wb.name="a.name", wb.label="A nice name")
+@
+
+An alterantive function, taking two numbers, giving the boundaries of the waveband is also available.
 
 <<>>=
 new_waveband(300, 400)
 @
-
-As you can see from the printout a name and label are created automatically. The user can also supply these as arguments, but must be careful not to duplicate existing names. 
 
 <<>>=
 new_waveband(300, 400, wb.name="a.name")
@@ -410,13 +459,20 @@ new_waveband(300, 400, wb.name="a.name")
 new_waveband(300, 400, wb.name="a.name", wb.label="A nice name")
 @
 
-If we include a weighting function, there is still quite a lot of flexibility. One can supply either a function that takes energy irradiance as input or a function that takes photon irradiance as input. Unless both are supplied, the missing function will be automatically created. There is are also arguments related to normalization, both of the output, and of the SWF supplied as argument. In the examples above, `hinges' are created automatically for the range extremes. When using SWF with discontinuous derivatives, best results are obtained by supplying the hinges to be used as arguments to \code{new\_waveband}. An example follows for the definition of a waveband for the CIE98 SWF---the function \code{CIE.e.fun} is defined in package \code{photobiologyWavebands} but any R function taking a numeric vector of wavelengths as input and returning a numeric vector of the same length containing weights can be used. The use of SWFs is discussed in more detail in chapter \ref{chap:wt:irrad}.
+For both functions, if we include a weighting function, there is still quite a lot of flexibility. One can supply either a function that takes energy irradiance as input or a function that takes photon irradiance as input. Unless both are supplied, the missing function will be automatically created. There are also arguments related to normalization, both of the output, and of the SWF supplied as argument. In the examples above, `hinges' are created automatically for the range extremes. When using SWF with discontinuous derivatives, best results are obtained by supplying the hinges to be used as arguments to \code{new\_waveband}. An example follows for the definition of a waveband for the CIE98 SWF---the function \code{CIE.e.fun} is defined in package \code{photobiologyWavebands} but any R function taking a numeric vector of wavelengths as input and returning a numeric vector of the same length containing weights can be used. The use of SWFs is discussed in more detail in chapter \ref{chap:wt:irrad}.
+
+<<>>=
+waveband(c(250, 400),
+         weight="SWF", SWF.e.fun=CIE.e.fun, SWF.norm=298,
+         norm=298, hinges=c(249.99, 250, 298, 328, 399.99, 400),
+         wb.name="CIE98.298", wb.label="CIE98")
+@
 
 <<>>=
 new_waveband(w.low=250, w.high=400,
-               weight="SWF", SWF.e.fun=CIE.e.fun, SWF.norm=298,
-               norm=298, hinges=c(249.99, 250, 298, 328, 399.99, 400),
-               wb.name="CIE98.298", wb.label="CIE98")
+             weight="SWF", SWF.e.fun=CIE.e.fun, SWF.norm=298,
+             norm=298, hinges=c(249.99, 250, 298, 328, 399.99, 400),
+             wb.name="CIE98.298", wb.label="CIE98")
 @
 
 
@@ -427,7 +483,24 @@ Special methods for \code{waveband}s of \code{print} giving more compact output 
 
 \subsection{Operators and functions}
 
-Several functions described in chapters \ref{chap:uw:irrad}, \ref{chap:wt:irrad}, and \ref{chap:plots} use \code{waveband} objects as arguments. Those functions 
+Several functions described in chapters \ref{chap:uw:irrad}, \ref{chap:wt:irrad}, and \ref{chap:plots} use \code{waveband} objects as arguments. Those functions provide selective summaries of spectra.
+
+<<>>=
+e_irrad(sun.data, UVB()) / e_irrad(sun.data, VIS())
+@
+
+Multiplying a source spectrum by an un-weighted waveband, is equivalent to trimming with \code{fill} set to \code{NA}.
+ 
+<<>>=
+sun.spct * UVA()
+@
+
+Multiplying a source spectrum by a weighted waveband convolutes the spectrum with weights, yielding effective spectral irradiance.
+
+<<>>=
+sun.spct * CIE()
+@
+
 \section{Internal-use functions}\label{sec:base:internal}
 
 The generic function \code{check} can be used on any type of \code{.spct} object, and depending on its types checks that the required components are present. If they are missing they are added. If it is possible to calculate the missing values from other optional components, they are calculated, otherwise they are filled with \code{NA}. It is used internally during the creation of spectral objects.

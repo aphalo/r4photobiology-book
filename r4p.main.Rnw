@@ -145,11 +145,11 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_chaps <- TRUE
+incl_chaps <- FALSE
 incl_ckbk <- TRUE
-incl_data <- TRUE
-incl_acq <- TRUE
-incl_apdx <- TRUE
+incl_data <- FALSE
+incl_acq <- FALSE
+incl_apdx <- FALSE
 eval_diag <- FALSE
 @
 
