@@ -759,19 +759,19 @@ We can calculate the current position of the sun, in this case giving the positi
 \end{alltt}
 \begin{verbatim}
 ## $time
-## [1] "2014-11-27 00:22:26 EET"
+## [1] "2014-11-27 13:45:42 EET"
 ## 
 ## $azimuth
-## [1] 11.94001
+## [1] 207.1927
 ## 
 ## $elevation
-## [1] -48.04411
+## [1] 3.087934
 ## 
 ## $diameter
-## [1] 0.5403144
+## [1] 0.5403688
 ## 
 ## $distance
-## [1] 0.9868329
+## [1] 0.9867335
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1992,7 +1992,7 @@ For both functions, if we include a weighting function, there is still quite a l
 \end{alltt}
 
 
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning in new\_waveband(x.range[1], x.range[2] + 1e-04, weight = weight, : Warning: either both photon and energy SWFs should be supplied, or a value for the\\\#\#\ \ \ \ \ \ \ \ \ \ \ \ \ \  wavelength at which the function supplied is normalized should be supplied through SWF.norm}}\begin{verbatim}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning in new\_waveband(x.range[1], x.range[2], weight = weight, SWF.e.fun = SWF.e.fun, : Warning: either both photon and energy SWFs should be supplied, or a value for the\\\#\#\ \ \ \ \ \ \ \ \ \ \ \ \ \  wavelength at which the function supplied is normalized should be supplied through SWF.norm}}\begin{verbatim}
 ## CIE98.298 
 ## low (nm) 250 
 ## high (nm) 400 
@@ -2138,10 +2138,10 @@ For executing the examples listed in this chapter you need first to load the fol
 %%%%
 \section{Introduction}\label{sec:uw:intro}
 
-
+Functions \code{e\_irrad} and \code{q\_irrad} return energy irradiance and photon (or quantum) irradiance, and both take as argument a \code{source.spct} object containing either spectral (energy) irradiance or spectral photon irradiance data. An additional parameter accepting a \code{waveband} object, or a list of \code{waveband} objects, can be used to set the range(s) of wavelengths and spectral weighting function(s) to use for integration(s). Two additional functions, \code{energy\_irradiance} and \code{photon\_irradiance}, are defined for equivalent calculations on spectral irradiance data stored as numeric vectors.
 
 %%%%
-\section{Task: (energy) irradiance from spectral irradiance}\label{sec:uw:e2e}
+\section{Task: (energy) irradiance from spectral irradiance}\label{sec:uw:eirrad}
 
 The task to be completed is to calculate the (energy) irradiance ($\irr$) in \watt from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
@@ -2150,8 +2150,8 @@ The task to be completed is to calculate the (energy) irradiance ($\irr$) in \wa
 \label{eq:energy:irrad}
 \end{equation}
 
-Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and 
-$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The functions available for this task when working with spectral objects are \code{e\_irrad} and \code{q\_irrad}, returning energy- and photon irradiance, respectively. The "names" of the returned valued is set according to the waveband used.
+Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_irrad} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source.spct} object.
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2160,14 +2160,14 @@ $\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunl
 \end{alltt}
 \begin{verbatim}
 ## range.400.700 
-##      197.1762 
+##      196.7004 
 ## attr(,"time.unit")
 ## [1] "second"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-or using the built-in \code{PAR} waveband constructor, predefined in package \PBWB as a convenience function,
+or using the \code{PAR} waveband constructor, defined in package \PBWB as a convenience function,
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2185,9 +2185,43 @@ or using the built-in \code{PAR} waveband constructor, predefined in package \PB
 
 or if no waveband is supplied as argument, then irradiance is computed for the whole range of wavelengths in the spectral data, and the `name' attribute is generated accordingly.
 
-<<>>
-e_irrad(sun.spct)
-@
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{e_irrad}\hlstd{(sun.spct)}
+\end{alltt}
+\begin{verbatim}
+## range.293.800 
+##      269.1249 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+If a waveband extends outside of the wavelength range of the spectral data, spectral irradiance for unavailable wavelengths is assumed to be zero:
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{e_irrad}\hlstd{(sun.spct,} \hlkwd{waveband}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{100}\hlstd{,}\hlnum{400}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## range.100.400 
+##      28.32466 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{e_irrad}\hlstd{(sun.spct,} \hlkwd{waveband}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{100}\hlstd{,}\hlnum{250}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## range.100.250 
+##             0 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 Both \code{e\_irrad} and \code{q\_irrad} accept, in addition to a waveband as second argument, a list of wavebands. In this case, the returned value is a numeric vector of the same length as the list.
 
@@ -2205,23 +2239,11 @@ Both \code{e\_irrad} and \code{q\_irrad} accept, in addition to a waveband as se
 \end{kframe}
 \end{knitrout}
 
-If you are not using spectral objects, then function \code{energy\_irradiance}, which accepts the spectral data as vectors, can be used instead, at the cost of less concise code.
+\begin{small}
 
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{energy_irradiance}\hlstd{(w.length, s.e.irrad,}
-                       \hlkwd{new_waveband}\hlstd{(}\hlnum{400}\hlstd{,} \hlnum{700}\hlstd{)))}
-\end{alltt}
-\begin{verbatim}
-## range.400.700 
-##      196.7004
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
+Storing emission spectral data in \code{source.spct} objects is recommended, as it allows better protection against mistakes, and allows automatic detection of input data base of expression and units. However, it may be sometimes more convenient or efficient to keep spectral data in individual numeric vectors, or data frames. In such cases function \code{energy\_irradiance}, which accepts the spectral data as vectors can be used at the cost of less concise code and weaker error tests. In this case, the user must indicate whether spectral data is on energy or photon based units through parameter \code{unit.in}, which defaults to \code{"energy"}.
 
-Using function \code{PAR()}, the code above becomes:
+For example when using function \code{PAR()}, the code above becomes:
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2233,55 +2255,52 @@ Using function \code{PAR()}, the code above becomes:
 ##      PAR 
 ## 196.7004
 \end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-If no waveband is supplied as argument, then the whole range of wavelengths in the spectral data is used for the integration, and the `name' attribute is generated accordingly:
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{energy_irradiance}\hlstd{(w.length, s.e.irrad))}
+     \hlkwd{energy_irradiance}\hlstd{(w.length, s.e.irrad,} \hlkwd{PAR}\hlstd{(),} \hlkwc{unit.in}\hlstd{=}\hlstr{"energy"}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
-## range.293.800 
-##      269.1249
+##      PAR 
+## 196.7004
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-If a waveband that does not fully overlap with the data is supplied as argument, then spectral irradiance for wavelengths outside the range is assumed to be zero:
+where \code{sun.data} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
+
+
+The \code{sun.data} data frame also contains spectral photon irradiance values:
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{names}\hlstd{(sun.data)}
+\end{alltt}
+\begin{verbatim}
+## [1] "w.length"  "s.e.irrad" "s.q.irrad"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+which allows us to use:
+
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{energy_irradiance}\hlstd{(w.length, s.e.irrad,}
-                       \hlkwd{new_waveband}\hlstd{(}\hlnum{700}\hlstd{,}\hlnum{1000}\hlstd{)))}
+     \hlkwd{energy_irradiance}\hlstd{(w.length, s.q.irrad,} \hlkwd{PAR}\hlstd{(),} \hlkwc{unit.in}\hlstd{=}\hlstr{"photon"}\hlstd{))}
 \end{alltt}
 \begin{verbatim}
-## range.700.1000 
-##       44.09981
+##      PAR 
+## 196.7004
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-If a waveband that does not overlap with the data is supplied as argument, then spectral irradiance for wavelengths outside the range is assumed to be zero:
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{energy_irradiance}\hlstd{(w.length, s.e.irrad,}
-                       \hlkwd{new_waveband}\hlstd{(}\hlnum{100}\hlstd{,}\hlnum{200}\hlstd{)))}
-\end{alltt}
-\begin{verbatim}
-## range.100.200 
-##             0
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
+The other examples above can be re-written with similar syntax.
+
+\end{small}
 
 %%%%
-\section{Task: photon irradiance from spectral irradiance}\label{sec:uw:e2q}
+\section{Task: photon irradiance from spectral irradiance}\label{sec:uw:qirrad}
 
 The task to be completed is to calculate the photon irradiance ($\pfd$) in \mol from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
@@ -2291,28 +2310,75 @@ Combining equations \ref{eq:energy:irrad} and \ref{eq:energy:mol:photons} we obt
 \pfd[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \frac{h' \cdot c}{\lambda} \mathrm{d}\ \lambda
 \end{equation}
 
-Let's assume that we want to calculate photosynthetically active radiation (PAR) photon irradiance. In this example we will use example data for sunlight.
+Let's assume that we want to calculate photosynthetically active radiation (PAR) photon irradiance (frequently called PPFD or photosynthetic photon flux density), for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{q\_irrad}, returning photon irradiance in \mol. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source.spct} object.
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,} \hlkwd{PAR}\hlstd{()))}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{waveband}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{400}\hlstd{,}\hlnum{700}\hlstd{)))}
 \end{alltt}
 \begin{verbatim}
-##          PAR 
-## 0.0008937598
+## range.400.700 
+##  0.0008937598 
+## attr(,"time.unit")
+## [1] "second"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-If we want to have $\pfd[\PAR]$ (\PPFD) expressed in the usual units of \umol, we need to multiply the result above by $10^6$:
+to obtain the photon irradiance expressed in \umol we multiply the returned value by $1 \times 10^6$:
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{waveband}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{400}\hlstd{,}\hlnum{700}\hlstd{)))} \hlopt{*} \hlnum{1e6}
+\end{alltt}
+\begin{verbatim}
+## range.400.700 
+##      893.7598 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+or using the \code{PAR} waveband constructor, defined in package \PBWB as a convenience function,
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{PAR}\hlstd{())} \hlopt{*} \hlnum{1e6}
+\end{alltt}
+\begin{verbatim}
+##      PAR 
+## 893.7598 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Examples given in section \ref{sec:uw:eirrad} can all be converted by replacing \code{e\_irrad} function calls with \code{q\_irrad} function calls.
+
+\begin{small}
+
+Storing emission spectral data in \code{source.spct} objects is recommended (see section \ref{sec:uw:eirrad}). However, it may be sometimes more convenient or efficient to keep spectral data in individual numeric vectors, or data frames. In such cases function \code{photon\_irradiance}, which accepts the spectral data as vectors can be used at the cost of less concise code and weaker error tests. In this case, the user must indicate whether spectral data is on energy or photon based units through parameter \code{unit.in}, which defaults to \code{"energy"}.
+
+For example when using function \code{PAR()}, the code above becomes:
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,} \hlkwd{PAR}\hlstd{()))} \hlopt{*} \hlnum{1e6}
+     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,} \hlkwd{PAR}\hlstd{()),} \hlkwc{unit.in}\hlstd{=}\hlstr{"energy"}\hlstd{)}  \hlopt{*} \hlnum{1e6}
+\end{alltt}
+\begin{verbatim}
+##      PAR 
+## 893.7598
+\end{verbatim}
+\begin{alltt}
+\hlkwd{with}\hlstd{(sun.data,}
+     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,} \hlkwd{PAR}\hlstd{()))}  \hlopt{*} \hlnum{1e6}
 \end{alltt}
 \begin{verbatim}
 ##      PAR 
@@ -2321,72 +2387,34 @@ If we want to have $\pfd[\PAR]$ (\PPFD) expressed in the usual units of \umol, w
 \end{kframe}
 \end{knitrout}
 
-\code{PAR()} is predefined in package \PBWB as a convenience function, see section \ref{sec:energy:irrad} for an example with arbitrary values for $\lambda_1$ and $\lambda_2$.
+where \code{sun.data} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
 
-%%%%
-\section[Task: irradiance from spectral photon irradiance]{Task: calculate energy and photon irradiances from spectral photon irradiance}\label{sec:uw:irrad:q2e}
+\end{small}
 
-In the case of the calculation of energy irradiance from spectral photon irradiance the calculation is:
-\begin{equation}
-\irr[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \spfd\ \frac{\lambda}{h' \cdot c} \mathrm{d}\ \lambda
-\end{equation}
-
-And the code\footnote{The dataframe \code{sun.data} contains both spectral energy irradiance vales in `column' \code{s.e.irrad} and spectral photon irradiance in `column' \code{s.q.irrad}}:
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{energy_irradiance}\hlstd{(w.length, s.q.irrad,}
-                       \hlkwd{PAR}\hlstd{()),} \hlkwc{unit.in}\hlstd{=}\hlstr{"photon"}\hlstd{)}
-\end{alltt}
-\begin{verbatim}
-##          PAR 
-## 0.0008937598
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-The calculation of photon irradiance from spectral photon irradiance, is a simple integration, analogous to that in equation \ref{eq:energy:irrad}, and the code is:
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.q.irrad,}
-                       \hlkwd{PAR}\hlstd{()),} \hlkwc{unit.in}\hlstd{=}\hlstr{"photon"}\hlstd{)}
-\end{alltt}
-\begin{verbatim}
-##          PAR 
-## 4.157767e-09
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-%%%%
 \section{Task: irradiances for more than one waveband}\label{sec:uw:mult:wb}
 
-It is possible to calculate the irradiances for several wavebands with a single function call by supplying a \code{list} of \code{wavebands} as argument:
+As discussed above, it is possible to calculate simultaneously the irradiances for several wavebands with a single function call by supplying a \code{list} of \code{wavebands} as argument:
+
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,}
-                       \hlkwd{list}\hlstd{(}\hlkwd{Red}\hlstd{(),} \hlkwd{Green}\hlstd{(),} \hlkwd{Blue}\hlstd{())))} \hlopt{*} \hlnum{1e6}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{list}\hlstd{(}\hlkwd{Red}\hlstd{(),} \hlkwd{Green}\hlstd{(),} \hlkwd{Blue}\hlstd{()))} \hlopt{*} \hlnum{1e6}
 \end{alltt}
 \begin{verbatim}
 ##   Red.ISO Green.ISO  Blue.ISO 
-##  452.1700  220.1562  148.9735
+##  452.1700  220.1562  148.9735 
+## attr(,"time.unit")
+## [1] "second"
 \end{verbatim}
 \begin{alltt}
-\hlstd{Q.RGB} \hlkwb{<-} \hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,}
-                       \hlkwd{list}\hlstd{(}\hlkwd{Red}\hlstd{(),} \hlkwd{Green}\hlstd{(),} \hlkwd{Blue}\hlstd{())))} \hlopt{*} \hlnum{1e6}
+\hlstd{Q.RGB} \hlkwb{<-} \hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{list}\hlstd{(}\hlkwd{Red}\hlstd{(),} \hlkwd{Green}\hlstd{(),} \hlkwd{Blue}\hlstd{()))} \hlopt{*} \hlnum{1e6}
 \hlkwd{signif}\hlstd{(Q.RGB,} \hlnum{3}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
 ##   Red.ISO Green.ISO  Blue.ISO 
-##       452       220       149
+##       452       220       149 
+## attr(,"time.unit")
+## [1] "second"
 \end{verbatim}
 \begin{alltt}
 \hlstd{Q.RGB[}\hlnum{1}\hlstd{]}
@@ -2404,18 +2432,19 @@ It is possible to calculate the irradiances for several wavebands with a single 
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+as the value returned is in \mol we multiply it by $1 \times 10^6$ to obtain \umol.
 
-A named list can be used to override the use as names for the output of the waveband names:
+A named list can be used to override the names used for the output:
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,}
-                       \hlkwd{list}\hlstd{(}\hlkwc{R}\hlstd{=}\hlkwd{Red}\hlstd{(),} \hlkwc{G}\hlstd{=}\hlkwd{Green}\hlstd{(),} \hlkwc{B}\hlstd{=}\hlkwd{Blue}\hlstd{())))} \hlopt{*} \hlnum{1e6}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{list}\hlstd{(}\hlkwc{R}\hlstd{=}\hlkwd{Red}\hlstd{(),} \hlkwc{G}\hlstd{=}\hlkwd{Green}\hlstd{(),} \hlkwc{B}\hlstd{=}\hlkwd{Blue}\hlstd{()))} \hlopt{*} \hlnum{1e6}
 \end{alltt}
 \begin{verbatim}
 ##        R        G        B 
-## 452.1700 220.1562 148.9735
+## 452.1700 220.1562 148.9735 
+## attr(,"time.unit")
+## [1] "second"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -2424,21 +2453,57 @@ Even when using a single waveband:
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,}
-                       \hlkwd{list}\hlstd{(}\hlkwc{UVB}\hlstd{=}\hlkwd{UVB}\hlstd{())))} \hlopt{*} \hlnum{1e6}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{list}\hlstd{(}\hlstr{'ultraviolet-B'}\hlstd{=}\hlkwd{UVB}\hlstd{()))} \hlopt{*} \hlnum{1e6}
 \end{alltt}
 \begin{verbatim}
-##      UVB 
-## 1.526862
+## ultraviolet-B 
+##      1.526862 
+## attr(,"time.unit")
+## [1] "second"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-%%%%
-\section{Task: use simple wavebands}\label{sec:wavebands}
+\begin{small}
+The examples above, can be easily rewritten using functions \code{e\_irrad}, \code{energy\_irradiance} or \code{photon\_irradiance}.
 
-Please, consult the packages' documentation for a list of predefined functions for creating wavebands. Here we will present just a few examples of their use. We usually associate wavebands with colours, however, in many cases there are different definitions in use. For this reason, the functions provided accept an argument that can be used to select the definition to use. In general, the default, is to use the ISO standard whenever it is applicable. The case of the various definitions in use for the \UVB waveband are described on page \pageref{pag:UVB:stds}
+For example, the second example above becomes:
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{e_irrad}\hlstd{(sun.spct,} \hlkwd{list}\hlstd{(}\hlkwc{R}\hlstd{=}\hlkwd{Red}\hlstd{(),} \hlkwc{G}\hlstd{=}\hlkwd{Green}\hlstd{(),} \hlkwc{B}\hlstd{=}\hlkwd{Blue}\hlstd{()))}
+\end{alltt}
+\begin{verbatim}
+##        R        G        B 
+## 79.61176 49.30478 37.57760 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+or
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{with}\hlstd{(sun.data,}
+     \hlkwd{energy_irradiance}\hlstd{(w.length, s.e.irrad,}
+                       \hlkwd{list}\hlstd{(}\hlkwc{R}\hlstd{=}\hlkwd{Red}\hlstd{(),} \hlkwc{G}\hlstd{=}\hlkwd{Green}\hlstd{(),} \hlkwc{B}\hlstd{=}\hlkwd{Blue}\hlstd{())))}
+\end{alltt}
+\begin{verbatim}
+##        R        G        B 
+## 79.61176 49.30478 37.57760
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\end{small}
+
+%%%%
+\section{Task: use simple predefined wavebands}\label{sec:uwavebands:use}
+
+Please, consult the packages' documentation for a list of predefined functions for creating wavebands also called \code{waveband} \emph{constructors}. Here we will present just a few examples of their use. We usually associate wavebands with colours, however, in many cases there are different definitions in use. For this reason, the functions provided accept an argument that can be used to select the definition to use. In general, the default, is to use the ISO standard whenever it is applicable. The case of the various definitions in use for the \UVB waveband are described on page \pageref{pag:UVB:stds}
 
 We can use a predefined function to create a new \code{waveband} object, which as any other R object can be assigned to a variable:
 
@@ -2457,7 +2522,7 @@ We can use a predefined function to create a new \code{waveband} object, which a
 \end{kframe}
 \end{knitrout}
 
-As seen above, there is a specialized \code{print} function for \code{wavebands}. Functions available are \code{min}, \code{max}, \code{range}, \code{center\_wl}, \code{labels}, and \code{color}.
+As seen above, there is a specialized \code{print} method for \code{wavebands}. \code{waveband} methods returning wavelength values in nm are \code{min}, \code{max}, \code{range}, \code{midpoint}, and \code{spread}. Method \code{labels} returns the name and label stored in the waveband, and method \code{color} returns a color definition calculated from the range of wavelengths.
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2496,6 +2561,12 @@ As seen above, there is a specialized \code{print} function for \code{wavebands}
 ## [1] 685
 \end{verbatim}
 \begin{alltt}
+\hlkwd{spread}\hlstd{(red)}
+\end{alltt}
+\begin{verbatim}
+## [1] 150
+\end{verbatim}
+\begin{alltt}
 \hlkwd{labels}\hlstd{(red)}
 \end{alltt}
 \begin{verbatim}
@@ -2520,7 +2591,7 @@ As seen above, there is a specialized \code{print} function for \code{wavebands}
 \end{kframe}
 \end{knitrout}
 
-Here we demonstrate the use of an argument to choose a certain definition:\label{pag:UVB:stds}
+The argument \code{standard} can be used to choose a given alternative definition\footnote{When available, the definition in the ISO standard is the default.}:\label{pag:UVB:stds}
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2572,35 +2643,97 @@ Here we demonstrate the use of an argument to choose a certain definition:\label
 \end{kframe}
 \end{knitrout}
 
-Here we demonstrate the importance of complying with standards, and how much the photon irradiance calculated can depend on the definition used.
+Here we demonstrate the importance of complying with standards, and how much photon irradiance can depend on the definition used in the calculation.
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,} \hlkwd{UVB}\hlstd{(}\hlstr{"ISO"}\hlstd{)))} \hlopt{*} \hlnum{1e6}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{UVB}\hlstd{(}\hlstr{"ISO"}\hlstd{))} \hlopt{*} \hlnum{1e6}
 \end{alltt}
 \begin{verbatim}
 ##  UVB.ISO 
-## 1.526862
+## 1.526862 
+## attr(,"time.unit")
+## [1] "second"
 \end{verbatim}
 \begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad,} \hlkwd{UVB}\hlstd{(}\hlstr{"none"}\hlstd{)))} \hlopt{*} \hlnum{1e6}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{UVB}\hlstd{(}\hlstr{"none"}\hlstd{))} \hlopt{*} \hlnum{1e6}
 \end{alltt}
 \begin{verbatim}
 ## UVB.none 
-##  3.28209
+##  3.28209 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{UVB}\hlstd{(}\hlstr{"ISO"}\hlstd{))} \hlopt{/} \hlkwd{q_irrad}\hlstd{(sun.spct,} \hlkwd{UVB}\hlstd{(}\hlstr{"none"}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##   UVB.ISO 
+## 0.4652103 
+## attr(,"time.unit")
+## [1] "second"
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 %%%%
-\section{Task: define simple wavebands}\label{sec:wavebands}
+\section{Task: define simple wavebands}\label{sec:uwavebands}
 
-Here we briefly introduce \code{new\_waveband}, and only in chapter \ref{chap:wtirrad} we describe its use in full detail, including the use of spectral weighting functions (SWFs).
+Here we briefly introduce \code{waveband} and \code{new\_waveband}, and only in chapter \ref{chap:wtirrad} we describe their use in full detail, including the use of spectral weighting functions (SWFs). The examples in the present section only describe \code{waveband}s that define a wavelength range.
 
-Defining a new \code{waveband} based on extreme wavelengths expressed in nm.
+A \code{waveband} can be created based on any R object for which function \code{range} is defined, and returns numbers interpretable as wavelengths expressed in nanometres:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{waveband}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{400}\hlstd{,}\hlnum{700}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## range.400.700 
+## low (nm) 400 
+## high (nm) 700 
+## weighted none
+\end{verbatim}
+\begin{alltt}
+\hlkwd{waveband}\hlstd{(}\hlnum{400}\hlopt{:}\hlnum{700}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## range.400.700 
+## low (nm) 400 
+## high (nm) 700 
+## weighted none
+\end{verbatim}
+\begin{alltt}
+\hlkwd{waveband}\hlstd{(sun.spct)}
+\end{alltt}
+\begin{verbatim}
+## Total 
+## low (nm) 293 
+## high (nm) 800 
+## weighted none
+\end{verbatim}
+\begin{alltt}
+\hlstd{wb_total} \hlkwb{<-} \hlkwd{waveband}\hlstd{(sun.spct,} \hlkwc{wb.name}\hlstd{=}\hlstr{"total"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{q_irrad}\hlstd{(sun.spct, wb_total)} \hlopt{*} \hlnum{1e6}
+\end{alltt}
+\begin{verbatim}
+##    total 
+## 1253.975 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+A \code{waveband} can also be created based on extreme wavelengths expressed in nm.
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -2614,12 +2747,13 @@ Defining a new \code{waveband} based on extreme wavelengths expressed in nm.
 ## weighted none
 \end{verbatim}
 \begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad, wb1))} \hlopt{*} \hlnum{1e6}
+\hlkwd{q_irrad}\hlstd{(sun.spct, wb1)} \hlopt{*} \hlnum{1e6}
 \end{alltt}
 \begin{verbatim}
 ## range.500.600 
-##      314.0618
+##      314.0618 
+## attr(,"time.unit")
+## [1] "second"
 \end{verbatim}
 \begin{alltt}
 \hlstd{wb2} \hlkwb{<-} \hlkwd{new_waveband}\hlstd{(}\hlnum{500}\hlstd{,}\hlnum{600}\hlstd{,} \hlkwc{wb.name}\hlstd{=}\hlstr{"my.colour"}\hlstd{)}
@@ -2632,12 +2766,179 @@ Defining a new \code{waveband} based on extreme wavelengths expressed in nm.
 ## weighted none
 \end{verbatim}
 \begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_irradiance}\hlstd{(w.length, s.e.irrad, wb2))} \hlopt{*} \hlnum{1e6}
+\hlkwd{q_irrad}\hlstd{(sun.spct, wb2)} \hlopt{*} \hlnum{1e6}
 \end{alltt}
 \begin{verbatim}
 ## my.colour 
-##  314.0618
+##  314.0618 
+## attr(,"time.unit")
+## [1] "second"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+%%%%
+\section{Task: define lists of simple wavebands}\label{sec:uwaveband:lists}
+
+Lists of wavebands can be created by grouping \code{waveband} objects using the R-defined constructor \code{list},
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{UV.list} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwd{UVC}\hlstd{(),} \hlkwd{UVB}\hlstd{(),} \hlkwd{UVA}\hlstd{())}
+\hlstd{UV.list}
+\end{alltt}
+\begin{verbatim}
+## [[1]]
+## UVC.ISO 
+## low (nm) 100 
+## high (nm) 280 
+## weighted none 
+## 
+## [[2]]
+## UVB.ISO 
+## low (nm) 280 
+## high (nm) 315 
+## weighted none 
+## 
+## [[3]]
+## UVA.ISO 
+## low (nm) 315 
+## high (nm) 400 
+## weighted none
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+in which case wavebands can be non-contiguous and/or overlapping.
+
+In addition function \code{split\_bands} can be used to create a list of contiguous wavebands by supplying a numeric vector of wavelength boundaries in nanometres,
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{split_bands}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{400}\hlstd{,}\hlnum{500}\hlstd{,}\hlnum{600}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## $wb1
+## range.400.500 
+## low (nm) 400 
+## high (nm) 500 
+## weighted none 
+## 
+## $wb2
+## range.500.600 
+## low (nm) 500 
+## high (nm) 600 
+## weighted none
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+It is also possible to also provide the limits of the region to be covered by the list of wavebands and the number of (equally spaced) wavebands desired:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{split_bands}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{400}\hlstd{,}\hlnum{600}\hlstd{),} \hlkwc{length.out}\hlstd{=}\hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## $wb1
+## range.400.500 
+## low (nm) 400 
+## high (nm) 500 
+## weighted none 
+## 
+## $wb2
+## range.500.600 
+## low (nm) 500 
+## high (nm) 600 
+## weighted none
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+in all cases code{range} is used to find the list boundaries, so we can also split the region defined by an exisating \code{waveband} object into smaller wavebands,
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{split_bands}\hlstd{(}\hlkwd{PAR}\hlstd{(),} \hlkwc{length.out}\hlstd{=}\hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## $wb1
+## range.400.500 
+## low (nm) 400 
+## high (nm) 500 
+## weighted none 
+## 
+## $wb2
+## range.500.600 
+## low (nm) 500 
+## high (nm) 600 
+## weighted none 
+## 
+## $wb3
+## range.600.700 
+## low (nm) 600 
+## high (nm) 700 
+## weighted none
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+or split a whole spectrum\footnote(This is not restricted to \code{source.spct} objects as all other classes of \code{\_\_\_.spct} objects also have \code{range} methods defined.) into equally sized regions,
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{split_bands}\hlstd{(sun.spct,} \hlkwc{length.out}\hlstd{=}\hlnum{3}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## $wb1
+## range.293.462 
+## low (nm) 293 
+## high (nm) 462 
+## weighted none 
+## 
+## $wb2
+## range.462.631 
+## low (nm) 462 
+## high (nm) 631 
+## weighted none 
+## 
+## $wb3
+## range.631.800 
+## low (nm) 631 
+## high (nm) 800 
+## weighted none
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Package \PBWB also predefines some useful contrustors of lists of wavebands, currently \code{VIS\_bands}, \code{UV\_bands} and \code{Plant\_bands}.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{UV_bands}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [[1]]
+## UVC.ISO 
+## low (nm) 100 
+## high (nm) 280 
+## weighted none 
+## 
+## [[2]]
+## UVB.ISO 
+## low (nm) 280 
+## high (nm) 315 
+## weighted none 
+## 
+## [[3]]
+## UVA.ISO 
+## low (nm) 315 
+## high (nm) 400 
+## weighted none
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -2647,7 +2948,7 @@ Defining a new \code{waveband} based on extreme wavelengths expressed in nm.
 
 In photobiology sometimes we are interested in calculation the photon ratio between two wavebands. It makes more sense to calculate such ratios if both numerator and denominator wavebands have the same `width' or if the numerator waveband is fully nested in the denominator waveband. However, frequently used ratios like the \UVB to \PAR photon ratio do not comply with this. For this reason, our functions do not enforce any such restrictions.
 
-For example a ratio frequently used in plant photobiology is the read to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \cite{Morgan1981a}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
+For example a ratio frequently used in plant photobiology is the red to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \cite{Morgan1981a}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
 
 \begin{equation}
 \zeta = \frac{\pfd[655 \mathrm{nm} < \lambda < 665  \mathrm{nm}]}{\pfd[725 \mathrm{nm} < \lambda < 735 \mathrm{nm}]}
@@ -2658,9 +2959,71 @@ To calculate this for our example sunlight spectrum we can use the following cod
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlkwd{q_ratio}\hlstd{(sun.spct,} \hlkwd{Red}\hlstd{(}\hlstr{"Smith"}\hlstd{),} \hlkwd{Far_red}\hlstd{(}\hlstr{"Smith"}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## Red.Smith:FarRed.Smith(q:q) 
+##                    1.251099
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Function \code{q\_ratio} also accepts lists of wavebands, for both denominator and numerator arguments, and recycling takes place when needed.
+Calculation of the contribution of different colors to visible light, using ISO-standard definitions.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{q_ratio}\hlstd{(sun.spct,} \hlkwd{UVB}\hlstd{(),} \hlkwd{list}\hlstd{(}\hlkwd{UV}\hlstd{(),} \hlkwd{VIS}\hlstd{()))}
+\end{alltt}
+\begin{verbatim}
+##  UVB.ISO:UV.ISO(q:q) UVB.ISO:VIS.ISO(q:q) 
+##          0.017862550          0.001404725
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{q_ratio}\hlstd{(sun.spct,}
+         \hlkwd{list}\hlstd{(}\hlkwd{Red}\hlstd{(),} \hlkwd{Green}\hlstd{(),} \hlkwd{Blue}\hlstd{()),} \hlkwd{VIS}\hlstd{())}
+\end{alltt}
+\begin{verbatim}
+##   Red.ISO:VIS.ISO(q:q) Green.ISO:VIS.ISO(q:q) 
+##              0.4159998              0.2025454 
+##  Blue.ISO:VIS.ISO(q:q) 
+##              0.1370567
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+or using a predefined list of wavebands:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{q_ratio}\hlstd{(sun.spct,} \hlkwd{VIS_bands}\hlstd{(),} \hlkwd{VIS}\hlstd{())}
+\end{alltt}
+\begin{verbatim}
+## Purple.ISO:VIS.ISO(q:q)   Blue.ISO:VIS.ISO(q:q) 
+##              0.15004110              0.13705675 
+##  Green.ISO:VIS.ISO(q:q) Yellow.ISO:VIS.ISO(q:q) 
+##              0.20254538              0.06110784 
+## Orange.ISO:VIS.ISO(q:q)    Red.ISO:VIS.ISO(q:q) 
+##              0.05533039              0.41599981
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{small}
+Using spectral data stored in numeric vectors:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
 \hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{photon_ratio}\hlstd{(w.length, s.e.irrad,}
-                  \hlkwd{Red}\hlstd{(}\hlstr{"Smith"}\hlstd{),} \hlkwd{Far_red}\hlstd{(}\hlstr{"Smith"}\hlstd{)))}
+     \hlkwd{photon_ratio}\hlstd{(w.length, s.e.irrad,}  \hlkwd{Red}\hlstd{(}\hlstr{"Smith"}\hlstd{),} \hlkwd{Far_red}\hlstd{(}\hlstr{"Smith"}\hlstd{)))}
 \end{alltt}
 \begin{verbatim}
 ## [1] 1.251099
@@ -2682,24 +3045,31 @@ or using the predefined convenience function \code{R\_FR\_ratio}:
 \end{kframe}
 \end{knitrout}
 
-Using defaults for waveband definitions:
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{with}\hlstd{(sun.data,}
-     \hlkwd{energy_ratio}\hlstd{(w.length, s.e.irrad,} \hlkwd{UVB}\hlstd{(),} \hlkwd{PAR}\hlstd{()))}
-\end{alltt}
-\begin{verbatim}
-## [1] 0.002989897
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
+\end{small}
 
 %%%%
 \section{Task: energy ratios}\label{sec:energy:ratio}
 
 An energy ratio, equivalent to $\zeta$ can be calculated as follows:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{e_ratio}\hlstd{(sun.spct,} \hlkwd{Red}\hlstd{(}\hlstr{"Smith"}\hlstd{),} \hlkwd{Far_red}\hlstd{(}\hlstr{"Smith"}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## Red.Smith:FarRed.Smith(e:e) 
+##                    1.384353
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+other examples in section \ref{sec:photon:ratio} above, can be easily edited to use \code{e\_ratio} instead of \code{q\_ratio}.
+
+
+\begin{small}
+
+Using spectral data stored in vectors:
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2715,6 +3085,7 @@ An energy ratio, equivalent to $\zeta$ can be calculated as follows:
 \end{knitrout}
 
 For this infrequently used ratio, no pre-defined function is provided.
+\end{small}
 
 %%%%
 \section{Task: calculate average number of photons per unit energy}\label{sec:photons:energy}
@@ -2724,6 +3095,56 @@ When comparing photo-chemical and photo-biological responses under different lig
 \begin{equation}
 \bar{q'} = \frac{\pfd[\lambda_1 < \lambda < \lambda_2]}{\irr[\lambda_1 < \lambda < \lambda_2]}
 \end{equation}
+
+From this equation it follows that the value of the ratio will depend on the shape of the emission spectrum of the radiation source.
+For example, for PAR the R code is:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{qe_ratio}\hlstd{(sun.spct,} \hlkwd{PAR}\hlstd{())}
+\end{alltt}
+\begin{verbatim}
+##     q:e(PAR) 
+## 4.543762e-06
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+for obtaining the same quotient in \umoljoule we just need to multiply by $1 \times 10^6$,
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{qe_ratio}\hlstd{(sun.spct,} \hlkwd{PAR}\hlstd{())} \hlopt{*} \hlnum{1e6}
+\end{alltt}
+\begin{verbatim}
+## q:e(PAR) 
+## 4.543762
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+The seldom needed inverse ratio in \joulemol can be calculated with function \code{eq\_ratio}.
+
+Both functions accept lists of wavebands, so several ratios can be calculated with a single function call:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{qe_ratio}\hlstd{(sun.spct,} \hlkwd{VIS_bands}\hlstd{())}
+\end{alltt}
+\begin{verbatim}
+## q:e(Purple.ISO)   q:e(Blue.ISO)  q:e(Green.ISO) 
+##    3.429575e-06    3.964423e-06    4.465210e-06 
+## q:e(Yellow.ISO) q:e(Orange.ISO)    q:e(Red.ISO) 
+##    4.847365e-06    5.016828e-06    5.679688e-06
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{small}
+The same ratios can be calculated for data stored in numeric vectors using function \code{photons\_energy\_ratio}:
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2737,7 +3158,7 @@ When comparing photo-chemical and photo-biological responses under different lig
 \end{kframe}
 \end{knitrout}
 
-For obtaining the same quotient in \umoljoule we just need to multiply by $10^6$. We can use such a multiplier to convert $\irr$ [\watt] into $\pfd$ [\umol] (as \Unit{W} = \Unit{J\,s^{-1}}), or as a divisor to convert $\pfd$ [\umol] into $\irr$ [\watt], \emph{for a given light source and waveband}:
+For obtaining the same quotient in \umoljoule from spectral data in \wattnm we just need to multiply by $1 \times 10^6$:
 
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2750,6 +3171,8 @@ For obtaining the same quotient in \umoljoule we just need to multiply by $10^6$
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
+\end{small}
 
 %%%%
 \section[Task: split energy irradiance into regions]{Task: calculate the contribution of different regions of a spectrum to energy irradiance}\label{sec:split:energy}
@@ -3723,7 +4146,7 @@ Here we plot the RGB colours for the range covered by the CIE 2006 proposed stan
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=.95\textwidth]{figure/pos-unnamed-chunk-139-1} 
+{\centering \includegraphics[width=.95\textwidth]{figure/pos-unnamed-chunk-156-1} 
 
 }
 
@@ -5726,7 +6149,7 @@ Of course it is possible to combine tagged data spectra and tagged spectra creat
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=.95\textwidth]{figure/pos-unnamed-chunk-149-1} 
+{\centering \includegraphics[width=.95\textwidth]{figure/pos-unnamed-chunk-166-1} 
 
 }
 
@@ -5826,11 +6249,11 @@ This task is here simply to show that there is nothing special about plotting sp
 ##   4:      296 6.780119e-05  #000000  UVB
 ##   5:      297 1.533491e-04  #000000  UVB
 ##  ---                                    
-## 506:      796 0.000000e+00  #000000   NA
-## 507:      797 0.000000e+00  #000000   NA
-## 508:      798 0.000000e+00  #000000   NA
-## 509:      799 0.000000e+00  #000000   NA
-## 510:      800 0.000000e+00  #000000   NA
+## 507:      796 0.000000e+00  #000000   NA
+## 508:      797 0.000000e+00  #000000   NA
+## 509:      798 0.000000e+00  #000000   NA
+## 510:      799 0.000000e+00  #000000   NA
+## 511:      800 0.000000e+00  #000000   NA
 ##         filter
 ##   1: no filter
 ##   2: no filter
@@ -5838,11 +6261,11 @@ This task is here simply to show that there is nothing special about plotting sp
 ##   4: no filter
 ##   5: no filter
 ##  ---          
-## 506: no filter
 ## 507: no filter
 ## 508: no filter
 ## 509: no filter
 ## 510: no filter
+## 511: no filter
 \end{verbatim}
 \begin{alltt}
 \hlstd{sun.eff.cie.pe.spct[ , filter} \hlkwb{:=} \hlstr{'polyester'}\hlstd{]}
@@ -5855,11 +6278,11 @@ This task is here simply to show that there is nothing special about plotting sp
 ##   4:      296 2.034036e-07  #000000  UVB
 ##   5:      297 4.600472e-07  #000000  UVB
 ##  ---                                    
-## 506:      796 0.000000e+00  #000000   NA
-## 507:      797 0.000000e+00  #000000   NA
-## 508:      798 0.000000e+00  #000000   NA
-## 509:      799 0.000000e+00  #000000   NA
-## 510:      800 0.000000e+00  #000000   NA
+## 507:      796 0.000000e+00  #000000   NA
+## 508:      797 0.000000e+00  #000000   NA
+## 509:      798 0.000000e+00  #000000   NA
+## 510:      799 0.000000e+00  #000000   NA
+## 511:      800 0.000000e+00  #000000   NA
 ##         filter
 ##   1: polyester
 ##   2: polyester
@@ -5867,11 +6290,11 @@ This task is here simply to show that there is nothing special about plotting sp
 ##   4: polyester
 ##   5: polyester
 ##  ---          
-## 506: polyester
 ## 507: polyester
 ## 508: polyester
 ## 509: polyester
 ## 510: polyester
+## 511: polyester
 \end{verbatim}
 \begin{alltt}
 \hlstd{sun.eff.cie.226.spct[ , filter} \hlkwb{:=} \hlstr{'Rosco #226'}\hlstd{]}
@@ -5884,11 +6307,11 @@ This task is here simply to show that there is nothing special about plotting sp
 ##   4:      296         0  #000000  UVB Rosco #226
 ##   5:      297         0  #000000  UVB Rosco #226
 ##  ---                                            
-## 506:      796         0  #000000   NA Rosco #226
-## 507:      797         0  #000000   NA Rosco #226
-## 508:      798         0  #000000   NA Rosco #226
-## 509:      799         0  #000000   NA Rosco #226
-## 510:      800         0  #000000   NA Rosco #226
+## 507:      796         0  #000000   NA Rosco #226
+## 508:      797         0  #000000   NA Rosco #226
+## 509:      798         0  #000000   NA Rosco #226
+## 510:      799         0  #000000   NA Rosco #226
+## 511:      800         0  #000000   NA Rosco #226
 \end{verbatim}
 \begin{alltt}
 \hlstd{sun.eff.cie.spct} \hlkwb{<-} \hlkwd{rbindspct}\hlstd{(}\hlkwd{list}\hlstd{(sun.eff.cie.nf.spct,}
@@ -5904,11 +6327,11 @@ This task is here simply to show that there is nothing special about plotting sp
 ##    4:      294 6.142401e-06  #000000  UVB
 ##    5:      294 1.842720e-08  #000000  UVB
 ##   ---                                    
-## 1526:      799 0.000000e+00  #000000   NA
-## 1527:      799 0.000000e+00  #000000   NA
-## 1528:      800 0.000000e+00  #000000   NA
-## 1529:      800 0.000000e+00  #000000   NA
-## 1530:      800 0.000000e+00  #000000   NA
+## 1529:      799 0.000000e+00  #000000   NA
+## 1530:      799 0.000000e+00  #000000   NA
+## 1531:      800 0.000000e+00  #000000   NA
+## 1532:      800 0.000000e+00  #000000   NA
+## 1533:      800 0.000000e+00  #000000   NA
 ##           filter
 ##    1:  no filter
 ##    2:  polyester
@@ -5916,11 +6339,11 @@ This task is here simply to show that there is nothing special about plotting sp
 ##    4:  no filter
 ##    5:  polyester
 ##   ---           
-## 1526:  polyester
-## 1527: Rosco #226
-## 1528:  no filter
 ## 1529:  polyester
 ## 1530: Rosco #226
+## 1531:  no filter
+## 1532:  polyester
+## 1533: Rosco #226
 \end{verbatim}
 \begin{alltt}
 \hlstd{fig_sun.cie0} \hlkwb{<-}
@@ -5940,11 +6363,11 @@ This task is here simply to show that there is nothing special about plotting sp
 \end{alltt}
 
 
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 400 rows containing missing values (position\_stack).}}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 401 rows containing missing values (position\_stack).}}
 
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 400 rows containing missing values (position\_stack).}}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 401 rows containing missing values (position\_stack).}}
 
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 400 rows containing missing values (position\_stack).}}\end{kframe}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 401 rows containing missing values (position\_stack).}}\end{kframe}
 
 {\centering \includegraphics[width=.95\textwidth]{figure/pos-plot-eff-cie-1-1} 
 
@@ -6293,7 +6716,7 @@ The assessment of the perceived `colour difference' between background and foreg
 ## [16] MASS_7.3-35                
 ## [17] memoise_0.2.1              
 ## [18] munsell_0.4.2              
-## [19] photobiology_0.4.7         
+## [19] photobiology_0.4.8         
 ## [20] photobiologyFilters_0.1.13 
 ## [21] photobiologygg_0.1.14      
 ## [22] photobiologyLEDs_0.1.4     

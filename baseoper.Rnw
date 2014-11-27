@@ -426,16 +426,16 @@ Wavebands are derived from R lists. All valid R operations for lists can be also
 
 \subsection{How can the user create waveband objects}
 
-Wavebands are created by means of function \code{new\_waveband} which has several arguments, but except for the first two they have default values.
+Wavebands are created by means of function \code{waveband} or function \code{new\_waveband} which have in addition to the initial parameter(s) giving the wavelength range, the same additional arguments, also with the same default values.
 
-The simplest \code{waveband} creation call is one supplying as argument just any R object for which the \code{range} function returns the wavelength limits of the desired band.
+The simplest \code{waveband} creation call is one supplying as argument just any R object for which the \code{range} function returns the wavelength limits of the desired band in nanometres. Such a call yields an un-weighted \code{waveband} definition, describing a range of wavelengths. 
 
-Any numeric vector of at least two elements, any spectral object or any waveband object is valid input.
+Any numeric vector of at least two elements, any spectral object or any existing \code{waveband} object is valid input.
 <<>>=
 waveband(c(300, 400))
 @
 
-As you can see above, a name and label are created automatically for the new wavebenad. The user can also supply these as arguments, but must be careful not to duplicate existing names.
+As you can see above, a name and label are created automatically for the new \code{waveband}. The user can also supply these as arguments, but must be careful not to duplicate existing names\footnote{It is preferable that \code{wb.name} complies with the requirements for R object names and file names, while labels have fewer restrictions as they are meant to be used only for output text labels.}.
 
 <<>>=
 waveband(c(300, 400), wb.name="a.name")
@@ -459,7 +459,9 @@ new_waveband(300, 400, wb.name="a.name")
 new_waveband(300, 400, wb.name="a.name", wb.label="A nice name")
 @
 
-For both functions, if we include a weighting function, there is still quite a lot of flexibility. One can supply either a function that takes energy irradiance as input or a function that takes photon irradiance as input. Unless both are supplied, the missing function will be automatically created. There are also arguments related to normalization, both of the output, and of the SWF supplied as argument. In the examples above, `hinges' are created automatically for the range extremes. When using SWF with discontinuous derivatives, best results are obtained by supplying the hinges to be used as arguments to \code{new\_waveband}. An example follows for the definition of a waveband for the CIE98 SWF---the function \code{CIE.e.fun} is defined in package \code{photobiologyWavebands} but any R function taking a numeric vector of wavelengths as input and returning a numeric vector of the same length containing weights can be used. The use of SWFs is discussed in more detail in chapter \ref{chap:wt:irrad}.
+See chapter \ref{chap:uw:irrad} on page \pageref{chap:uw:irrad}, in particular sections \ref{sec:uwavebands}, \ref{sec:uwavebands:use}, and \ref{sec:uwaveband:lists} for further examples, and a more in-depth discussion of the creation and use of \emph{un-weighted} \code{waveband} objects.
+
+For both functions, even if we supply a \emph{weighting function} (SWF), a lot of flexibility remains. One can supply either a function that takes energy irradiance as input or a function that takes photon irradiance as input. Unless both are supplied, the missing function will be automatically created. There are also arguments related to normalization, both of the output, and of the SWF supplied as argument. In the examples above, `hinges' are created automatically for the range extremes. When using SWF with discontinuous derivatives, best results are obtained by explicitly supplying the hinges to be used as an argument to \code{new\_waveband} call. An example follows for the definition of a waveband for the CIE98 SWF---the function \code{CIE.e.fun} is defined in package \PBWB but any R function taking a numeric vector of wavelengths as input and returning a numeric vector of the same length containing weights can be used.
 
 <<>>=
 waveband(c(250, 400),
@@ -475,6 +477,7 @@ new_waveband(w.low=250, w.high=400,
              wb.name="CIE98.298", wb.label="CIE98")
 @
 
+See chapter \ref{chap:wt:irrad} on page \pageref{chap:wt:irrad}, in particular sections \ref{sec:wwavebands}, \ref{sec:wwavebands:use}, and \ref{sec:wwaveband:lists} for further examples, and a more in-depth discussion of the creation and use of \emph{weighted} \code{waveband} objects.
 
 \subsection{What `summary' functions are available for wavebands?}
 
@@ -486,11 +489,11 @@ Special methods for \code{waveband}s of \code{print} giving more compact output 
 Several functions described in chapters \ref{chap:uw:irrad}, \ref{chap:wt:irrad}, and \ref{chap:plots} use \code{waveband} objects as arguments. Those functions provide selective summaries of spectra.
 
 <<>>=
-e_irrad(sun.data, UVB()) / e_irrad(sun.data, VIS())
+e_irrad(sun.data, UVB())
 @
 
 Multiplying a source spectrum by an un-weighted waveband, is equivalent to trimming with \code{fill} set to \code{NA}.
- 
+
 <<>>=
 sun.spct * UVA()
 @

@@ -20,38 +20,37 @@ library(photobiologyWavebands)
 %%%%
 \section{Introduction}\label{sec:wt:intro}
 
-Weighted irradiance is usually reported in weighted energy units, but it is possible to also use weighted photon based units. In practice the R code to use is exactly the same as for unweighted irradiances, as all the information needed is stored in the \code{waveband} object. An additional factor comes into play and it is the \emph{normalization wavelength}, which is accepted as an argument by the predefined waveband creation functions that use a biological spectral weighting function (BSWF). The focus of this chapter is on the differences between calculations for weighted irradiances compared to those for unweighted irradiances described in chapter \ref{chap:uw:irrad}. In particular it is important that you read sections \ref{sec:uw:e2e}, \ref{sec:uw:e2q}, \ref{sec:uw:q2e}, and \ref{sec:uw:mult:wb} before reading the present chapter.
+Weighted irradiance is usually reported in weighted energy units, but it is also possible to use weighted photon based units. In practice the R code to use is exactly the same as for unweighted irradiances, as all the information needed for applying weights is stored in the \code{waveband} object. An additional factor comes into play and it is the \emph{normalization wavelength}, which is accepted as an argument by the predefined waveband creation functions that describe biological spectral weighting functions (BSWFs). The focus of this chapter is on the differences between calculations for weighted irradiances compared to those for un-weighted irradiances described in chapter \ref{chap:uw:irrad}. In particular it is important that you read sections \ref{sec:uw:ueirrad}, \ref{sec:uw:qirrad}, on the calculation of irradiances from spectral irradiances and sections \ref{sec:uwavebands:use}, and \ref{sec:uwavebands} before reading the present chapter.
 
+Most SWFs are defined using measured action spectra or spectra derived by combining different measured action spectra. As these spectra have been measured under different conditions, what is of interest is the shape of the curve as a function of wavelength, but not the absolute values. Because of this, SWFs are normalized to an action of one at an arbitrary wavelength. In many cases there is no consensus about the wavelength to use. Normalization is simple, it consists in dividing all action values along the curve by the action value at the selected normalization wavelengths.
+
+Another complication is that it is not always clear if a given SWF definition is based on energy or photon units for the fluence rate or irradiances. In photobiology using photon units for expressing action spectra is the norm, but SWFs based on them have rather frequently been used as weights for spectral energy irradiance. The current package makes this difference explicit, and uses the correct weights depending on the spectral data, as long as the \code{waveband} objects have been correctly defined. In the case of the definitions in package \PBWB, we have used, whenever possible the correct interpretation when described in the literature, or the common practice when information has been unavailable.
+ 
 %%%%
-\section{Task: choosing the normalization wavelength}\label{sec:wt:intro}
+\section{Task: specifying the normalization wavelength}\label{sec:wt:intro}
 
-Function \code{GEN.G()} is predefined in package \PBWB as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \cite{Green198x}:
+Several constructors for SWF-based \code{waveband} objects are supplied. Most of them have parameters, in most cases with default arguments, so that different common uses and misuses in the literature can be reproduced. For example, function \code{GEN.G()} is predefined in package \PBWB as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \cite{Green198x}:
 
 <<>>=
-with(sun.data,
-     energy_irradiance(w.length, s.e.irrad, GEN.G()))
+e_irrad(sun.spct, GEN.G())
 @
 
-The code above uses the default normalization wavelength of 300 nm. Any arbitrary wavelength (nm), within the range of the waveband can be provided as an argument.
+The code above uses the default normalization wavelength of 300~nm, which is almost universally used nowadays, but not the value used in the original publication \autocite{Caldwell1973}. Any arbitrary wavelength (nm), within the range of the waveband is accepted as \code{norm} argument:
 
 <<>>=
 range(GEN.G())
-with(sun.data,
-     energy_irradiance(w.length, s.e.irrad, GEN.G(280)))
+e_irrad(sun.spct, GEN.G(280))
 @
 
 
 %%%%
-\section{Task: use weighted wavebands}\label{sec:wt:intro}
+\section{Task: use of weighted wavebands}\label{sec:wt:intro}
 
-Please, consult the packages' documentation for a list of predefined functions for creating weighted wavebands. Here we will present just a few examples of their use. We usually think of weighted irradiances as being defined by the weighting function, however, in many cases different normalizations are in use, and the result of any calculation depends very strongly on the wavelength used for normalization. For this reason, the functions provided accept an argument that can be used to select the normalization wavelength. In general, the default, is to use the most frequently used normalization.
-
-In a few cases different mathematical formulations are available for the same spectrum, and the differences among them can be quite large. In such cases separate functions are provided for each of them (e.g. \code{GEN.N} and \code{GEN.T} for Green's and Thimijan's formulations of Caldwell's GPAS).
+Please, consult the documentation of package \PBWB for a list of predefined constructor functions for weighted wavebands. Here we will present just a few examples of their use. We usually think of weighted irradiances as being defined only by the weighting function, however, as mentioned above, in many cases different normalization wavelengths are in use, and the result of calculations depends very strongly on which wavelength is used for normalization. In a few cases different mathematical formulations are available for the `same' SWF, and the differences among them can be also important. In such cases separate functions are provided for each formulation (e.g.\ \code{GEN.N} and \code{GEN.T} for Green's and Thimijan's formulations of Caldwell's GPAS).
 
 <<>>=
 GEN.G()
-GEN.G(300)
-GEN.G(280)
+GEN.T()
 @
 
 We can use one of the predefined functions to create a new \code{waveband} object, which as any other R object can be assigned to a variable:
@@ -61,41 +60,82 @@ cie <- CIE()
 cie
 @
 
-As seen above, there is a specialized \code{print} function for \code{wavebands}. Functions available are \code{min}, \code{max}, \code{range}, \code{midpoint}, \code{labels}, and \code{color}.
+As described in section \ref{sec:uwavebands:use}, there are several methods for querying and printing \code{waveband} objects. The same functions described for un-weighted \code{waveband} objects can be used with any \code{waveband} object, including those based on SWFs.
+
+%%%
+\section{Task: define wavebands that use weighting functions}\label{sec:wt:wavebands}
+
+In sections \ref{sec:uw:wavebands} and \ref{sec:wb:objects} we briefly introduced functions \code{waveband} and \code{new\_waveband}, and here we describe their use in full detail. Most users are unlikely to frequently need to define new \code{waveband} objects as common SWFs are already defined in package \PBWB.
+
+Although the constructors are flexible, and can automatically handle both definitions based on action or response spectra in photon or energy units, some care is needed when performance is important.
+
+When defining a new weighted \code{waveband}, we need to supply to the constructor more information than in the case on un-weighted wavebands. We start with a simple `toy' example:
+
+<<tidy=FALSE>>=
+toy.wb <- waveband(c(400,700), weight="SWF",
+                       SWF.e.fun=function(wl){(wl / 550)^2},
+                       norm=550, SWF.norm=550,
+                       wb.name="TOY")
+toy.wb
+@
+where the first argument is the range of wavelengths included, \code{weight="SWF"} indicates that spectral weighting will be used, \code{ SWF.e.fun=function(wl){wl * 2 / 550} } supplies an `anonymous' spectral weighting function based on energy units, \code{norm=550} indicates the default normalization wavelength to use in calculations, \code{SWF.norm=550} indicates the normalization wavelength of the output of the SWF, and \code{wb.name="TOY"} gives a name for the waveband.
+
+In the example above the constructor generates automatically the SWF to use with spectral photon irradiance from the function supplied for spectral energy irradiance. The reverse is true if only an SWF for spectral photon irradiance is supplied. If both functions are supplied, they are used, but no test for their consistency is applied.
+
+
+%%%
+\section{Task: calculate effective energy irradiance}\label{sec:wt:eirrad}
+
+We can use the \code{waveband} object defined above in calculations:
 
 <<>>=
-min(cie)
-max(cie)
-range(cie)
-midpoint(cie)
-normalization(cie)
-labels(cie)
-color(cie)
+e_irrad(sun.spct, toy.wb)
 @
 
+Just in the same way as we can use those created with the specific constructors, including using anonymous objects created on the fly:
 
-%%%%
-%\section{Task: define wavebands}\label{sec:wt:wavebands}
-%
-%In section \ref{sec:uw:wavebands} we briefly introduced \code{new\_waveband}, and here we describe its use in full detail, including the use of spectral weighting functions (SWFs).
-%
-%Defining a new weighted \code{waveband}. We start with a simple `toy' example:
-%
-%<<tidy=FALSE>>=
-%toy.wb <- new_waveband(400, 700, "SWF",
-%                       SWF.e.fun=function(wl){(wl - 400)^2},
-%                       norm=550, SWF.norm=550,
-%                       wb.name="TOY")
-%toy.wb
-%with(sun.data,
-%     energy_irradiance(w.length, s.e.irrad, toy.wb))
-%with(sun.data,
-%     photon_irradiance(w.length, s.e.irrad, toy.wb))
-%@
+<<>>=
+e_irrad(sun.spct, CIE())
+@
 
+or lists of wavebands, such as
 
-%%%%
-\section{Introduction}\label{sec:wt:intro}
+<<>>=
+e_irrad(sun.spct, list(GEN.G(), GEN.T()))
+@
+
+or
+
+<<>>=
+e_irrad(sun.spct, list(GEN.G(280), GEN.G(300)))
+@
+
+Nothing prevents the user from defining his or her own \code{waveband} object constructors for new SWFs, and making this easy was an important goal in the design of the packages.
+
+%%%
+\section{Task: calculate effective photon irradiance}\label{sec:wt:eirrad}
+
+All what is needed is to use function \code{q\_irrad} instead of \code{e\_irrad}. However, one should think carefully if such a calculation is what is needed, as in some research fields it is rarely used, even when from the theoretical point of view would be in most cases preferable.
+
+<<>>=
+q_irrad(sun.spct, GEN.G())
+@
+
+%%%
+\section{Task: calculate daily effective energy exposure}\label{sec:wt:eirrad}
+
+To calculate daily exposure values, we need to apply the same code as used above, but using spectral daily exposure instead of spectral irradiance as starting point:
+
+<<>>=
+e_irrad(sun.daily.spct, GEN.G())
+@
+
+the output from the code above is in units of \jday, the code below returns the same result in the more common uints of \kjday:
+
+<<>>=
+e_irrad(sun.daily.spct, GEN.G()) * 1e-3
+@
+by comparing these result to those for effective irradiances above, it can be seen that the \code{time.unit} attribute of the spectral data is copied to the result, allowing us to distinguish irradiance values (\code{time.unit="second"}) from daily exposure values (\code{time.unit="day"}).
 
 <<>>=
 try(detach(package:photobiologyWavebands))

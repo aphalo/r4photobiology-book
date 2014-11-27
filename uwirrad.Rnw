@@ -26,10 +26,137 @@ library(photobiologyWavebands)
 %%%%
 \section{Introduction}\label{sec:uw:intro}
 
+Functions \code{e\_irrad} and \code{q\_irrad} return energy irradiance and photon (or quantum) irradiance, and both take as argument a \code{source.spct} object containing either spectral (energy) irradiance or spectral photon irradiance data. An additional parameter accepting a \code{waveband} object, or a list of \code{waveband} objects, can be used to set the range(s) of wavelengths and spectral weighting function(s) to use for integration(s). Two additional functions, \code{energy\_irradiance} and \code{photon\_irradiance}, are defined for equivalent calculations on spectral irradiance data stored as numeric vectors.
 
+We start by describing how to use and define \code{waveband} objects, for which we need to use function \code{e\_irrad} in some examples before a detailed explanation of its use (see section \ref{sec:uw:eirrad}) on page \pageref{sec:uw:eirrad} for details).
 
 %%%%
-\section{Task: (energy) irradiance from spectral irradiance}\label{sec:uw:e2e}
+\section{Task: use simple predefined wavebands}\label{sec:uwavebands:use}
+
+Please, consult the packages' documentation for a list of predefined functions for creating wavebands also called \code{waveband} \emph{constructors}. Here we will present just a few examples of their use. We usually associate wavebands with colours, however, in many cases there are different definitions in use. For this reason, the functions provided accept an argument that can be used to select the definition to use. In general, the default, is to use the ISO standard whenever it is applicable. The case of the various definitions in use for the \UVB waveband are described on page \pageref{pag:UVB:stds}
+
+We can use a predefined function to create a new \code{waveband} object, which as any other R object can be assigned to a variable:
+
+<<>>=
+uvb <- UVB()
+uvb
+@
+
+As seen above, there is a specialized \code{print} method for \code{wavebands}. \code{waveband} methods returning wavelength values in nm are \code{min}, \code{max}, \code{range}, \code{midpoint}, and \code{spread}. Method \code{labels} returns the name and label stored in the waveband, and method \code{color} returns a color definition calculated from the range of wavelengths.
+
+<<>>=
+red <- Red()
+red
+min(red)
+max(red)
+range(red)
+midpoint(red)
+spread(red)
+labels(red)
+color(red)
+@
+
+The argument \code{standard} can be used to choose a given alternative definition\footnote{When available, the definition in the ISO standard is the default.}:\label{pag:UVB:stds}
+
+<<>>=
+UVB()
+UVB("ISO")
+UVB("CIE")
+UVB("medical")
+UVB("none")
+@
+
+Here we demonstrate the importance of complying with standards, and how much photon irradiance can depend on the definition used in the calculation.
+
+<<tidy=FALSE>>=
+e_irrad(sun.spct, UVB("ISO"))
+e_irrad(sun.spct, UVB("none"))
+e_irrad(sun.spct, UVB("ISO")) / e_irrad(sun.spct, UVB("none"))
+@
+
+%%%%
+\section{Task: define simple wavebands}\label{sec:uwavebands}
+
+Here we briefly introduce \code{waveband} and \code{new\_waveband}, and only in chapter \ref{chap:wtirrad} we describe their use in full detail, including the use of spectral weighting functions (SWFs). The examples in the present section only describe \code{waveband}s that define a wavelength range.
+
+A \code{waveband} can be created based on any R object for which function \code{range} is defined, and returns numbers interpretable as wavelengths expressed in nanometres:
+
+<<>>=
+waveband(c(400,700))
+waveband(400:700)
+waveband(sun.spct)
+wb_total <- waveband(sun.spct, wb.name="total")
+@
+
+<<>>=
+e_irrad(sun.spct, wb_total)
+@
+
+A \code{waveband} can also be created based on extreme wavelengths expressed in nm.
+<<tidy=FALSE>>=
+wb1 <- new_waveband(500,600)
+wb1
+e_irrad(sun.spct, wb1)
+wb2 <- new_waveband(500,600, wb.name="my.colour")
+wb2
+e_irrad(sun.spct, wb2)
+@
+
+%%%%
+\section{Task: define lists of simple wavebands}\label{sec:uwaveband:lists}
+
+Lists of wavebands can be created by grouping \code{waveband} objects using the R-defined constructor \code{list},
+
+<<>>=
+UV.list <- list(UVC(), UVB(), UVA())
+UV.list
+@
+in which case wavebands can be non-contiguous and/or overlapping.
+
+In addition function \code{split\_bands} can be used to create a list of contiguous wavebands by supplying a numeric vector of wavelength boundaries in nanometres,
+
+<<>>=
+split_bands(c(400,500,600))
+@
+
+or with longer but more meaningful names,
+
+<<>>=
+split_bands(c(400,500,600), short.names=FALSE)
+@
+
+It is also possible to also provide the limits of the region to be covered by the list of wavebands and the number of (equally spaced) wavebands desired:
+
+<<>>=
+split_bands(c(400,600), length.out=2)
+@
+
+in all cases code{range} is used to find the list boundaries, so we can also split the region defined by an existing \code{waveband} object into smaller wavebands,
+<<>>=
+split_bands(PAR(), length.out=3)
+@
+
+or split a whole spectrum\footnote{This is not restricted to \code{source.spct} objects as all other classes of \code{\_\_\_.spct} objects also have \code{range} methods defined.} into equally sized regions,
+
+<<>>=
+split_bands(sun.spct, length.out=3)
+@
+
+It is also possible to supply a list of wavelength ranges\footnote{When using a list argument, even overlapping and non-contiguous wavelength ranges are valid input}, and, when present, names are copied from the input list to the output list:
+
+<<>>=
+split_bands(list(c(400,500), c(600,700)))
+split_bands(list(blue=c(400,500), PAR=c(400,700)))
+@
+
+Package \PBWB also predefines some useful constructors of lists of wavebands, currently \code{VIS\_bands}, \code{UV\_bands} and \code{Plant\_bands}.
+
+<<>>=
+UV_bands()
+@
+
+%%%%
+\section{Task: (energy) irradiance from spectral irradiance}\label{sec:uw:eirrad}
 
 The task to be completed is to calculate the (energy) irradiance ($\irr$) in \watt from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
@@ -38,14 +165,14 @@ The task to be completed is to calculate the (energy) irradiance ($\irr$) in \wa
 \label{eq:energy:irrad}
 \end{equation}
 
-Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and 
-$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The functions available for this task when working with spectral objects are \code{e\_irrad} and \code{q\_irrad}, returning energy- and photon irradiance, respectively. The "names" of the returned valued is set according to the waveband used.
+Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_irrad} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source.spct} object.
 
 <<>>=
 e_irrad(sun.spct, waveband(c(400,700)))
 @
 
-or using the built-in \code{PAR} waveband constructor, predefined in package \PBWB as a convenience function,
+or using the \code{PAR} waveband constructor, defined in package \PBWB as a convenience function,
 
 <<>>=
 e_irrad(sun.spct, PAR())
@@ -57,49 +184,52 @@ or if no waveband is supplied as argument, then irradiance is computed for the w
 e_irrad(sun.spct)
 @
 
+If a waveband extends outside of the wavelength range of the spectral data, spectral irradiance for unavailable wavelengths is assumed to be zero:
+<<tidy=FALSE>>=
+e_irrad(sun.spct, waveband(c(100,400)))
+e_irrad(sun.spct, waveband(c(100,250)))
+@
+
 Both \code{e\_irrad} and \code{q\_irrad} accept, in addition to a waveband as second argument, a list of wavebands. In this case, the returned value is a numeric vector of the same length as the list.
 
 <<>>=
 e_irrad(sun.spct, list(UVB(), UVA()))
 @
 
-If you are not using spectral objects, then function \code{energy\_irradiance}, which accepts the spectral data as vectors, can be used instead, at the cost of less concise code.
+\begin{small}
 
-<<tidy=FALSE>>=
-with(sun.data,
-     energy_irradiance(w.length, s.e.irrad,
-                       new_waveband(400, 700)))
-@
+Storing emission spectral data in \code{source.spct} objects is recommended, as it allows better protection against mistakes, and allows automatic detection of input data base of expression and units. However, it may be sometimes more convenient or efficient to keep spectral data in individual numeric vectors, or data frames. In such cases function \code{energy\_irradiance}, which accepts the spectral data as vectors can be used at the cost of less concise code and weaker error tests. In this case, the user must indicate whether spectral data is on energy or photon based units through parameter \code{unit.in}, which defaults to \code{"energy"}.
 
-Using function \code{PAR()}, the code above becomes:
+For example when using function \code{PAR()}, the code above becomes:
 
 <<>>=
 with(sun.data,
      energy_irradiance(w.length, s.e.irrad, PAR()))
+with(sun.data,
+     energy_irradiance(w.length, s.e.irrad, PAR(), unit.in="energy"))
 @
 
-If no waveband is supplied as argument, then the whole range of wavelengths in the spectral data is used for the integration, and the `name' attribute is generated accordingly:
-<<tidy=FALSE>>=
+where \code{sun.data} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
+
+
+The \code{sun.data} data frame also contains spectral photon irradiance values:
+<<>>=
+names(sun.data)
+@
+which allows us to use:
+
+<<>>=
 with(sun.data,
-     energy_irradiance(w.length, s.e.irrad))
+     energy_irradiance(w.length, s.q.irrad, PAR(), unit.in="photon"))
+     
 @
 
-If a waveband that does not fully overlap with the data is supplied as argument, then spectral irradiance for wavelengths outside the range is assumed to be zero:
-<<tidy=FALSE>>=
-with(sun.data,
-     energy_irradiance(w.length, s.e.irrad,
-                       new_waveband(700,1000)))
-@
+The other examples above can be re-written with similar syntax.
 
-If a waveband that does not overlap with the data is supplied as argument, then spectral irradiance for wavelengths outside the range is assumed to be zero:
-<<tidy=FALSE>>=
-with(sun.data,
-     energy_irradiance(w.length, s.e.irrad,
-                       new_waveband(100,200)))
-@
+\end{small}
 
 %%%%
-\section{Task: photon irradiance from spectral irradiance}\label{sec:uw:e2q}
+\section{Task: photon irradiance from spectral irradiance}\label{sec:uw:qirrad}
 
 The task to be completed is to calculate the photon irradiance ($\pfd$) in \mol from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
@@ -109,143 +239,90 @@ Combining equations \ref{eq:energy:irrad} and \ref{eq:energy:mol:photons} we obt
 \pfd[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \frac{h' \cdot c}{\lambda} \mathrm{d}\ \lambda
 \end{equation}
 
-Let's assume that we want to calculate photosynthetically active radiation (PAR) photon irradiance. In this example we will use example data for sunlight.
+Let's assume that we want to calculate photosynthetically active radiation (PAR) photon irradiance (frequently called PPFD or photosynthetic photon flux density), for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{q\_irrad}, returning photon irradiance in \mol. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source.spct} object.
 
-<<tidy=FALSE>>=
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, PAR()))
+<<>>=
+q_irrad(sun.spct, waveband(c(400,700)))
 @
 
-If we want to have $\pfd[\PAR]$ (\PPFD) expressed in the usual units of \umol, we need to multiply the result above by $10^6$:
-
-<<tidy=FALSE>>=
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, PAR())) * 1e6
+to obtain the photon irradiance expressed in \umol we multiply the returned value by $1 \times 10^6$:
+<<>>=
+q_irrad(sun.spct, waveband(c(400,700))) * 1e6
 @
 
-\code{PAR()} is predefined in package \PBWB as a convenience function, see section \ref{sec:energy:irrad} for an example with arbitrary values for $\lambda_1$ and $\lambda_2$.
+or using the \code{PAR} waveband constructor, defined in package \PBWB as a convenience function,
 
-%%%%
-\section[Task: irradiance from spectral photon irradiance]{Task: calculate energy and photon irradiances from spectral photon irradiance}\label{sec:uw:irrad:q2e}
+<<>>=
+q_irrad(sun.spct, PAR()) * 1e6
+@
 
-In the case of the calculation of energy irradiance from spectral photon irradiance the calculation is:
-\begin{equation}
-\irr[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \spfd\ \frac{\lambda}{h' \cdot c} \mathrm{d}\ \lambda
-\end{equation}
+Examples given in section \ref{sec:uw:eirrad} can all be converted by replacing \code{e\_irrad} function calls with \code{q\_irrad} function calls.
 
-And the code\footnote{The dataframe \code{sun.data} contains both spectral energy irradiance vales in `column' \code{s.e.irrad} and spectral photon irradiance in `column' \code{s.q.irrad}}:
+\begin{small}
+
+Storing emission spectral data in \code{source.spct} objects is recommended (see section \ref{sec:uw:eirrad}). However, it may be sometimes more convenient or efficient to keep spectral data in individual numeric vectors, or data frames. In such cases function \code{photon\_irradiance}, which accepts the spectral data as vectors can be used at the cost of less concise code and weaker error tests. In this case, the user must indicate whether spectral data is on energy or photon based units through parameter \code{unit.in}, which defaults to \code{"energy"}.
+
+For example when using function \code{PAR()}, the code above becomes:
 
 <<>>=
 with(sun.data,
-     energy_irradiance(w.length, s.q.irrad,
-                       PAR()), unit.in="photon")
-@
-
-The calculation of photon irradiance from spectral photon irradiance, is a simple integration, analogous to that in equation \ref{eq:energy:irrad}, and the code is:
-
-<<>>=
+     photon_irradiance(w.length, s.e.irrad, PAR()), unit.in="energy")  * 1e6
 with(sun.data,
-     photon_irradiance(w.length, s.q.irrad,
-                       PAR()), unit.in="photon")
+     photon_irradiance(w.length, s.e.irrad, PAR()))  * 1e6
 @
 
-%%%%
+where \code{sun.data} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
+
+\end{small}
+
 \section{Task: irradiances for more than one waveband}\label{sec:uw:mult:wb}
 
-It is possible to calculate the irradiances for several wavebands with a single function call by supplying a \code{list} of \code{wavebands} as argument:
+As discussed above, it is possible to calculate simultaneously the irradiances for several wavebands with a single function call by supplying a \code{list} of \code{wavebands} as argument:
+
 <<>>=
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad,
-                       list(Red(), Green(), Blue()))) * 1e6
-Q.RGB <- with(sun.data,
-     photon_irradiance(w.length, s.e.irrad,
-                       list(Red(), Green(), Blue()))) * 1e6
+q_irrad(sun.spct, list(Red(), Green(), Blue())) * 1e6
+Q.RGB <- q_irrad(sun.spct, list(Red(), Green(), Blue())) * 1e6
 signif(Q.RGB, 3)
 Q.RGB[1]
 Q.RGB["Green.ISO"]
 @
+as the value returned is in \mol we multiply it by $1 \times 10^6$ to obtain \umol.
 
-A named list can be used to override the use as names for the output of the waveband names:
+A named list can be used to override the names used for the output:
 <<>>=
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad,
-                       list(R=Red(), G=Green(), B=Blue()))) * 1e6
+q_irrad(sun.spct, list(R=Red(), G=Green(), B=Blue())) * 1e6
 @
 
 Even when using a single waveband:
 <<tidy=FALSE>>=
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad,
-                       list(UVB=UVB()))) * 1e6
+q_irrad(sun.spct, list('ultraviolet-B'=UVB())) * 1e6
 @
 
-%%%%
-\section{Task: use simple wavebands}\label{sec:wavebands}
+\begin{small}
+The examples above, can be easily rewritten using functions \code{e\_irrad}, \code{energy\_irradiance} or \code{photon\_irradiance}.
 
-Please, consult the packages' documentation for a list of predefined functions for creating wavebands. Here we will present just a few examples of their use. We usually associate wavebands with colours, however, in many cases there are different definitions in use. For this reason, the functions provided accept an argument that can be used to select the definition to use. In general, the default, is to use the ISO standard whenever it is applicable. The case of the various definitions in use for the \UVB waveband are described on page \pageref{pag:UVB:stds}
+For example, the second example above becomes:
+<<>>=
+e_irrad(sun.spct, list(R=Red(), G=Green(), B=Blue()))
+@
 
-We can use a predefined function to create a new \code{waveband} object, which as any other R object can be assigned to a variable:
+or
 
 <<>>=
-uvb <- UVB()
-uvb
-@
-
-As seen above, there is a specialized \code{print} function for \code{wavebands}. Functions available are \code{min}, \code{max}, \code{range}, \code{center\_wl}, \code{labels}, and \code{color}.
-
-<<>>=
-red <- Red()
-red
-min(red)
-max(red)
-range(red)
-midpoint(red)
-labels(red)
-color(red)
-@
-
-Here we demonstrate the use of an argument to choose a certain definition:\label{pag:UVB:stds}
-
-<<>>=
-UVB()
-UVB("ISO")
-UVB("CIE")
-UVB("medical")
-UVB("none")
-@
-
-Here we demonstrate the importance of complying with standards, and how much the photon irradiance calculated can depend on the definition used.
-
-<<tidy=FALSE>>=
 with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, UVB("ISO"))) * 1e6
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, UVB("none"))) * 1e6
+     energy_irradiance(w.length, s.e.irrad,
+                       list(R=Red(), G=Green(), B=Blue())))
 @
 
-%%%%
-\section{Task: define simple wavebands}\label{sec:wavebands}
-
-Here we briefly introduce \code{new\_waveband}, and only in chapter \ref{chap:wtirrad} we describe its use in full detail, including the use of spectral weighting functions (SWFs).
-
-Defining a new \code{waveband} based on extreme wavelengths expressed in nm.
-<<tidy=FALSE>>=
-wb1 <- new_waveband(500,600)
-wb1
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, wb1)) * 1e6
-wb2 <- new_waveband(500,600, wb.name="my.colour")
-wb2
-with(sun.data,
-     photon_irradiance(w.length, s.e.irrad, wb2)) * 1e6
-@
+\end{small}
 
 %%%%
 \section{Task: photon ratios}\label{sec:photon:ratio}
 
 In photobiology sometimes we are interested in calculation the photon ratio between two wavebands. It makes more sense to calculate such ratios if both numerator and denominator wavebands have the same `width' or if the numerator waveband is fully nested in the denominator waveband. However, frequently used ratios like the \UVB to \PAR photon ratio do not comply with this. For this reason, our functions do not enforce any such restrictions.
 
-For example a ratio frequently used in plant photobiology is the read to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \cite{Morgan1981a}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
+For example a ratio frequently used in plant photobiology is the red to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \cite{Morgan1981a}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
 
 \begin{equation}
 \zeta = \frac{\pfd[655 \mathrm{nm} < \lambda < 665  \mathrm{nm}]}{\pfd[725 \mathrm{nm} < \lambda < 735 \mathrm{nm}]}
@@ -253,10 +330,34 @@ For example a ratio frequently used in plant photobiology is the read to far-red
 
 To calculate this for our example sunlight spectrum we can use the following code:
 
+<<>>=
+q_ratio(sun.spct, Red("Smith"), Far_red("Smith"))
+@
+
+Function \code{q\_ratio} also accepts lists of wavebands, for both denominator and numerator arguments, and recycling takes place when needed.
+Calculation of the contribution of different colors to visible light, using ISO-standard definitions.
+
+<<>>=
+q_ratio(sun.spct, UVB(), list(UV(), VIS()))
+@
+
+<<>>=
+q_ratio(sun.spct,
+         list(Red(), Green(), Blue()), VIS())
+@
+
+or using a predefined list of wavebands:
+
+<<>>=
+q_ratio(sun.spct, VIS_bands(), VIS())
+@
+
+\begin{small}
+Using spectral data stored in numeric vectors:
+
 <<tidy=FALSE>>=
 with(sun.data,
-     photon_ratio(w.length, s.e.irrad,
-                  Red("Smith"), Far_red("Smith")))
+     photon_ratio(w.length, s.e.irrad,  Red("Smith"), Far_red("Smith")))
 @
 
 or using the predefined convenience function \code{R\_FR\_ratio}:
@@ -266,17 +367,23 @@ with(sun.data,
      R_FR_ratio(w.length, s.e.irrad))
 @
 
-Using defaults for waveband definitions:
-
-<<tidy=FALSE>>=
-with(sun.data,
-     energy_ratio(w.length, s.e.irrad, UVB(), PAR()))
-@
+\end{small}
 
 %%%%
 \section{Task: energy ratios}\label{sec:energy:ratio}
 
 An energy ratio, equivalent to $\zeta$ can be calculated as follows:
+
+<<>>=
+e_ratio(sun.spct, Red("Smith"), Far_red("Smith"))
+@
+
+other examples in section \ref{sec:photon:ratio} above, can be easily edited to use \code{e\_ratio} instead of \code{q\_ratio}.
+
+
+\begin{small}
+
+Using spectral data stored in vectors:
 
 <<tidy=FALSE>>=
 with(sun.data,
@@ -285,6 +392,7 @@ with(sun.data,
 @
 
 For this infrequently used ratio, no pre-defined function is provided.
+\end{small}
 
 %%%%
 \section{Task: calculate average number of photons per unit energy}\label{sec:photons:energy}
@@ -295,23 +403,89 @@ When comparing photo-chemical and photo-biological responses under different lig
 \bar{q'} = \frac{\pfd[\lambda_1 < \lambda < \lambda_2]}{\irr[\lambda_1 < \lambda < \lambda_2]}
 \end{equation}
 
+From this equation it follows that the value of the ratio will depend on the shape of the emission spectrum of the radiation source.
+For example, for PAR the R code is:
+
+<<>>=
+qe_ratio(sun.spct, PAR())
+@
+
+for obtaining the same quotient in \umoljoule we just need to multiply by $1 \times 10^6$,
+
+<<>>=
+qe_ratio(sun.spct, PAR()) * 1e6
+@
+
+The seldom needed inverse ratio in \joulemol can be calculated with function \code{eq\_ratio}.
+
+Both functions accept lists of wavebands, so several ratios can be calculated with a single function call:
+
+<<>>=
+qe_ratio(sun.spct, VIS_bands())
+@
+
+\begin{small}
+The same ratios can be calculated for data stored in numeric vectors using function \code{photons\_energy\_ratio}:
+
 <<tidy=FALSE>>=
 with(sun.data,
      photons_energy_ratio(w.length, s.e.irrad, PAR()))
 @
 
-For obtaining the same quotient in \umoljoule we just need to multiply by $10^6$. We can use such a multiplier to convert $\irr$ [\watt] into $\pfd$ [\umol] (as \Unit{W} = \Unit{J\,s^{-1}}), or as a divisor to convert $\pfd$ [\umol] into $\irr$ [\watt], \emph{for a given light source and waveband}:
+For obtaining the same quotient in \umoljoule from spectral data in \wattnm we just need to multiply by $1 \times 10^6$:
 
 <<>>=
 with(sun.data,
      photons_energy_ratio(w.length, s.e.irrad, PAR())) * 1e6
 @
 
+\end{small}
+
 %%%%
 \section[Task: split energy irradiance into regions]{Task: calculate the contribution of different regions of a spectrum to energy irradiance}\label{sec:split:energy}
 
 \sloppy
-It can be of interest to split the total (energy) irradiance into adjacent regions delimited by arbitrary wavelengths. We can use the function \code{split\_energy\_irradiance} to obtain to energy of each of the regions delimited by the values in nm supplied in a numeric vector:
+It can be of interest to split the total (energy) irradiance into adjacent regions delimited by arbitrary wavelengths. 
+When working with \code{source.spct} objects, the best way to achieve this is to combine the use of the functions \code{e\_irrad} and \code{split\_bands} already described above, for example,
+
+<<>>=
+e_irrad(sun.spct, split_bands(c(400, 500, 600, 700)))
+@
+
+or
+
+<<>>=
+e_irrad(sun.spct, split_bands(PAR(), length.out=3))
+@
+
+or
+
+<<>>=
+my_bands <- split_bands(PAR(), length.out=3)
+e_irrad(sun.spct, my_bands)
+@
+
+For the example immediately above, we can calculate relative values as
+
+<<>>=
+e_irrad(sun.spct, my_bands) / e_irrad(sun.spct, PAR())
+@
+
+or more efficiently as
+
+<<>>=
+irradiances <- e_irrad(sun.spct, my_bands)
+irradiances / sum(irradiances)
+@
+
+The examples above use short names, the default, but longer names are also available,
+
+<<>>=
+e_irrad(sun.spct, split_bands(c(400, 500, 600, 700), short.names=FALSE))
+e_irrad(sun.spct, split_bands(PAR(), short.names=FALSE, length.out=3))
+@
+
+With spectral data stored in numeric vectors, we can use function \code{energy\_irradiance} together with function \code{split\_bands} or we can use the convenience function \code{split\_energy\_irradiance} to obtain to energy of each of the regions delimited by the values in nm supplied in a numeric vector:
 
 <<>>=
 with(sun.data,
@@ -319,17 +493,7 @@ with(sun.data,
                              c(400, 500, 600, 700)))
 @
 
-Here we demonstrate that the sum of the four `split' irradiances add to the total for the range of wavelengths covered:
-
-<<>>=
-with(sun.data,
-     sum(split_energy_irradiance(w.length, s.e.irrad,
-                                 c(400, 500, 600, 700))))
-with(sun.data,
-     energy_irradiance(w.length, s.e.irrad, PAR()))
-@
-
-It also possible to obtain the `split' as a vector of fractions adding up to one,
+It possible to obtain the `split' as a vector of fractions adding up to one,
 
 <<>>=
 with(sun.data,
@@ -378,18 +542,6 @@ In contrast, for \code{scale="absolute"}, the default, it can be used as a quick
 with(sun.data,
      split_energy_irradiance(w.length, s.e.irrad,
                              c(400, 700)))
-@
-
-%%%%
-\section[Task: split photon irradiance into regions]{Task: calculate the contribution of different regions of a spectrum to photon irradiance}\label{sec:split:photons}
-
-The function \code{split\_photon\_irradiance} takes the same arguments as the equivalent function for photon irradiance, consequently only one code example is provided here (see section \ref{sec:split:energy} for more details):
-
-<<>>=
-with(sun.data,
-     split_photon_irradiance(w.length, s.e.irrad,
-                             c(400, 500, 600, 700),
-                             scale="percent"))
 @
 
 <<>>=
