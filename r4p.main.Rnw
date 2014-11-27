@@ -151,7 +151,7 @@ incl_ckbk <- TRUE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
 incl_apdx <- FALSE || incl_all
-eval_diag <- FALSE || incl_all
+eval_diag <- FALSE
 @
 
 <<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=

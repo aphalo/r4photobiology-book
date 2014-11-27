@@ -1230,13 +1230,13 @@ sun.eff.cie.226.spct <- sun.spct * uv.226.new.spct * CIE()
 tag(sun.eff.cie.nf.spct, UV_bands())
 tag(sun.eff.cie.pe.spct, UV_bands())
 tag(sun.eff.cie.226.spct, UV_bands())
-sun.eff.cie.nf.spct[ , filter := 'no filter']
-sun.eff.cie.pe.spct[ , filter := 'polyester']
-sun.eff.cie.226.spct[ , filter := 'Rosco #226']
+invisible(sun.eff.cie.nf.spct[ , filter := 'no filter'])
+invisible(sun.eff.cie.pe.spct[ , filter := 'polyester'])
+invisible(sun.eff.cie.226.spct[ , filter := 'Rosco #226'])
 sun.eff.cie.spct <- rbindspct(list(sun.eff.cie.nf.spct,
                                    sun.eff.cie.pe.spct,
                                    sun.eff.cie.226.spct))
-sun.eff.cie.spct[ , filter := factor(filter)]
+invisible(sun.eff.cie.spct[ , filter := factor(filter)])
 
 fig_sun.cie0 <-
   ggplot(data=sun.eff.cie.spct, aes(x=w.length, y=s.e.irrad, fill=wb.f)) +
