@@ -195,8 +195,7 @@ options(datatable.print.topn=2)
 <<child-r-plotting, child='R.plotting.Rnw', eval=TRUE>>=
 @
 
-<<child-r-data, child='R.readings.Rnw', eval=TRUE>>=
-@
+\include{R.readings.tex}
 
 \printbibliography
 
