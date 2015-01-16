@@ -9,7 +9,7 @@ opts_knit$set(concordance=TRUE)
 
 \section{Packages used in this chapter}
 
-For executing the examples listed in this chapter you need first to load the following packages from the library, the last three packages seem to interfere with each other, in particular GGally does not function in ggtern is loaded, so the are loaded only in the sections where they are used:
+For executing the examples listed in this chapter you need first to load the following packages from the library, the last three packages seem to interfere with each other, in particular GGally does not function if ggtern is loaded, so they are loaded only in the sections where they are used:
 <<>>=
 library(plyr)
 library(grid)
@@ -441,15 +441,20 @@ At the current time, \code{facet\_wrap} does not accept labellers, so neither ex
 In this type of plot a set of several variables are plotted against each other, forming all possible pairs.
 There is a function \code{plotmatrix} in ggplot2, but it is deprecated. Function \code{ggpairs} from package GGally provides this type of plots as an extension to ggplot.
 
+\begin{framed}
+\noindent
+Package GGally interferes with ggtern, and needs a session restart to get things back to normal. Detaching and unloading GGally is not enough to prevent the problems. Needs further investigation!
+
+\end{framed}
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide_square)
 @
 
-<<>>=
+<<eval=TRUE>>=
 library(GGally)
 @
 
-<<>>=
+<<eval=TRUE>>=
 # Use sample of the diamonds data
 data(diamonds, package="ggplot2")
 diamonds.samp <- diamonds[sample(1:dim(diamonds)[1],200),]
@@ -464,7 +469,7 @@ title = "Diamonds"
 pm
 @
 
-<<>>=
+<<eval=TRUE>>=
 try(detach(package:GGally))
 @
 
@@ -651,7 +656,7 @@ fig.trn <- ggplot(my.trn1.data, aes(x,y,z)) +
 
 One can achieve a similar result by using \code{ggtern} instead of \code{ggplot}:
 
-<<eval=FALSE>>=
+<<eval=TRUE>>=
 fig.trn <- ggtern(my.trn1.data, aes(x,y,z))
 @
 
@@ -691,6 +696,11 @@ opts_chunk$set(opts_fig_wide_square)
 As a final example we reproduce an elaborate ternary plot from \url{http://www.ggtern.com/2014/01/15/usda-textural-soil-classification/}, the website of the package.
 
 <<>>=
+# Load the required libraries
+library(ggtern)
+library(plyr)
+library(grid)
+
 # Load the Data. (Available in ggtern 1.0.3.0 next version)
 data(USDA)
 
@@ -704,7 +714,7 @@ USDA.LAB$Angle = 0
 USDA.LAB$Angle[which(USDA.LAB$Label == 'Loamy Sand')] = -35
 @
 
-<<>>=
+<<eval=TRUE>>=
 # Construct the plot.
 ggplot(data = USDA, aes(y=Clay, x=Sand, z=Silt,
                         color = Label,

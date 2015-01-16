@@ -99,37 +99,6 @@
       \field{year}{1971}
       \field{pages}{131\bibrangedash 177}
     \endentry
-    \entry{Chang2013}{book}{}
-      \name{labelname}{1}{}{%
-        {{uniquename=0,hash=3ad4f9244dbfff3b38eeeec6d91fbd7d}{Chang}{C\bibinitperiod}{Winston}{W\bibinitperiod}{}{}{}{}}%
-      }
-      \name{author}{1}{}{%
-        {{uniquename=0,hash=3ad4f9244dbfff3b38eeeec6d91fbd7d}{Chang}{C\bibinitperiod}{Winston}{W\bibinitperiod}{}{}{}{}}%
-      }
-      \list{location}{1}{%
-        {Sebastopol}%
-      }
-      \list{publisher}{1}{%
-        {O'Reilly Media}%
-      }
-      \strng{namehash}{3ad4f9244dbfff3b38eeeec6d91fbd7d}
-      \strng{fullhash}{3ad4f9244dbfff3b38eeeec6d91fbd7d}
-      \field{sortinit}{C}
-      \field{sortinithash}{dd0e4ddd17488a6ebf12cd6de2f2c237}
-      \field{labelyear}{2013}
-      \field{datelabelsource}{}
-      \field{labeltitle}{{R Graphics Cookbook}}
-      \field{booktitle}{Vasa}
-      \field{edition}{1-2}
-      \field{isbn}{9781449316952}
-      \field{title}{{R Graphics Cookbook}}
-      \field{year}{2013}
-      \field{pages}{413}
-      \verb{url}
-      \verb http://medcontent.metapress.com/index/A65RM03P4874243N.pdf
-      \endverb
-      \keyw{Graphics,Plotting,R,ggplot2}
-    \endentry
     \entry{Green1974}{article}{}
       \name{labelname}{3}{}{%
         {{uniquename=0,hash=cbeb35d526137e7662a946a49b645d53}{Green}{G\bibinitperiod}{A.\bibnamedelimi E.\bibnamedelimi S.}{A\bibinitperiod\bibinitdelim E\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
@@ -213,12 +182,10 @@
       \field{year}{1978}
     \endentry
   \endsortlist
-  \missing{Murriel2009}
-  \missing{chitka?}
-  \missing{Green198x}
   \missing{Morgan1981a}
-  \missing{xxx}
+  \missing{Green198x}
   \missing{Caldwell1973}
+  \missing{chitka?}
 \endrefsection
 \endinput
 

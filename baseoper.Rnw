@@ -43,7 +43,7 @@ Objects of class \code{reflector.spct} have two mandatory components \code{w.len
 
 Objects of class \code{chroma.spct} have four mandatory components \code{w.length}, and \code{x, y, z} giving the chromaticity coordinates for trichromic vision.
 
-Objects of class \code{response.spct} have two mandatory components \code{w.length}, and \code{response} giving the spectral response.
+Objects of class \code{response.spct} have two mandatory components \code{w.length}, and \code{s.e.response} giving the spectral response to energy or \code{s.q.response} giving spectral quantum response. The response units can be volts or amperes for instruments and sensors, or a biological response for organisms.
 
 \subsection{How can the user create spectra from his own data}
 
@@ -78,7 +78,7 @@ is.source.spct(my_sun.spct)
 Similar functions are available for filter, reflector and response spectral objects.
 
 
-Table \ref{tab:obj:components} lists the different `names' understood by the constructor functions which take a data frame as argument, and the required and optional components of the different spectral object classes.
+Table \ref{tab:obj:components} lists the different `names' understood by the constructor functions which take a data frame as argument, and the required and optional components of the different spectral object classes. A.U.\ absorbance units; a.u.\ arbitrary units.
 
 \begin{table}
 \caption{Names of spectral object components, and the additional names recognized during automatic spectral object creation, and the units of expression.}\label{tab:obj:components}
@@ -96,15 +96,15 @@ source.spct & w.length & --- & wl, wavelength & nm\\
 filter.spct & w.length & --- & wl, wavelength & nm \\
             & Tfr      & --- & --- & $x/1$  \\
             & ---      & Tpc    & transmittance & \% \\
-            & ---      & A      & absorbance & a.u. $\log_{10}$-based\\
+            & ---      & A      & absorbance & A.U.\ $\log_{10}$-based\\
 \midrule
-reflector.spct & w.length & --- & wl, wavelength \\
+reflector.spct & w.length & --- & wl, wavelength & nm \\
             & Rfr      & --- & --- & $x/1$  \\
             & ---      & Rpc    & reflectance & \% \\
 \midrule
 response.spct & w.length & --- & wl, wavelength & nm\\
-            & response   & --- & response & arbitrary u.\\
-%            & ---       & resp.actual & --- & absolute u.\\
+            & s.e.response   & --- & response & a.u. \Unit{J^{-1}}\\
+            & ---       & s.q.response & --- & a.u. \Unit{mol^{-1}}\\
 \midrule
 chroma.spct & w.length & --- & wl, wavelength & nm\\
             & x, y, z  & ---    & X, Y, Z & relative u.\\
@@ -133,6 +133,7 @@ For example we can divide an spectrum by a numeric value (a vector of length 1, 
 
 <<>>=
 sun.spct / 2
+2 * sun.spct
 @
 
 \subsection{What unary math functions are available for spectra?}
@@ -163,22 +164,24 @@ filtered_uncoated_sun.spct <- sun.spct * gg400.spct * (100 - 9) / 100
 filtered_uncoated_sun.spct
 @
 
-Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work, even when, as in this example, the wavelength values do not coincide bertween the two spectra.
+Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work, even when, as in this example, the wavelength values do not coincide between the two spectra.
 
 %%%%
 \subsection{Task: uniform scaling of a spectrum}\label{sec:base:scale}
 
-As noted above operators are available for \code{generic.scpt}, \code{source.spct}, \code{filter.spct} and \code{reflector.spct} objects, and `recycling' takes places when needed:
+As noted above operators are available for \code{generic.scpt}, \code{source.spct}, \code{filter.spct} and \code{reflector.spct} objects, and `recycling' takes place when needed:
 
 <<>>=
 sun.spct
 sun.spct * 2
 @
 
-All four basic binary operators (\code{+, -, *, /}) can be used in the same way, but when operating between a spectrum an a numeric value the spectrum should be the first term or factor. If an operation on a ``source.spct'' would yield different values for data on energy and photon basis, only the value based on energy data is returned in \code{s.e.irrad} and \code{s.q.irrad} is set to NA.
+All four basic binary operators (\code{+, -, *, /}) can be used in the same way. By default all calculations are done using energy based units, and only values in these units returned. If the operands need conversion, they are silently converted before applying the operator. The default behaviour can be switched into doing operations and returning values in photon-based units by setting an R option, using the normal R \code{options} mechanism.
 
 %%%%
 \subsection{Task: simple operations between two spectra}\label{sec:base:simple:opper}
+
+Among spectra of the same type, all normal arithmetic operations and some functions are allowed, and return a spectrun of the same type. However, when an operation between spectra of two different types makes no sense from the physics or optics point of view, \code{NA} is returned. The returned type depends also on the physical expectations. For example the multiplication (or convolution) of a light source spectrum \code{source.spct} and the transmittance spectrum of a filter \code{filter.spct} yields a new light source \code{source.spct} object. In contrast the addition of a \code{source.spct} and a \code{filter.spct} yields \code{NA}, a missing value, as such an operation is \emph{undefined}.
 
 <<>>=
 filtered_sun.spct <- ug1.spct * sun.spct
@@ -428,7 +431,7 @@ Wavebands are derived from R lists. All valid R operations for lists can be also
 
 Wavebands are created by means of function \code{waveband} or function \code{new\_waveband} which have in addition to the initial parameter(s) giving the wavelength range, the same additional arguments, also with the same default values.
 
-The simplest \code{waveband} creation call is one supplying as argument just any R object for which the \code{range} function returns the wavelength limits of the desired band in nanometres. Such a call yields an un-weighted \code{waveband} definition, describing a range of wavelengths. 
+The simplest \code{waveband} creation call is one supplying as argument just any R object for which the \code{range} function returns the wavelength limits of the desired band in nanometres. Such a call yields an un-weighted \code{waveband} definition, describing a range of wavelengths.
 
 Any numeric vector of at least two elements, any spectral object or any existing \code{waveband} object is valid input.
 <<>>=

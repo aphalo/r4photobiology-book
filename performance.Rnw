@@ -450,14 +450,14 @@ library(profr)
 @
 
 <<>>=
-profr.df <- profr({q_irrad_spct(sun.spct)},
+profr.df <- profr({q_irrad(sun.spct)},
                   interval = 0.0005, quiet = TRUE)
 head(profr.df)
 ggplot(profr.df)
 @
 
 <<>>=
-profr.df <- profr({q_irrad_spct(sun.spct, my_PAR, use.hinges=TRUE)},
+profr.df <- profr({q_irrad(sun.spct, my_PAR, use.hinges=TRUE)},
                   interval = 0.0001, quiet = TRUE)
 head(profr.df)
 ggplot(profr.df)
@@ -465,7 +465,7 @@ ggplot(profr.df)
 
 <<>>=
 my_sun.spct <- copy(sun.spct)
-profr.df <- profr({q_irrad_spct(my_sun.spct, my_PAR, use.hinges=FALSE)},
+profr.df <- profr({q_irrad(my_sun.spct, my_PAR, use.hinges=FALSE)},
                   interval = 0.0001, quiet = TRUE)
 head(profr.df)
 ggplot(profr.df)

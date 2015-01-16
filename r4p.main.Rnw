@@ -150,7 +150,7 @@ incl_chaps <- FALSE || incl_all
 incl_ckbk <- TRUE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
-incl_apdx <- FALSE || incl_all
+incl_apdx <- FALSE # || incl_all
 eval_diag <- FALSE
 @
 
@@ -164,6 +164,12 @@ getwd()
 # objects not to delete
 main_ls <- c(ls(), "main_ls")
 @
+
+<<set-up-printing, echo=FALSE, include=FALSE>>=
+options(datatable.print.nrows=10)
+options(datatable.print.topn=2)
+@
+
 
 \thispagestyle{empty}
 \titleLL

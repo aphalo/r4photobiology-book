@@ -94,13 +94,13 @@ plot(sun.daily.spct)
 The parameter \code{unit} can be set to \code{"photon"} to obtain a plot depicting spectral photon irradiance. This works irrespective of whether the \code{source.spct} object contains the spectral data in photon or energy units.
 
 <<plot-sun-default-2>>=
-plot(sun.spct, unit="photon")
+plot(sun.spct, unit.out="photon")
 @
 
 A list of wave bands, or a single wave band, to be used for annotation can be supplied through the \code{bands} parameter. A \code{NULL} waveband results in no waveband labels, while the next example shows how to obtain the total irradiance.
 
 <<plot-sun-default-3>>=
-plot(sun.spct, bands=PAR(), unit="photon")
+plot(sun.spct, bands=PAR(), unit.out="photon")
 @
 
 <<plot-sun-default-4>>=
@@ -115,19 +115,19 @@ Of course the arguments to these parameters can be supplied in different combina
 
 <<plot-sun-default-6>>=
 plot(trim_spct(sun.spct, waveband(c(600,800))),
-     bands=list(Red("Smith"), Far_red("Smith")), unit="photon")
+     bands=list(Red("Smith"), Far_red("Smith")), unit.out="photon")
 @
 
 Two final examples show how to annotate a spectrum plot by equal sized wavebands.
 
 <<plot-sun-default-7>>=
 plot(sun.spct,
-     bands=split_bands(c(300,800), length.out=5), unit="photon")
+     bands=split_bands(c(300,800), length.out=5), unit.out="photon")
 @
 
 <<plot-sun-default-8>>=
 plot(trim_spct(sun.spct, PAR()),
-     bands=split_bands(PAR(), length.out=6), unit="photon")
+     bands=split_bands(PAR(), length.out=6), unit.out="photon")
 @
 
 \begin{framed}
@@ -1173,7 +1173,7 @@ fig_sun.uv1
 Possible variations are almost endless, so we invite the reader to continue exploring how the functions from package \code{photobiology} can be used together with \code{ggplot}, to obtain beautiful plots of spectra. As an example here we show new versions of two plots from the previous section, one using a filled area to label the PAR region, and another one using symbols with colours according to their wavelength, to which we add a guide for PAR.
 
 <<plot-par-tag-annotate>>=
-par <- q_irrad_spct(sun.spct, PAR()) * 1e6
+par <- q_irrad(sun.spct, PAR()) * 1e6
 
 fig_sun.tgrect1 <-
   ggplot(data=par.sun.spct,
@@ -1388,7 +1388,7 @@ Given a color definition, we can convert it to RGB values by means of R's functi
 opts_chunk$set(opts_fig_wide_square)
 @
 
-<<plot-tern-1>>=
+<<plot-tern-1, eval=TRUE>>=
 colours <- c("red", "green", "yellow", "white",
              "orange", "purple", "seagreen", "pink")
 rgb.values <- col2rgb(colours)

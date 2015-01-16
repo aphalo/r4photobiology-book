@@ -117,16 +117,16 @@ head(filtered_sun.spct)
 The result of the calculation can be directly used as an argument, for example, when calulating irradiance.
 
 <<>>=
-q_irrad_spct(sun.spct, UV()) * 1e6
-q_irrad_spct(my_sun.spct, UV()) * 1e6
-q_irrad_spct(filtered_sun.spct, UV()) * 1e6
-q_irrad_spct(sun.spct * gg400.spct, UV()) * 1e6
-q_irrad_spct(my_sun.spct * my_gg400.spct, UV()) * 1e6
+q_irrad(sun.spct, UV()) * 1e6
+q_irrad(my_sun.spct, UV()) * 1e6
+q_irrad(filtered_sun.spct, UV()) * 1e6
+q_irrad(sun.spct * gg400.spct, UV()) * 1e6
+q_irrad(my_sun.spct * my_gg400.spct, UV()) * 1e6
 @
 
 <<>>=
-q_irrad_spct(my_sun.spct * my_gg400.spct) * 1e6
-q_irrad_spct(my_sun.spct * my_gg400.spct,
+q_irrad(my_sun.spct * my_gg400.spct) * 1e6
+q_irrad(my_sun.spct * my_gg400.spct,
              new_waveband(min(sun.spct), max(sun.spct))) * 1e6
 @
 
@@ -148,7 +148,7 @@ my_luminaire
 
 q_ratio_spct(my_luminaire,
              list(Red(), Blue(), Green()), PAR())
-q_irrad_spct(my_luminaire,
+q_irrad(my_luminaire,
              list(PAR(), Red(), Blue(), Green())) *  1e6
 @
 
