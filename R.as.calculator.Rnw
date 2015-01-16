@@ -1,3 +1,5 @@
+% !Rnw root = appendix.main.Rnw
+
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide)
 opts_knit$set(concordance=TRUE)
@@ -537,18 +539,18 @@ We have added two columns to the data frame, and in the case of column \code{x3}
 a.df[ , 1]   # first column
 a.df[ , "x"] # first column
 a.df[1, ]    # first row
-a.df[1:2, c(FALSE, FALSE, TRUE, FALSE, FALSE)] 
+a.df[1:2, c(FALSE, FALSE, TRUE, FALSE, FALSE)]
              # first two rows of the third column
 a.df[a.df$z , ] # the rows for which z is true
 a.df[a.df$x > 3, -3] # the rows for which x > 3 for
-                 # all columns except the third one 
+                 # all columns except the third one
 @
 
 When the names of data frames are long, complex conditions become awkward to write. In such cases \code{subset} is handy because evaluation is done in the `environment' of the data frame, i.e.\ the names of the columns are recognized if entered directly.
 
 <<data-frames-4>>=
 subset(a.df, x > 3)
-@  
+@
 
 When calling functions that return a vector, data farme, or other structure, the square brackets can be appended to the rightmost parenthesis of the function call, in the same way as to the name of a variable holding the same data.
 

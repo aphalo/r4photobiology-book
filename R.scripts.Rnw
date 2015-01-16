@@ -1,3 +1,5 @@
+% !Rnw root = appendix.main.Rnw
+
 <<echo=FALSE, cache=FALSE>>=
 set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)

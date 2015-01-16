@@ -1,4 +1,4 @@
-% !Rnw root = r4p.main.Rnw
+% !Rnw root = appendix.main.Rnw
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide)
