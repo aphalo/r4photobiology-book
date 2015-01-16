@@ -44,7 +44,7 @@
 \definecolor{shadecolor}{gray}{0.80}
 
 \usepackage{abbrev}
-%\usepackage{r4photobiology}
+\usepackage{r4photobiology}
 %\usepackage{imakeidx}
 
 \addbibresource{rbooks.bib}
@@ -114,7 +114,11 @@ options(datatable.print.topn=2)
 
 %\mainmatter
 
-\setsecnumdepth{subsection}
+\chapter*{Preface}
+
+This Notes cover different aspects of the use of R. They
+are meant to be use as a complement to a course, as explanations
+are short and terse.
 
 <<child-r-calc, child='R.as.calculator.Rnw', eval=TRUE>>=
 @
@@ -128,7 +132,17 @@ options(datatable.print.topn=2)
 <<child-r-plotting, child='R.plotting.Rnw', eval=TRUE>>=
 @
 
-\include{R.readings.tr.tex}
+\chapter{Further reading about R}\label{chap:R:readings}
+
+\section{Introductory texts}
+
+\section{Texts on specific aspects}
+
+\section{Advanced texts}
+
+\section{Application-specific texts}
+
+\nocite{*}
 
 \printbibliography
 
