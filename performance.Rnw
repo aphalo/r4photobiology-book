@@ -425,10 +425,10 @@ res261 <- microbenchmark(
   sun_out.spct <- cp_sun.spct * 2 + cp_sun.spct,
   times=100L, control=list(warmup = 10L))
 res262 <- microbenchmark(
-  sun_out.spct <- with(sun.data, s.e.irrad * 2 + s.e.irrad),
+  sun_out.spct <- with(sun.spct, s.e.irrad * 2 + s.e.irrad),
   times=100L, control=list(warmup = 10L))
 res263 <- microbenchmark(
-  sun_out.spct <- with(sun.dt, s.e.irrad * 2 + s.e.irrad),
+  sun_out.spct <- with(sun.spct, s.e.irrad * 2 + s.e.irrad),
   times=100L, control=list(warmup = 10L))
 res264 <- microbenchmark(
   sun_out.spct <- with(cp_sun.spct, s.e.irrad * 2 + s.e.irrad),
@@ -437,7 +437,7 @@ res265 <- microbenchmark(
   sun_out.spct <- cp_sun.spct[ , s.e.irrad := s.e.irrad * 2 + s.e.irrad],
   times=100L, control=list(warmup = 10L))
 @
-When using operators with spectral objects execution time is \Sexpr{med1 <- median(res261$time) * 1e-6; signif(med1, 3)} ms and it decreases to \Sexpr{med2 <- median(res262$time) * 1e-6; signif(med2, 3)} ms, to \Sexpr{signif(med2 / med1 * 100, 3)} \% when using operators on vectors in a data frame, to \Sexpr{med3 <- median(res263$time) * 1e-6; signif(med3, 3)} ms, to \Sexpr{signif(med3 / med1 * 100, 3)} \% when using operators on vectors in a data table, to \Sexpr{med4 <- median(res264$time) * 1e-6; signif(med4, 3)} ms, to \Sexpr{signif(med4 / med1 * 100, 3)} \% when using operators on vectors in a \texttt{source.spct}, and to \Sexpr{med5 <- median(res265$time) * 1e-6; signif(med5, 3)} ms, to \Sexpr{signif(med5 / med1 * 100, 3)} \% when using data table syntax in a \texttt{source.spct}.
+When using operators with spectral objects execution time is \Sexpr{med1 <- median(res261$time) * 1e-6; signif(med1, 3)} ms and it decreases to \Sexpr{med2 <- median(res262$time) * 1e-6; signif(med2, 3)} ms, to \Sexpr{signif(med2 / med1 * 100, 3)} \% when using operators on vectors in a data frame, to \Sexpr{med3 <- median(res263$time) * 1e-6; signif(med3, 3)} ms, to \Sexpr{signif(med3 / med1 * 100, 3)} \% when using operators on vectors in a data table, to \Sexpr{med4 <- median(res264$time) * 1e-6; signif(med4, 3)} ms, to \Sexpr{signif(med4 / med1 * 100, 3)} \% when using operators on vectors in a \texttt{source_spct}, and to \Sexpr{med5 <- median(res265$time) * 1e-6; signif(med5, 3)} ms, to \Sexpr{signif(med5 / med1 * 100, 3)} \% when using data table syntax in a \texttt{source_spct}.
 
 %%%%
 \section{Profiling}\label{sec:perf:profiling}

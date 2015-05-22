@@ -91,48 +91,48 @@ plot(sun.spct)
 plot(sun.daily.spct)
 @
 
-The parameter \code{unit} can be set to \code{"photon"} to obtain a plot depicting spectral photon irradiance. This works irrespective of whether the \code{source.spct} object contains the spectral data in photon or energy units.
+The parameter \code{unit} can be set to \code{"photon"} to obtain a plot depicting spectral photon irradiance. This works irrespective of whether the \code{source\_spct} object contains the spectral data in photon or energy units.
 
 <<plot-sun-default-2>>=
-plot(sun.spct, unit.out="photon")
+plot(sun.spct, unit.out = "photon")
 @
 
 A list of wave bands, or a single wave band, to be used for annotation can be supplied through the \code{bands} parameter. A \code{NULL} waveband results in no waveband labels, while the next example shows how to obtain the total irradiance.
 
 <<plot-sun-default-3>>=
-plot(sun.spct, bands=PAR(), unit.out="photon")
+plot(sun.spct, w.band = PAR(), unit.out = "photon")
 @
 
 <<plot-sun-default-4>>=
-plot(sun.spct, bands=NULL)
+plot(sun.spct, w.band = NULL)
 @
 
 <<plot-sun-default-5>>=
-plot(sun.spct, bands=waveband(sun.spct))
+plot(sun.spct, w.band = waveband(sun.spct))
 @
 
 Of course the arguments to these parameters can be supplied in different combinations, and combined with other functions as need. This last example shows how to plot using photon-based units, selecting only a specific region of the spectrum, annotated with the red and far-red photon irradiances, using Prof.\ Harry Smith's definitions for these two wavebands.
 
 <<plot-sun-default-6>>=
 plot(trim_spct(sun.spct, waveband(c(600,800))),
-     bands=list(Red("Smith"), Far_red("Smith")), unit.out="photon")
+     w.band = list(Red("Smith20"), Far_red("Smith20")), unit.out = "photon")
 @
 
 Two final examples show how to annotate a spectrum plot by equal sized wavebands.
 
 <<plot-sun-default-7>>=
 plot(sun.spct,
-     bands=split_bands(c(300,800), length.out=5), unit.out="photon")
+     w.band = split_bands(c(300,800), length.out = 5), unit.out = "photon")
 @
 
 <<plot-sun-default-8>>=
 plot(trim_spct(sun.spct, PAR()),
-     bands=split_bands(PAR(), length.out=6), unit.out="photon")
+     w.band=split_bands(PAR(), length.out = 6), unit.out = "photon")
 @
 
 \begin{framed}
 \noindent
-As the current implementation uses annotations rather than a \code{ggplot} `statistic', waveband irradiance annotations ignore global aesthetics and facets. If used for simultaneous plotting of several spectra (stored in a single R object), then parameter \code{bands} should given \code{NULL} as argument.
+As the current implementation uses annotations rather than a \code{ggplot} `statistic', waveband irradiance annotations ignore global aesthetics and facets. If used for simultaneous plotting of several spectra (stored in a single R object), then parameter \code{w.band} should given \code{NULL} as argument.
 \end{framed}
 
 %%%%
@@ -215,12 +215,12 @@ fig_sun.e1 <-
   labs(x = xlab_nm)
 @
 
-We can use function \code{grid.arrange} to make a single plot from two separate ggplots, and put them side by or on top of each other. We use different $y$-axis labels in the two cases to make better use of the available space.
+We can use function \code{multiplot} to make a single plot from two separate ggplots, and put them side by or on top of each other. We use different $y$-axis labels in the two cases to make better use of the available space.
 
 <<plot-par-multiple-1>>=
-grid.arrange(fig_sun.q  + labs(y = ylab_umol_atop),
-             fig_sun.e1 + labs(y = ylab_watt_atop),
-             nrow=2)
+multiplot(fig_sun.q  + labs(y = ylab_umol_atop),
+          fig_sun.e1 + labs(y = ylab_watt_atop),
+          cols = 1)
 @
 
 <<echo=FALSE, include=FALSE>>=
@@ -228,9 +228,9 @@ opts_chunk$set(opts_fig_wide)
 @
 
 <<plot-par-multiple-2>>=
-grid.arrange(fig_sun.q  + labs(y = ylab_umol),
-             fig_sun.e1 + labs(y = ylab_watt),
-             nrow=1)
+multiplot(fig_sun.q  + labs(y = ylab_umol),
+          fig_sun.e1 + labs(y = ylab_watt),
+          cols = 2)
 @
 
 \section{Task: finding peaks and valleys in spectra}\label{sec:get:pk:vly}
@@ -1289,6 +1289,10 @@ cie.dt <- data.table(
 
 Now we plot stacked bars using \code{geom\_bar}, however as the default \code{stat} of this geom is not suitable for our data, we specify \code{stat="identity"} to have the data plotted as is. We set a specific palette for fill, and add a black border to the bars by means of \code{color="black"}, we remove the grid lines corresponding to the $x$-axis, and also position the legend within the plotting region.
 
+<<print-bar-cie-data>>=
+cie.dt
+@
+
 <<plot-bar-cie-2>>=
 fig_cie_bars0 <- ggplot(data=cie.dt,
                         aes(y = cie.irrad * 1e3,
@@ -1353,7 +1357,7 @@ for (i in 1:num.bands) {
 }
 
 q.irrad.bands.sun <- q_irrad(sun.spct, many.bands)
-q.irrad.sun.dt <- data.table(q.irrad = q.irrad.bands.sun,
+q.irrad.sun.spct <- data.table(q.irrad = q.irrad.bands.sun,
                                    w.length = w.length,
                                    wb.color = wb.color,
                                    wb.name = wb.name)
@@ -1362,7 +1366,7 @@ q.irrad.sun.dt <- data.table(q.irrad = q.irrad.bands.sun,
 Now we can plot the data as bars, filling each bar with the corresponding colour. In this case we plot the bars using a continuous variable, wavelength, for the $x$-axis.
 
 <<plot-bar-qirrad-bands-1>>=
-fig_qirrad_bar <- ggplot(data=q.irrad.sun.dt,
+fig_qirrad_bar <- ggplot(data=q.irrad.sun.spct,
                         aes(y = q.irrad * 1e6,
                             x = w.length,
                             fill=as.character(wb.color))) +

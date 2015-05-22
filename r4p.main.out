@@ -1,0 +1,87 @@
+\BOOKMARK [0][-]{section*.1}{Contents}{}% 1
+\BOOKMARK [0][-]{chapter*.2}{Preface}{}% 2
+\BOOKMARK [1][-]{section*.3}{Acknowledgements}{chapter*.2}% 3
+\BOOKMARK [0][-]{chapter*.4}{List of abbreviations and symbols}{}% 4
+\BOOKMARK [-1][-]{part.1}{Preliminaries}{}% 5
+\BOOKMARK [-1][-]{part.2}{Cookbook of calculations}{}% 6
+\BOOKMARK [0][-]{chapter.1}{Radiation physics}{part.2}% 7
+\BOOKMARK [1][-]{section.1.1}{Packages used in this chapter}{chapter.1}% 8
+\BOOKMARK [1][-]{section.1.2}{Introduction}{chapter.1}% 9
+\BOOKMARK [1][-]{section.1.3}{Task: black body emission}{chapter.1}% 10
+\BOOKMARK [0][-]{chapter.2}{Astronomy}{part.2}% 11
+\BOOKMARK [1][-]{section.2.1}{Packages used in this chapter}{chapter.2}% 12
+\BOOKMARK [1][-]{section.2.2}{Introduction}{chapter.2}% 13
+\BOOKMARK [1][-]{section.2.3}{Task: calculating the length of the photoperiod}{chapter.2}% 14
+\BOOKMARK [1][-]{section.2.4}{Task: calculating the position of the sun}{chapter.2}% 15
+\BOOKMARK [1][-]{section.2.5}{Task: plotting sun elevation through a day}{chapter.2}% 16
+\BOOKMARK [1][-]{section.2.6}{Task: plotting day length through the year}{chapter.2}% 17
+\BOOKMARK [0][-]{chapter.3}{Basic operations on spectra}{part.2}% 18
+\BOOKMARK [1][-]{section.3.1}{Packages used in this chapter}{chapter.3}% 19
+\BOOKMARK [1][-]{section.3.2}{Introduction}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.3}{Spectra}{chapter.3}% 21
+\BOOKMARK [1][-]{section.3.4}{Wavebands}{chapter.3}% 22
+\BOOKMARK [1][-]{section.3.5}{Internal-use functions}{chapter.3}% 23
+\BOOKMARK [0][-]{chapter.4}{Unweighted irradiance}{part.2}% 24
+\BOOKMARK [1][-]{section.4.1}{Packages used in this chapter}{chapter.4}% 25
+\BOOKMARK [1][-]{section.4.2}{Introduction}{chapter.4}% 26
+\BOOKMARK [1][-]{section.4.3}{Task: use simple predefined wavebands}{chapter.4}% 27
+\BOOKMARK [1][-]{section.4.4}{Task: define simple wavebands}{chapter.4}% 28
+\BOOKMARK [1][-]{section.4.5}{Task: define lists of simple wavebands}{chapter.4}% 29
+\BOOKMARK [1][-]{section.4.6}{Task: \(energy\) irradiance from spectral irradiance}{chapter.4}% 30
+\BOOKMARK [1][-]{section.4.7}{Task: photon irradiance from spectral irradiance}{chapter.4}% 31
+\BOOKMARK [1][-]{section.4.8}{Task: irradiances for more than one waveband}{chapter.4}% 32
+\BOOKMARK [1][-]{section.4.9}{Task: photon ratios}{chapter.4}% 33
+\BOOKMARK [1][-]{section.4.10}{Task: energy ratios}{chapter.4}% 34
+\BOOKMARK [1][-]{section.4.11}{Task: calculate average number of photons per unit energy}{chapter.4}% 35
+\BOOKMARK [1][-]{section.4.12}{Task: split energy irradiance into regions}{chapter.4}% 36
+\BOOKMARK [0][-]{chapter.5}{Weighted and effective irradiance}{part.2}% 37
+\BOOKMARK [1][-]{section.5.1}{Packages used in this chapter}{chapter.5}% 38
+\BOOKMARK [1][-]{section.5.2}{Introduction}{chapter.5}% 39
+\BOOKMARK [1][-]{section.5.3}{Task: specifying the normalization wavelength}{chapter.5}% 40
+\BOOKMARK [1][-]{section.5.4}{Task: use of weighted wavebands}{chapter.5}% 41
+\BOOKMARK [1][-]{section.5.5}{Task: define wavebands that use weighting functions}{chapter.5}% 42
+\BOOKMARK [1][-]{section.5.6}{Task: calculate effective energy irradiance}{chapter.5}% 43
+\BOOKMARK [1][-]{section.5.7}{Task: calculate effective photon irradiance}{chapter.5}% 44
+\BOOKMARK [1][-]{section.5.8}{Task: calculate daily effective energy exposure}{chapter.5}% 45
+\BOOKMARK [0][-]{chapter.6}{Transmission and reflection}{part.2}% 46
+\BOOKMARK [1][-]{section.6.1}{Packages used in this chapter}{chapter.6}% 47
+\BOOKMARK [1][-]{section.6.2}{Introduction}{chapter.6}% 48
+\BOOKMARK [1][-]{section.6.3}{Task: absorbance and transmittance}{chapter.6}% 49
+\BOOKMARK [1][-]{section.6.4}{Task: spectral absorbance from spectral transmittance}{chapter.6}% 50
+\BOOKMARK [1][-]{section.6.5}{Task: spectral transmittance from spectral absorbance}{chapter.6}% 51
+\BOOKMARK [1][-]{section.6.6}{Task: reflected or transmitted spectrum from spectral reflectance and spectral irradiance}{chapter.6}% 52
+\BOOKMARK [1][-]{section.6.7}{Task: total spectral transmittance from internal spectral transmittance and spectral reflectance}{chapter.6}% 53
+\BOOKMARK [1][-]{section.6.8}{Task: combined spectral transmittance of two or more filters}{chapter.6}% 54
+\BOOKMARK [1][-]{section.6.9}{Task: light scattering media \(natural waters, plant and animal tissues\)}{chapter.6}% 55
+\BOOKMARK [0][-]{chapter.7}{Colour}{part.2}% 56
+\BOOKMARK [1][-]{section.7.1}{Packages used in this chapter}{chapter.7}% 57
+\BOOKMARK [1][-]{section.7.2}{Introduction}{chapter.7}% 58
+\BOOKMARK [1][-]{section.7.3}{Task: calculating an RGB colour from a single wavelength}{chapter.7}% 59
+\BOOKMARK [1][-]{section.7.4}{Task: calculating an RGB colour for a range of wavelengths}{chapter.7}% 60
+\BOOKMARK [1][-]{section.7.5}{Task: calculating an RGB colour for spectrum}{chapter.7}% 61
+\BOOKMARK [1][-]{section.7.6}{A sample of colours}{chapter.7}% 62
+\BOOKMARK [0][-]{chapter.8}{Plotting spectra and colours}{part.2}% 63
+\BOOKMARK [1][-]{section.8.1}{Packages used in this chapter}{chapter.8}% 64
+\BOOKMARK [1][-]{section.8.2}{Introduction to plotting spectra}{chapter.8}% 65
+\BOOKMARK [1][-]{section.8.3}{Task: simple plotting of spectra}{chapter.8}% 66
+\BOOKMARK [1][-]{section.8.4}{Task: plotting spectra with ggplot2}{chapter.8}% 67
+\BOOKMARK [1][-]{section.8.5}{Task: using a log scale}{chapter.8}% 68
+\BOOKMARK [1][-]{section.8.6}{Task: compare energy and photon spectral units}{chapter.8}% 69
+\BOOKMARK [1][-]{section.8.7}{Task: finding peaks and valleys in spectra}{chapter.8}% 70
+\BOOKMARK [1][-]{section.8.8}{Task: annotating peaks and valleys in spectra}{chapter.8}% 71
+\BOOKMARK [1][-]{section.8.9}{Task: annotating wavebands}{chapter.8}% 72
+\BOOKMARK [1][-]{section.8.10}{Task: using colour as data in plots}{chapter.8}% 73
+\BOOKMARK [1][-]{section.8.11}{Task: plotting effective spectral irradiance}{chapter.8}% 74
+\BOOKMARK [1][-]{section.8.12}{Task: making a bar plot of effective irradiance}{chapter.8}% 75
+\BOOKMARK [1][-]{section.8.13}{Task: plotting a spectrum using colour bars}{chapter.8}% 76
+\BOOKMARK [1][-]{section.8.14}{Task: plotting colours in Maxwell's triangle}{chapter.8}% 77
+\BOOKMARK [1][-]{section.8.15}{Honey-bee vision: GBU}{chapter.8}% 78
+\BOOKMARK [-1][-]{part.3}{Catalogue of data sources}{}% 79
+\BOOKMARK [-1][-]{part.4}{Data acquisition and modelling}{}% 80
+\BOOKMARK [0][-]{chapter.9}{Further reading about R}{part.4}% 81
+\BOOKMARK [1][-]{section.9.1}{Introductory texts}{chapter.9}% 82
+\BOOKMARK [1][-]{section.9.2}{Texts on specific aspects}{chapter.9}% 83
+\BOOKMARK [1][-]{section.9.3}{Advanced texts}{chapter.9}% 84
+\BOOKMARK [1][-]{section.9.4}{Application-specific texts}{chapter.9}% 85
+\BOOKMARK [0][-]{section*.10}{Bibliography}{part.4}% 86
+\BOOKMARK [0][-]{appendix.A}{Build information}{part.4}% 87

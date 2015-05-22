@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{report}
+\documentclass[a4paper,10pt]{scrreprt}
 
 \usepackage[utf8]{inputenc}
 
@@ -6,13 +6,13 @@
 \author{Pedro J. Aphalo}
 \date{Git: tag\gitVtagn , committed with hash \gitAbbrevHash\ on \gitAuthorIsoDate}
 
-%% using Lucida bright using now free package from PC TeX
-%\usepackage[lucidasmallscale,nofontinfo,seriftt=true,math-style=iso]{lucimatx}
-%% replace option altbullet
-%\renewcommand{\labelitemi}{%
-% {\UseTextSymbol{OMS}\textbullet}}
-%% needed for Lucida
-%\linespread{1.04}
+% using Lucida bright using now free package from PC TeX
+\usepackage[lucidasmallscale,nofontinfo,seriftt=true,math-style=iso]{lucimatx}
+% replace option altbullet
+\renewcommand{\labelitemi}{%
+{\UseTextSymbol{OMS}\textbullet}}
+% needed for Lucida
+\linespread{1.04}
 
 \usepackage[footinfo, missing={`none'}]{gitinfo} % remember to setup Git hooks
 
@@ -45,6 +45,7 @@
 
 \usepackage{abbrev}
 \usepackage{r4photobiology}
+\usepackage{breakurl}
 %\usepackage{imakeidx}
 
 \addbibresource{rbooks.bib}
@@ -116,7 +117,7 @@ options(datatable.print.topn=2)
 
 \chapter*{Preface}
 
-This Notes cover different aspects of the use of R. They
+This series of Notes cover different aspects of the use of R. They
 are meant to be use as a complement to a course, as explanations
 are short and terse.
 
@@ -129,8 +130,10 @@ are short and terse.
 <<child-r-data, child='R.data.Rnw', eval=TRUE>>=
 @
 
-<<child-r-plotting, child='R.plotting.Rnw', eval=TRUE>>=
+<<child-r-plotting, child='R.plotting.Rnw', eval=FALSE>>=
 @
+
+\end{document}
 
 \chapter{Further reading about R}\label{chap:R:readings}
 

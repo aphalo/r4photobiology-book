@@ -29,7 +29,7 @@ Transmittance is defined as:
 \tau(\lambda) = \frac{I}{I_0} = \frac{\sirr}{\sirr[0]} = \frac{\spfd}{\spfd[0]}
 \end{equation}
 
-Given this simple relation $\tau(\lambda)$ can be calculated as a division between two "source.spct" objects. This gives the correct answer, but as an object of class "source.scpt".
+Given this simple relation $\tau(\lambda)$ can be calculated as a division between two "source\_spct" objects. This gives the correct answer, but as an object of class "source.scpt".
 
 <<eval=FALSE>>=
 tau <- spc_above / spc_below
@@ -69,7 +69,7 @@ which in S language is:
 my_A2T <- function(x) {10^-x}
 @
 
-Instead of these functions, the package defines generic functions and specialized functions, that can be used on vectors and on \code{filter.spc} objects. Then functions defined above could be directly applied to vectors but doing this on a column in a \code{filter.spc} is more cumbersome. As the spectra objects are data.tables, one can add a new column, say with transmittances to a copy of the filter data as follows.
+Instead of these functions, the package defines generic functions and specialized functions, that can be used on vectors and on \code{filter\_spct} objects. Then functions defined above could be directly applied to vectors but doing this on a column in a \code{filter\_spct} is more cumbersome. As the spectra objects are data.tables, one can add a new column, say with transmittances to a copy of the filter data as follows.
 
 <<>>=
 my_gg400.spct <- copy(gg400.spct)
@@ -80,7 +80,7 @@ my_gg400.spct
 %%%%
 \section{Task: spectral absorbance from spectral transmittance}
 
-Using \code{filter.spct} objects, the calculations become very simple.
+Using \code{filter\_spct} objects, the calculations become very simple.
 
 <<>>=
 my_gg400.spct <- copy(gg400.spct)
@@ -99,7 +99,7 @@ A2T(a.gg400.spct, action="replace")
 %%%%
 \section{Task: reflected or transmitted spectrum from spectral reflectance and spectral irradiance}
 
-When we multiply a \code{source.spct} by a \code{filter.spct} or by a \code{reflector.spct} we obtain as a result a new \code{source.spct}.
+When we multiply a \code{source\_spct} by a \code{filter\_spct} or by a \code{reflector\_spct} we obtain as a result a new \code{source\_spct}.
 
 <<>>=
 class(sun.spct)
@@ -146,7 +146,7 @@ my_luminaire <-
   (Norlux_B.spct * 0.5 + Norlux_R.spct) *  PLX0A000_XT.spct
 my_luminaire
 
-q_ratio_spct(my_luminaire,
+q_ratio(my_luminaire,
              list(Red(), Blue(), Green()), PAR())
 q_irrad(my_luminaire,
              list(PAR(), Red(), Blue(), Green())) *  1e6

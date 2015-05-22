@@ -35,7 +35,7 @@
             pdftitle={R for Photobiology},%
             pdfkeywords={photobiology, visible radiation, ultraviolet radiation, R, quantification, methods, calculations},%
             pdfsubject={Photobiology},%
-            pdfauthor={Pedro J. Aphalo, Andreas Albert}%
+            pdfauthor={Pedro J. Aphalo, Andreas Albert, Titta Kotilainen}%
             ]{hyperref}
 %\chapterstyle{veelo}
 
@@ -89,9 +89,9 @@
 \colorbox{grey50}{\textcolor{yellow}{\normalfont\itshape\Large
 A handbook}}\par
 \vspace{\drop}
-{\Large Pedro J. Aphalo\\ and\\ Andreas Albert}\par
+{\Large Pedro J. Aphalo,\\ Andreas Albert\\ and\\ Titta Kotilainen}\par
 \vfill
-{\footnotesize Git: tag\gitVtagn , committed with hash \gitAbbrevHash\ on \gitAuthorIsoDate\\ by\ \gitAuthorName \\PDF created \today\\ \copyright\ 2013-2014 by the authors}\par
+{\footnotesize Git: tag\gitVtagn , committed with hash \gitAbbrevHash\ on \gitAuthorIsoDate\\ by\ \gitAuthorName \\PDF created \today\\ \copyright\ 2013--2015 by the authors}\par
 \vspace*{\drop}
 \endgroup}
 
@@ -145,7 +145,7 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- TRUE
+incl_all <- FALSE
 incl_chaps <- FALSE || incl_all
 incl_ckbk <- TRUE || incl_all
 incl_data <- FALSE || incl_all
@@ -284,27 +284,12 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-performance, child='performance.Rnw', eval=FALSE>>=
 @
 
+\include{R.readings.tr}
+
+
 \printbibliography
 
 \appendix
-
-\part{Appendixes}
-
-<<child-r-calc, child='R.as.calculator.Rnw', eval=incl_apdx>>=
-@
-
-<<child-r-scripts, child='R.scripts.Rnw', eval=incl_apdx>>=
-@
-
-<<child-r-data, child='R.data.Rnw', eval=incl_apdx>>=
-@
-
-<<child-r-plotting, child='R.plotting.Rnw', eval=incl_apdx>>=
-@
-
-<<child-r-data, child='R.readings.Rnw', eval=incl_apdx>>=
-@
-
 
 \chapter{Build information}
 
@@ -320,6 +305,6 @@ R.Version()
 sessionInfo()
 @
 
-\backmatter
+% \backmatter
 
 \end{document}

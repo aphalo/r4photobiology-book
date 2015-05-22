@@ -601,7 +601,9 @@ My version using \code{ggplot2}:
 <<>>=
 # we rearrange the data
 my.mat <- matrix(as.matrix(anscombe), ncol=2)
-my.anscombe <- data.frame(x = my.mat[ , 1], y = my.mat[ , 2], case=factor(rep(1:4, rep(11,4))))
+my.anscombe <- data.frame(x = my.mat[ , 1], 
+                          y = my.mat[ , 2], 
+                          case=factor(rep(1:4, rep(11,4))))
 # we draw the figure
 ggplot(my.anscombe, aes(x,y)) +
   geom_point() +

@@ -56,7 +56,7 @@ Examples for wavelength ranges:
 <<>>=
 w_length_range2rgb(c(400,700))
 w_length_range2rgb(400:700)
-w_length_range2rgb(sun.data$w.length)
+w_length_range2rgb(sun.spct$w.length)
 w_length_range2rgb(550)
 @
 
@@ -68,15 +68,15 @@ Function \code{s\_e\_irrad2rgb} in contrast to those described above, when calcu
 Examples for spectra, in this case the solar spectrum:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      s_e_irrad2rgb(w.length, s.e.irrad))
-with(sun.data,
+with(sun.spct,
      s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF2.spct))
-with(sun.data,
+with(sun.spct,
      s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF10.spct))
-with(sun.data,
+with(sun.spct,
      s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC2.spct))
-with(sun.data,
+with(sun.spct,
      s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC10.spct))
 @
 

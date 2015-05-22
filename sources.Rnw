@@ -6,7 +6,7 @@ opts_knit$set(concordance=TRUE)
 \chapter{Radiation sources}\label{chap:sources}
 
 \begin{abstract}
-  In this chapter we explain how to use the spectral data for light sources.
+  In this chapter we explain how to use the spectral data for light sources, and describe the data supplied in the packages.
 \end{abstract}
 
 \section{Packages used in this chapter}
@@ -32,8 +32,29 @@ library(photobiologygg)
 %%%%
 \section{Task: extraterrestrial solar radiation spectra}\label{sec:}
 
+
 %%%%
 \section{Task: terrestrial  solar radiation spectra}\label{sec:}
+
+% from Titta
+
+\begin{itemize}
+  \item Global irradiance consists of both direct and diffuse components:
+  \begin{itemize}
+    \item Direct irradiance is solar radiation that comes in a straight line from the direction of the sun at its current position in the sky.
+    \item Diffuse irradiance is solar radiation that has been scattered by molecules and particles in the atmosphere or scattered and reflected from the surroundings.
+  \end{itemize}
+  \item Two standardization parties commonly referred to, the American Society for Testing and Materials (ASTM) and the International Electrotechnical Commission (IEC) both use the Simple Model of the Atmospheric Radiative Transfer of Sunshine (SMARTS) program to generate terrestrial reference spectra for photovoltaic system performance evaluation and product comparison and hence their reference spectra are essentially the same.
+  \item The standards define global irradiance where the receiving surface is defined in the standards as an inclined plane at 37$^\circ$ tilt toward the equator, facing the sun (i.e., the surface normal points to the sun, at an elevation of 41.81$^\circ$ above the horizon), and expressed as \wattnm.
+  \item American Society for Testing and Materials (ASTM) defines two standard terrestrial solar spectral irradiance distributions:
+  \begin{itemize}
+    \item The AM1.5 Global irradiance spectrum
+    \item The AM1.5 Direct (+circumsolar) spectrum that is defined for solar concentrator work. It includes the the direct beam from the sun plus the circumsolar component, that results from scattered radiation appearing to come from around the solar disk.
+  \end{itemize}
+  \item There is no standard sun spectrum specified separately for plant photobiology or horticulture.
+  \item Plant photobiologists refer to these SMARTS derived spectrum as well.
+  \item The global irradiance spectrum can be considered to be more relevant for plant photobiology and horticulture.
+\end{itemize}         
 
 %%%%
 \section{Task: incandescent lamps}\label{sec:}

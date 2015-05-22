@@ -12,6 +12,8 @@
 *.bcf
 *.bak
 *.blg
+*.out
+*.txt
 Rprof.out
 ggmapFileDrawer/
 cache/

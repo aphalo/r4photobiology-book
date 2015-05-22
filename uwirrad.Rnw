@@ -26,7 +26,7 @@ library(photobiologyWavebands)
 %%%%
 \section{Introduction}\label{sec:uw:intro}
 
-Functions \code{e\_irrad} and \code{q\_irrad} return energy irradiance and photon (or quantum) irradiance, and both take as argument a \code{source.spct} object containing either spectral (energy) irradiance or spectral photon irradiance data. An additional parameter accepting a \code{waveband} object, or a list of \code{waveband} objects, can be used to set the range(s) of wavelengths and spectral weighting function(s) to use for integration(s). Two additional functions, \code{energy\_irradiance} and \code{photon\_irradiance}, are defined for equivalent calculations on spectral irradiance data stored as numeric vectors.
+Functions \code{e\_irrad} and \code{q\_irrad} return energy irradiance and photon (or quantum) irradiance, and both take as argument a \code{source\_spct} object containing either spectral (energy) irradiance or spectral photon irradiance data. An additional parameter accepting a \code{waveband} object, or a list of \code{waveband} objects, can be used to set the range(s) of wavelengths and spectral weighting function(s) to use for integration(s). Two additional functions, \code{energy\_irradiance} and \code{photon\_irradiance}, are defined for equivalent calculations on spectral irradiance data stored as numeric vectors.
 
 We start by describing how to use and define \code{waveband} objects, for which we need to use function \code{e\_irrad} in some examples before a detailed explanation of its use (see section \ref{sec:uw:eirrad}) on page \pageref{sec:uw:eirrad} for details).
 
@@ -136,7 +136,7 @@ in all cases code{range} is used to find the list boundaries, so we can also spl
 split_bands(PAR(), length.out=3)
 @
 
-or split a whole spectrum\footnote{This is not restricted to \code{source.spct} objects as all other classes of \code{\_\_\_.spct} objects also have \code{range} methods defined.} into equally sized regions,
+or split a whole spectrum\footnote{This is not restricted to \code{source\_spct} objects as all other classes of \code{\_\_\_.spct} objects also have \code{range} methods defined.} into equally sized regions,
 
 <<>>=
 split_bands(sun.spct, length.out=3)
@@ -166,7 +166,7 @@ The task to be completed is to calculate the (energy) irradiance ($\irr$) in \wa
 \end{equation}
 
 Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
-$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_irrad} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source.spct} object.
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_irrad} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
 
 <<>>=
 e_irrad(sun.spct, waveband(c(400,700)))
@@ -198,30 +198,30 @@ e_irrad(sun.spct, list(UVB(), UVA()))
 
 \begin{small}
 
-Storing emission spectral data in \code{source.spct} objects is recommended, as it allows better protection against mistakes, and allows automatic detection of input data base of expression and units. However, it may be sometimes more convenient or efficient to keep spectral data in individual numeric vectors, or data frames. In such cases function \code{energy\_irradiance}, which accepts the spectral data as vectors can be used at the cost of less concise code and weaker error tests. In this case, the user must indicate whether spectral data is on energy or photon based units through parameter \code{unit.in}, which defaults to \code{"energy"}.
+Storing emission spectral data in \code{source\_spct} objects is recommended, as it allows better protection against mistakes, and allows automatic detection of input data base of expression and units. However, it may be sometimes more convenient or efficient to keep spectral data in individual numeric vectors, or data frames. In such cases function \code{energy\_irradiance}, which accepts the spectral data as vectors can be used at the cost of less concise code and weaker error tests. In this case, the user must indicate whether spectral data is on energy or photon based units through parameter \code{unit.in}, which defaults to \code{"energy"}.
 
 For example when using function \code{PAR()}, the code above becomes:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      energy_irradiance(w.length, s.e.irrad, PAR()))
-with(sun.data,
+with(sun.spct,
      energy_irradiance(w.length, s.e.irrad, PAR(), unit.in="energy"))
 @
 
-where \code{sun.data} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
+where \code{sun.spct} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
 
 
-The \code{sun.data} data frame also contains spectral photon irradiance values:
+The \code{sun.spct} data frame also contains spectral photon irradiance values:
 <<>>=
-names(sun.data)
+names(sun.spct)
 @
 which allows us to use:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      energy_irradiance(w.length, s.q.irrad, PAR(), unit.in="photon"))
-     
+
 @
 
 The other examples above can be re-written with similar syntax.
@@ -240,7 +240,7 @@ Combining equations \ref{eq:energy:irrad} and \ref{eq:energy:mol:photons} we obt
 \end{equation}
 
 Let's assume that we want to calculate photosynthetically active radiation (PAR) photon irradiance (frequently called PPFD or photosynthetic photon flux density), for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
-$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{q\_irrad}, returning photon irradiance in \mol. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source.spct} object.
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{q\_irrad}, returning photon irradiance in \mol. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
 
 <<>>=
 q_irrad(sun.spct, waveband(c(400,700)))
@@ -261,18 +261,18 @@ Examples given in section \ref{sec:uw:eirrad} can all be converted by replacing 
 
 \begin{small}
 
-Storing emission spectral data in \code{source.spct} objects is recommended (see section \ref{sec:uw:eirrad}). However, it may be sometimes more convenient or efficient to keep spectral data in individual numeric vectors, or data frames. In such cases function \code{photon\_irradiance}, which accepts the spectral data as vectors can be used at the cost of less concise code and weaker error tests. In this case, the user must indicate whether spectral data is on energy or photon based units through parameter \code{unit.in}, which defaults to \code{"energy"}.
+Storing emission spectral data in \code{source\_spct} objects is recommended (see section \ref{sec:uw:eirrad}). However, it may be sometimes more convenient or efficient to keep spectral data in individual numeric vectors, or data frames. In such cases function \code{photon\_irradiance}, which accepts the spectral data as vectors can be used at the cost of less concise code and weaker error tests. In this case, the user must indicate whether spectral data is on energy or photon based units through parameter \code{unit.in}, which defaults to \code{"energy"}.
 
 For example when using function \code{PAR()}, the code above becomes:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      photon_irradiance(w.length, s.e.irrad, PAR()), unit.in="energy")  * 1e6
-with(sun.data,
+with(sun.spct,
      photon_irradiance(w.length, s.e.irrad, PAR()))  * 1e6
 @
 
-where \code{sun.data} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
+where \code{sun.spct} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
 
 \end{small}
 
@@ -310,7 +310,7 @@ e_irrad(sun.spct, list(R=Red(), G=Green(), B=Blue()))
 or
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      energy_irradiance(w.length, s.e.irrad,
                        list(R=Red(), G=Green(), B=Blue())))
 @
@@ -356,14 +356,14 @@ q_ratio(sun.spct, VIS_bands(), VIS())
 Using spectral data stored in numeric vectors:
 
 <<tidy=FALSE>>=
-with(sun.data,
+with(sun.spct,
      photon_ratio(w.length, s.e.irrad,  Red("Smith"), Far_red("Smith")))
 @
 
 or using the predefined convenience function \code{R\_FR\_ratio}:
 
 <<tidy=FALSE>>=
-with(sun.data,
+with(sun.spct,
      R_FR_ratio(w.length, s.e.irrad))
 @
 
@@ -386,7 +386,7 @@ other examples in section \ref{sec:photon:ratio} above, can be easily edited to 
 Using spectral data stored in vectors:
 
 <<tidy=FALSE>>=
-with(sun.data,
+with(sun.spct,
      energy_ratio(w.length, s.e.irrad,
                   Red("Smith"), Far_red("Smith")))
 @
@@ -428,14 +428,14 @@ qe_ratio(sun.spct, VIS_bands())
 The same ratios can be calculated for data stored in numeric vectors using function \code{photons\_energy\_ratio}:
 
 <<tidy=FALSE>>=
-with(sun.data,
+with(sun.spct,
      photons_energy_ratio(w.length, s.e.irrad, PAR()))
 @
 
 For obtaining the same quotient in \umoljoule from spectral data in \wattnm we just need to multiply by $1 \times 10^6$:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      photons_energy_ratio(w.length, s.e.irrad, PAR())) * 1e6
 @
 
@@ -445,8 +445,8 @@ with(sun.data,
 \section[Task: split energy irradiance into regions]{Task: calculate the contribution of different regions of a spectrum to energy irradiance}\label{sec:split:energy}
 
 \sloppy
-It can be of interest to split the total (energy) irradiance into adjacent regions delimited by arbitrary wavelengths. 
-When working with \code{source.spct} objects, the best way to achieve this is to combine the use of the functions \code{e\_irrad} and \code{split\_bands} already described above, for example,
+It can be of interest to split the total (energy) irradiance into adjacent regions delimited by arbitrary wavelengths.
+When working with \code{source\_spct} objects, the best way to achieve this is to combine the use of the functions \code{e\_irrad} and \code{split\_bands} already described above, for example,
 
 <<>>=
 e_irrad(sun.spct, split_bands(c(400, 500, 600, 700)))
@@ -488,7 +488,7 @@ e_irrad(sun.spct, split_bands(PAR(), short.names=FALSE, length.out=3))
 With spectral data stored in numeric vectors, we can use function \code{energy\_irradiance} together with function \code{split\_bands} or we can use the convenience function \code{split\_energy\_irradiance} to obtain to energy of each of the regions delimited by the values in nm supplied in a numeric vector:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      split_energy_irradiance(w.length, s.e.irrad,
                              c(400, 500, 600, 700)))
 @
@@ -496,7 +496,7 @@ with(sun.data,
 It possible to obtain the `split' as a vector of fractions adding up to one,
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      split_energy_irradiance(w.length, s.e.irrad,
                              c(400, 500, 600, 700),
                              scale="relative"))
@@ -505,7 +505,7 @@ with(sun.data,
 or as percentages:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      split_energy_irradiance(w.length, s.e.irrad,
                              c(400, 500, 600, 700),
                              scale="percent"))
@@ -514,14 +514,14 @@ with(sun.data,
 If the `limits' cover only a region of the spectral data, relative and percent values will be calculated with that region as a reference.
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      split_energy_irradiance(w.length, s.e.irrad,
                              c(400,500,600,700),
                              scale="percent"))
 @
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      split_energy_irradiance(w.length, s.e.irrad,
                              c(400,500,600),
                              scale="percent"))
@@ -530,7 +530,7 @@ with(sun.data,
 A vector of two wavelengths is valid input, although not very useful for percentages:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      split_energy_irradiance(w.length, s.e.irrad,
                              c(400, 700),
                              scale="percent"))
@@ -539,7 +539,7 @@ with(sun.data,
 In contrast, for \code{scale="absolute"}, the default, it can be used as a quick way of calculating an irradiance for a range of wavelengths without having to define a \code{waveband}:
 
 <<>>=
-with(sun.data,
+with(sun.spct,
      split_energy_irradiance(w.length, s.e.irrad,
                              c(400, 700)))
 @
