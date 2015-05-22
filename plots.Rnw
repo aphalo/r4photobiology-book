@@ -380,13 +380,13 @@ figv2 <- fig_sun.e0 +
                     ymax=0.82) +
   annotate_waveband(Red(), "text",
                     y=0.86) +
-  annotate_waveband(Red("Smith"), "rect",
+  annotate_waveband(Red("Smith10"), "rect",
                     ymax=0.82) +
-  annotate_waveband(Red("Smith"), "text",
+  annotate_waveband(Red("Smith10"), "text",
                     y=0.80, angle=90, hjust=1) +
-  annotate_waveband(Far_red("Smith"), "rect",
+  annotate_waveband(Far_red("Smith10"), "rect",
                     ymax=0.82) +
-  annotate_waveband(Far_red("Smith"), "text",
+  annotate_waveband(Far_red("Smith10"), "text",
                     y=0.80, angle=90, hjust=1)
 
 figv2 + theme_bw()

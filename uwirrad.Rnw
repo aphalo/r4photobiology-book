@@ -331,7 +331,7 @@ For example a ratio frequently used in plant photobiology is the red to far-red 
 To calculate this for our example sunlight spectrum we can use the following code:
 
 <<>>=
-q_ratio(sun.spct, Red("Smith"), Far_red("Smith"))
+q_ratio(sun.spct, Red("Smith10"), Far_red("Smith10"))
 @
 
 Function \code{q\_ratio} also accepts lists of wavebands, for both denominator and numerator arguments, and recycling takes place when needed.
@@ -357,7 +357,7 @@ Using spectral data stored in numeric vectors:
 
 <<tidy=FALSE>>=
 with(sun.spct,
-     photon_ratio(w.length, s.e.irrad,  Red("Smith"), Far_red("Smith")))
+     photon_ratio(w.length, s.e.irrad,  Red("Smith10"), Far_red("Smith10")))
 @
 
 or using the predefined convenience function \code{R\_FR\_ratio}:
@@ -375,7 +375,7 @@ with(sun.spct,
 An energy ratio, equivalent to $\zeta$ can be calculated as follows:
 
 <<>>=
-e_ratio(sun.spct, Red("Smith"), Far_red("Smith"))
+e_ratio(sun.spct, Red("Smith10"), Far_red("Smith10"))
 @
 
 other examples in section \ref{sec:photon:ratio} above, can be easily edited to use \code{e\_ratio} instead of \code{q\_ratio}.
@@ -388,7 +388,7 @@ Using spectral data stored in vectors:
 <<tidy=FALSE>>=
 with(sun.spct,
      energy_ratio(w.length, s.e.irrad,
-                  Red("Smith"), Far_red("Smith")))
+                  Red("Smith10"), Far_red("Smith10")))
 @
 
 For this infrequently used ratio, no pre-defined function is provided.
