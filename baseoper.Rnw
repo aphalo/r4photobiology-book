@@ -22,46 +22,105 @@ library(photobiologyLEDs)
 %%%%
 \section{Introduction}
 
-The suite uses object-oriented programming for its higher level `user-friendly' syntax. Objects are implemented using ``S3'' classes. The two main distinct kinds of objects are different types of spectra, and wavebands. Spectral objects contain, as their name implies, spectral data. Wavebands contain the information needed to calculate irradiance, non-weighted or weighted (effective), and a name and a label to be used in output printing. Functions and operators are defined for operations on these objects, alone and in combination. We will first describe spectra, and then wavebands, in each case describing operators and functions. Towards the end of the chapter we describe
+The suite uses object-oriented programming for its higher level `user-friendly' syntax. Objects are implemented using ``S3'' classes. The two main distinct kinds of objects are different types of spectra, and wavebands. Spectral objects contain, as their name implies, spectral data. Wavebands contain the information needed to calculate irradiance, non-weighted or weighted (effective), and a name and a label to be used in output printing. Functions and operators are defined for operations on these objects, alone and in combination. We will first describe spectra, and then wavebands, in each case describing operators and functions.
 
 \section{Spectra}\label{sec:spct:objects}
 
 \subsection{How are spectra stored?}
 
-For spectra the classes are a specialization of \code{data.table} which are in turn a specialization of \code{data.frame}. This means that they are compatible with functions that operate on these classes.
+For spectra the classes are a specialization of \code{data.table} which are in turn a specialization of \code{data.frame}. This means that they are \emph{mostly} compatible with functions that operate on these classes.
 
 \sloppy
-The suite defines a \code{generic\_spct} class, from which two specialized classes, `\code{filter\_spct}, \code{reflector\_spct}, \code{source\_spct}, \code{response\_spct} and \code{chroma\_spct} are derived. Having this class structure allows us to create special methods and operators, which use the same names than the generic ones defined by R itself, but take into account the special properties of spectra. Each spectrum object can hold only one spectrum.
+The suite defines a \code{generic\_spct} class, from which other specialized classes, `\code{filter\_spct}, \code{reflector\_spct}, \code{object\_spct}, \code{source\_spct}, \code{response\_spct}, \code{response\_spct}, \code{chroma\_spct} and \code{cps\_spct} are derived. Having this class structure allows us to create special methods and operators, which use the same `names' than the generic ones defined by R itself, but take into account the special properties of spectra.
 
-Objects of class \code{generic\_spct} one one mandatory component \code{w.length}, containing wavelength values in \Unit{nm}.
+Except for \emph{special} cases each spectral object holds only spectral data from a single measurement. When spectral data from more than one measurement is contained in a single object, the data for the different measurements are stored \emph{melted}, in other words, in the same variable(s), and distinguished by means of an index factor. When a single measurement consists in several different quantities being measured, then these are stored in different variables, or columns, in the same spectral object. The name used for variables containing spectral data for a given quantity have mandatory names, and are always stored using the same units. Spectral objects also carry additional information in attributes, such a text comment, sorting key, time unit used for expression, and additional attributes indicating properties such as whether reflectance is \textbf{specular} or \textbf{total}. These strict rules allow the functions in the package to handle unit conversions, and units in labels and plots automatically. It also allows the use of operators like (`+') with spectra, and some sanity checks on the supplied spectral data and restriction of \emph{some} invalid operations. Table \ref{tab:spct:classes} lists the mandatory names of variables and attributes for each of the classes. In Table \ref{tab:spct:units} for each mandatory variable name, plus the additional names recognized by constructors are listed together with the respective units. Additional columns are allowed in the spectral objects, and deleted or set to \code{NA} only when the meaning of an operation on the whole spectrum is for these columns ambiguous.
 
-Objects of class \code{source\_spct} have two mandatory components \code{w.length}, and \code{s.e.irrad}, and an optional one, \code{s.q.irrad}. They are expected to contain data expressed always in the same units: nm, for \code{w.length}, \wattnm for \code{s.e.irrad}, and \molnm for \code{s.q.irrad}. Objects can have a ``comment'' attribute with a textual description. Additional columns are ignored, but not deleted, unless the operation applied could invalidate them.
+\begin{table}
+\caption{Classes for spectral data and \emph{mandatory} variable and attribute names}\label{tab:spct:classes}
+\centering
+\begin{tabular}{lll}
+\toprule
+Name & Variables & Attributes\\
+\midrule
+generic\_spct & w.length & \\
+cps\_spct & w.length, cps & \\
+source\_spct & w.length, s.e.irrad, s.q.irrad & time.unit, bswf \\
+filter\_spct & w.length, Tfr, A & Tfr.type \\
+reflector\_spct & w.length, Rfr & Rfr.type \\
+object\_spct & w.length, Tfr, Rfr & Tfr.type, Rfr.type \\
+response\_spct & w.length, s.e.response, s.q.response & time.unit \\
+chroma\_spct & w.length, x, y, z & \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-Objects of class \code{filter\_spct} have two mandatory components \code{w.length}, and \code{Tfr} and two optional components,\code{Tpc} and \code{A}. They are expected to contain data expressed always in the same units: nm, for \code{w.length}, a fraction of one for \code{Tfr}, and \% for \code{Tpc}. Absorbance \code{A} values are expected to be expressed based on $\log_{10}$. Objects have a ``comment'' attribute with a textual description.
-
-Objects of class \code{reflector\_spct} have two mandatory components \code{w.length}, and \code{Rfr} and one optional components,\code{Rpc}. They are expected to contain data expressed always in the same units: nm, for \code{w.length}, a fraction of one for \code{Rfr}, and \% for \code{Rpc}. Objects have a ``comment'' attribute with a textual description.
-
-Objects of class \code{chroma\_spct} have four mandatory components \code{w.length}, and \code{x, y, z} giving the chromaticity coordinates for trichromic vision.
-
-Objects of class \code{response\_spct} have two mandatory components \code{w.length}, and \code{s.e.response} giving the spectral response to energy or \code{s.q.response} giving spectral quantum response. The response units can be volts or amperes for instruments and sensors, or a biological response for organisms.
+\begin{table}
+\caption[Variables for spectral data]{Variables used for spectral data and their units of expression: A: as stored in objects of the spectral classes, B: also recognized by the \texttt{set} family of functions for spectra and automatically converted. \texttt{time.unit} accepts in addition to the character strings listed in the table, objects of classes \texttt{lubridate::duration} and \texttt{period}, in addition \texttt{numeric} values are interpreted as seconds. \texttt{exposure.time} accepts these same values, but not the character strings.}\label{tab:spct:units}
+\centering
+\begin{tabular}{lll}
+\toprule
+Variables & Unit of expression & Attribute value \\
+\midrule
+A: stored & & \\
+\midrule
+w.length & nm &  \\
+cps & \cps & \\
+s.e.irrad &  \wattnm & time.unit = "second" \\
+s.e.irrad &  \jdaynm & time.unit = "day" \\
+s.e.irrad &  varies & time.unit = \emph{duration} \\
+s.q.irrad &  \molnm & time.unit = "second" \\
+s.q.irrad &  \moldaynm & time.unit = "day" \\
+s.q.irrad &  \moltotnm & time.unit = "exposure" \\
+s.q.irrad &  varies & time.unit = \emph{duration} \\
+Tfr & [0,1] &  Tfr.type = "total" \\
+Tfr & [0,1] &  Tfr.type = "internal" \\
+A   & a.u.  &  Tfr.type = "internal" \\
+Rfr & [0,1] &  Rfr.type = "total" \\
+Rfr & [0,1] &  Rfr.type = "specular" \\
+s.e.response & \eresponsenm &  time.unit = "second" \\
+s.e.response & \eresponsedaynm &  time.unit = "day" \\
+s.e.response & \eresponsetotnm &  time.unit = "exposure" \\
+s.e.response & varies &  time.unit = \emph{duration} \\
+s.q.response & \qresponsenm &  time.unit = "second" \\
+s.q.response & \qresponsedaynm &  time.unit = "day" \\
+s.q.response & \qresponsetotnm &  time.unit = "exposure" \\
+s.q.response & varies &  time.unit = \emph{duration} \\
+x, y, z & [0,1] & \\
+\midrule
+B: converted & & \\
+\midrule
+wl $\to$ w.length & nm & \\
+wavelength $\to$ w.length & nm & \\
+Tpc $\to$ Tfr & [0,100] &  Tfr.type = "total" \\
+Tpc $\to$ Tfr  & [0,100] &  Tfr.type = "internal" \\
+Rpc $\to$ Rfr  & [0,100] &  Rfr.type = "total" \\
+Rpc $\to$ Rfr  & [0,100] &  Rfr.type = "specular" \\
+counts.per.second $\to$ cps & \cps &  \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{How can the user create spectra from his own data}
 
-If the data is already stored in a data frame or data table, or even a list, and if the components have one of the recognized ``standard'' names, specific \code{setGenericSpct}, \code{setSourceSpct}, \code{setFilterSpct}, \code{setReflectorSpct} commands can be used to change the class attribute and check that the object is valid. These functions have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}, they modify their argument directly---the argument is passed by \emph{reference} instead of by \emph{copy} as is usual in R. As \code{sun.spct} is part of the package, we need to make a copy before modifying it, with one's own data frames or data tables this step is not need.
+`Traditional' constructor and conversion functions are available, and possibly easier to use to those used R programming style. Constructor functions have the same name as the classes, and conversion functions the names of the classes preceded by \code{as.}. When data is already stored in a data frame or data table, or even a list, with components use the recognized or ``mandatory'' names, \code{set} functions can be used avoid copying\footnote{Avoiding copying can improve performance for huge objects, but will rarely make a tangible difference for individual spectra of moderate size.} Functions like \code{setGenericSpct} can be used to change the class and other attributes and check that the object is valid. These functions, listed in Table xxx, have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}, they modify their argument directly---the argument is passed by \emph{reference} instead of by \emph{copy} as is usual in R.
 
-We can create a new object from two vectors,
+\begin{framed}
+  \noindent Data supplied as part of packages, like the one we use in the examples, is protected from overwriting. Before attempting to alter data objects supplied by packages one should make a local copy (in the `user' environment). It is best to avoid using the same name as the original object, as the copy would mask the original object from user's code, and its modification could trigger difficult to track bugs.
+\end{framed}
 
-<<>>=
-source_spct(sun.spct$w.length, s.e.irrad = sun.spct$s.e.irrad)
-@
-
-or make a copy of a data frame or a data table and convert it into a source spectrum,
+We can create a new object of class \code{source\_spect} from two \code{numeric} vectors,
 
 <<>>=
-as.source_spct(sun.spct)
+source_spct(sun.data$w.length, s.e.irrad = sun.spct$s.e.irrad)
 @
 
-or convert an existing data frame or data table into a source spectrum\footnote{In this case we need to copy sun.spct because this data frame is protected as a member of the package. This is rarely needed with user's data.}.
+or make a copy of a data frame or a data table and convert it into a source spectrum, but in this case the names of the variables stored in the data frame or data table object must be in the corresponding list of recognized names (Table xxx).
+
+<<>>=
+as.source_spct(sun.data)
+@
+
+or convert an existing data frame or data table, \emph{in situ} or by referenece, into a source spectrum\footnote{In this case we need to copy sun.spct because this data frame is protected as a member of the \PB package. This is rarely needed with user's data.}.
 
 <<>>=
 my_sun.spct <- sun.spct
@@ -75,49 +134,20 @@ class(my_sun.spct)
 is.source_spct(my_sun.spct)
 @
 
-Similar functions are available for filter, reflector and response spectral objects.
+Similar functions are available for all the classes spectral objects.
 
 
-Table \ref{tab:obj:components} lists the different `names' understood by the constructor functions which take a data frame as argument, and the required and optional components of the different spectral object classes. A.U.\ absorbance units; a.u.\ arbitrary units.
+Table \ref{tab:obj:units} lists the different `names' understood by the constructor functions which take a data frame as argument, and the required and optional components of the different spectral object classes. A.U.\ absorbance units; a.u.\ arbitrary units.
 
-\begin{table}
-\caption{Names of spectral object components, and the additional names recognized during automatic spectral object creation, and the units of expression.}\label{tab:obj:components}
-\begin{center}
-\begin{tabular}{lllll}
-\toprule
-Class    & required & optional & recognized & units\\
-\midrule
-generic\_spct & w.length & --- & wl, wavelength & nm\\
-\midrule
-source\_spct & w.length & --- & wl, wavelength & nm\\
-            & s.e.irrad & --- & irradiance & \wattnm\\
-            & ---       & s.q.irrad & --- & \molnm\\
-\midrule
-filter\_spct & w.length & --- & wl, wavelength & nm \\
-            & Tfr      & --- & --- & $x/1$  \\
-            & ---      & Tpc    & transmittance & \% \\
-            & ---      & A      & absorbance & A.U.\ $\log_{10}$-based\\
-\midrule
-reflector\_spct & w.length & --- & wl, wavelength & nm \\
-            & Rfr      & --- & --- & $x/1$  \\
-            & ---      & Rpc    & reflectance & \% \\
-\midrule
-response\_spct & w.length & --- & wl, wavelength & nm\\
-            & s.e.response   & --- & response & a.u. \Unit{J^{-1}}\\
-            & ---       & s.q.response & --- & a.u. \Unit{mol^{-1}}\\
-\midrule
-chroma\_spct & w.length & --- & wl, wavelength & nm\\
-            & x, y, z  & ---    & X, Y, Z & relative u.\\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{table}
 
 \subsection{What operators are available for operations between spectra?}
 
-All operations with spectral objects affect only the required components listed in Table \ref{tab:obj:components}, all optional components are deleted, while unrecognized components are left alone. There will be seldom need to add numerical components, and the user should take into account that the paradigm of the suite is that each spectrum is stored as a separate object. However, it is allowed, and possibly useful to have factors as components with levels identifying different bands, or color vectors with RGB values. Ancillary information information useful for presentation and plotting might sometimes be useful.
+All operations with spectral objects affect only the required components listed in Table \ref{tab:obj:components}, redundant components are always deleted\footnote{e.g.\ equivalent quantities expressed in different types of units, such as spectral energy irradiance and spectral photon irradiance}, while unrecognized components, including all factors and character variables, are conserved only when one of the operands is a numeric vector of any length. There will be seldom need to add numerical components, and the user should take into account that the paradigm of the suite is that each spectrum is stored as a separate object. However, it is allowed, and possibly useful to have factors as components with levels identifying different bands, or color vectors with RGB values. Such ancillary information is useful for presentation and plotting and can be added with functions described in Chapter \ref{chap:plot}. Exceptionally, objects can contain spectral data from several measurements and an additional factor indexing them. Such objects cannot be directly used with operators and summary functions, but can be a convenient format for storing related spectra.  
 
-Several operators are defined for spectral objects. Using operators is an easy and familiar way of doing calculations, but operators are rather inflexible (they can take at most two arguments, the operands) and performance is slower than with functions with additional parameters that allow optimizing the algorithm. The operators are defined so that an operation between two \code{filter\_spct} objects yields another \code{filter\_spct} object, an operation between two \code{reflector\_spct} yields a \code{reflector\_spct} object, and operations between a \code{filter\_spct} object and a \code{source\_spct}, between a \code{reflector\_spct} and a \code{source\_spct}, or between two \code{source\_spct} objects yield \code{source\_spct} objects. The object returned contains data only for the overlapping region of wavelengths. The objects do NOT need to have values at the same wavelengths, as interpolation is handled transparently. All four basic maths operations are supported with any combination of spectra, and the user is responsible for deciding which calculations make sense and which not. Operations can be concatenated and combined. The unary negation operator is also implemented.
+Several operators are defined for spectral objects. Using operators is an easy and familiar way of doing calculations, but operators are rather inflexible (they can take at most two arguments, the operands) and performance is usually slower than with functions with additional parameters that allow optimizing the algorithm. Which operations are legal between different combinations of operands depends on the laws of Physics, but in cases in which exceptions might exist, they are allowed. This means that some mistakes can be prevented, but other may happen either with a warning or silently. So, although a class system provides a safer environment for calculations, it is not able to detect all possible `nonsensical' calculations. The user must be aware that sanity checks and good understanding of the algorithms are still a prerequisite for reliable results.
+
+Table \ref{} list the available operators and the operands accepted as legal, together with the class of the objects returned. Only in extreme cases errors will be triggered, in most cases when errors occur
+  an operation between two \code{reflector\_spct} yields a \code{reflector\_spct} object, and operations between a \code{filter\_spct} object and a \code{source\_spct}, between a \code{reflector\_spct} and a \code{source\_spct}, or between two \code{source\_spct} objects yield \code{source\_spct} objects. The object returned contains data only for the overlapping region of wavelengths. The objects do NOT need to have values at the same wavelengths, as interpolation is handled transparently. All four basic maths operations are supported with any combination of spectra, and the user is responsible for deciding which calculations make sense and which not. Operations can be concatenated and combined. The unary negation operator is also implemented.
 
 For example we can convolute the emission spectrum of a light source and the transmittance spectrum of a filter.
 

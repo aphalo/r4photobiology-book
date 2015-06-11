@@ -22,7 +22,7 @@ library(ggmap)
 %%%%
 \section{Introduction}\label{sec:astro:intro}
 
-This chapter deals with calculations that require times and/or dates as arguments. One could use R's built-in functions for POSIXct but package \code{lubridate} makes working with dates and times, much easier. Package \code{lubridate} defines functions for decoding dates represented as character strings, and for manipulating dates and doing calcualtions on dates. Each one of the different functions shown in the code chunk below can decode dates in different formats as long as the year, month and date order in the string agrees with the name of the function:
+This chapter deals with calculations that require times and/or dates as arguments. One could use R's built-in functions for POSIXct but package \code{lubridate} makes working with dates and times, much easier. Package \code{lubridate} defines functions for decoding dates represented as character strings, and for manipulating dates and doing calculations on dates. Each one of the different functions shown in the code chunk below can decode dates in different formats as long as the year, month and date order in the string agrees with the name of the function.
 
 <<>>=
 ymd("20140320")
@@ -30,11 +30,14 @@ ymd("2014-03-20")
 ymd("14-03-20")
 ymd("2014-3-20")
 ymd("2014/3/20")
+dmy("20.03.2014")
 dmy("20032014")
 mdy("03202014")
 @
 
-For astronomical calculations we need as argument the geographical coordinates. It is, of course, possible to enter latitude and longitude values recorded with a GPS instrument or manually obtained from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates by means of a query from within R using packages \code{RgoogleMaps}, or package \code{ggmap}, as done here. When inputing coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point numberin degrees, and not as separate integers representing minutes and seconds of degree).
+Similar functions including hours, minutes and seconds are defined by \code{lubridate} as well as functions for manipulating dates, and calculating durations with all the necessary and non-trivial corrections needed for leap years, summer time, and other idiosyncracies of the calendar system.
+
+For astronomical calculations we also need as argument the geographical coordinates. It is, of course, possible to enter latitude and longitude values recorded with a GPS instrument or manually obtained from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates by means of a query from within R using packages \code{RgoogleMaps}, or package \code{ggmap}, as done here. When inputing coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree).
 
 <<astro-geocode-1, message=FALSE, cache=TRUE>>=
 geocode("Helsinki")
@@ -44,56 +47,182 @@ geocode("Viikinkaari 1, 00790 Helsinki, Finland")
 %%%%
 \section{Task: calculating the length of the photoperiod}\label{sec:astro:photoperiod}
 
-In function \code{day\_night} from our \code{photobiology} package we use function \code{sun\_angles}, which is an edited version of function \code{sunAngle} from package \code{ode}, to calculate the altitude or elevation of the sun. We first find local solar noon by finding the maximal solar elevation, and then search for sunrise in the first half of the day and for sunset in the second half, defined based on the local solar noon. Sunset and sunrise are by default based on a solar elevation angle equal to zero. The argument \code{twilight} can be used to set the angle according to different conventions.
+Functions \texttt{day\_length} and \texttt{night\_length} have same parameter signature. They are vectorized for the
+\texttt{date} parameter.
 
-In the examples we use \code{geocode} to get the latitude and longitude of cities. \code{geocode} accepts any valid Google Maps search terms, including street addresses, and postal codes within cities. \code{day\_night} returns a list containing the times at sunrise, sunset and noon, and day- and night lengths. This first example is for Buenos Aires on two different dates, by use of the optional argument \code{tz} we request the results to be expressed in local time for Buenos Aires.
+Northern hemisphere latitudes are given as positive numbers and Southern hemisphere latitudes are given as negative numbers, in degrees, possibly with decimal fractions. The default date is \texttt{today}.
+<<>>=
+day_length(lat =  60, lon = 0)
+day_length(lat = -60, lon = 0)
+@
+
+Longitudes can be given similarly, with East of Greenwich being negative and West of Greenwhich positive.
+
+Function \texttt{geocode} from package \texttt{ggmap} returns suitable values in a \texttt{data.frame} based on search term(s). It uses Google to do the search, so some use restrictions apply.
+
+<<message=FALSE>>=
+my.city <- geocode('helsinki')
+my.city
+@
+
+We can calculate the photoperiod for the current day as
+
+<<>>=
+day_length(lon = my.city$lon, lat = my.city$lat)
+@
+
+Or also give a date explicitly using functions from package \texttt{lubridate}.
+
+<<>>=
+day_length(ymd("2015-06-09", tz = "EET"), 
+           lon = my.city$lon, lat = my.city$lat)
+day_length(dmy("9.6.2015", tz = "EET"), 
+           lon = my.city$lon, lat = my.city$lat)
+@
+
+The complementary function \texttt{night\_length} gives
+
+<<>>=
+night_length(ymd("2015-06-09", tz = "EET"), 
+             lon = my.city$lon, lat = my.city$lat)
+@
+
+It is also possible to use a vector of dates, for example created as a sequence in the next chunk using functions from package \texttt{lubridate}.
+
+Default time zone of \texttt{ymd} is UTC or GMT, but one should set the same time zone as will be used for further calculations.
+
+<<>>=
+dates <- seq(from = ymd("2015-01-01", tz = "EET"),
+             to = ymd("2015-12-31", tz = "EET"),
+             by = "7 day")
+photoperiods.df <-
+  data.frame(date = dates,
+             photoperiod = day_length(dates,
+                                       lon = my.city$lon,
+                                       lat = my.city$lat))
+@
+
+The 10 lines at the top of the output are
+
+<<>>=
+head(photoperiods.df, 10)
+@
+
+A further option described in section \ref{sec:sun:times} allow setting the twilight angle to be used for the day length calculations.
+
+\section{Task: Calculating times of sunrise, solar noon and sunset}\label{sec:sun:times}
+
+Functions \texttt{sunrise\_time}, \texttt{sunset\_time}, and \texttt{noon\_time} have all the same parameter signature.
+
+Default latitude is zero (the Equator), the default longitude is zero (Greenwich), and default time zone for the functions in the \texttt{photobiology} package is \texttt{"UTC"}. Be also aware that for summer dates the times are expressed accordingly. In the examples below this can be recognized for example, by the time zone being reported as EEST instead of EET for Eastern Europe.
+
+The default for \texttt{date} is the current day in time zone UTC.
+
+<<>>=
+sunrise_time(lat = 60)
+@
+
+Both latitude and longitude can be supplied, but be aware that if the returned value is desired in the local time coordinates, the time zone should match the longitude.
+
+<<>>=
+sunrise_time(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
+sunrise_time(today(tz = "EET"), lat = 60, lon = 25, tz = "EET")
+@
+
+Finally the angle used in the twilight calculation can be supplied, either as the name of a standard definition, or as an angle in degrees (negative for sun positions below the horizon). Positive angles can be used when the time of sun occlusion behind a building, mountain, or other obstacle needs to be calculated.
+
+<<>>=
+sunrise_time(today(tzone = "EET"), lat = 60, lon = 25, tz = "EET",
+             twilight = "civil")
+sunrise_time(today(tzone = "EET"), lat = 60, lon = 25, tz = "EET",
+             twilight = -10)
+sunrise_time(today(tzone = "EET"), lat = 60, lon = 25, tz = "EET",
+             twilight = +12)
+@
+
+We can reuse the array of dates from section \ref{sec:astro:photoperiod}, and the coordinates of Joensuu, to calculate the time at sunrise through the year.
+
+<<>>=
+time_at_sunrise.df <- 
+  data.frame(date = dates, 
+             sunrise_at = 
+               sunrise_time(dates, 
+                            lon = my.city$lon, lat =  my.city$lat,
+                            tz = "EET", unit.out = "hour"))
+@
+
+The 10 lines at the top of the output are
+
+<<>>=
+head(time_at_sunrise.df, 10)
+@
+
+Functions \code{day\_night} from our \code{photobiology} package uses function \code{sun\_angles}, which is a modified version of function \code{sunAngle} from package \code{ode}, to calculate the elevation of the sun. We first find local solar noon by finding the maximal solar elevation, and then search for sunrise in the first half of the day and for sunset in the second half, defined based on the local solar noon. Sunset and sunrise are by default based on a solar elevation angle equal to zero. The argument \code{twilight} can be used to set the angle according to different conventions.
+
+In the examples we use \code{geocode} to get the latitude and longitude of cities. \code{geocode} accepts any valid Google Maps search terms, including street addresses, and postal codes within cities. \code{day\_length} returns a numeric vector. This first example is for Buenos Aires on two different dates, by use of the optional argument \code{tz} we request the results to be expressed in local time for Buenos Aires.
 
 <<astro-geocode-2, message=FALSE, cache=TRUE>>=
 geo_code_BA <- geocode("Buenos Aires")
-geo_code_BA
 day_night(ymd("2013-12-21"),
           lon = geo_code_BA[["lon"]],
           lat = geo_code_BA[["lat"]],
-          tz="America/Argentina/Buenos_Aires")
-day_night(ymd("2013-06-21"),
+          tz = "America/Argentina/Buenos_Aires")
+@
+
+And with \texttt{unit.out} set to \texttt{"hour"}
+
+<<astro-geocode-2a, message=FALSE, cache=TRUE>>=
+day_night(ymd("2013-12-21"),
           lon = geo_code_BA[["lon"]],
           lat = geo_code_BA[["lat"]],
-          tz="America/Argentina/Buenos_Aires")
+          tz = "America/Argentina/Buenos_Aires",
+          unit.out = "hour")
 @
 
-We here repeat the same calculations for Munich on the same days ---note that the output for December is in "EET" time coordinates, and for June it is in "EEST", i.e.\ in `winter-' and `summer time' coordinates.
-
-<<astro-geocode-3, message=FALSE, cache=TRUE>>=
-geo_code_Mu <- geocode("Munich")
-geo_code_Mu
-day_night(ymd("2013-12-21"),
-          lon = geo_code_Mu[["lon"]],
-          lat = geo_code_Mu[["lat"]],
-          tz="Europe/Berlin")
-day_night(ymd("2013-06-21"),
-          lon = geo_code_Mu[["lon"]],
-          lat = geo_code_Mu[["lat"]],
-          tz="Europe/Berlin")
-@
-
-As a final example, we calculate day length based on different definitions of twilight for Helsinki, at the equinox:
+Next, we calculate day length  based on different definitions of twilight for Helsinki, at the equinox:
 
 <<astro-geocode-4, message=FALSE, cache=TRUE>>=
 geo_code_He <- geocode("Helsinki")
 geo_code_He
-day_night(ymd("2013-09-21"),
+day_length(ymd("2013-09-21"),
           lon = geo_code_He[["lon"]], lat = geo_code_He[["lat"]])
-day_night(ymd("2013-09-21"),
+day_length(ymd("2013-09-21"),
           lon = geo_code_He[["lon"]], lat = geo_code_He[["lat"]],
-          twilight="civil")
-day_night(ymd("2013-09-21"),
+          twilight = "civil")
+day_length(ymd("2013-09-21"),
           lon = geo_code_He[["lon"]], lat = geo_code_He[["lat"]],
-          twilight="nautical")
-day_night(ymd("2013-09-21"),
+          twilight = "nautical")
+day_length(ymd("2013-09-21"),
           lon = geo_code_He[["lon"]], lat = geo_code_He[["lat"]],
-          twilight="astronomical")
+          twilight = "astronomical")
 @
 
+Or for a given angle in degrees, which for example can be positive in the case of an obstacle like a building or mountain, instead of negative as used for twilight definitions. In the case of obstacles the angle will be different for morning and afternoon, and can be entered as a numeric vector of length two.
+
+<<>>=
+day_length(ymd("2013-09-21"),
+          lon = geo_code_He[["lon"]], lat = geo_code_He[["lat"]],
+          twilight = c(20, 0))
+@
+
+In addition, function \texttt{day\_night} returns a list containing all the quantities returned by the other functions. As other functions described in this chapter, \texttt{day\_night} is vectorized for the \texttt{date} parameter.
+
+<<astro-geocode-2, message=FALSE, cache=TRUE>>=
+day_night(ymd("2013-12-21"),
+          lon = geo_code_BA[["lon"]],
+          lat = geo_code_BA[["lat"]],
+          tz = "America/Argentina/Buenos_Aires")
+@
+
+And with \texttt{unit.out} set to \texttt{"hour"}
+
+<<astro-geocode-2a, message=FALSE, cache=TRUE>>=
+day_night(ymd("2013-12-21"),
+          lon = geo_code_BA[["lon"]],
+          lat = geo_code_BA[["lat"]],
+          tz = "America/Argentina/Buenos_Aires",
+          unit.out = "hour")
+@
 
 \section{Task: calculating the position of the sun}\label{sec:astro:position}
 
@@ -126,13 +255,13 @@ opts_chunk$set(opts_fig_wide)
 hours <- seq(from=ymd("2014-06-23", tz="EET"),
              by="10 min",
              length=24 * 6)
-elevations <- sun_angles(hours,
-          lon = geo_code_He[["lon"]],
-          lat = geo_code_He[["lat"]])$elevation
 sun_elev_hel <- data.frame(time_eet = hours,
-                            elevation = elevations,
-                            location = "Helsinki",
-                            lon = geo_code_He[["lon"]],
+                           elevation =
+                             sun_angles(hours,
+                                        lon = geo_code_He[["lon"]],
+                                        lat = geo_code_He[["lat"]])$elevation,
+                           location = "Helsinki",
+                           lon = geo_code_He[["lon"]],
                            lat = geo_code_He[["lat"]])
 @
 
@@ -175,58 +304,46 @@ days <- seq(from=ymd("2014-01-01"), to=ymd("2014-12-31"),
 
 To calculate the length of each day, we need to use an explicit loop as function \code{day\_night} is not vectorized. We repeat the calculations for three locations at different latitudes, then row bind the data frames into a single data frame. Each individual data frame contains information to identify the sites:
 
-<<astro-geocode-10, message=FALSE, cache=TRUE>>=
-len_days <- length(days)
-photoperiods <- numeric(len_days)
+<<astro-geocode-10a, message=FALSE, cache=TRUE>>=
 geo_code_He <- geocode("Helsinki")
-for (i in 1:len_days) {
-  day_night.ls <- day_night(days[i],
-                            lon = geo_code_He[["lon"]],
-                            lat = geo_code_He[["lat"]],
-                            tz="EET")
-  photoperiods[i] <-
-    as.numeric(day_night.ls[["daylength"]],
-               units="hours")
-}
 daylengths_hel <-
   data.frame(day = days,
-             daylength = photoperiods,
-             location="Helsinki",
+             daylength = day_length(days,
+                                    lon = geo_code_He[["lon"]],
+                                    lat = geo_code_He[["lat"]],
+                                    tz = "EET"),
+             location = "Helsinki",
              lon = geo_code_He[["lon"]],
              lat = geo_code_He[["lat"]])
+@
+
+<<astro-geocode-10b, message=FALSE, cache=TRUE>>=
 geo_code_Iv <- geocode("Ivalo")
-for (i in 1:len_days) {
-  day_night.ls <- day_night(days[i],
-                            lon = geo_code_Iv[["lon"]],
-                            lat = geo_code_Iv[["lat"]],
-                            tz="EET")
-  photoperiods[i] <-
-    as.numeric(day_night.ls[["daylength"]],
-               units="hours")
-}
 daylengths_ivalo <-
   data.frame(day = days,
-             daylength = photoperiods,
-             location="Ivalo",
+             daylength = day_length(days,
+                                    lon = geo_code_Iv[["lon"]],
+                                    lat = geo_code_Iv[["lat"]],
+                                    tz = "EET"),
+             location = "Ivalo",
              lon = geo_code_Iv[["lon"]],
              lat = geo_code_Iv[["lat"]])
+@
+
+<<astro-geocode-10c, message=FALSE, cache=TRUE>>=
 geo_code_At <- geocode("Athens, Greece")
-for (i in 1:len_days) {
-  day_night.ls <- day_night(days[i],
-                            lon = geo_code_At[["lon"]],
-                            lat = geo_code_At[["lat"]],
-                            tz="EET")
-  photoperiods[i] <-
-    as.numeric(day_night.ls[["daylength"]],
-               units="hours")
-}
 daylengths_athens <-
   data.frame(day = days,
-             daylength = photoperiods,
-             location="Athens",
+             daylength = day_length(days,
+                            lon = geo_code_At[["lon"]],
+                            lat = geo_code_At[["lat"]],
+                            tz = "EET"),
+             location = "Athens",
              lon = geo_code_At[["lon"]],
              lat = geo_code_At[["lat"]])
+@
 
+<<astro-geocode-10d>>=
 daylengths <- rbind(daylengths_hel,
                     daylengths_ivalo,
                     daylengths_athens)
@@ -234,13 +351,74 @@ daylengths <- rbind(daylengths_hel,
 
 Once we have the data available, plotting is simple:
 
-<<astro-11>>=
+<<astro-10e>>=
 ggplot(daylengths,
        aes(x = day, y = daylength, colour=factor(location))) +
   geom_line() +
   scale_y_continuous(breaks=c(0,6,12,18,24), limits=c(0,24)) +
   labs(x = "Date", y = "Daylength (h)", colour="Location")
 @
+
+\section{Task: plotting local time at sunrise}
+
+For this we reuse \texttt{days} from the previous sections. We repeat the calculations for three locations at different latitudes, then row bind the data frames into a single data frame. Data frames contain information to identify the sites:
+
+<<astro-geocode-11a, message=FALSE, cache=TRUE>>=
+geo_code_He <- geocode("Helsinki")
+sunrise_hel <-
+  data.frame(day = days,
+             sunrise = sunrise_time(days,
+                                    lon = geo_code_He[["lon"]],
+                                    lat = geo_code_He[["lat"]],
+                                    tz = "EET", unit.out = "hour"),
+             location = "Helsinki",
+             lon = geo_code_He[["lon"]],
+             lat = geo_code_He[["lat"]])
+@
+
+<<astro-geocode-11b, message=FALSE, cache=TRUE>>=
+geo_code_Iv <- geocode("Ivalo")
+sunrise_ivalo <-
+  data.frame(day = days,
+             sunrise = sunrise_time(days,
+                                    lon = geo_code_Iv[["lon"]],
+                                    lat = geo_code_Iv[["lat"]],
+                                    tz = "EET", unit.out = "hour"),
+             location = "Ivalo",
+             lon = geo_code_Iv[["lon"]],
+             lat = geo_code_Iv[["lat"]])
+@
+
+<<astro-geocode-11c, message=FALSE, cache=TRUE>>=
+geo_code_At <- geocode("Athens, Greece")
+sunrise_athens <-
+  data.frame(day = days,
+             sunrise = sunrise_time(days,
+                            lon = geo_code_At[["lon"]],
+                            lat = geo_code_At[["lat"]],
+                            tz = "EET", unit.out = "hour"),
+             location = "Athens",
+             lon = geo_code_At[["lon"]],
+             lat = geo_code_At[["lat"]])
+@
+
+<<astro-geocode-11d, message=FALSE, cache=TRUE>>=
+sunrises <- rbind(sunrise_hel,
+                  sunrise_ivalo,
+                  sunrise_athens)
+@
+
+Once we have the data available, plotting is simple:
+
+<<astro-11e>>=
+ggplot(sunrises,
+       aes(x = day, y = sunrise, colour=factor(location))) +
+  geom_line() +
+  scale_y_continuous(breaks=c(0,6,12), limits=c(0,12)) +
+  labs(x = "Date", y = "Time-of-day at sunrise (h)", colour="Location")
+@
+
+The breaks in the lines are the result of the changes between winter and summer time coordinates.
 
 <<>>=
 try(detach(package:photobiology))

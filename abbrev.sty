@@ -16,6 +16,7 @@
 % Version 1.05   9 May 2013 (\Asub added)
 % Version 1.06   14 May 2014 (\wattnm and \molnm added)
 % Version 1.07   27 November 2014 (\joulemol added)
+% Version 1.08   1 June 2015 (several units added for r4photobiology)
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{abbrev}[2014/05/17]
@@ -58,8 +59,10 @@
 \newcommand{\mmolmol}{\Unit{mmol\,mol^{-1}}}
 \newcommand{\mmolmolt}{\Unit{\frac{mmol}{mol}}}
 \newcommand{\molday}{\Unit{mol\,m^{-2}\,d^{-1}}}
+\newcommand{\moldaynm}{\Unit{mol\,m^{-2}\,d^{-1}\,nm^{-1}}}
 \newcommand{\kjday}{\Unit{kJ\,m^{-2}\,d^{-1}}}
 \newcommand{\jday}{\Unit{J\,m^{-2}\,d^{-1}}}
+\newcommand{\jdaynm}{\Unit{J\,m^{-2}\,d^{-1}\,nm^{-1}}}
 \newcommand{\kjhour}{\Unit{kJ\,m^{-2}\,h^{-1}}}
 \newcommand{\jhour}{\Unit{kJ\,m^{-2}\,h^{-1}}}
 \newcommand{\kjdaynm}{\Unit{kJ\,m^{-2}\,d^{-1}\,nm^{-1}}}
@@ -83,6 +86,28 @@
 \newcommand{\jouleumol}{\Unit{J\,\mymu mol^{-1}}}
 \newcommand{\molwatt}{\Unit{mol\,W^{-1}}}
 \newcommand{\umolwatt}{\Unit{\mymu mol\,W^{-1}}}
+
+\newcommand{\jtot}{\Unit{J\,m^{-2}}}
+\newcommand{\kjtot}{\Unit{kJ\,m^{-2}}}
+\newcommand{\jtotnm}{\Unit{J\,m^{-2}\,nm^{-1}}}
+\newcommand{\moltot}{\Unit{molday\,m^{-2}}}
+\newcommand{\moltotnm}{\Unit{mol\,m^{-2}\,nm^{-1}}}
+
+\newcommand{\cps}{\Unit{\mathit{n}\,s^{-1}}}
+\newcommand{\qresponse}{\Unit{\mathit{x}\,mol^{-1}\,s^{-1}}}
+\newcommand{\eresponse}{\Unit{\mathit{x}\,J^{-1}\,s^{-1}}}
+\newcommand{\qresponsenm}{\Unit{\mathit{x}\,mol^{-1}\,s^{-1}\,nm^{-1}}}
+\newcommand{\eresponsenm}{\Unit{\mathit{x}\,J^{-1}\,s^{-1}\,nm^{-1}}}
+
+\newcommand{\qresponseday}{\Unit{\mathit{x}\,mol^{-1}\,d^{-1}}}
+\newcommand{\eresponseday}{\Unit{\mathit{x}\,J^{-1}\,d^{-1}}}
+\newcommand{\qresponsedaynm}{\Unit{\mathit{x}\,mol^{-1}\,d^{-1}\,nm^{-1}}}
+\newcommand{\eresponsedaynm}{\Unit{\mathit{x}\,J^{-1}\,d^{-1}\,nm^{-1}}}
+
+\newcommand{\qresponsetot}{\Unit{\mathit{x}\,mol^{-1}}}
+\newcommand{\eresponsetoto}{\Unit{\mathit{x}\,J^{-1}}}
+\newcommand{\qresponsetotnm}{\Unit{\mathit{x}\,mol^{-1}\,nm^{-1}}}
+\newcommand{\eresponsetotnm}{\Unit{\mathit{x}\,J^{-1}\,nm^{-1}}}
 
 \newcommand{\PAR}{\ensuremath{\mathrm{PAR}}\xspace}
 \newcommand{\Rlight}{\ensuremath{\mathrm{R}}\xspace}

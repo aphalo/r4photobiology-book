@@ -1,0 +1,106 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Simple summaries and spectral features}
+
+\begin{abstract}
+  In this chapter we explain how to obtain different summaries common to all types of spectral data. In addition we describe how to extract spectral features from spectral data.
+\end{abstract}
+
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologygg)
+library(photobiologyLamps)
+@
+
+
+%%%%
+\section{Task: Summaries related to wavelength}\label{sec:summaries:wavelength}
+
+Functions \texttt{max}, \texttt{min}, \texttt{range}, \texttt{midpoint} when used with an object of class \texttt{generic\_spct} (or a derived class) return the result of applying these functions to the \texttt{w.length} component of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
+
+<<>>=
+range(sun.spct)
+midpoint(sun.spct)
+max(sun.spct)
+min(sun.spct)
+@
+
+Functions \texttt{spread} are \texttt{stepsize} are generics defined in package \PB. \texttt{spread} returns maximum less minimum wavelengths values in nanometres, while \texttt{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
+
+<<>>=
+spread(sun.spct)
+stepsize(sun.spct)
+@
+
+In the case of the \texttt{summary} method, specializations for \texttt{source\_spct} and \ldots are provided. But for other spectral objects, the \texttt{summary} method for \texttt{data.table} is called. For the \texttt{summary} specializations defined, the corresponding \texttt{print} method specializations are also defined.
+
+<<>>=
+summary(sun.spct)
+@
+
+\section{Task: Find peaks and valleys}\label{sec:summaries:peaks}
+
+\subsection{Obtaining the location of peaks as an index into the spectral data}
+
+Function \texttt{find\_peaks}, takes as argument a \texttt{numeric} vector, and returns a logical vector of the same length, with \texttt{TRUE} for local maxima and \texttt{FALSE} for all other observations. Infinite values are discarded.
+
+<<>>=
+find_peaks(sun.spct$s.e.irrad)
+@
+
+To obtain the indexes, one can use R's function \texttt{which}
+
+<<>>=
+which(find_peaks(sun.spct$s.e.irrad))
+@
+
+\subsection{Obtaining the location of peaks as a wavelength in nanometres}
+
+Function \texttt{get\_peaks} takes two numeric vectors as as arguments, $x$ is, for spectra assumed to be a vector of wavelengths, and $y$ the spectral variable to search for local maxima.
+<<>>=
+with(sun.spct, get_peaks(w.length, s.e.irrad))
+@
+The returned value is a (shorter) data frame with two numeric vectors, $x$ and $y$, and an optional chracter variables \texttt{label}, for each local maximum found in $y$.
+
+\begin{framed}
+\noindent
+Methods for spectral objects will be added.
+\end{framed}
+
+\section{Task: Refining the location of peaks and valleys}\label{sec:summaries:peak:refine}
+
+The functions described in the previous section locate the observation with the locally highest $y$-value. This is in most cases the true location of the peaks as they may fall in between two observations along the wavelength axis. By fitting a suitable model to describe the shape of the peak, which is the result of the true peak and the slit function of the spectrometer, the true location of a peak can be approximated more precisely. There is no universally useful model, so we show some examples of a possible method of peak-position refinement.
+
+In this example, in the second statement we refine the location of the shortest-wavelength peak found by \texttt{get\_peaks} in the first statement. For this approach to work, the peaks should be clearly visible, and not very close to each other. We use the spectral irradiance measured from a UV-B lamp as an example.
+
+<<>>=
+stepsize(philips.tl01.bentham.spct)
+peaks <- with(philips.tl01.bentham.spct, get_peaks(w.length, s.e.irrad, span = 51))
+fit <- nls(s.e.irrad ~ d + a1*exp(-0.5*((w.length-c1)/b1)^2),
+           start=list(a1=6, b1=1, c1=peaks[1, 1], d=0), data=philips.tl01.bentham.spct)
+fit
+fit$m$getPars()[["c1"]]
+peaks[1, 1]
+@
+
+Because in this example the spectral resolution of the data is high, the improvement is small. We now subsample the spectral data, and repeat the calculations.
+
+<<>>=
+my.tl01.spct <- subset(philips.tl01.bentham.spct, w.length %% 2 == 0)
+stepsize(my.tl01.spct)
+my.peaks <- with(my.tl01.spct, get_peaks(w.length, s.e.irrad, span = 51))
+my.fit <- nls(s.e.irrad ~ d + a1*exp(-0.5*((w.length-c1)/b1)^2),
+           start=list(a1=6, b1=1, c1=my.peaks[1, 1], d=0), data=my.tl01.spct)
+my.fit
+my.fit$m$getPars()[["c1"]]
+my.peaks[1, 1]
+@
+
+
+\section{Task: }\label{sec:}
