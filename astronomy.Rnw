@@ -74,16 +74,16 @@ day_length(lon = my.city$lon, lat = my.city$lat)
 Or also give a date explicitly using functions from package \texttt{lubridate}.
 
 <<>>=
-day_length(ymd("2015-06-09", tz = "EET"), 
+day_length(ymd("2015-06-09", tz = "EET"),
            lon = my.city$lon, lat = my.city$lat)
-day_length(dmy("9.6.2015", tz = "EET"), 
+day_length(dmy("9.6.2015", tz = "EET"),
            lon = my.city$lon, lat = my.city$lat)
 @
 
 The complementary function \texttt{night\_length} gives
 
 <<>>=
-night_length(ymd("2015-06-09", tz = "EET"), 
+night_length(ymd("2015-06-09", tz = "EET"),
              lon = my.city$lon, lat = my.city$lat)
 @
 
@@ -143,10 +143,10 @@ sunrise_time(today(tzone = "EET"), lat = 60, lon = 25, tz = "EET",
 We can reuse the array of dates from section \ref{sec:astro:photoperiod}, and the coordinates of Joensuu, to calculate the time at sunrise through the year.
 
 <<>>=
-time_at_sunrise.df <- 
-  data.frame(date = dates, 
-             sunrise_at = 
-               sunrise_time(dates, 
+time_at_sunrise.df <-
+  data.frame(date = dates,
+             sunrise_at =
+               sunrise_time(dates,
                             lon = my.city$lon, lat =  my.city$lat,
                             tz = "EET", unit.out = "hour"))
 @
@@ -207,7 +207,7 @@ day_length(ymd("2013-09-21"),
 
 In addition, function \texttt{day\_night} returns a list containing all the quantities returned by the other functions. As other functions described in this chapter, \texttt{day\_night} is vectorized for the \texttt{date} parameter.
 
-<<astro-geocode-2, message=FALSE, cache=TRUE>>=
+<<astro-geocode-A2, message=FALSE, cache=TRUE>>=
 day_night(ymd("2013-12-21"),
           lon = geo_code_BA[["lon"]],
           lat = geo_code_BA[["lat"]],
@@ -216,7 +216,7 @@ day_night(ymd("2013-12-21"),
 
 And with \texttt{unit.out} set to \texttt{"hour"}
 
-<<astro-geocode-2a, message=FALSE, cache=TRUE>>=
+<<astro-geocode-A2a, message=FALSE, cache=TRUE>>=
 day_night(ymd("2013-12-21"),
           lon = geo_code_BA[["lon"]],
           lat = geo_code_BA[["lat"]],

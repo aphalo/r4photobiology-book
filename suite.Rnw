@@ -9,7 +9,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Photobiology R packages}
+\chapter{Photobiology R packages}\label{chap:suite}
 
 \begin{abstract}
   In this chapter we describe the suite of R packages for photobiological calculations `\textsf{r4photobiology}', and explain how to install them.

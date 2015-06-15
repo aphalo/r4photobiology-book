@@ -6,7 +6,7 @@ opts_knit$set(self.contained=FALSE)
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Plotting spectra and colours}
+\chapter{Plotting spectra and colours}\label{chap:plotting}
 
 <<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
 opts_knit$get()

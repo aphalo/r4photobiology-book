@@ -9,7 +9,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Introduction}
+\chapter{Introduction}\label{chap:introduction}
 
 \begin{abstract}
   In this chapter we explain the physical basis of optics and photochemistry.

@@ -1,0 +1,293 @@
+<<echo=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Storing data}\label{chap:construct}
+
+\begin{abstract}
+  In this chapter we describe the objects used to store data and functions and operators for basic operations. We also give some examples of operating on these objects and their components using normal R functions and operators.
+\end{abstract}
+
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologyFilters)
+library(photobiologyWavebands)
+@
+
+%%%%
+\section{Introduction}
+
+The suite uses object-oriented programming for its higher level `user-friendly' syntax. Objects are implemented using ``S3'' classes. The two main distinct kinds of objects are different types of spectra, and wavebands. Spectral objects contain, as their name implies, spectral data. Wavebands contain the information needed to calculate irradiance, non-weighted or weighted (effective), and a name and a label to be used in output printing. Functions and operators are defined for operations on these objects, alone and in combination. We will first describe spectra, and then wavebands, in each case describing operators and functions.
+
+\section{Spectra}\label{sec:spct:objects}
+
+\subsection{How are spectra stored?}
+
+For spectra the classes are a specialization of \code{data.table} which are in turn a specialization of \code{data.frame}. This means that they are \emph{mostly} compatible with functions that operate on these classes.
+
+\sloppy
+The suite defines a \code{generic\_spct} class, from which other specialized classes, `\code{filter\_spct}, \code{reflector\_spct}, \code{object\_spct}, \code{source\_spct}, \code{response\_spct}, \code{response\_spct}, \code{chroma\_spct} and \code{cps\_spct} are derived. Having this class structure allows us to create special methods and operators, which use the same `names' than the generic ones defined by R itself, but take into account the special properties of spectra.
+
+Except for \emph{special} cases each spectral object holds only spectral data from a single measurement. When spectral data from more than one measurement is contained in a single object, the data for the different measurements are stored \emph{melted}, in other words, in the same variable(s), and distinguished by means of an index factor. When a single measurement consists in several different quantities being measured, then these are stored in different variables, or columns, in the same spectral object. The name used for variables containing spectral data for a given quantity have mandatory names, and are always stored using the same units. Spectral objects also carry additional information in attributes, such a text comment, sorting key, time unit used for expression, and additional attributes indicating properties such as whether reflectance is \textbf{specular} or \textbf{total}. These strict rules allow the functions in the package to handle unit conversions, and units in labels and plots automatically. It also allows the use of operators like (`+') with spectra, and some sanity checks on the supplied spectral data and restriction of \emph{some} invalid operations. Table \ref{tab:spct:classes} lists the mandatory names of variables and attributes for each of the classes. In Table \ref{tab:spct:units} for each mandatory variable name, plus the additional names recognized by constructors are listed together with the respective units. Additional columns are allowed in the spectral objects, and deleted or set to \code{NA} only when the meaning of an operation on the whole spectrum is for these columns ambiguous.
+
+\begin{table}
+\caption{Classes for spectral data and \emph{mandatory} variable and attribute names}\label{tab:spct:classes}
+\centering
+\begin{tabular}{lll}
+\toprule
+Name & Variables & Attributes\\
+\midrule
+generic\_spct & w.length & \\
+cps\_spct & w.length, cps & \\
+source\_spct & w.length, s.e.irrad, s.q.irrad & time.unit, bswf \\
+filter\_spct & w.length, Tfr, A & Tfr.type \\
+reflector\_spct & w.length, Rfr & Rfr.type \\
+object\_spct & w.length, Tfr, Rfr & Tfr.type, Rfr.type \\
+response\_spct & w.length, s.e.response, s.q.response & time.unit \\
+chroma\_spct & w.length, x, y, z & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption[Variables for spectral data]{Variables used for spectral data and their units of expression: A: as stored in objects of the spectral classes, B: also recognized by the \texttt{set} family of functions for spectra and automatically converted. \texttt{time.unit} accepts in addition to the character strings listed in the table, objects of classes \texttt{lubridate::duration} and \texttt{period}, in addition \texttt{numeric} values are interpreted as seconds. \texttt{exposure.time} accepts these same values, but not the character strings.}\label{tab:spct:units}
+\centering
+\begin{tabular}{lll}
+\toprule
+Variables & Unit of expression & Attribute value \\
+\midrule
+A: stored & & \\
+\midrule
+w.length & nm &  \\
+cps & \cps & \\
+s.e.irrad &  \wattnm & time.unit = "second" \\
+s.e.irrad &  \jdaynm & time.unit = "day" \\
+s.e.irrad &  varies & time.unit = \emph{duration} \\
+s.q.irrad &  \molnm & time.unit = "second" \\
+s.q.irrad &  \moldaynm & time.unit = "day" \\
+s.q.irrad &  \moltotnm & time.unit = "exposure" \\
+s.q.irrad &  varies & time.unit = \emph{duration} \\
+Tfr & [0,1] &  Tfr.type = "total" \\
+Tfr & [0,1] &  Tfr.type = "internal" \\
+A   & a.u.  &  Tfr.type = "internal" \\
+Rfr & [0,1] &  Rfr.type = "total" \\
+Rfr & [0,1] &  Rfr.type = "specular" \\
+s.e.response & \eresponsenm &  time.unit = "second" \\
+s.e.response & \eresponsedaynm &  time.unit = "day" \\
+s.e.response & \eresponsetotnm &  time.unit = "exposure" \\
+s.e.response & varies &  time.unit = \emph{duration} \\
+s.q.response & \qresponsenm &  time.unit = "second" \\
+s.q.response & \qresponsedaynm &  time.unit = "day" \\
+s.q.response & \qresponsetotnm &  time.unit = "exposure" \\
+s.q.response & varies &  time.unit = \emph{duration} \\
+x, y, z & [0,1] & \\
+\midrule
+B: converted & & \\
+\midrule
+wl $\to$ w.length & nm & \\
+wavelength $\to$ w.length & nm & \\
+Tpc $\to$ Tfr & [0,100] &  Tfr.type = "total" \\
+Tpc $\to$ Tfr  & [0,100] &  Tfr.type = "internal" \\
+Rpc $\to$ Rfr  & [0,100] &  Rfr.type = "total" \\
+Rpc $\to$ Rfr  & [0,100] &  Rfr.type = "specular" \\
+counts.per.second $\to$ cps & \cps &  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Task: Create a spectral object from numeric vectors}
+
+`Traditional' constructor functions are available, and possibly easiest to use to those used R programming style. Constructor functions have the same name as the classes (e.g.\ \texttt{source\_spct}). The constructor functions accept numeric vectors as arguments, and these can be ``renamed'' on the fly. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
+
+We can create a new object of class \code{source\_spct} from two \code{numeric} vectors, and as shown below, recycling applies.
+
+<<>>=
+source_spct(w.length = 300:500, s.e.irrad = 1)
+@
+
+The code above uses defaults for all attributes, and assumes that spectral energy irradiance is expressed in \wattnm. As elsewhere in the package, wavelengths should be expressed in nanometres. If our spectral data is in photon-based units with spectral photon irradiance expressed in \molnm the code becomes:
+
+<<>>=
+source_spct(w.length = 300:500, s.q.irrad = 1)
+@
+
+Spectral objects have attributes, which store additional information needed for correct handling of units of expression, printing and plotting. The defaults need frequently to be changed, for example when spectral exposure is expressed as a daily integral, or other arbitrary exposure time. This length of time or \texttt{duration} should be set, whenever the unit of time used is different to second.
+
+<<>>=
+source_spct(w.length = 300:500, s.q.irrad = 1, time.unit = "day")
+@
+
+In addition to the character strings \texttt{"second"}, \texttt{"hour"}, and \texttt{"day"}, any object belonging to the class \texttt{duration} defined in package \texttt{lubridate} can be used. This means, that any arbitrary time duration can be used.
+
+Please, see Tables \ref{tab:spct:classes} and \ref{tab:spct:units} for the attributes defined for the different classes of spectral objects.
+
+\subsection{Task: Create a spectral object from a data frame}
+
+`Traditional' conversion functions with names given by names of classes preceded by \code{as.} (e.g.\ \texttt{as.source\_spct}. These functions accept data frames, data tables, and lists with components of equal length as arguments. These functions are less flexible, as the component variables in the argument should be named using one of the names recognized. Table \ref{tab:obj:units} lists the different `names' understood by these constructor functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
+
+We can create a new object of class \code{source\_spct} by making a copy of a data frame or a data table and converting it into a source spectrum:
+
+<<>>=
+my.df <- data.frame(w.length = 300:500, s.e.irrad = 1)
+my.spct <- as.source_spct(my.df)
+@
+
+In this case \texttt{sun.data} remains independent, and whatever change we make to my.spct does not affect \texttt{sun.data}:
+
+<<>>=
+my.spct <- my.spct * 2
+my.spct
+head(my.df)
+@
+
+These functions, in the same way as constructors, accept attributes as arguments.
+
+Using a technical term, we have used a copy constructor, which is the normal behaviour in R.
+
+\subsection{Task: Convert a data frame into a spectral object}
+
+The last possibility, is to use a syntax that is unusual for R, but which is some settings will lead to faster execution: convert an existing data frame or data table, \emph{in situ} or by reference, into a \code{source\_spct} object. These \texttt{set} functions have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}. Table \ref{tab:obj:units} lists the different `names' understood by these conversion functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
+
+<<>>=
+my.ref.spct <- setSourceSpct(my.df)
+is.source_spct(my.df)
+@
+
+If we combine the above code with an assignment, we end up having two names for the \emph{same} object, which has been converted to a \code{source\_spct} object. (At the moment we get a copy!)
+
+<<>>=
+my.ref.spct <- my.ref.spct * 2
+my.ref.spct
+my.df
+@
+
+In fact, the assignment is unnecessary, as the class of \texttt{my.df} is set:
+
+<<>>=
+setSourceSpct(my.df)
+@
+
+These functions, in the same way as constructors, accept attributes as arguments.
+
+Using a technical term, we have converted an object by \emph{reference}, which is \emph{not} the normal behaviour in R.\footnote{Avoiding copying can improve performance for huge objects, but will rarely make a tangible difference for individual spectra of moderate size.}
+
+\subsection{Task: trimming a spectrum}\label{sec:base:trim}
+
+This is basically a subsetting operation, but our functions operate only based on wavelengths, while R \code{subset} is more general. On the other hand, our functions \code{trim\_spct} and \code{trim\_tails} add a few `bells and whistles'. The trimming is based on wavelengths and by default the cut points are inserted by interpolation, so that the spectrum returned includes the limits given as arguments. In addition, by default the trimming is done by deleting both spectral irradiance and wavelength values outside the range delimited by the limits (just like \code{subset} does), but through parameter \code{fill} the values outside the limits can be replaced by any value desired (most commonly \code{NA} or 0.) It is possible to supply a only one, or both of \code{low.limit} and \code{high.limit}, depending on the desired trimming, or use a \code{waveband} definition or a numeric vector as an argument for \texttt{range}. If the limits are outside the original data set, then the output spectrum is expanded and the tails filled with the value given as argument for \code{fill} unless \code{fill} is equal to \texttt{NA}, which is the default.
+
+<<>>=
+trim_spct(sun.spct, range = UV())
+trim_spct(sun.spct, range = UV(), fill = 0)
+trim_spct(sun.spct, low.limit = 400)
+trim_spct(sun.spct, low.limit = 250, fill = 0.0)
+trim_spct(sun.spct, range = c(300, 400, 500, 600))
+@
+
+If the limits are outside the range of the input spectral data, and \code{fill} is set to a value other than \code{NULL} the output is expanded up to the limits and filled.
+
+<<>>=
+trim_spct(sun.spct, range=c(300, 1000))
+trim_spct(sun.spct, range=c(300, 1000), fill = NA)
+trim_spct(sun.spct, range=c(300, 1000), fill = 0.0)
+@
+
+Function \code{trim\_tails} can be used for trimming spectra when data is available as vectors.
+
+
+\subsection{Task: interpolating a spectrum}\label{sec:base:interpol}
+
+Functions \code{interpolate\_spct} and \code{interpolate\_spectrum} allow interpolation to different wavelength values. \code{interpolate\_spectrum} is used internally, and accepts spectral data measured at arbitrary wavelengths. Raw data from array spectrometers is not available with a constant wavelength step. It is always best to do any interpolation as late as possible in the data analysis.
+
+In this example we generate interpolated data for the range 280~nm to 300~nm at 1~nm steps, by default output values outside the wavelength range of the input are set to \code{NA}s unless a different argument is provided for parameter \code{fill}:
+
+<<>>=
+interpolate_spct(sun.spct, seq(290, 300, by=0.1))
+interpolate_spct(sun.spct, seq(290, 300, by=0.1), fill=0.0)
+@
+
+\code{interpolate\_spct} accepts any spectral object, and returns an object of the same type as its input.
+
+<<>>=
+interpolate_spct(polyester.new.spct, seq(290, 300, by=0.1))
+@
+
+Function \code{interpolate\_spectrum} takes numeric vectors as arguments, but is otherwise functionally equivalent.
+
+\begin{framed}
+These functions, in their current implementation, always return
+interpolated values, even when the density of wavelengths in the output is less than that in the input.
+A future version of the package will include a \code{smooth\_spectrum} function, and possibly a \code{remap\_w.length} function that will automatically choose between interpolation and smoothing/averaging as needed.
+\end{framed}
+
+\section{Internal-use functions}\label{sec:base:internal}
+
+The generic function \code{check} can be used on \code{generic\_spct} objects (i.e.\ any spectral object), and depending on their class it checks that the required components are present, and in some cases whether they are within the expected range. If they are missing they are added. If it is possible to calculate the missing values from other optional components, they are calculated, otherwise they are filled with \code{NA}. It is used internally during the creation of spectral objects.
+
+The function \code{check\_spectrum} may need to be called by the user if he/she disables automatic sanity checking to increase calculation speed.
+
+The function \code{insert\_hinges} is used internally to insert individual interpolated values to the spectra when needed to reduce errors in calculations.
+
+\section{Wavebands}\label{sec:wb:objects}
+
+\subsection{How are wavebands stored?}
+
+Wavebands are derived from R lists. All valid R operations for lists can be also used with \code{waveband} objects. However, there are \code{waveband}-specific specializations of some generic R methods as described in Chapter \ref{chap:baseoper} and Chapter \ref{chap:summ:wb}.
+
+\subsection{Task: Create waveband objects}
+
+Wavebands are created by means of function \code{waveband} which have in addition to the parameter(s) giving the wavelength range, additional arguments with default values.
+
+The simplest \code{waveband} creation call is one supplying as argument just any R object for which the \code{range} function returns the wavelength limits of the desired band in nanometres. Such a call yields a \code{waveband} object defining an un-weighted range of wavelengths.
+
+Any numeric vector of at least two elements, any spectral object or any existing \code{waveband} object for which a \texttt{range} method exists is valid input, as long as the values can be interpreted as wavelengths in nanometres.
+
+<<>>=
+waveband(c(300, 400))
+waveband(sun.spct)
+waveband(c(400, 300))
+@
+
+As you can see above, a name and label are created automatically for the new \code{waveband}. The user can also supply these as arguments, but must be careful not to duplicate existing names\footnote{It is preferable that \code{wb.name} complies with the requirements for R object names and file names, while labels have fewer restrictions as they are meant to be used only for output text labels.}.
+
+<<>>=
+waveband(c(300, 400), wb.name="a.name")
+@
+
+<<>>=
+waveband(c(300, 400), wb.name="a.name", wb.label="A nice name")
+@
+
+See chapter \ref{chap:uw:irrad} on page \pageref{chap:uw:irrad}, in particular sections \ref{sec:uwavebands}, \ref{sec:uwavebands:use}, and \ref{sec:uwaveband:lists} for further examples, and a more in-depth discussion of the creation and use of \emph{un-weighted} \code{waveband} objects.
+
+For both functions, even if we supply a \emph{weighting function} (SWF), a lot of flexibility remains. One can supply either a function that takes energy irradiance as input or a function that takes photon irradiance as input. Unless both are supplied, the missing function will be automatically created. There are also arguments related to normalization, both of the output, and of the SWF supplied as argument. In the examples above, `hinges' are created automatically for the range extremes. When using SWF with discontinuous derivatives, best results are obtained by explicitly supplying the hinges to be used as an argument to the \code{waveband} call. An example follows for the definition of a waveband for the CIE98 SWF---the function \code{CIE\_e\_fun} is defined in package \PBWB but any R function taking a numeric vector of wavelengths as input and returning a numeric vector of the same length containing weights can be used.
+
+<<>>=
+waveband(c(250, 400),
+         weight="SWF", SWF.e.fun=CIE_e_fun, SWF.norm=298,
+         norm=298, hinges=c(249.99, 250, 298, 328, 399.99, 400),
+         wb.name="CIE98.298", wb.label="CIE98")
+@
+
+
+See chapter \ref{chap:wt:irrad} on page \pageref{chap:wt:irrad}, in particular sections \ref{sec:wwavebands}, \ref{sec:wwavebands:use}, and \ref{sec:wwaveband:lists} for further examples, and a more in-depth discussion of the creation and use of \emph{weighted} \code{waveband} objects.
+
+\subsection{Task: trimming a waveband}\label{sec:base:trim}
+
+This operation either changes the boundaries of \texttt{waveband} objects, or deletes \texttt{waveband} objects from a list of waveband.  The first argument can be either a \texttt{waveband} object or a list of \texttt{waveband} objects. Those wavebands fully outside the limits are always discarded and those fully within the limits always kept. In the case of those wavebands crossing a limit, if the argument \texttt{trim} is set to \texttt{FALSE}, they are discarded, but if \texttt{trim} is set to \texttt{TRUE} their boundary is moved to be at the trimming limit. Trimming is based on wavelengths and by default the cut points are inserted.  Trimming is done by shrinking the waveband, expansion is not possible. During trimming labels stored in the \texttt{waveband} object are `edited' to reflect the altered boundaries. Trimming does not affect weighting functions stored within the waveband.
+
+<<>>=
+trim_waveband(UV(), range = UVB())
+trim_waveband(VIS_bands(), low.limit = 400, trim = FALSE)
+trim_waveband(VIS_bands(), low.limit = 400, trim = TRUE)
+trim_waveband(VIS_bands(), range = c(500, 600))
+@
+
+<<>>=
+try(detach(package:photobiologyWavebands))
+try(detach(package:photobiologyFilters))
+try(detach(package:photobiology))
+@

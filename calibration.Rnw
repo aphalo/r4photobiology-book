@@ -3,7 +3,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Calibration}
+\chapter{Calibration}\label{chap:calibration}
 
 \begin{abstract}
   In this chapter we explain how to .

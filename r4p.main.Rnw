@@ -147,8 +147,8 @@ opts_chunk$set(opts_fig_narrow)
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
 incl_all <- FALSE
-incl_chaps <- FALSE || incl_all
-incl_ckbk <- FALSE || incl_all
+incl_chaps <- TRUE || incl_all
+incl_ckbk <- TRUE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
 incl_apdx <- FALSE # || incl_all
@@ -221,16 +221,16 @@ rm(list = setdiff(current_ls, main_ls))
 
 \part{Cookbook of calculations}
 
-<<child-physics, child='physics.Rnw', eval=incl_ckbk>>=
-@
-
-<<child-astronomy, child='astronomy.Rnw', eval=incl_ckbk>>=
+<<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-baseoper, child='baseoper.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-summaries, child='summaries.Rnw', eval=TRUE>>=
+<<child-summaries, child='summaries.Rnw', eval=incl_ckbk>>=
+@
+
+<<child-summarieswb, child='summariesWB.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-uwirrad, child='uwirrad.Rnw', eval=incl_ckbk>>=
@@ -239,18 +239,24 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-wtirrad, child='wtirrad.Rnw', eval=incl_ckbk>>=
 @
 
-<<echo=FALSE, include=FALSE>>=
-current_ls <- ls()
-rm(list = setdiff(current_ls, main_ls))
+<<child-wtirrad, child='transmittance.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-wtirrad, child='transmittance.Rnw', eval=incl_ckbk>>=
+<<child-astronomy, child='astronomy.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-colour, child='colour.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-plots, child='plots.Rnw', eval=incl_ckbk>>=
+@
+
+<<child-physics, child='physics.Rnw', eval=incl_ckbk>>=
+@
+
+<<echo=FALSE, include=FALSE>>=
+current_ls <- ls()
+rm(list = setdiff(current_ls, main_ls))
 @
 
 \part{Catalogue of data sources}

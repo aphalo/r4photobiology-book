@@ -3,7 +3,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Photoreceptors}
+\chapter{Photoreceptors}\label{chap:photoreceptors}
 
 \begin{abstract}
   In this chapter we explain how to .

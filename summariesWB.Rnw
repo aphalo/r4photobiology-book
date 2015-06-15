@@ -1,0 +1,101 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+opts_chunk$set(opts_fig_wide)
+@
+
+\chapter{Wavebands: simple summaries and features}\label{chap:summ:wb}
+
+\begin{abstract}
+  In this chapter we explain how to obtain different summaries and query features from wavebands.
+\end{abstract}
+
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologyWavebands)
+library(photobiologygg)
+@
+
+\section{Task: Summaries related to object properties}\label{sec:summarieswb:wavelength}
+
+In the case of the \texttt{summary} method, specializations for \texttt{source\_spct} and \ldots are provided. But for other spectral objects, the \texttt{summary} method for \texttt{data.table} is called. For the \texttt{summary} specializations defined, the corresponding \texttt{print} method specializations are also defined.
+
+<<>>=
+my.wb <- waveband(c(400,500))
+summary(my.wb)
+@
+<<>>=
+vis.wb <- VIS()
+summary(vis.wb)
+@
+
+<<>>=
+cie.wb <- CIE()
+summary(cie.wb)
+@
+
+%%%%
+\section{Task: Summaries related to wavelength}\label{sec:summarieswb:wavelength}
+
+Functions \texttt{max}, \texttt{min}, \texttt{range}, \texttt{midpoint} when used with an object of class \texttt{waveband} return the result of applying these functions to the wavelength component boundaries of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
+
+<<>>=
+range(vis.wb)
+midpoint(vis.wb)
+max(vis.wb)
+min(vis.wb)
+@
+
+Functions \texttt{spread} are \texttt{stepsize} are generics defined in package \PB. \texttt{spread} returns maximum less minimum wavelengths values in nanometres, while \texttt{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
+
+<<>>=
+spread(vis.wb)
+@
+
+\section{Task: Querying other properties}\label{sec:summarieswb:other}
+
+It is possible to query whether a \texttt{waveband} object includes a weighting function using function \texttt{is\_effective}. Weighting functions are used for the calculation \emph{effective irradiances} and \emph{effecctive exposures}.
+
+<<>>=
+is_effective(vis.wb)
+is_effective(cie.wb)
+@
+
+\section{Task: R's methods}
+
+The ``labels'' can be retrieved with R's method \texttt{labels}. Waveband objects have two slots for names, normally used when wavebands are plotted or printed.
+
+<<>>=
+labels(my.wb)
+labels(vis.wb)
+labels(cie.wb)
+@
+
+As with any R object, method \texttt{names} returns a vector of names of the object's components.
+
+<<>>=
+names(vis.wb)
+names(cie.wb)
+@
+
+\section{Task: Plotting a waveband}
+
+Method \texttt{plot} is defined for \texttt{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
+
+<<>>=
+plot(vis.wb)
+@
+
+<<>>=
+plot(cie.wb)
+@
+
+<<>>=
+try(detach(package:photobiologygg))
+try(detach(package:photobiologyWavebands))
+try(detach(package:photobiology))
+@
+
