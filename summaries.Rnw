@@ -21,6 +21,17 @@ library(photobiologyFilters)
 library(photobiologyReflectors)
 @
 
+\section{Task: Printing spectra}
+
+Spectral objects are printed with the \texttt{print} method for \texttt{data.frame} objects, consequently, it is possible to use options from package \texttt{data.frame} to control printing. The first option set below, \texttt{datatable.print.nrows}, determines the number of rows above which only `head' and `tail' rows are printed. The second option, \texttt{datatable.print.topn}, determines how many rows are printed when not all rows are printed.
+
+<<printing-spct>>=
+options(datatable.print.nrows = 10)
+options(datatable.print.topn = 2)
+@
+
+The number of rows printed can be also controlled through an explicit argument to the second parameter of \texttt{print}, \texttt{head}, and \texttt{tail}. Setting an option by means of \texttt{options} changes the default behaviour of \texttt{print}, but explicit arguments can still be used for changing this behaviour in an individual statement.
+
 \section{Task: Summaries related to object properties}\label{sec:summaries:wavelength}
 
 In the case of the \texttt{summary} method, specializations for \texttt{source\_spct} and \ldots are provided. But for other spectral objects, the \texttt{summary} method for \texttt{data.table} is called. For the \texttt{summary} specializations defined, the corresponding \texttt{print} method specializations are also defined.

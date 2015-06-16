@@ -99,6 +99,17 @@ counts.per.second $\to$ cps & \cps &  \\
 \end{tabular}
 \end{table}
 
+\subsection{Spectral data assumptions}
+
+The packages' code assumes that wavelengths are always expressed in nanometres ($1~\Unit{nm} = 1 \cdot 10^{-9}\,\Unit{m}$). If the data to be analysed uses different units for wavelengths, e.g.\ Ångstrom ($1~\Unit{Å} = 1 \cdot 10^{-10}\,\Unit{m}$), the values need to be re-scaled before any calculations. The assumptions related to the expression of spectral data should be followed strictly as otherwise the results returned by calculations will be erroneous. Table \ref{tab:spct:units} lists the units of expression for the different variables listed in Table  \ref{tab:spct:classes}. Object constructors accept, if properly instructed, spectral data expressed in some cases differently than the format used for storage. In such cases unit connversion during object creation is automatic. For example, although transmittance is always stored as a fraction of one in variable \texttt{Tfr}, the constructors recognize variable \texttt{Tpc} as expressed as a percent and convert the data and rename the variable.
+
+The attributes related to the stored quantities add additional flexibility, and are normally set when an object spectral object is created, either to a default or a value supplied by the user. Attribute values can be also retrieved and set from existing objects.
+
+\begin{framed}
+\noindent
+Not respecting data assumptions will yield completely wrong results! It is extremely important to make sure that the wavelengths are in nanometres as this is what all functions expect. If wavelength values are in the wrong units, the action-spectra weights and quantum conversions will be wrongly calculated, and the values returned by most functions completely wrong, without warning. The assumptions related to spectral data need also to be strictly followed, as the packages do automatically use the assumed units of expression when printing and plotting results.
+\end{framed}
+
 \subsection{Task: Create a spectral object from numeric vectors}
 
 `Traditional' constructor functions are available, and possibly easiest to use to those used R programming style. Constructor functions have the same name as the classes (e.g.\ \texttt{source\_spct}). The constructor functions accept numeric vectors as arguments, and these can be ``renamed'' on the fly. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
@@ -124,6 +135,24 @@ source_spct(w.length = 300:500, s.q.irrad = 1, time.unit = "day")
 In addition to the character strings \texttt{"second"}, \texttt{"hour"}, and \texttt{"day"}, any object belonging to the class \texttt{duration} defined in package \texttt{lubridate} can be used. This means, that any arbitrary time duration can be used.
 
 Please, see Tables \ref{tab:spct:classes} and \ref{tab:spct:units} for the attributes defined for the different classes of spectral objects.
+
+\subsubsection{Task: Manual unit conversion}
+
+If spectral irradiance data is in \wattnm, and the wavelength in nm, as is the case for many
+Macam spectroradiometers, the data can be used directly and functions in the package will return irradiances in \watt.
+
+If, for example, the spectral irradiance data output by a spectroradiometer is expressed in \mwattnm,
+and the wavelengths are in Ångstrom then to obtain correct results when using any of the packages in the suite, we need to rescale the data before creating a new object.
+
+<<example-1, eval=FALSE>>=
+# not run
+my.spct <-
+   source_spct(w.length = wavelength / 10, s.e.irrad = irrad / 1000)
+@
+
+In the example above, we take advantage of the behaviour of the S language: an operation between a scalar and vector, is equivalent to applying this operation to each member of the vector.
+Consequently, in the code above, each value from the vector of wavelengths is divided
+by 10, and each value in the vector of spectral irradiances is divided by 1000.
 
 \subsection{Task: Create a spectral object from a data frame}
 
@@ -222,6 +251,42 @@ These functions, in their current implementation, always return
 interpolated values, even when the density of wavelengths in the output is less than that in the input.
 A future version of the package will include a \code{smooth\_spectrum} function, and possibly a \code{remap\_w.length} function that will automatically choose between interpolation and smoothing/averaging as needed.
 \end{framed}
+
+\subsection{Task: Row binding spectra}
+
+Sometimes, especially for plotting, we may want to row-bind spectra. When the aim is that the returned object
+retains its class attributes, and other spectrum related attributes like the time unit, functions \texttt{rbind}
+from base R, and its reimplementation from package \texttt{data.table}, and function \texttt{rbindlist} also
+defined in package \texttt{data.table} should NOT be used. Package \PB provides function \texttt{rbinspct} for
+row-binding spectra, with the necessary checks for consistency of the bound spectra.
+
+<<>>=
+# STOPGAP
+shade.spct <- copy(sun.spct)
+@
+
+<<>>=
+rbindspct(list(sun.spct, shade.spct))
+@
+
+It is also possible to add an ID factor, to be able to still recognize the origin of the observations after the
+binding. If the supplied list is anonymous, then capital letters will be used for levels.
+
+<<>>=
+rbindspct(list(sun.spct, shade.spct), idfactor = TRUE)
+@
+
+In contrast, if a named list with no missing names, is supplied as argument, these names are used for the levels of the ID factor.
+
+<<>>=
+rbindspct(list(sun = sun.spct, shade = shade.spct), idfactor = TRUE)
+@
+
+If a character string is supplied as argument, then this will be used as the name of the factor.
+
+<<>>=
+rbindspct(list(sun = sun.spct, shade = shade.spct), idfactor = "ID")
+@
 
 \section{Internal-use functions}\label{sec:base:internal}
 
