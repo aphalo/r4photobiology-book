@@ -114,14 +114,35 @@ A handbook}}\par
 \addbibresource{rbooks.bib}
 \addbibresource{handbook.bib}
 \addbibresource{guidelines.bib}
+\addbibresource{andreas.bib}
 
 %\makeindex
 %\makeglossaries
 %\loadglsentries{gp_glossary}
 
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{rotating}
+
+
+\definecolor{darklila}{rgb}{0.5,0,0.5}
+\definecolor{lila}{rgb}{1,0,1}
+\definecolor{darkgreen}{rgb}{0,0.7,0}
+\definecolor{darkyellow}{rgb}{1,0.8,0}
+\definecolor{orange}{rgb}{1,0.5,0}
+\definecolor{brown}{rgb}{0.5,0.2,0.2}
+\definecolor{darkred}{rgb}{0.75,0,0.1}
 
 \newcommand{\gls}[1]{} % until start building the glossary.
 
+\newcommand{\examplename}{Example}
+\newcommand{\listexamplename}{List of Examples}
+\newlistof{listofexamples}{xpl}{\listexamplename}
+\newfloat[chapter]{example}{xpl}{\examplename}
+\newlistentry{example}{xpl}{0}
+
+\setfloatadjustment{figure}{\sffamily\centering}
+\setfloatadjustment{table}{\sffamily\footnotesize\centering}
 
 \begin{document}
 
@@ -147,7 +168,7 @@ opts_chunk$set(opts_fig_narrow)
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
 incl_all <- FALSE
-incl_chaps <- FALSE || incl_all
+incl_chaps <- TRUE || incl_all
 incl_ckbk <- TRUE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
@@ -185,9 +206,14 @@ options(datatable.print.topn=2)
 
 \tableofcontents
 
-%\listoftables
+\newpage
+\listoftables
 
-%\listoffigures
+\newpage
+\listoffigures
+
+\newpage
+\listofexamples
 
 \include{preface.tr}
 
@@ -242,7 +268,7 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-wtirrad, child='transmittance.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-astronomy, child='astronomy.Rnw', eval=incl_ckbk>>=
+<<child-astronomy, child='astronomy.Rnw', eval=FALSE>>=
 @
 
 <<child-colour, child='colour.Rnw', eval=incl_ckbk>>=

@@ -40,6 +40,22 @@ In the case of the \texttt{summary} method, specializations for \texttt{source\_
 summary(sun.spct)
 @
 
+\section{Task: Integrating spectral data}
+
+Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \texttt{integrate\_spct} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operates on all \texttt{numeric} variables contained in a spectral object except for \texttt{w.length}. The returned value is expressed as a total per spectrum.
+
+<<>>=
+integrate_spct(sun.spct)
+@
+
+\section{Task: Averaging spectral data}
+
+Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \texttt{average\_spct} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operate on all \texttt{numeric} variables contained in a spectral object except for \texttt{w.length}. The returned value is expressed per nanometre.
+
+<<>>=
+average_spct(sun.spct)
+@
+
 %%%%
 \section{Task: Summaries related to wavelength}\label{sec:summaries:wavelength}
 

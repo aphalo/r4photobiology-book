@@ -16,21 +16,40 @@ opts_knit$set(concordance=TRUE)
 \end{abstract}
 
 %%%%
+\section{Expected use and users}
+
+The aim of the suite is to both provide a framework for teaching VIS and UV radiation physics and photobiology through a set of functions and data examples. Furthermore, we expect these functions and data to be useful for active researchers during design of experiments, data analysis and data validation. In particular we hope the large set of example data will make it easy to carry out sanity checks of newly acquired and/or published data.
+
+Given the expected audience of both students and biologists, rather than data analysts, or experienced programmers, we have aimed at designing a consistent and easy to understand paradigm for the analysis of spectral data. The design is based on our own user experience, and on feedback from our students and `early adopters'.
+
 \section{The design of the user interface}
 
-The design of the `high level' interface is based on the idea of achieving simplicity of use by hiding the computational difficulties and exposing objects, functions and operators that map directly to physical concepts. Computations and plotting of spectral data centers on two types of objects: \emph{spectra} and \emph{wavebands}. Al spectra have in common that all observations are referenced to a wavelength value, there are different types spectral objects, e.g. for light sources and responses. Waveband objects include much more than information about a range of wavelengths, they can also include information about a transformation of the spectral data, like a biological spectral weighting function (BSWF). In addition to functions for calculating summary quantities like irradiance from spectral irradiance, the packages define operators for spectra and wavebands. The use of operators simplifies the syntax and makes the interface easier to use.
+\begin{figure}
+\caption{The elements of the suite.}\label{fig:diagram:paradigm}
+  \begin{framed}
+  \noindent
+    \begin{description}
+      \item[\texttt{\_spct}] Spectral objects are containers for different types of spectral data, data which is referenced to wavelength. These data normally originate in measurements or simulation with models.
+      \item[\texttt{wavebands}] Waveband objects are containers of `instructions' for the quantification of spectral data. In addition to the everyday definition as a range of wavelengths, we include the spectral weighting functions used in the calculation of what are frequently called weighted or effective exposures and doses.
+      \item[summary functions] Different summary functions return different quantities through integration over wavelengths and take as arguments spectra and wavebands.
+      \item[maths operators and functions] Are used to combine and/or transform spectral data, and in some cases to apply weights defined by wavebands.  
+    \end{description}
+  \end{framed}
+\end{figure}
+
+The design of the `high level' interface is based on the idea of achieving simplicity of use by hiding the computational difficulties and exposing objects, functions and operators that map directly to physical concepts. Computations and plotting of spectral data centers on two types of objects: \emph{spectra} and \emph{wavebands} (Figure \ref{fig:diagram:paradigm}). Al spectra have in common that all observations are referenced to a wavelength value, there are different types spectral objects, e.g.\ for light sources and responses to light. Waveband objects include much more than information about a range of wavelengths, they can also include information about a transformation of the spectral data, like a biological spectral weighting function (BSWF). In addition to functions for calculating summary quantities like irradiance from spectral irradiance, the packages define operators for spectra and wavebands. The use of operators simplifies the syntax and makes the interface easier to use.
 
 <<suite-design-example, eval=FALSE>>=
 e_irrad(sun.spct * polyester.new.spc, CIE())
 @
 
-Is all what is needed to obtain the CIE98-weigthed energy irradiance simulating the effect of a polyester filter on the example solar spectrum, which of course, can be substituted by other spectral data.
+Is all what is needed to obtain the CIE98-weigthed energy irradiance simulating the effect of a polyester filter on the example solar spectrum, which of course, can be substituted by other spectral irradiance and filter data.
 
-When we say that we hide the computational difficulties what we mean, is that in the example above, the data for the two spectra do not need to be available at the same wavelengths values, and the BSWF is defined as a function. Interpolation of the spectral data and calculation of weighting factors takes place automatically and invisibly. All functions and operators function without error with spectra with varying (even arbitrarily and randomly varying) wavelength steps. Integration is always used rather than summation for summarizing the spectral data.
+When we say that we hide the computational difficulties what we mean, is that in the example above, the data for the two spectra do not need to be available at the same wavelengths values, and the BSWF is defined as a function. Interpolation of the spectral data and calculation of spectral weighting factors takes place automatically and invisibly. All functions and operators function without error with spectra with varying (even arbitrarily and randomly varying) wavelength steps. Integration is always used rather than summation for summarizing the spectral data.
 
-There is lower layer of functions, used internally, but also exported, which allow improved performance at the expense of more complex scripts and commands. This user interface is not meant for the casual user, but for the user who has to analyse thousands of spectra and uses scripts for this. For such users performance is the main concern rather than easy of use and easy to remember syntax. Also these functions handle any wavelength mismatch by interpolation before applying operations or functions.
+There is a lower layer of functions, used internally, but also exported, which allow improved performance at the expense of more complex scripts and commands. This user interface is not meant for the casual user, but for the user who has to analyse thousands of spectra and uses scripts for this. For such users performance is the main concern rather than easy of use and easy to remember syntax. Also these functions handle any wavelength mismatch by interpolation before applying operations or functions.
 
-The suite also includes data for the users to try options and ideas, and helper functions for plotting spectra using other R packages available from CRAN, in particular \code{ggplot2}. There are some packages, not part of the suite itself, for data acquisition from Ocean Optics spectrometers, and application of special calibration and correction procedures to those data. A package will provide an interface to the TUV model to allow easy simulation of the solar spectrum.
+The suite also includes data for the users to try options and ideas, and helper functions for plotting spectra using other R packages available from CRAN, in particular \code{ggplot2}. There are some packages, not part of the suite itself, for data acquisition from Ocean Optics spectrometers, and application of special calibration and correction procedures to those data. A future package will provide an interface to the TUV model to allow easy simulation of the solar spectrum.
 
 \section{The suite}
 
@@ -51,23 +70,28 @@ green bullet \gblt.}\label{tab:suite}
 \toprule
  & Package           &  Type        & Contents \\
 \midrule
+\gblt & photobiologyAll   &  dummy          & loads other packages of the suite\\
 \gblt & photobiology      &  funs + classes & basic functions, class definitions,\\
       &                   &                 & class methods and example data \\
-\midrule
+\yblt & photobiologyInOut     &  functions  & data import/export functions \\
 \gblt & photobiologyWavebands   &  definitions & quantification of radiation \\
+\gblt & photobiologygg  & functions       & extensions to package \code{ggplot2} \\
+\midrule
 \midrule
 \gblt & photobiologySun   &  data        & spectral data for solar radiation \\
 \gblt & photobiologyLamps &  data        & spectral data for lamps \\
 \gblt & photobiologyLEDs  &  data        & spectral data for LEDs \\
 \gblt & photobiologyFilters  &  data     & transmittance data for filters \\
-\gblt & photobiologySensors  &  data     & response data for broadband sensors \\
+\gblt & photobiologySensors  &  data     & response data for sensors \\
+\yblt & photobiologyReflectors  &  data  & reflectance data for materials \\
 \midrule
-\yblt & photobiologyPlants  & funs + data & photoreceptors and optical properties \\
+\yblt & photobiologyPlants  & funs + data & photobiology of plants \\
 \midrule
-\gblt & photobiologygg  & functions       & extensions to package \code{ggplot2} \\
 \midrule
+\gblt & rOmniDriver      & functions   & Ocean Optics spectrometers \\
+\gblt & MayaCalc      & functions   & UV and VIS irradiance data \\
+      &               &             & processing for Maya2000 Pro \\
 \rblt & rTUV             & funs + data & TUV model interface \\
-\gblt & rOmniDriver      & functions   & control of Ocean Optics spectrometers \\
 \bottomrule
 \end{tabular}
 \end{small}
@@ -83,41 +107,41 @@ Wavelengths should always be in nm, and when conversion between energy and photo
 The suite is still under active development. Even those packages marked as `stable' are likely to acquire new functionality. By stability, we mean that we hope to be able to make most changes backwards compatible, in other words, we hope they will not break existing user code.
 
 %%%%
-\section{\lowercase{\code{r4photo}} repository}\label{sec:photoCRAN}
+\section{The \lowercase{\textsf{r4photobiology}} repository}\label{sec:photoCRAN}
 % \lowercase needed for page headers
 
-I have created a small repository for the packages. This repository follows the CRAN folder structure, so now package installation can be done using just the normal R commands. This means that dependencies are installed automatically, and that automatic updates are possible. The build most suitable for the current system and R version is also picked automatically if available. It is normally recommended that you do installs and updates on a clean R session (just after starting R or RStudio).For easy installation and updates of packages, the r4photo repository can be added to the list of repositories that R knows about.
+I have created a repository for the packages. This repository follows the CRAN folder structure, so package installation can be done using normal R commands. This means that dependencies are installed automatically and that automatic updates are possible. The build most suitable for the current system and R version is also picked automatically if available. It is normally recommended that you do installs and updates on a clean R session (just after starting R or RStudio). For easy installation and updates of packages, the r4photobiology repository can be added to the list of repositories that R knows about.
 
-Whether you use RStudio or not it is possible to add the r4photo repository to the current session as follows, which will give you a menu of additional repositories to activate:
+Whether you use RStudio or not it is possible to add the r4photobiology repository to the current session as follows, which will give you a menu of additional repositories to activate:
 
 <<eval=FALSE, tidy=FALSE>>=
-setRepositories(graphics = getOption("menu.graphics"),
-                ind = NULL,
-                addURLs = c(r4photo =
-                      "http://www.mv.helsinki.fi/aphalo/R"))
+setRepositories(
+  graphics = getOption("menu.graphics"),
+  ind = NULL,
+  addURLs = c(r4photobiology = "http://www.r4photobiology.info/R"))
 @
 
 If you know the indexes in the menu you can use this code, where ‘1’ and ‘6’ are the entries in the menu in the command above.
 
 <<eval=FALSE, tidy=FALSE>>=
-setRepositories(graphics = getOption("menu.graphics"),
-                ind = c(1, 6),
-                addURLs = c(r4photo =
-                      "http://www.mv.helsinki.fi/aphalo/R"))
+setRepositories(
+  graphics = getOption("menu.graphics"),
+  ind = c(1, 6),
+  addURLs = c(r4photobiology = "http://www.r4photobiology.info/R"))
 @
 
 Be careful not to issue this command more than once per R session, otherwise the list of repositories gets corrupted by having two repositories with the same name.
 
-Easiest is to create a text file and name it `\code{.Rprofile}'. The commands above (and any others you would like to run at R start up) should be included, but with the addition that the package names for the functions need to be prepended. The minimum needed is.
+Easiest is to create a text file and name it `\code{.Rprofile}', unless it already exists. The commands above (and any others you would like to run at R start up) should be included, but with the addition that the package names for the functions need to be prepended. So previous example becomes:
 
 <<eval=FALSE, tidy=FALSE>>=
-utils::setRepositories(graphics = getOption("menu.graphics"),
-                ind = c(1, 6),
-                addURLs = c(r4photo =
-                      "http://www.mv.helsinki.fi/aphalo/R"))
+utils::setRepositories(
+  graphics = getOption("menu.graphics"),
+  ind = c(1, 6),
+  addURLs = c(r4photobiology = "http://www.r4photobiology.info/R"))
 @
 
-The \code{.Rprofile} file located in the current folder is sourced at R start up. It is also possible to have such a file affecting all of the user's R sessions, but its location is operating system dependent, it is in most cases the what the OS considers the current user's \textit{HOME} directory or folder (e.g. `My Documents' in recent versions of MS-Windows). If you are using RStudio, after setting up this file, installation and updating of the packages in the suite can take place exactly as for any other package archived at CRAN.
+The \code{.Rprofile} file located in the current folder is sourced at R start up. It is also possible to have such a file affecting all of the user's R sessions, but its location is operating system dependent, it is in most cases what the OS considers the current user's \textit{HOME} directory or folder (e.g. `My Documents' in recent versions of MS-Windows). If you are using RStudio, after setting up this file, installation and updating of the packages in the suite can take place exactly as for any other package archived at CRAN.
 
 The commands and examples below can be used at the R prompt and in scripts whether RStudio is used or not.
 
@@ -127,7 +151,7 @@ setRepositories()
 @
 and can be enabled and disabled.
 
-In RStudio, after adding the r4photo repository as shown above, the photobiology packages can be installed and uninstalled through the normal RStudio menus and dialogues, and will listed after typing the first few characters of their names. For example when you type ‘photob’ in the packages field, all the packages with names starting with ‘photob’ will be listed.
+In RStudio, after adding the \textsf{r4photobiology} repository as shown above, the photobiology packages can be installed and uninstalled through the normal RStudio menus and dialogues, and will listed after typing the first few characters of their names. For example when you type ‘photob’ in the packages field, all the packages with names starting with ‘photob’ will be listed.
 
 They can be also installed at the R command prompt with the following command:
 <<eval=FALSE>>=
@@ -141,67 +165,5 @@ update.packages()
 @
 
 
-The added repository will persist only during the current R session. Adding it permanently requires editing the R configuration file, as discussed above. Take into consideration that .Rprofile is read by R itself, and will take effect whether you use RStudio or not. It is possible to have a user wide .Rprofile file, and a different one on those folders needing different settings. There many options that can be modified by means of commands in the .Rprofile file.
+The added repository will persist only during the current R session. Adding it permanently requires editing the R configuration file, as discussed above. Take into consideration that \texttt{.Rprofile} is read by R itself, and will take effect whether you use RStudio or not. It is possible to have an user-account wide .Rprofile file, and a different one on those folders needing different settings. Many other R options can also be modified by means of commands in the .Rprofile file.
 
-\section{How to install the packages}
-
-The examples given in this page assume that ‘r4photo’ is not in the list of repositories known to the current R session. See the section \ref{sec:photoCRAN} on the r4photo repository for a better alternative to the approach given here. We mention these other commands because they may be useful in cases when the user does not have write access to his/hers home directory, or just wants to try the packages.
-
-To install the latest version of one package (photobiology used as example) you just need to indicate the repository. However this simple command will only install the dependencies between the different photobiology packages.
-<<eval=FALSE, tidy=FALSE>>=
-install.packages("photobiology",
-                 repos = "http://www.mv.helsinki.fi/aphalo/R")
-@
-
-To update what is already installed, this command is enough (even if the packages have been installed manually before):
-
-<<eval=FALSE>>=
-update.packages(repos = "http://www.mv.helsinki.fi/aphalo/R")
-@
-
-
-The best way to install the packages is to specify both the r4photo repository and a normal CRAN repository, then all dependencies will be automatically installed. The package photobiolgyAll just loads and imports all the packages in the suite, except for photobiolygg. Because of this dependency all the packages are installed unless already installed by issuing this command.
-<<eval=FALSE, tidy=FALSE>>=
-install.packages(c("photobiologyAll", "photobiologygg"),
-         repos = c(r4photo =
-                     "http://www.mv.helsinki.fi/aphalo/R",
-                   CRAN =
-                     "http://cran.rstudio.com"))
-@
-
-This example also shows how one can use an array of package names (in this example all currently available “photobiology” packages) in the call to the function install.packages, this is useful if you want to install only a subset of the files, or if you want to make sure that any older install of the packages is overwritten:
-<<eval=FALSE, tidy=FALSE>>=
-photobiology_packages <- c("photobiology",
-    "photobiologyWavebands",
-    "photobiologyCry", "photobiologyPhy",
-    "photobiologyLamps", "photobiologyLEDs",
-    "photobiologySun", "photobiologygg",
-    "photobiologyFilters",  "photobiologySensors")
-
-install.packages(photobiology_packages,
-         repos = c(r4photo =
-                     "http://www.mv.helsinki.fi/aphalo/R",
-                   CRAN =
-                     "http://cran.rstudio.com"))
-@
-
-The commands above install all packages in the suite and all their dependencies from CRAN if needed. The following command will update all the packages currently installed (if new versions are available) and install any new dependencies.
-
-<<eval=FALSE, tidy=FALSE>>=
-update.packages(repos =
-                  c(r4photo =
-                      "http://www.mv.helsinki.fi/aphalo/R",
-                    CRAN =
-                      "http://cran.rstudio.com"))
-@
-
-The instructions above should work under Windows as long as you have a supported version of R (3.0.0 or later) because I have built suitable binaries, under other OSs you may need to add type="source" unless this is already the default. We will try to build OS X binaries for Mac so that installation is easier. Meanwhile if installation fails try adding type="source" to the commands given above. For example the first one would become:
-
-<<eval=FALSE, tidy=FALSE>>=
-install.packages("photobiology",
-                 repos = "http://www.mv.helsinki.fi/aphalo/R",
-                 type="source")
-@
-
-
-When using type=”source” you may need to install some dependencies like the splus2R package beforehand from CRAN if building it from sources fails.

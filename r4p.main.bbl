@@ -19,6 +19,56 @@
 
 \refsection{0}
   \sortlist{nyt}{nyt}
+    \entry{alber06}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=010e4c387a3152fe83e35d940957689f}{Albert}{A\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c4f94d88e91cc98323b941bbc79b2e94}{Gege}{G\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{077aae1715a6f4a81e594364ec19fb68}
+      \strng{fullhash}{077aae1715a6f4a81e594364ec19fb68}
+      \field{sortinit}{A}
+      \field{sortinithash}{b685c7856330eaee22789815b49de9bb}
+      \field{labelyear}{2006}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Applied Optics}
+      \field{title}{Inversion of irradiance and remote sensing reflectance in shallow water between 400 and 800 nm for calculations of water and bottom properties}
+      \field{volume}{45}
+      \field{year}{2006}
+      \field{pages}{2331\bibrangedash 2343}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1364/AO.45.002331
+      \endverb
+    \endentry
+    \entry{alber03}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=010e4c387a3152fe83e35d940957689f}{Albert}{A\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=be06619cf6ae5be601f4a3a031b616b6}{Mobley}{M\bibinitperiod}{C.\bibnamedelimi D.}{C\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {Optical Society of America}%
+      }
+      \strng{namehash}{8fd548d29d080b4f16f6e5e865f27cbc}
+      \strng{fullhash}{8fd548d29d080b4f16f6e5e865f27cbc}
+      \field{sortinit}{A}
+      \field{sortinithash}{b685c7856330eaee22789815b49de9bb}
+      \field{labelyear}{2003}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Optics Express}
+      \field{number}{22}
+      \field{title}{An analytical model for subsurface irradiance and remote sensing reflectance in deep and shallow case-2 waters}
+      \field{volume}{11}
+      \field{year}{2003}
+      \field{pages}{2873\bibrangedash 2890}
+      \range{pages}{18}
+      \verb{url}
+      \verb http://www.opticsexpress.org/abstract.cfm?URI=OPEX-11-22-2873
+      \endverb
+    \endentry
     \entry{Allen1975}{article}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=61b6f73716ce52882c42e714ea2ae189}{Allen}{A\bibinitperiod}{L.\bibnamedelimi H.}{L\bibinitperiod\bibinitdelim H\bibinitperiod}{}{}{}{}}%
@@ -968,6 +1018,54 @@
       \verb 10.1351/pac200779030293
       \endverb
     \endentry
+    \entry{brica95}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,hash=3dae5ff927edeac35f848a7ac6d48dce}{Bricaud}{B\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=e553bb1e8195da608bacdf6c2e185409}{Babin}{B\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=727ed1600ef56a690f71ee69a82a8038}{Morel}{M\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=65616a7a05136ff1626c0bcbf2794239}{Claustre}{C\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{163dd29209b81d091a1647c80903e016}
+      \strng{fullhash}{d25336253d0313132dd2c99b58e88ce2}
+      \field{sortinit}{B}
+      \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
+      \field{labelyear}{1995}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Geophysical Research}
+      \field{number}{C7}
+      \field{title}{Variability in the chlorophyll-specific absorption coefficients of natural phytoplankton: analysis and parameterization}
+      \field{volume}{100}
+      \field{year}{1995}
+      \field{pages}{13321\bibrangedash 13332}
+      \range{pages}{12}
+    \endentry
+    \entry{brica81}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=3dae5ff927edeac35f848a7ac6d48dce}{Bricaud}{B\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=727ed1600ef56a690f71ee69a82a8038}{Morel}{M\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=f21adc7f371d63cc8842d171d151f127}{Prieur}{P\bibinitperiod}{L.}{L\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{163dd29209b81d091a1647c80903e016}
+      \strng{fullhash}{bc5ae9f4ba68ae5b68ff77ecd69cc380}
+      \field{sortinit}{B}
+      \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
+      \field{labelyear}{1981}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography}
+      \field{number}{1}
+      \field{title}{Absorption by dissolved organic matter of the sea (yellow substance) in the UV and visible domains}
+      \field{volume}{26}
+      \field{year}{1981}
+      \field{pages}{43\bibrangedash 53}
+      \range{pages}{11}
+      \verb{url}
+      \verb http://www.jstor.org/stable/2835805
+      \endverb
+    \endentry
     \entry{Brooms2010}{misc}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=e6237576f132bc34defe75195830486e}{Brooms}{B\bibinitperiod}{A.\bibnamedelimi C.}{A\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
@@ -1019,6 +1117,30 @@
       \verb http://www.jstor.org/stable/2261448
       \endverb
     \endentry
+    \entry{buite94}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=d65190dbb2222f85df5406aaebb0d973}{Buiteveld}{B\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=a2e8171da51760884d4a71327d144c1f}{Hakvoort}{H\bibinitperiod}{J.\bibnamedelimi H.\bibnamedelimi M.}{J\bibinitperiod\bibinitdelim H\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c8fa92e8c0950682b45e3236c96c0890}{Donze}{D\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {International Society for Optical Engineering}%
+      }
+      \strng{namehash}{15b8544c8a40bfdf7a35a3964577a2c7}
+      \strng{fullhash}{e6507b83f84430160fc9aa8597d11258}
+      \field{sortinit}{B}
+      \field{sortinithash}{4ecbea03efd0532989d3836d1a048c32}
+      \field{labelyear}{1994}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of SPIE ``Ocean Optics XII''}
+      \field{title}{The optical properties of pure water}
+      \field{volume}{2258}
+      \field{year}{1994}
+      \field{pages}{174\bibrangedash 183}
+      \range{pages}{10}
+    \endentry
     \entry{Caldwell1971}{incollection}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=c2ce30675bb398d2a8297a1eda2acf7d}{Caldwell}{C\bibinitperiod}{M.\bibnamedelimi M.}{M\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
@@ -1048,6 +1170,27 @@
       \field{pages}{131\bibrangedash 177}
       \range{pages}{47}
     \endentry
+    \entry{caldw94}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=c2ce30675bb398d2a8297a1eda2acf7d}{Caldwell}{C\bibinitperiod}{M.\bibnamedelimi M.}{M\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=d90ffb4c04ab7f16042f53c11ba8e138}{Flint}{F\bibinitperiod}{S.\bibnamedelimi D.}{S\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{7b4c1a14c6f0c42e7558eebff8ef01c6}
+      \strng{fullhash}{7b4c1a14c6f0c42e7558eebff8ef01c6}
+      \field{sortinit}{C}
+      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
+      \field{extrayear}{1}
+      \field{labelyear}{1994}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the International Lighting in Controlled Environments Workshop}
+      \field{title}{Lighting considerations in controlled environments for nonphotosynthetic plant responses to blue and ultraviolet radiation}
+      \field{volume}{NASA-CP-95-3309}
+      \field{year}{1994}
+      \field{pages}{113\bibrangedash 124}
+      \range{pages}{12}
+    \endentry
     \entry{Caldwell1994b}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=c2ce30675bb398d2a8297a1eda2acf7d}{Caldwell}{C\bibinitperiod}{M.\bibnamedelimi M.}{M\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
@@ -1057,6 +1200,7 @@
       \strng{fullhash}{7b4c1a14c6f0c42e7558eebff8ef01c6}
       \field{sortinit}{C}
       \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
+      \field{extrayear}{2}
       \field{labelyear}{1994}
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
@@ -1417,6 +1561,30 @@
       \verb 10.1088/0031-9155/53/18/026
       \endverb
     \endentry
+    \entry{Coohill1992}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=33e473bb8f95b18979420f5759813d42}{Coohill}{C\bibinitperiod}{T.\bibnamedelimi P.}{T\bibinitperiod\bibinitdelim P\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{2}{%
+        {Science}%
+        {Policy Associaties, Washington D.C.}%
+      }
+      \strng{namehash}{33e473bb8f95b18979420f5759813d42}
+      \strng{fullhash}{33e473bb8f95b18979420f5759813d42}
+      \field{sortinit}{C}
+      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
+      \field{labelyear}{1992}
+      \field{labelmonth}{10-12 March}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{{UV-B} monitoring workshop: a review of the science and status of measuring and monitoring programs}
+      \field{month}{10-12 March}
+      \field{title}{Action spectroscopy and stratospheric ozone depletion}
+      \field{year}{1992}
+      \field{pages}{C89\bibrangedash C112}
+      \range{pages}{-1}
+    \endentry
     \entry{Cooley2000a}{article}{}
       \name{author}{4}{}{%
         {{uniquename=0,hash=903791e14171e0acbd7238c45c570834}{Cooley}{C\bibinitperiod}{N.\bibnamedelimi M.}{N\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
@@ -1620,6 +1788,33 @@
       \verb http://www.amazon.co.uk/Time-Series-Analysis-Applications-Statistics/dp/0387759581
       \endverb
     \endentry
+    \entry{Cullen1997}{inbook}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=011cd84d16eca3827aac874399fb4794}{Cullen}{C\bibinitperiod}{J.\bibnamedelimi J.}{J\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=fd18102b3ee4746be7a05c0e823c7108}{Neale}{N\bibinitperiod}{P.\bibnamedelimi J.}{P\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=a377e131face5142fb3970b428f6acc3}{Häder}{H\bibinitperiod}{D.-P.}{D\bibinithyphendelim P\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Academic Press}%
+      }
+      \strng{namehash}{8134d592ab8fe9b154aedef0ae5d4990}
+      \strng{fullhash}{8134d592ab8fe9b154aedef0ae5d4990}
+      \field{sortinit}{C}
+      \field{sortinithash}{59f25d509f3381b07695554a9f35ecb2}
+      \field{labelyear}{1997}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{The effects of ozone depletion on aquatic ecosystems}
+      \field{chapter}{6}
+      \field{isbn}{0123991730}
+      \field{title}{Biological weighting functions for describing the effects of ultraviolet radiation on aquatic systems}
+      \field{year}{1997}
+      \field{pages}{97\bibrangedash 118}
+      \range{pages}{22}
+    \endentry
     \entry{Dalgaard2002}{book}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=07f51e51b6a672eaeaa971d58bb9fbce}{Dalgaard}{D\bibinitperiod}{P}{P\bibinitperiod}{}{}{}{}}%
@@ -1766,6 +1961,26 @@
       \verb{doi}
       \verb 10.1023/A:1012920716047
       \endverb
+    \endentry
+    \entry{dekke93}{thesis}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=6cdae767644d9433d4d151e4ba2c2fd5}{Dekker}{D\bibinitperiod}{A.\bibnamedelimi G.}{A\bibinitperiod\bibinitdelim G\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {Vrije Universiteit Amsterdam}%
+      }
+      \strng{namehash}{6cdae767644d9433d4d151e4ba2c2fd5}
+      \strng{fullhash}{6cdae767644d9433d4d151e4ba2c2fd5}
+      \field{sortinit}{D}
+      \field{sortinithash}{78f7c4753a2004675f316a80bdb31742}
+      \field{labelyear}{1993}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Cip-Gegevens Koninklijke Bibliotheek, Den Haag}
+      \field{title}{Detection of optical water quality parameters for eutrophic waters by high resolution remote sensing}
+      \field{type}{phdthesis}
+      \field{year}{1993}
     \endentry
     \entry{DeLucia1992}{article}{}
       \name{author}{3}{}{%
@@ -1929,6 +2144,83 @@
       \field{title}{Radiation Measurement in Photobiology}
       \field{year}{1989}
     \endentry
+    \entry{lindsey2005}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=bb263cb3597efdd228c7936ddd182fb0}{Dixon}{D\bibinitperiod}{J.\bibnamedelimi M.}{J\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c1a87352ec8b3b5455312524fd356407}{Taniguchi}{T\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=67e0d9eca207cbee4eb8c8f9b2ba2287}{Lindsey}{L\bibinitperiod}{J.\bibnamedelimi S.}{J\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{8538b199a98962f5c54b1736f5bc4b5d}
+      \strng{fullhash}{0819ecf69f006d0a6f9eb40b51eaa787}
+      \field{sortinit}{D}
+      \field{sortinithash}{78f7c4753a2004675f316a80bdb31742}
+      \field{labelyear}{2005}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Photochemistry and Photobiology}
+      \field{number}{1}
+      \field{title}{{PhotochemCAD} 2: a refined program with accompanying spectral data bases for photochemical calculations}
+      \field{volume}{81}
+      \field{year}{2005}
+      \field{pages}{212\bibrangedash 213}
+      \range{pages}{2}
+      \verb{doi}
+      \verb 10.1111/j.1751-1097.2005.tb01544.x
+      \endverb
+    \endentry
+    \entry{doehr96}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,hash=c0b9f90fce365bdf20f8ba2631b05708}{Döhring}{D\bibinitperiod}{T.}{T\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=726019155d7c3d62cb7ff877f363f10d}{Köfferlein}{K\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=9f9d089ba41d016aad69c1a13504412f}{Thiel}{T\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c094f6f7205bea767b36d5bbac1b68a6}{Seidlitz}{S\bibinitperiod}{H.\bibnamedelimi K.}{H\bibinitperiod\bibinitdelim K\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{e8e9557d4e4f79f757358334f162ee6d}
+      \strng{fullhash}{0aa1a8b71d096e3d37c5dd4faac93f21}
+      \field{sortinit}{D}
+      \field{sortinithash}{78f7c4753a2004675f316a80bdb31742}
+      \field{labelyear}{1996}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Plant Physiology}
+      \field{title}{Spectral shaping of artificial {UV-B} irradiation for vegetation stress research}
+      \field{volume}{148}
+      \field{year}{1996}
+      \field{pages}{115\bibrangedash 119}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1016/S0176-1617(96)80302-6
+      \endverb
+    \endentry
+    \entry{lindsey1998}{article}{}
+      \name{author}{5}{}{%
+        {{uniquename=0,hash=9f6c9b5d83c44e7dd0cd61ccb2456dfc}{Du}{D\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=9c268571a049f3a5a54edc217c9ae7e5}{Fuh}{F\bibinitperiod}{R.-\bibnamedelimb C.\bibnamedelimi A.}{R\bibinithyphendelim \bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=262394c964914c2a67b690bd67fde298}{Li}{L\bibinitperiod}{J.}{J\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=934abb2bb5f3ac7f30021b38c5664635}{Corkan}{C\bibinitperiod}{L.\bibnamedelimi A.}{L\bibinitperiod\bibinitdelim A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=67e0d9eca207cbee4eb8c8f9b2ba2287}{Lindsey}{L\bibinitperiod}{J.\bibnamedelimi S.}{J\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{a89769c7421576600e12b8eda0ae281d}
+      \strng{fullhash}{2bcd4a2ec781aabbbedded0632d3536d}
+      \field{sortinit}{D}
+      \field{sortinithash}{78f7c4753a2004675f316a80bdb31742}
+      \field{labelyear}{1998}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Photochemistry and Photobiology}
+      \field{number}{2}
+      \field{title}{{PhotochemCAD}: a computer-aided design and research tool in photochemistry}
+      \field{volume}{68}
+      \field{year}{1998}
+      \field{pages}{141\bibrangedash 142}
+      \range{pages}{2}
+      \verb{doi}
+      \verb 10.1111/j.1751-1097.1998.tb02480.x
+      \endverb
+    \endentry
     \entry{Dunne1999}{article}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=53c1425d586fe814a6d02427a5bfd8d2}{Dunne}{D\bibinitperiod}{Richard\bibnamedelima P.}{R\bibinitperiod\bibinitdelim P\bibinitperiod}{}{}{}{}}%
@@ -1975,6 +2267,58 @@
       \verb http://www.amazon.co.uk/Seamless-Integration-Rcpp-Dirk-Eddelbuettel/dp/1461468671
       \endverb
       \keyw{C++,R,Rcpp,programming}
+    \endentry
+    \entry{bergm33}{book}{}
+      \name{author}{12}{}{%
+        {{uniquename=0,hash=a69fe6fe5d138d517fef25dcd4846f79}{Eichler}{E\bibinitperiod}{H.-\bibnamedelima J.}{H\bibinithyphendelim \bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=8a245724c186217f2bb3a9cf3a242638}{Fleischner}{F\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=0dcef01867f84fb84c1c16d9a687a0cf}{Kross}{K\bibinitperiod}{J.}{J\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c5e962e6435960027dc1e5bf93c4118e}{Krystek}{K\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=e2f45c1ec6ab3331c2a2329c5ab51f8e}{Lang}{L\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=1ce19fb2dd5d5495d9fddfb3a7a4edd9}{Niedrig}{N\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=18eecc20e4f2bae38b2990d4eeff12cd}{Rauch}{R\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=85da2a1025c894f5588a042c7cf5803a}{Schmahl}{S\bibinitperiod}{G.}{G\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=0fb40910acaac4658ef2cf8b9c7f0d09}{Schoenebeck}{S\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=b80ecb1ef1c5debbedae6cd0867ae3c7}{Sedlmayr}{S\bibinitperiod}{E.}{E\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=b3badd05b3b9be2daaa9dc8c9c9faf9c}{Weber}{W\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=6d9df29f928c3d9e40cbccb112a223f1}{Weber}{W\bibinitperiod}{K.}{K\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=1ce19fb2dd5d5495d9fddfb3a7a4edd9}{Niedrig}{N\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Verlag Walter de Gruyter Berlin/New York}%
+      }
+      \strng{namehash}{47f716fad0c8573c7a8a70e62f7264d0}
+      \strng{fullhash}{8dca0dc70037fee062c2a0265684b321}
+      \field{sortinit}{E}
+      \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
+      \field{labelyear}{1993}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Bergmann, Schaefer: Lehrbuch der Experimentalphysik Band 3: Optik}
+      \field{year}{1993}
+    \endentry
+    \entry{einst10}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=c41fe28d266fcc789622049d39b72c39}{Einstein}{E\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{c41fe28d266fcc789622049d39b72c39}
+      \strng{fullhash}{c41fe28d266fcc789622049d39b72c39}
+      \field{sortinit}{E}
+      \field{sortinithash}{fefc5210ef4721525b2a478df41efcd4}
+      \field{labelyear}{1910}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Annalen der Physik IV. Folge}
+      \field{number}{16}
+      \field{title}{Theorie der Opaleszenz von homogenen Flüssigkeiten und Flüssigkeitsgemischen in der Nähe des kritischen Zustandes}
+      \field{volume}{33}
+      \field{year}{1910}
+      \field{pages}{1275\bibrangedash 1298}
+      \range{pages}{24}
     \endentry
     \entry{Eisinger2000}{article}{}
       \name{author}{4}{}{%
@@ -2362,6 +2706,53 @@
       \verb 10.1029/93JD00030
       \endverb
     \endentry
+    \entry{frigaard1996}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=33380ebb8c6d575f7710a7d9431b6a7d}{Frigaard}{F\bibinitperiod}{N.-\bibnamedelima U.}{N\bibinithyphendelim \bibinitperiod\bibinitdelim U\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=20352572586c4184fc19e44e01cc378f}{Larsen}{L\bibinitperiod}{K.\bibnamedelimi L.}{K\bibinitperiod\bibinitdelim L\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=713a48731f1e7e033d1761969e591502}{Cox}{C\bibinitperiod}{R.\bibnamedelimi P.}{R\bibinitperiod\bibinitdelim P\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{9f935b48f40c9bebd05d68daea950f88}
+      \strng{fullhash}{14eaf6a3044f9fe0fa411f0baa29c6ad}
+      \field{sortinit}{F}
+      \field{sortinithash}{c6a7d9913bbd7b20ea954441c0460b78}
+      \field{labelyear}{1996}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{FEMS Microbiology Ecology}
+      \field{title}{Spectrochromatography of photosynthetic pigments as a fingerprinting technique for microbial phototrophs}
+      \field{volume}{20}
+      \field{year}{1996}
+      \field{pages}{69\bibrangedash 77}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1111/j.1574-6941.1996.tb00306.x
+      \endverb
+    \endentry
+    \entry{froeh04}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=556e6a16bfbd14cabb1ee2abf15ff267}{Fröhlich}{F\bibinitperiod}{C.}{C\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=f3c79d2461fa5769661aa7a094efbbc2}{Lean}{L\bibinitperiod}{J.}{J\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{c7bf0aeb2022a5d55c4dd7750e45628d}
+      \strng{fullhash}{c7bf0aeb2022a5d55c4dd7750e45628d}
+      \field{sortinit}{F}
+      \field{sortinithash}{c6a7d9913bbd7b20ea954441c0460b78}
+      \field{labelyear}{2004}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Astronomy and Astrophysics Review}
+      \field{title}{Solar radiative output and its variability: evidence and mechanisms}
+      \field{volume}{12}
+      \field{year}{2004}
+      \field{pages}{273\bibrangedash 320}
+      \range{pages}{48}
+      \verb{doi}
+      \verb 10.1007/s00159-004-0024-1
+      \endverb
+    \endentry
     \entry{Furness2005}{article}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=c94377880623fa7089a193be6b3e7dd9}{Furness}{F\bibinitperiod}{Nancy\bibnamedelima H.}{N\bibinitperiod\bibinitdelim H\bibinitperiod}{}{}{}{}}%
@@ -2459,6 +2850,51 @@
       \verb 10.1111/j.1751-1097.1995.tb03967.x
       \endverb
     \endentry
+    \entry{gegep98}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=c4f94d88e91cc98323b941bbc79b2e94}{Gege}{G\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{2}{%
+        {International Association for Theoretical}%
+        {Applied Limnology}%
+      }
+      \strng{namehash}{c4f94d88e91cc98323b941bbc79b2e94}
+      \strng{fullhash}{c4f94d88e91cc98323b941bbc79b2e94}
+      \field{sortinit}{G}
+      \field{sortinithash}{1c854ef9177a91bf894e66485bdbd3ed}
+      \field{labelyear}{1998}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Archiv für Hydrobiologie, Special issues: Advances in Limnology}
+      \field{title}{Characterization of the phytoplankton in {L}ake {C}onstance for classification by remote sensing}
+      \field{volume}{53}
+      \field{year}{1998}
+      \field{pages}{179\bibrangedash 193}
+      \range{pages}{15}
+    \endentry
+    \entry{gegep04}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=c4f94d88e91cc98323b941bbc79b2e94}{Gege}{G\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{c4f94d88e91cc98323b941bbc79b2e94}
+      \strng{fullhash}{c4f94d88e91cc98323b941bbc79b2e94}
+      \field{sortinit}{G}
+      \field{sortinithash}{1c854ef9177a91bf894e66485bdbd3ed}
+      \field{labelyear}{2004}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computers and Geosciences}
+      \field{title}{The water color simulator {WASI}: an integrating software tool for analysis and simulation of optical in situ spectra}
+      \field{volume}{30}
+      \field{year}{2004}
+      \field{pages}{523\bibrangedash 532}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/j.cageo.2004.03.005
+      \endverb
+    \endentry
     \entry{Geiss2003}{report}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=424ba61903d6170fd337a3867025f90f}{Geiss}{G\bibinitperiod}{O.}{O\bibinitperiod}{}{}{}{}}%
@@ -2507,6 +2943,31 @@
       \verb http://www.amazon.com/Programming-Bioinformatics-Chapman-Computer-Analysis/dp/1420063677
       \endverb
     \endentry
+    \entry{Ghetti1999}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,hash=90dcc094408dd596844ab439f129a35a}{Ghetti}{G\bibinitperiod}{F.}{F\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=05b2e53f46861e99145912777d1b7fc8}{Herrmann}{H\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=37f3805bbdabbe13bbc9158a0abb3f66}{Häder}{H\bibinitperiod}{D.-\bibnamedelima P.}{D\bibinithyphendelim \bibinitperiod\bibinitdelim P\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c094f6f7205bea767b36d5bbac1b68a6}{Seidlitz}{S\bibinitperiod}{H.\bibnamedelimi K.}{H\bibinitperiod\bibinitdelim K\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{32027fce6e446b4f46d93384de9ac722}
+      \strng{fullhash}{575b6068e3bb0c87e769445400787fdb}
+      \field{sortinit}{G}
+      \field{sortinithash}{1c854ef9177a91bf894e66485bdbd3ed}
+      \field{labelyear}{1999}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Photochemistry and Photobiology B: Biology}
+      \field{title}{Spectral dependence of the inhibition of photosynthesis under simulated global radiation in the unicellular green alga \species{Dunaliella salina}}
+      \field{volume}{48}
+      \field{year}{1999}
+      \field{pages}{166\bibrangedash 173}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1016/S1011-1344(99)00043-3
+      \endverb
+    \endentry
     \entry{Goldstein2008}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=cf646842abdc87e78649b53cd1b6c07a}{Goldstein}{G\bibinitperiod}{Sara}{S\bibinitperiod}{}{}{}{}}%
@@ -2531,6 +2992,36 @@
       \verb{doi}
       \verb 10.1016/j.jphotochem.2007.06.006
       \endverb
+    \endentry
+    \entry{gordo83}{book}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=b37330e09c689295902fea1910980c59}{Gordon}{G\bibinitperiod}{H.\bibnamedelimi R.}{H\bibinitperiod\bibinitdelim R\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=d32ec5a13f8a3120877d8ac1f6fe2d12}{Morel}{M\bibinitperiod}{A.\bibnamedelimi Y.}{A\bibinitperiod\bibinitdelim Y\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{4}{}{%
+        {{hash=e15cd8c6b2babb1b591b7f1f4df7ba3b}{Barber}{B\bibinitperiod}{R.\bibnamedelimi T.}{R\bibinitperiod\bibinitdelim T\bibinitperiod}{}{}{}{}}%
+        {{hash=ca9a16130dfbddfaa91819c816804932}{Mooers}{M\bibinitperiod}{C.\bibnamedelimi N.\bibnamedelimi K.}{C\bibinitperiod\bibinitdelim N\bibinitperiod\bibinitdelim K\bibinitperiod}{}{}{}{}}%
+        {{hash=6c80711a903767e91f8315da763e60cb}{Bowman}{B\bibinitperiod}{M.\bibnamedelimi J.}{M\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+        {{hash=43527ff996102d72aadd4a64de162bfb}{Zeitzschel}{Z\bibinitperiod}{B.}{B\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Springer Verlag}%
+      }
+      \strng{namehash}{ee2590246aeef207511e199584830be5}
+      \strng{fullhash}{ee2590246aeef207511e199584830be5}
+      \field{sortinit}{G}
+      \field{sortinithash}{1c854ef9177a91bf894e66485bdbd3ed}
+      \field{labelyear}{1983}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{series}{Lecture Notes on Coastal and Estuarine Studies}
+      \field{title}{Remote assessment of ocean color for interpretation of satellite visible imagery: a review}
+      \field{volume}{4}
+      \field{year}{1983}
     \endentry
     \entry{Gorton2010}{incollection}{}
       \name{author}{1}{}{%
@@ -2557,6 +3048,36 @@
       \verb http://www.photobiology.info/Gorton.html
       \endverb
       \keyw{action spectra,methods}
+    \endentry
+    \entry{goetz10}{article}{}
+      \name{author}{9}{}{%
+        {{uniquename=0,hash=83ee4f3cda89220afede3bae30100eda}{Götz}{G\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=010e4c387a3152fe83e35d940957689f}{Albert}{A\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=5f0aa7df71c7f2948887337c9890b1c4}{Stich}{S\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=03a25c08d6af2667b348f7caf8027c93}{Heller}{H\bibinitperiod}{W.}{W\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=a2ae5dbae25aff4ce0d8b3650edcc055}{Scherb}{S\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=335fccfda6c62f187db420f171178335}{Krins}{K\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=415d1de741fd5f7b494e327fa0395286}{Langebartels}{L\bibinitperiod}{C.}{C\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c094f6f7205bea767b36d5bbac1b68a6}{Seidlitz}{S\bibinitperiod}{H.\bibnamedelimi K.}{H\bibinitperiod\bibinitdelim K\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=f6896880189181daca79473ea63f992e}{Ernst}{E\bibinitperiod}{D.}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{6dc841bf337c546e6a507bba8558d7d3}
+      \strng{fullhash}{39e80c4e9c2297333209c6256325992c}
+      \field{sortinit}{G}
+      \field{sortinithash}{1c854ef9177a91bf894e66485bdbd3ed}
+      \field{labelyear}{2010}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Protoplasma}
+      \field{title}{PAR modulation of the {UV}-dependent levels of flavonoid metabolites in \species{Arabidopsis thaliana} ({L}.) {H}eynh. leaf rosettes: cumulative effects after a whole vegetative growth period}
+      \field{volume}{243}
+      \field{year}{2010}
+      \field{pages}{95\bibrangedash 103}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1007/s00709-009-0064-5
+      \endverb
     \endentry
     \entry{Goulas2004}{article}{}
       \name{author}{4}{}{%
@@ -2888,6 +3409,26 @@
       \verb http://www.amazon.com/Bioconductor-Case-Studies-Use-R/dp/0387772391
       \endverb
     \endentry
+    \entry{hakvo94}{thesis}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=a2e8171da51760884d4a71327d144c1f}{Hakvoort}{H\bibinitperiod}{J.\bibnamedelimi H.\bibnamedelimi M.}{J\bibinitperiod\bibinitdelim H\bibinitperiod\bibinitdelim M\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {Delft University of Technology}%
+      }
+      \strng{namehash}{a2e8171da51760884d4a71327d144c1f}
+      \strng{fullhash}{a2e8171da51760884d4a71327d144c1f}
+      \field{sortinit}{H}
+      \field{sortinithash}{82012198d5dfa657b8c4a168793268a6}
+      \field{labelyear}{1994}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Delft Studies in Integrated Water Management 2, Delft University Press}
+      \field{title}{Absorption of light by surface water}
+      \field{type}{phdthesis}
+      \field{year}{1994}
+    \endentry
     \entry{Hannay1986}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=3f29ccd416fba6a0f69374b6b4253e55}{Hannay}{H\bibinitperiod}{J.\bibnamedelimi W.}{J\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
@@ -3074,6 +3615,31 @@
       \field{pages}{43\bibrangedash 79}
       \range{pages}{37}
     \endentry
+    \entry{Holmes1997}{inbook}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=0d46ec392ecc90c0e4bf24982e91c075}{Holmes}{H\bibinitperiod}{M.\bibnamedelimi G.}{M\bibinitperiod\bibinitdelim G\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=6fc2bcbdc46c83b15259a9b731d3f1ed}{Lumsden}{L\bibinitperiod}{P.\bibnamedelimi J.}{P\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{0d46ec392ecc90c0e4bf24982e91c075}
+      \strng{fullhash}{0d46ec392ecc90c0e4bf24982e91c075}
+      \field{sortinit}{H}
+      \field{sortinithash}{82012198d5dfa657b8c4a168793268a6}
+      \field{labelyear}{1997}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Plants and UV-B - responses to environmental change}
+      \field{isbn}{0521572223}
+      \field{title}{Action spectra for {UV-B} effects on plants: monochromatic and polychromatic approaches for analysing plant responses}
+      \field{year}{1997}
+      \field{pages}{31\bibrangedash 50}
+      \range{pages}{20}
+    \endentry
     \entry{Holmes2002}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=0d46ec392ecc90c0e4bf24982e91c075}{Holmes}{H\bibinitperiod}{M.\bibnamedelimi G.}{M\bibinitperiod\bibinitdelim G\bibinitperiod}{}{}{}{}}%
@@ -3130,6 +3696,28 @@
       \verb 10.1016/1011-1344(95)07219-5
       \endverb
       \keyw{biofilm; biological UV-dosimetry; solar radiation; biological effectiveness; UV-B radiation; ozone depletion; radiation amplification factor}
+    \endentry
+    \entry{vhuls81}{book}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=9971fc387ee978117358f90e98bc4bfe}{Hulst}{H\bibinitperiod}{H.\bibnamedelimi C.}{H\bibinitperiod\bibinitdelim C\bibinitperiod}{van\bibnamedelima de}{v\bibinitperiod\bibinitdelim d\bibinitperiod}{}{}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Dover Publications Inc.}%
+      }
+      \strng{namehash}{9971fc387ee978117358f90e98bc4bfe}
+      \strng{fullhash}{9971fc387ee978117358f90e98bc4bfe}
+      \field{sortinit}{H}
+      \field{sortinithash}{82012198d5dfa657b8c4a168793268a6}
+      \field{labelyear}{1981}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{unabridged and corrected republication of the work originally published in 1957 by John Wiley \& Sons Inc. New York}
+      \field{title}{Light scattering by small particles}
+      \field{year}{1981}
     \endentry
     \entry{Hunt1997}{thesis}{}
       \name{author}{1}{}{%
@@ -3242,6 +3830,7 @@
       \strng{fullhash}{a38313595c067e1f8a176335f6f6a090}
       \field{sortinit}{I}
       \field{sortinithash}{25e99d37ba90f7c4fb20baf4e310faf3}
+      \field{extrayear}{1}
       \field{labelyear}{2002}
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
@@ -3255,6 +3844,37 @@
       \range{pages}{10}
       \verb{doi}
       \verb doi:10.1046/j.1365-3040.2002.00895.x
+      \endverb
+    \endentry
+    \entry{ibdah02}{article}{}
+      \name{author}{6}{}{%
+        {{uniquename=0,hash=cb0f06e1580f4268fe0810b6736f8d46}{Ibdah}{I\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=335fccfda6c62f187db420f171178335}{Krins}{K\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c094f6f7205bea767b36d5bbac1b68a6}{Seidlitz}{S\bibinitperiod}{H.\bibnamedelimi K.}{H\bibinitperiod\bibinitdelim K\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=03a25c08d6af2667b348f7caf8027c93}{Heller}{H\bibinitperiod}{W.}{W\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=b7d224292443df4f4e7c6a5a56f7aede}{Strack}{S\bibinitperiod}{D.}{D\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=3ab2e36270addc4900a5e6fc1f5f1bed}{Vogt}{V\bibinitperiod}{T.}{T\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {Blackwell Publishing Ltd.}%
+      }
+      \strng{namehash}{d8d3d7b7328f0938e86593eb4d7d326a}
+      \strng{fullhash}{a38313595c067e1f8a176335f6f6a090}
+      \field{sortinit}{I}
+      \field{sortinithash}{25e99d37ba90f7c4fb20baf4e310faf3}
+      \field{extrayear}{2}
+      \field{labelyear}{2002}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Plant, Cell and Environment}
+      \field{title}{Spectral dependence of flavonol and betacyanin accumulation in Mesembryanthemum crystallinum under enhanced ultraviolet radiation}
+      \field{volume}{25}
+      \field{year}{2002}
+      \field{pages}{1145\bibrangedash 1154}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1046/j.1365-3040.2002.00895.x
       \endverb
     \endentry
     \entry{Ihaka1996}{article}{}
@@ -3277,6 +3897,24 @@
       \field{pages}{299\bibrangedash 314}
       \range{pages}{16}
       \keyw{R,graphics,software,statistics}
+    \endentry
+    \entry{iqbal83}{book}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=8d3caa7575a91a20dde78206974fadc2}{Iqbal}{I\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Academic Press Canada}%
+      }
+      \strng{namehash}{8d3caa7575a91a20dde78206974fadc2}
+      \strng{fullhash}{8d3caa7575a91a20dde78206974fadc2}
+      \field{sortinit}{I}
+      \field{sortinithash}{25e99d37ba90f7c4fb20baf4e310faf3}
+      \field{labelyear}{1983}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{An introduction to solar radiation}
+      \field{year}{1983}
     \endentry
     \entry{Jagger1967}{book}{}
       \name{author}{1}{}{%
@@ -3474,6 +4112,25 @@
       \verb 10.1071/FP07197
       \endverb
     \endentry
+    \entry{kalle66}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=b3373b3db5fb970b2e496f9facf9f321}{Kalle}{K\bibinitperiod}{K.}{K\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{b3373b3db5fb970b2e496f9facf9f321}
+      \strng{fullhash}{b3373b3db5fb970b2e496f9facf9f321}
+      \field{sortinit}{K}
+      \field{sortinithash}{a7d5b3aec5a0890aae7baf85a209abfc}
+      \field{labelyear}{1966}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Oceanography and Marine Biology Annual Review}
+      \field{title}{The problem of the gelbstoff in the sea}
+      \field{volume}{4}
+      \field{year}{1966}
+      \field{pages}{91\bibrangedash 104}
+      \range{pages}{14}
+    \endentry
     \entry{Karabourniotis1999}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=0e3a1fc112db76fc08789a5ed98f1984}{Karabourniotis}{K\bibinitperiod}{George}{G\bibinitperiod}{}{}{}{}}%
@@ -3570,6 +4227,33 @@
       \range{pages}{2}
       \verb{doi}
       \verb 10.1021/ac00264a053
+      \endverb
+    \endentry
+    \entry{kirkj91}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=473df150b628f1462c037a221d8a1ec9}{Kirk}{K\bibinitperiod}{J.\bibnamedelimi T.\bibnamedelimi O.}{J\bibinitperiod\bibinitdelim T\bibinitperiod\bibinitdelim O\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{2}{%
+        {American Society of Limnology}%
+        {Oceanography}%
+      }
+      \strng{namehash}{473df150b628f1462c037a221d8a1ec9}
+      \strng{fullhash}{473df150b628f1462c037a221d8a1ec9}
+      \field{sortinit}{K}
+      \field{sortinithash}{a7d5b3aec5a0890aae7baf85a209abfc}
+      \field{labelyear}{1991}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography}
+      \field{number}{3}
+      \field{title}{Volume scattering function, average cosine, and the underwater light field}
+      \field{volume}{36}
+      \field{year}{1991}
+      \field{pages}{455\bibrangedash 467}
+      \range{pages}{13}
+      \verb{url}
+      \verb http://www.jstor.org/stable/2837511
       \endverb
     \endentry
     \entry{Kolb2005}{article}{}
@@ -3702,6 +4386,29 @@
       \verb 10.1111/j.1751-1097.2009.00597.x
       \endverb
     \endentry
+    \entry{kowal10}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,hash=69d3f2e0558d871874f3ae619694b298}{Kowalczuk}{K\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=0005bfa9cfb01207e9c7ca2bab3688f2}{Zab{ł}ocka}{Z\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=cf0141d807f75d1ccde66272b92194b2}{Sagan}{S\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=cffbe6fa51b81a016cb06052c78ef20e}{Kuliński}{K\bibinitperiod}{K.}{K\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{af5134b0414f0192d5ab4297befff3a3}
+      \strng{fullhash}{51d9bed0da63890d2d38f02ab836b4ae}
+      \field{sortinit}{K}
+      \field{sortinithash}{a7d5b3aec5a0890aae7baf85a209abfc}
+      \field{labelyear}{2010}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Oceanologia}
+      \field{number}{3}
+      \field{title}{Fluorescence measured in situ as a proxy of {CDOM} absorption and {DOC} concentration in the {B}altic Sea}
+      \field{volume}{52}
+      \field{year}{2010}
+      \field{pages}{431\bibrangedash 471}
+      \range{pages}{41}
+    \endentry
     \entry{Kreuter2009}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=a155c995e3a7f19869ae6a3048d71f13}{Kreuter}{K\bibinitperiod}{Axel}{A\bibinitperiod}{}{}{}{}}%
@@ -3802,6 +4509,32 @@
       \verb 10.1351/pac198961020187
       \endverb
     \endentry
+    \entry{Langhans1997}{book}{}
+      \name{editor}{2}{}{%
+        {{uniquename=0,hash=a8af7fef570c7df3c84dc8ef76d18e01}{Langhans}{L\bibinitperiod}{R.\bibnamedelimi W.}{R\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=5f790ef9c929a3ce5bf37a7ddd3b52e2}{Tibbitts}{T\bibinitperiod}{T.\bibnamedelimi W.}{T\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{2}{%
+        {Iowa Agriculture}%
+        {Home Economics Experiment Station}%
+      }
+      \strng{namehash}{9026d0fa34e9603c155059dcf5de54c9}
+      \strng{fullhash}{9026d0fa34e9603c155059dcf5de54c9}
+      \field{sortinit}{L}
+      \field{sortinithash}{872351f18d0f736066eda0bf18bfa4f7}
+      \field{labelyear}{1997}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{number}{340}
+      \field{series}{North Central Regional Research Publication}
+      \field{title}{Plant growth chamber handbook}
+      \field{volume}{SR-99}
+      \field{year}{1997}
+      \verb{url}
+      \verb http://www.controlledenvironments.org/Growth_Chamber_Handbook/Plant_Growth_Chamber_Handbook.htm
+      \endverb
+    \endentry
     \entry{Lee1964}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,hash=a38fe2282e0ae708270c02346a36d08f}{Lee}{L\bibinitperiod}{J}{J\bibinitperiod}{}{}{}{}}%
@@ -3825,6 +4558,31 @@
       \range{pages}{5}
       \verb{doi}
       \verb 10.1063/1.1725147
+      \endverb
+    \endentry
+    \entry{leezp02}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=2cb15e45c0736868333129b856e1b47f}{Lee}{L\bibinitperiod}{Z.\bibnamedelimi P.}{Z\bibinitperiod\bibinitdelim P\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=785070af551852e3b4d0cb9aca2156f1}{Carder}{C\bibinitperiod}{K.\bibnamedelimi L.}{K\bibinitperiod\bibinitdelim L\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=de2e7634070415fe8d65015e281555d9}{Arnone}{A\bibinitperiod}{R.\bibnamedelimi A.}{R\bibinitperiod\bibinitdelim A\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{389904bf83d09640fcc6c2ffd6d37b94}
+      \strng{fullhash}{0338a077a811e7feef179bfcad852013}
+      \field{sortinit}{L}
+      \field{sortinithash}{872351f18d0f736066eda0bf18bfa4f7}
+      \field{labelyear}{2002}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Applied Optics}
+      \field{number}{27}
+      \field{title}{Deriving inherent optical properties from water color: a multiband quasi-analytical algorithm for optically deep water}
+      \field{volume}{41}
+      \field{year}{2002}
+      \field{pages}{5755\bibrangedash 5772}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1364/AO.41.005755
       \endverb
     \endentry
     \entry{Lester2003}{article}{}
@@ -4030,6 +4788,35 @@
       \range{pages}{8}
       \verb{doi}
       \verb 10.1007/BF02594166
+      \endverb
+    \endentry
+    \entry{marit94}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=f371c9904f6fb9981c641aa1ffd2ece9}{Maritorena}{M\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=727ed1600ef56a690f71ee69a82a8038}{Morel}{M\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c30c777e225d7c95bd624242281cb204}{Gentili}{G\bibinitperiod}{B.}{B\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{2}{%
+        {American Society of Limnology}%
+        {Oceanography}%
+      }
+      \strng{namehash}{434fb0ea789939db00a1b3d6c7f986d3}
+      \strng{fullhash}{122b1dc0d84d06e1563ce52dff9e4f66}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{1994}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography}
+      \field{number}{7}
+      \field{title}{Diffuse reflectance of oceanic shallow waters: influence of water depth and bottom albedo}
+      \field{volume}{39}
+      \field{year}{1994}
+      \field{pages}{1689\bibrangedash 1703}
+      \range{pages}{15}
+      \verb{url}
+      \verb http://www.jstor.org/stable/2838204
       \endverb
     \endentry
     \entry{Markvart2010}{article}{}
@@ -4245,6 +5032,102 @@
       \verb 10.1093/jxb/37.6.898
       \endverb
     \endentry
+    \entry{moble94}{book}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=be06619cf6ae5be601f4a3a031b616b6}{Mobley}{M\bibinitperiod}{C.\bibnamedelimi D.}{C\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {San Diego}%
+      }
+      \list{publisher}{1}{%
+        {Academic Press}%
+      }
+      \strng{namehash}{be06619cf6ae5be601f4a3a031b616b6}
+      \strng{fullhash}{be06619cf6ae5be601f4a3a031b616b6}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{1994}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Light and water - radiative transfer in natural waters}
+      \field{year}{1994}
+      \verb{url}
+      \verb http://www.curtismobley.com/lightandwater.zip
+      \endverb
+    \endentry
+    \entry{moble11}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=be06619cf6ae5be601f4a3a031b616b6}{Mobley}{M\bibinitperiod}{C.\bibnamedelimi D.}{C\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{be06619cf6ae5be601f4a3a031b616b6}
+      \strng{fullhash}{be06619cf6ae5be601f4a3a031b616b6}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{2011}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Optics Express}
+      \field{number}{20}
+      \field{title}{Fast light calculations for ocean ecosystem and inverse models}
+      \field{volume}{19}
+      \field{year}{2011}
+      \field{pages}{18927\bibrangedash 18944}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1364/OE.19.018927
+      \endverb
+    \endentry
+    \entry{moble03a}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=be06619cf6ae5be601f4a3a031b616b6}{Mobley}{M\bibinitperiod}{C.\bibnamedelimi D.}{C\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=3dc4cb1af9f35903a9072ec8411d1579}{Sundman}{S\bibinitperiod}{L.\bibnamedelimi K.}{L\bibinitperiod\bibinitdelim K\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{6bb98d907e92e3a93b92484c9def0f34}
+      \strng{fullhash}{6bb98d907e92e3a93b92484c9def0f34}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{2003}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography, Light in Shallow Waters}
+      \field{number}{1, part 2}
+      \field{title}{Effects of optically shallow bottoms on upwelling radiances: inhomogeneous and sloping bottoms}
+      \field{volume}{48}
+      \field{year}{2003}
+      \field{pages}{329\bibrangedash 336}
+      \range{pages}{8}
+      \verb{url}
+      \verb http://www.jstor.org/stable/3597753
+      \endverb
+    \endentry
+    \entry{moble03b}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=be06619cf6ae5be601f4a3a031b616b6}{Mobley}{M\bibinitperiod}{C.\bibnamedelimi D.}{C\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=1dba7954181d04ac67d05bc2ed559ed4}{Zhang}{Z\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=790d2f41085ea108d114ca6947494d23}{Voss}{V\bibinitperiod}{K.\bibnamedelimi J.}{K\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{ae242b32bba089151615e71ed5473309}
+      \strng{fullhash}{2c418734cc15bbe961323a661ee30bab}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{2003}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography, Light in Shallow Waters}
+      \field{number}{1, part 2}
+      \field{title}{Effects of optically shallow bottoms on upwelling radiances: bidirectional reflectance distribution function effects}
+      \field{volume}{48}
+      \field{year}{2003}
+      \field{pages}{337\bibrangedash 345}
+      \range{pages}{9}
+      \verb{url}
+      \verb http://www.jstor.org/stable/3597754
+      \endverb
+    \endentry
     \entry{Moeglich2010}{article}{}
       \name{author}{4}{}{%
         {{uniquename=0,hash=3f73b585129bda54873b2ed139c36346}{Möglich}{M\bibinitperiod}{Andreas}{A\bibinitperiod}{}{}{}{}}%
@@ -4365,6 +5248,78 @@
       \verb{doi}
       \verb 10.1093/treephys/tpq051
       \endverb
+    \endentry
+    \entry{morel74}{inbook}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=727ed1600ef56a690f71ee69a82a8038}{Morel}{M\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=cb6274ddf5507dbaf345d232574fbbb8}{Jerlov}{J\bibinitperiod}{N.\bibnamedelimi G.}{N\bibinitperiod\bibinitdelim G\bibinitperiod}{}{}{}{}}%
+        {{hash=b1706bf9657f887af34dd57952de6c69}{Steemann\bibnamedelima Nielsen}{S\bibinitperiod\bibinitdelim N\bibinitperiod}{E.}{E\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Academic Press}%
+      }
+      \strng{namehash}{727ed1600ef56a690f71ee69a82a8038}
+      \strng{fullhash}{727ed1600ef56a690f71ee69a82a8038}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{1974}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Optical Aspects of Oceanography}
+      \field{isbn}{0123849500}
+      \field{title}{Optical properties of pure water and pure sea water}
+      \field{year}{1974}
+      \field{pages}{1\bibrangedash 24}
+      \range{pages}{24}
+    \endentry
+    \entry{morel91}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=727ed1600ef56a690f71ee69a82a8038}{Morel}{M\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{727ed1600ef56a690f71ee69a82a8038}
+      \strng{fullhash}{727ed1600ef56a690f71ee69a82a8038}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{1991}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Progress in Oceanography}
+      \field{title}{Light and marine photosynthesis: a spectral model with geochemical and climatological implications}
+      \field{volume}{26}
+      \field{year}{1991}
+      \field{pages}{263\bibrangedash 306}
+      \range{pages}{44}
+      \verb{doi}
+      \verb 10.1016/0079-6611(91)90004-6
+      \endverb
+    \endentry
+    \entry{morel76}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=727ed1600ef56a690f71ee69a82a8038}{Morel}{M\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=f21adc7f371d63cc8842d171d151f127}{Prieur}{P\bibinitperiod}{L.}{L\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{6b1642b2d637fe2d5b25a002adf19265}
+      \strng{fullhash}{6b1642b2d637fe2d5b25a002adf19265}
+      \field{sortinit}{M}
+      \field{sortinithash}{2684bec41e9697b92699b46491061da2}
+      \field{labelyear}{1976}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Publ. CNEXO}
+      \field{number}{Sect. 1.1.11}
+      \field{title}{Analyse spectrale de l'absorption par les substances dissoutes (substances jaunes)}
+      \field{volume}{10}
+      \field{year}{1976}
+      \field{pages}{1\bibrangedash 9}
+      \range{pages}{9}
     \endentry
     \entry{Morison1984}{article}{}
       \name{author}{2}{}{%
@@ -4639,6 +5594,30 @@
       \field{pagetotal}{600}
       \field{title}{Physicochemical and Environmental Plant Physiology}
       \field{year}{2009}
+    \endentry
+    \entry{ohdet03}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=797d3460f5147ef4f737b7519efc49f2}{Ohde}{O\bibinitperiod}{T.}{T\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=42231633ac09a60713ecc9902139e42f}{Siegel}{S\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{18aeaa3f151f88fbc9fea4aee554f0b6}
+      \strng{fullhash}{18aeaa3f151f88fbc9fea4aee554f0b6}
+      \field{sortinit}{O}
+      \field{sortinithash}{7803d2715d5e795e70382b084ab8d00e}
+      \field{labelyear}{2003}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Optics A: Pure and Applied Optics}
+      \field{number}{3}
+      \field{title}{Derivation of immersion factors for the hyperspectral {TriOS} radiance sensor}
+      \field{volume}{5}
+      \field{year}{2003}
+      \field{pages}{L12\bibrangedash L14}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb doi:10.1088/1464-4258/5/3/103
+      \endverb
     \endentry
     \entry{Oke1988}{book}{}
       \name{author}{1}{}{%
@@ -4928,6 +5907,29 @@
       \verb 10.1562/2004-12-06-RA-392
       \endverb
     \endentry
+    \entry{pegau93}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=aecd7d2a1b9a575dceadd518d03c7ece}{Pegau}{P\bibinitperiod}{W.\bibnamedelimi S.}{W\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=476620e7f91bd82704dcf351338cf0b5}{Zaneveld}{Z\bibinitperiod}{J.\bibnamedelimi R.\bibnamedelimi V.}{J\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim V\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{d8805de947939412e89eb1920c6d3d86}
+      \strng{fullhash}{d8805de947939412e89eb1920c6d3d86}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelyear}{1993}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography}
+      \field{title}{Temperature-dependent absorption of water in the red and near-infrared portions of the spectrum}
+      \field{volume}{38 (1)}
+      \field{year}{1993}
+      \field{pages}{188\bibrangedash 192}
+      \range{pages}{5}
+      \verb{url}
+      \verb http://www.jstor.org/stable/2837903
+      \endverb
+    \endentry
     \entry{Petris2009}{book}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=6f10e131c6c7771fafafd1377b41c690}{Petris}{P\bibinitperiod}{Giovanni}{G\bibinitperiod}{}{}{}{}}%
@@ -4953,6 +5955,31 @@
       \verb{url}
       \verb http://www.amazon.co.uk/Dynamic-Linear-Models-Giovanni-Petris/dp/0387772375
       \endverb
+    \endentry
+    \entry{petzo77}{inbook}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=257797b2ea2be4065a4bd13cd27f40dd}{Petzold}{P\bibinitperiod}{T.J.}{T\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=5732f69ea324cf5c98feb01226bd3ba6}{Tyler}{T\bibinitperiod}{J.E.}{J\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Dowden, Hutchinson \& Ross, Strouddberg}%
+      }
+      \strng{namehash}{257797b2ea2be4065a4bd13cd27f40dd}
+      \strng{fullhash}{257797b2ea2be4065a4bd13cd27f40dd}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelyear}{1977}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Light in the sea}
+      \field{isbn}{0879332654}
+      \field{title}{Volume scattering functions for selected ocean waters}
+      \field{year}{1977}
+      \field{pages}{152\bibrangedash 174}
+      \range{pages}{23}
     \endentry
     \entry{Phoenix2003}{article}{}
       \name{author}{4}{}{%
@@ -5002,6 +6029,29 @@
       \field{title}{{Mixed-Effects Models in S and S-Plus}}
       \field{year}{2000}
       \keyw{LME,NLME,S,S-Plus,linear mixed effects,mixed effects,non-linear mixed effects,R}
+    \endentry
+    \entry{pinne07}{thesis}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=578e3f69b7f1c2b15f2c0d87b401b925}{Pinnel}{P\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {Technische Universität München}%
+      }
+      \strng{namehash}{578e3f69b7f1c2b15f2c0d87b401b925}
+      \strng{fullhash}{578e3f69b7f1c2b15f2c0d87b401b925}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelyear}{2007}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Fakultät Wissenschaftszentrum Weihenstephan für Ernährung, Landnutzung und Umwelt, Department für Ökologie und Ökosystemmanagement, Fachbereich für Limnologie}
+      \field{title}{A method for mapping submersed macrophytes in lakes using hyperspectral remote sensing}
+      \field{type}{phdthesis}
+      \field{year}{2007}
+      \verb{url}
+      \verb http://mediatum2.ub.tum.de/node?id=604557
+      \endverb
     \endentry
     \entry{Poorter2012a}{article}{}
       \name{author}{5}{uniquelist=2}{%
@@ -5058,6 +6108,83 @@
       \verb 10.1071/FP12028
       \endverb
     \endentry
+    \entry{pozdn03}{book}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=2234f1e0b39cc6f0c05e2c257939612f}{Pozdnyakov}{P\bibinitperiod}{D.}{D\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c13aa09144f0d6952f8c4473681371fc}{Grassl}{G\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {Berlin/Heidelberg/New York andChichester}%
+      }
+      \list{publisher}{2}{%
+        {Springer Verlag}%
+        {Praxis Publishing Ltd.}%
+      }
+      \strng{namehash}{1a2c1fd3b556d666916a52cdd24ee5e5}
+      \strng{fullhash}{1a2c1fd3b556d666916a52cdd24ee5e5}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelyear}{2003}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Colour of inland and coastal waters - a methodology for its interpretation}
+      \field{year}{2003}
+    \endentry
+    \entry{prahl89}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,hash=3020440d4735651c1f681ce7b808e7d6}{Prahl}{P\bibinitperiod}{S.\bibnamedelimi A.}{S\bibinitperiod\bibinitdelim A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=a11eacde24d40707ec4f2c7493a46d1b}{Keijzer}{K\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=4320a8059b7a44d600438d726569e438}{Jacques}{J\bibinitperiod}{S.\bibnamedelimi L.}{S\bibinitperiod\bibinitdelim L\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=ec54409d36fbf16da04b9c4707ffc103}{Welch}{W\bibinitperiod}{A.\bibnamedelimi J.}{A\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=d2b76ccc3d87ff9fb5af3a1c8355ae77}{Müller}{M\bibinitperiod}{G.\bibnamedelimi J.}{G\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+        {{hash=9d7a546d772b5037551acf26cd5b900d}{Sliney}{S\bibinitperiod}{D.\bibnamedelimi H.}{D\bibinitperiod\bibinitdelim H\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{dfb72ad4930b2ed1bd948c862f34cd46}
+      \strng{fullhash}{3829d9ef2cae824fbb63a3828561c650}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelyear}{1989}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{SPIE Proceedings of Dosimetry of Laser Radiation in Medicine and Biology}
+      \field{title}{A {M}onte {C}arlo Model of Light Propagation in Tissue}
+      \field{volume}{IS 5}
+      \field{year}{1989}
+      \field{pages}{102\bibrangedash 111}
+      \range{pages}{10}
+    \endentry
+    \entry{prieu81}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=f21adc7f371d63cc8842d171d151f127}{Prieur}{P\bibinitperiod}{L.}{L\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=45f6b5fdad04118b330d7f8e258ef812}{Sathyendranath}{S\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{2}{%
+        {American Society of Limnology}%
+        {Oceanography}%
+      }
+      \strng{namehash}{26391038d9794d7bedae461b162d4fc8}
+      \strng{fullhash}{26391038d9794d7bedae461b162d4fc8}
+      \field{sortinit}{P}
+      \field{sortinithash}{c0a4896d0e424f9ca4d7f14f2b3428e7}
+      \field{labelyear}{1981}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography}
+      \field{number}{4}
+      \field{title}{An optical classification of coastal and oceanic waters based on the specific spectral absorption curves of phytoplankton pigments, dissolved organic matter, and other particulate materials}
+      \field{volume}{26}
+      \field{year}{1981}
+      \field{pages}{671\bibrangedash 689}
+      \range{pages}{19}
+      \verb{url}
+      \verb http://www.jstor.org/stable/2836033
+      \endverb
+    \endentry
     \entry{Quaite1992}{article}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=288a5148a00b7d35058c9c1e679c6058}{Quaite}{Q\bibinitperiod}{F\bibnamedelima E}{F\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
@@ -5082,6 +6209,30 @@
       \verb 10.1038/358576a0
       \endverb
       \keyw{action spectrum,ultraviollet,DNA damage,alfalfa}
+    \endentry
+    \entry{quanx95}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=e2c123aac575c695d621290500739b71}{Quan}{Q\bibinitperiod}{X.}{X\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=90888bf6a6a85d13c3949eea2ee4a7d0}{Fry}{F\bibinitperiod}{E.\bibnamedelimi S.}{E\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{8a5ab80d8862c3544e8634ae38857003}
+      \strng{fullhash}{8a5ab80d8862c3544e8634ae38857003}
+      \field{sortinit}{Q}
+      \field{sortinithash}{15867262911a166ca2270ec58a0e3fe9}
+      \field{labelyear}{1995}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Applied Optics}
+      \field{number}{18}
+      \field{title}{Empirical equation for the index of refraction of seawater}
+      \field{volume}{34}
+      \field{year}{1995}
+      \field{pages}{3477\bibrangedash 3480}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1364/AO.34.003477
+      \endverb
     \endentry
     \entry{Quinn2002}{book}{}
       \name{author}{2}{}{%
@@ -5338,6 +6489,31 @@
       \verb 10.1146/annurev.arplant.56.032604.144208
       \endverb
     \endentry
+    \entry{roesl89}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=f8dd398927409cfe9439ad346fc51faa}{Roesler}{R\bibinitperiod}{C.\bibnamedelimi S.}{C\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=5c825f6bf7b2aaef49b32d65fae8e38d}{Perry}{P\bibinitperiod}{M.\bibnamedelimi J.}{M\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=785070af551852e3b4d0cb9aca2156f1}{Carder}{C\bibinitperiod}{K.\bibnamedelimi L.}{K\bibinitperiod\bibinitdelim L\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{8b8086ccca8e390ee4262a02f55b5851}
+      \strng{fullhash}{3eecf0cfe1fac5889b199af3fa3e4f64}
+      \field{sortinit}{R}
+      \field{sortinithash}{c7387613477035a752d935acfc3e3ea2}
+      \field{labelyear}{1989}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography}
+      \field{number}{8}
+      \field{title}{Modeling in situ phytoplankton absorption from total absorption spectra in productive inland marine waters}
+      \field{volume}{34}
+      \field{year}{1989}
+      \field{pages}{1510\bibrangedash 1523}
+      \range{pages}{14}
+      \verb{url}
+      \verb http://www.jstor.org/stable/2837036
+      \endverb
+    \endentry
     \entry{Rosenqvist2012}{inbook}{}
       \name{author}{4}{}{%
         {{uniquename=0,hash=3f31e61e2bb19ddc37961092f5e8b452}{Rosenqvist}{R\bibinitperiod}{E.}{E\bibinitperiod}{}{}{}{}}%
@@ -5481,6 +6657,28 @@
       \verb 10.1007/BF00696813
       \endverb
     \endentry
+    \entry{Rundel1983}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=43c7f97962ae8b8eed20db803cc4a94e}{Rundel}{R\bibinitperiod}{R.\bibnamedelimi D.}{R\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{43c7f97962ae8b8eed20db803cc4a94e}
+      \strng{fullhash}{43c7f97962ae8b8eed20db803cc4a94e}
+      \field{sortinit}{R}
+      \field{sortinithash}{c7387613477035a752d935acfc3e3ea2}
+      \field{labelyear}{1983}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Physiologia Plantarum}
+      \field{title}{Action spectra and estimation of biologically effective {UV} radiation}
+      \field{volume}{58}
+      \field{year}{1983}
+      \field{pages}{360\bibrangedash 366}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1111/j.1399-3054.1983.tb04195.x
+      \endverb
+    \endentry
     \entry{Rupert1974}{article}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=657e34283cf39e3298a824ee6bd3c4c5}{Rupert}{R\bibinitperiod}{C.\bibnamedelimi S.}{C\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
@@ -5580,6 +6778,31 @@
       \endverb
       \keyw{R,software,statistics}
     \endentry
+    \entry{sathy89}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=45f6b5fdad04118b330d7f8e258ef812}{Sathyendranath}{S\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=f21adc7f371d63cc8842d171d151f127}{Prieur}{P\bibinitperiod}{L.}{L\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=727ed1600ef56a690f71ee69a82a8038}{Morel}{M\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{973040f22fda4324a6dde2fbe2d4c531}
+      \strng{fullhash}{12321ab6266e46d762af81b216fae80f}
+      \field{sortinit}{S}
+      \field{sortinithash}{fd1e7c5ab79596b13dbbb67f8d70fb5a}
+      \field{labelyear}{1989}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Remote Sensing}
+      \field{number}{8}
+      \field{title}{A three-component model of ocean colour and its application to remote sensing of phytoplankton pigments in coastal waters}
+      \field{volume}{10}
+      \field{year}{1989}
+      \field{pages}{1373\bibrangedash 1394}
+      \range{pages}{22}
+      \verb{doi}
+      \verb 10.1080/01431168908903974
+      \endverb
+    \endentry
     \entry{Schouten2007}{article}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=161cbc5808f45c8b5c536c4339f408ef}{Schouten}{S\bibinitperiod}{Peter\bibnamedelima W.}{P\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
@@ -5652,6 +6875,38 @@
       \verb 10.1111/j.1751-1097.2010.00720.x
       \endverb
     \endentry
+    \entry{Schreiner2012}{article}{}
+      \name{author}{8}{}{%
+        {{uniquename=0,hash=02201cc09f497d3826e44c0f9149c00f}{Schreiner}{S\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=5a6235836592fc849b132e28efb60bb8}{Mewis}{M\bibinitperiod}{I.}{I\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=d2a51d539fc9447ce662b222e97a98f6}{Huyskens-Keil}{H\bibinithyphendelim K\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=b51db3e13dd9bae7649bfa7a4c49ca2b}{Jansen}{J\bibinitperiod}{M.A.K.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=5070bd37a99fddf32316a856b130d5b5}{Zrenner}{Z\bibinitperiod}{R.}{R\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=4804d6c8d3ee3156c291c0abf43d960b}{Winkler}{W\bibinitperiod}{J.B.}{J\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=a197f9a0c04124f5a2bede8a570fd42e}{O'Brian}{O\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=ca2b0ab5acfd50e86c0a587efb8f5c39}{Krumbein}{K\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{165197b39e837c532980716417364484}
+      \strng{fullhash}{13ea2a8f6ecdc97f7d1e7411346a283c}
+      \field{sortinit}{S}
+      \field{sortinithash}{fd1e7c5ab79596b13dbbb67f8d70fb5a}
+      \field{labelyear}{2012}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Critical Reviews in Plant Sciences}
+      \field{title}{{UV-B-induced secondary plant metabolites - potential benefits for plant and human health}}
+      \field{volume}{31 (3)}
+      \field{year}{2012}
+      \field{pages}{229\bibrangedash 240}
+      \range{pages}{12}
+      \verb{doi}
+      \verb doi:10.1080/07352689.2012.664979
+      \endverb
+      \verb{url}
+      \verb http://www.tandfonline.com/doi/abs/10.1080/07352689.2012.664979
+      \endverb
+    \endentry
     \entry{Schwander2000}{online}{}
       \name{author}{6}{}{%
         {{uniquename=0,hash=5c428acfcdba53fee044843f35a377b7}{Schwander}{S\bibinitperiod}{H.}{H\bibinitperiod}{}{}{}{}}%
@@ -5671,6 +6926,24 @@
       \field{labeltitlesource}{title}
       \field{title}{System for transfer of atmospheric radiation STAR - version 2000}
       \field{year}{2000}
+    \endentry
+    \entry{Schwiegerling2004}{book}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=290469fd4e4260cff75f0947d04ba6b0}{Schwiegerling}{S\bibinitperiod}{J.}{J\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {SPIE Press, Bellingham, WA}%
+      }
+      \strng{namehash}{290469fd4e4260cff75f0947d04ba6b0}
+      \strng{fullhash}{290469fd4e4260cff75f0947d04ba6b0}
+      \field{sortinit}{S}
+      \field{sortinithash}{fd1e7c5ab79596b13dbbb67f8d70fb5a}
+      \field{labelyear}{2004}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Field guide to visual and ophthalmic optics}
+      \field{year}{2004}
     \endentry
     \entry{Seckmeyer2001}{report}{}
       \name{author}{10}{}{%
@@ -5966,6 +7239,75 @@
       \verb http://www.jstor.org/stable/2527917
       \endverb
     \endentry
+    \entry{smith81}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=d507e2b6d1a9eba5ccd522600a9c65b8}{Smith}{S\bibinitperiod}{R.\bibnamedelimi C.}{R\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=051a7f0adee7e46d66f83764a60d3e92}{Baker}{B\bibinitperiod}{K.\bibnamedelimi S.}{K\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{cba7446b5e5cc96abbec32381cefa06a}
+      \strng{fullhash}{cba7446b5e5cc96abbec32381cefa06a}
+      \field{sortinit}{S}
+      \field{sortinithash}{fd1e7c5ab79596b13dbbb67f8d70fb5a}
+      \field{labelyear}{1981}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Applied Optics}
+      \field{number}{2}
+      \field{title}{Optical properties of the clearest natural waters (200-800 nm)}
+      \field{volume}{20}
+      \field{year}{1981}
+      \field{pages}{177\bibrangedash 184}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1364/AO.20.000177
+      \endverb
+    \endentry
+    \entry{smith76}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,hash=d507e2b6d1a9eba5ccd522600a9c65b8}{Smith}{S\bibinitperiod}{R.\bibnamedelimi C.}{R\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=e7551a6bb84cdad1621dbd6d7789aa5b}{Tyler}{T\bibinitperiod}{J.\bibnamedelimi E.}{J\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4c1ce56fb634d915fdf224e76709bf48}{Smith}{S\bibinitperiod}{K.\bibnamedelimi C.}{K\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Plenum Press, New York}%
+      }
+      \strng{namehash}{53a320c13a9282e833ce7a02aa0d670c}
+      \strng{fullhash}{53a320c13a9282e833ce7a02aa0d670c}
+      \field{sortinit}{S}
+      \field{sortinithash}{fd1e7c5ab79596b13dbbb67f8d70fb5a}
+      \field{labelyear}{1976}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{series}{Photochemical and Photobiological Reviews}
+      \field{title}{Transmission of solar radiation into natural waters}
+      \field{volume}{1}
+      \field{year}{1976}
+      \field{pages}{117\bibrangedash 155}
+      \range{pages}{39}
+    \endentry
+    \entry{smolu08}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=a7b48b9943e6bf44d3b84761f80da8f2}{Smoluchowski}{S\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{a7b48b9943e6bf44d3b84761f80da8f2}
+      \strng{fullhash}{a7b48b9943e6bf44d3b84761f80da8f2}
+      \field{sortinit}{S}
+      \field{sortinithash}{fd1e7c5ab79596b13dbbb67f8d70fb5a}
+      \field{labelyear}{1908}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Annalen der Physik}
+      \field{title}{Molekular-kinetische Theorie der Opaleszenz von Gasen im kritischen Zustande, sowie einiger verwandter Erscheinungen}
+      \field{volume}{25}
+      \field{year}{1908}
+      \field{pages}{205\bibrangedash 226}
+      \range{pages}{22}
+    \endentry
     \entry{Soetaert}{book}{}
       \name{author}{3}{}{%
         {{uniquename=0,hash=43981cf6555ee8dd0d0a2b88cefba2fe}{Soetaert}{S\bibinitperiod}{Karline}{K\bibinitperiod}{}{}{}{}}%
@@ -6140,6 +7482,30 @@
       \range{pages}{1}
       \keyw{R}
     \endentry
+    \entry{tennessen1994}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=3b6b5f33f60950e4c1791aed7d5ec06d}{Tennessen}{T\bibinitperiod}{D.\bibnamedelimi J.}{D\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=ec21e89c96992b5e90223aa68f9921f7}{Singsaas}{S\bibinitperiod}{E.\bibnamedelimi L.}{E\bibinitperiod\bibinitdelim L\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=0a85afd4b9d3cae33ebbf371f8dd0a3d}{Sharkey}{S\bibinitperiod}{T.\bibnamedelimi D.}{T\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{2d5c79ffc3f281e1f2ee1c959463a382}
+      \strng{fullhash}{b135c2ea8894c2b52de5c12091c708f2}
+      \field{sortinit}{T}
+      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
+      \field{labelyear}{1994}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Photosynthesis Research}
+      \field{title}{Light-emitting diodes as a light source for photosynthesis research}
+      \field{volume}{39}
+      \field{year}{1994}
+      \field{pages}{85\bibrangedash 92}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1007/BF00027146
+      \endverb
+    \endentry
     \entry{Tevini1993}{incollection}{}
       \name{author}{1}{}{%
         {{uniquename=0,hash=8d8620df85e90bab35f19ea9b18cff86}{Tevini}{T\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
@@ -6181,6 +7547,7 @@
       \strng{fullhash}{80e664613c9ed4e1589d95359ce4cddd}
       \field{sortinit}{T}
       \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
+      \field{extrayear}{1}
       \field{labelyear}{1996}
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
@@ -6188,6 +7555,34 @@
       \field{journaltitle}{Journal of Plant Physiology}
       \field{number}{3--4}
       \field{title}{A Phytotron for Plant Stress Research: How Far Can Artificial Lighting Compare to Natural Sunlight?}
+      \field{volume}{148}
+      \field{year}{1996}
+      \field{pages}{456\bibrangedash 463}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1016/S0176-1617(96)80279-3
+      \endverb
+    \endentry
+    \entry{thiel96}{article}{}
+      \name{author}{6}{}{%
+        {{uniquename=0,hash=9f9d089ba41d016aad69c1a13504412f}{Thiel}{T\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c0b9f90fce365bdf20f8ba2631b05708}{Döhring}{D\bibinitperiod}{T.}{T\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=726019155d7c3d62cb7ff877f363f10d}{Köfferlein}{K\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=34bd045a89faa93fb3a287717ed5b7c3}{Kosak}{K\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=0490860c42530c47649ac4fdcda61791}{Martin}{M\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=c094f6f7205bea767b36d5bbac1b68a6}{Seidlitz}{S\bibinitperiod}{H.\bibnamedelimi K.}{H\bibinitperiod\bibinitdelim K\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{06e4379155a14f4d564aee6eb310ad2d}
+      \strng{fullhash}{d2b7c51f97b747db1b2404ebbfe61dff}
+      \field{sortinit}{T}
+      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
+      \field{extrayear}{2}
+      \field{labelyear}{1996}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Plant Physiology}
+      \field{title}{A phytotron for plant stress research: how far can artificial lighting compare to natural sunlight?}
       \field{volume}{148}
       \field{year}{1996}
       \field{pages}{456\bibrangedash 463}
@@ -6269,6 +7664,33 @@
       \range{pages}{4}
       \verb{doi}
       \verb 10.5194/acp-8-2759-2008
+      \endverb
+    \endentry
+    \entry{tyler68}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=e7551a6bb84cdad1621dbd6d7789aa5b}{Tyler}{T\bibinitperiod}{J.\bibnamedelimi E.}{J\bibinitperiod\bibinitdelim E\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{2}{%
+        {American Society of Limnology}%
+        {Oceanography}%
+      }
+      \strng{namehash}{e7551a6bb84cdad1621dbd6d7789aa5b}
+      \strng{fullhash}{e7551a6bb84cdad1621dbd6d7789aa5b}
+      \field{sortinit}{T}
+      \field{sortinithash}{423d138a005a533b47e6475e39378bf2}
+      \field{labelyear}{1968}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Limnology and Oceanography}
+      \field{number}{1}
+      \field{title}{The {S}ecchi disc}
+      \field{volume}{13}
+      \field{year}{1968}
+      \field{pages}{1\bibrangedash 6}
+      \range{pages}{6}
+      \verb{url}
+      \verb http://www.jstor.org/stable/2833820
       \endverb
     \endentry
     \entry{UNEP2011}{misc}{}
@@ -6610,6 +8032,30 @@
       \verb 10.1046/j.1365-3040.2000.00649.x
       \endverb
     \endentry
+    \entry{Wang1995}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,hash=8d3512844b39ad98944325403b23d537}{Wang}{W\bibinitperiod}{L.-\bibnamedelima H.}{L\bibinithyphendelim \bibinitperiod\bibinitdelim H\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=4320a8059b7a44d600438d726569e438}{Jacques}{J\bibinitperiod}{S.\bibnamedelimi L.}{S\bibinitperiod\bibinitdelim L\bibinitperiod}{}{}{}{}}%
+        {{uniquename=0,hash=a8953dd44dad2ae04b20eb870aba003c}{Zheng}{Z\bibinitperiod}{L.-\bibnamedelima Q.}{L\bibinithyphendelim \bibinitperiod\bibinitdelim Q\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{04c364cff443f77b836c08d630907bab}
+      \strng{fullhash}{509451050f31e66ec5c2177fca123d21}
+      \field{sortinit}{W}
+      \field{sortinithash}{99e3ba1b3f78bb6f073e7fa7ac11636b}
+      \field{labelyear}{1995}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Methods and Programs in Biomedicine}
+      \field{title}{{MCML} - {M}onte {C}arlo modeling of photon transport in multi-layered tissues}
+      \field{volume}{47}
+      \field{year}{1995}
+      \field{pages}{131\bibrangedash 146}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.1016/0169-2607(95)01640-F
+      \endverb
+    \endentry
     \entry{Wargent2009b}{article}{}
       \name{author}{5}{}{%
         {{uniquename=0,hash=08479db5d47f64aa73cd35e0ac028937}{Wargent}{W\bibinitperiod}{Jason\bibnamedelima J}{J\bibinitperiod\bibinitdelim J\bibinitperiod}{}{}{}{}}%
@@ -6710,6 +8156,49 @@
       \range{pages}{4}
       \verb{doi}
       \verb 10.1111/j.1751-1097.2010.00871.x
+      \endverb
+    \endentry
+    \entry{wehrl85}{report}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=fbc3eb8d0fd4b7eab2ab2e94cbe18788}{Wehrli}{W\bibinitperiod}{C.}{C\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {Physikalisch-Meteorologisches Observatorium und World Radiation Center Davos Dorf, Switzerland}%
+      }
+      \strng{namehash}{fbc3eb8d0fd4b7eab2ab2e94cbe18788}
+      \strng{fullhash}{fbc3eb8d0fd4b7eab2ab2e94cbe18788}
+      \field{sortinit}{W}
+      \field{sortinithash}{99e3ba1b3f78bb6f073e7fa7ac11636b}
+      \field{labelyear}{1985}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{615}
+      \field{title}{Extraterrestrial solar spectrum}
+      \field{type}{PMOD/WRC Publication}
+      \field{year}{1985}
+    \endentry
+    \entry{whouv02}{report}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,hash=9ed1e9f759b27c20c0ee8a56113c84e3}{WHO}{W\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {World Health Organization}%
+      }
+      \strng{namehash}{9ed1e9f759b27c20c0ee8a56113c84e3}
+      \strng{fullhash}{9ed1e9f759b27c20c0ee8a56113c84e3}
+      \field{sortinit}{W}
+      \field{sortinithash}{99e3ba1b3f78bb6f073e7fa7ac11636b}
+      \field{labelyear}{2002}
+      \field{datelabelsource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{ISBN 92 4 159007 6}
+      \field{title}{Global solar {UV} index: a practical guide}
+      \field{type}{techreport}
+      \field{year}{2002}
+      \verb{url}
+      \verb http://www.unep.org/PDF/Solar_Index_Guide.pdf
       \endverb
     \endentry
     \entry{Wickham2009}{book}{}

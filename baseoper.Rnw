@@ -293,6 +293,78 @@ my_sun.spct
 
 In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \texttt{q2e} as for \code{source\_spct} objects, the appropriate conversion is applied.
 
+\subsubsection{Task: Using options to change default behaviour of maths operators and functions}
+
+Table \ref{tab:options} lists all the recognized options, and their default values. Within the suite all functions have a default value which is used when the options are undefined. Options are set using base R's function \texttt{options}, and queried with functions \texttt{options} and \texttt{getOption}. Using options can result in more compact and terse code, but the user should clearly document the use of non-default values for options to avoid surprising the reader of the code.
+
+\begin{table}
+\caption[Options]{Options affecting calculations by functions and operators in the \PB package and their possible values. Options controlling the printing of the returned values are also listed.\label{tab:options}}\vspace{0.75ex}
+
+\centering
+\begin{footnotesize}
+\begin{tabular}{lll}
+\toprule
+\textbf{Option} & \textbf{default} & \textbf{function} \\
+\midrule
+\textbf{Base R} & & \\
+\addlinespace
+digits & 7 & $d - 3$ used by \texttt{summary} \\
+\midrule
+\textbf{Package \texttt{data.table}} & & \\
+\addlinespace
+datatable.print.nrows & $n = 100$ & nrow(\emph{spct}) $> n$ \texttt{}short'' printing \\
+datatable.print.topn & $n = 5 $ & nrows to print at top and bottom \\
+datatable.verbose & \texttt{FALSE} & give verbose output or not \\
+\midrule
+\textbf{R4photobioloy suite} & & \\
+\addlinespace
+photobiology.radiation.unit & \texttt{"energy"} & output (\wattnm) \\
+                            & \texttt{"photon"} & output (\molnm) \\
+photobiology.filter.qty & \texttt{"transmittance"} & output ($/1$) \\
+                        & \texttt{"absorptance"} & output ($/1$) \\
+                        & \texttt{"absorbance"} & output (a.u. $\log_10$ base) \\
+photobiology.use.hinges & \texttt{NULL} & guess automatically \\
+                        & \texttt{TRUE} & do not insert hinges \\
+                        & \texttt{FALSE} & do insert hinges \\
+photobiology.auto.hinges.limit & 0.5 & wavelength step (nm) \\
+photobiology.waveband.trim & \texttt{TRUE} & trim or exclude \\
+photobiology.use.cached.mult & \texttt{FALSE} & cache intermediate results or not \\
+photobiology.verbose & \texttt{FALSE} & give verbose output or not \\
+\bottomrule
+\end{tabular}
+\end{footnotesize}
+\end{table}
+
+The behaviour of the operators defined in this package depends on the value of two global options. If we would like the operators to
+operate on spectral photon irradiance and return spectral photon irradiance instead of spectral energy irradiance,
+this behaviour can be set, and will remain active until unset or reset.
+
+<<>>=
+options(photobiology.radiation.unit = "photon")
+sun.spct * UVB()
+options(photobiology.radiation.unit = "energy")
+sun.spct * UVB()
+@
+
+For filters, an option controls whether transmittance, the default, or absorbance is use in the operations, and returned.
+
+<<>>=
+options(photobiology.filter.qty = "absorbance")
+polyester.new.spct * 2
+options(photobiology.filter.qty = "transmittance")
+polyester.new.spct ^ 2
+@
+
+Either option can be unset, by means of the \texttt{NULL} value.
+<<>>=
+options(photobiology.radiation.unit = NULL)
+options(photobiology.filter.qty = NULL)
+@
+
+The proper use of trimming of wavebands is important, and option \texttt{photobiology.waveband.trim} makes changing the behaviour of the \texttt{trim\_spct} function and other functions accepting wavebands easier. The need to carefully assess the validity of trimming and how it can affect the interpretation of results is further discussed in Chapter \ref{chap:uw:irrad} and Chapter \ref{chap:wt:irrad}.
+
+Other options affect the optimization for performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \texttt{data.table} affect printing of output.
+
 \section{Wavebands}\label{sec:wb:objects}
 
 \subsection{How are wavebands stored?}

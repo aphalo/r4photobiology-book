@@ -1,13 +1,546 @@
-<<echo=FALSE, cache=FALSE>>=
+<<echo=FALSE>>=
 set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
+opts_chunk$set(opts_fig_wide)
 @
 
-\chapter{Optics}\label{chap:optics}
+\chapter{Radiation physiscs}\label{chap:optics}
 
 \begin{abstract}
   In this chapter we explain how to .
 \end{abstract}
 
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologygg)
+library(photobiologyWavebands)
+library(photobiologySun)
+@
+\section{Ultraviolet and visible radiation}
 %%%%
-\section{Task: }\label{sec:}
+In a physical sense, ultraviolet (\UV) and visible (VIS) radiation (i.e.\ also PAR) are electromagnetic waves and are described by Maxwell's equations.\footnote{These equations are a system of four partial differential equations describing classical electromagnetism.} The wavelength ranges of \UV and visible radiation and their usual names are listed in Table \ref{tab:Waverange}. The long wavelengths of solar radiation, called infrared (IR) radiation, are also listed. The colour ranges indicated in Table \ref{tab:Waverange} are an approximation as different individual human observers will not perceive colours exactly in the same way. We follow the ISO definitions for wavelength boundaries for colours \autocite{??}. Other finer-grained colour name series are also in use \autocite[e.g.][Table xx]{Aphalo2012}). The electromagnetic spectrum is continuous with no clear boundaries between one colour and the next, the colours could be thought as artifacts produced by our sensory system, and are meaningful only from the perspective of an \emph{average} human observer. Especially in the IR region the subdivision is somewhat arbitrary and the boundaries used in the literature vary.
+
+Radiation can also be thought of as composed of quantum particles or photons. The energy of a quantum of radiation\index{radiation quantum}\index{photon} in a vacuum, \quantum, depends on the wavelength\index{wavelength}, $\lambda$, or frequency\index{frequency}\footnote{Wavelength and frequency are related to each other by the speed of light, according to $\nu = c / \lambda$ where $c$ is speed of light in vacuum. Consequently there are two equivalent formulations for equation \ref{equ_energy}.}, $\nu$,
+%
+\begin{equation}
+\quantum = h \cdot \nu = h \cdot \frac{c}{\lambda} \label{equ_energy}
+\end{equation}
+%
+with the Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecond and speed of light in vacuum $c=2.998\times 10^{8}$ \msecond. When dealing with numbers of photons, the equation (\ref{equ_energy}) can be extended by using Avogadro's number\index{Avogadro's number} $N_\mathrm{A}=6.022\times 10^{23}$ mol$^{-1}$. Thus, the energy of one mole of photons, \molequanta, is
+%
+\begin{equation}
+\molequanta = h' \cdot \nu = h' \cdot \frac{c}{\lambda} \label{equ_molenergy}
+\end{equation}
+%
+with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}. Example 1: red light at 600~nm has about 200 \kjmole, therefore, 1~$\mymu$mol photons has 0.2~J. Example 2: \UVB radiation at 300~nm has about 400 \kjmole, therefore, 1~$\mymu$mol photons has 0.4~J. Equations \ref{equ_energy} and \ref{equ_molenergy} are valid for all kinds of electromagnetic waves (see Section \ref{??} for a worked-out calculation example).
+
+%\authorNote{Andreas, I added the value for $c$ so that the reader can follow the calculations. This was needed because some time ago I changed the order of some of the text. Also having another example for a wavelength in the \UVB, 300~nm exemplifies how \molequanta varies as a function of wavelength. Changed your example from 500~nm to 600~nm to make the comparison of the two wavelengths easier.}
+
+\begin{table*}[tbp]
+\caption[Regions of the electromagnetic radiation associated with colours]{Regions of the electromagnetic radiation associated with colours, after \autocite{iqbal83} and \autocite{bergm33} with alterations.}\label{tab:Waverange}
+\begin{tabular}{ccccc} \toprule
+& Colour & Wavelength (nm) & Frequency (THz) \\ \midrule
+\cellcolor{black} & \UVC & 100 -- 280 & 3000 -- 1070 & \cellcolor{black} \\
+\cellcolor{black} & \UVB & 280 -- 315 & 1070 -- 950 & \cellcolor{black} \\
+\cellcolor{darklila} & \color{darklila}{\UVA} & \color{darklila}{315 -- 400} & \color{darklila}{950 -- 750} & \cellcolor{darklila}\\
+\cellcolor{lila} & \color{lila}{violet} & \color{lila}{400 -- 455} & \color{lila}{750 -- 660} & \cellcolor{lila} \\
+\cellcolor{blue} & \color{blue}{blue} & \color{blue}{455 -- 492} & \color{blue}{660 -- 610} & \cellcolor{blue} \\
+\cellcolor{green} & \color{darkgreen}{green} & \color{darkgreen}{492 -- 577} & \color{darkgreen}{610 -- 520} & \cellcolor{green}\\
+\cellcolor{yellow} & \color{darkyellow}{yellow} & \color{darkyellow}{577 -- 597} & \color{darkyellow}{520 -- 502} & \cellcolor{yellow}\\
+\cellcolor{orange} & \color{orange}{orange} & \color{orange}{597 -- 622} & \color{orange}{502 -- 482} & \cellcolor{orange}\\
+\cellcolor{red} & \color{red}{red} & \color{red}{622 -- 700} & \color{red}{482 -- 428} & \cellcolor{red}\\
+\cellcolor{darkred} & \color{darkred}{far red} & \color{darkred}{700 -- 770} & \color{darkred}{428 -- 390} & \cellcolor{darkred}\\
+\cellcolor{brown} & \color{brown}{near IR} & \color{brown}{770 -- 3000} & \color{brown}{390 -- 100} & \cellcolor{brown}\\
+\cellcolor{black} & mid IR & 3000 -- 50000 & 100 -- 6 & \cellcolor{black} \\
+\cellcolor{black} & far IR & 50000 -- 10$^6$ & 6 -- 0.3 & \cellcolor{black} \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+One way of understanding the relationship between the distance and positions of source and observer (or sensor) on the amount of radiation received is to use a geometric model. Bellow we describe such a model, in which a point source is located at the centre or origin of an imaginary sphere. As the distance from the origin increases, the surface area of the sphere at this distance increases. The relationship between the distance increase and area increase is, obviously, not linear. In addition, according to the well known cosine law, the amount of radiation received per unit area depends on the angle of incidence. This informal description, will is formally described below.
+
+When a beam or the radiation passing into a space or sphere is analysed, two important parameters are necessary: the distance to the source and the measuring position---i.e.\ if the receiving surface is perpendicular to the beam or not. The geometry is illustrated in Figure \ref{fig_space} with a radiation source at the origin. The radiation is received at distance $r$ by a surface of area d$A$, tilted by an angle $\alpha$ to the unit sphere's surface element, so called solid angle, d$\Omega$, which is a two-dimensional angle in a space. The relation between d$A$ and d$\Omega$ in spherical coordinates is geometrically explained in Figure \ref{fig_space}.
+
+\begin{figure*}[htbp]
+%\centerline{\includegraphics[width=0.8\myfigwidth]{figures/sphere_detailed}}
+\includegraphics[width=0.8\textwidth]{figures/sphere_highres}
+\caption[Definition of the solid angles and areas in space]{Definition of the solid angle d$\Omega$ and the geometry of areas in the space (redrawn after \cite{bergm33}), where the given solid angle d$\Omega$ remains the same, regardless of distance $r$, while the exposed area exemplified by d$A$ will change with distance $r$ from the origin (light source) and the angle $\alpha$, if the exposed area (or detector) is tilted.  The angle denoted by $\phi$ is the azimuth angle and $\theta$ is the zenith angle. }\label{fig_space}
+\end{figure*}
+
+The solid angle is calculated from the zenith angle $\theta$ and azimuth angle $\phi$, which denote the direction of the radiation beam
+\begin{equation}
+\mathrm{d}\Omega = \mathrm{d}\theta\cdot\sin\theta\mathrm{d}\phi \label{equ_dsolidangle}
+\end{equation}
+The area of the receiving surface is calculated by a combination of the solid angle of the beam, the distance $r$ from the radiation source and the angle $\alpha$ of the tilt:
+\begin{equation}
+\mathrm{d}A  =  \frac{r\mathrm{d}\theta}{\cos\alpha}\cdot r\sin\theta\mathrm{d}\phi
+\end{equation}
+which can be rearranged to
+\begin{equation}
+\Rightarrow \mathrm{d}A  =  \frac{r^2}{\cos\alpha}\quad\mathrm{d}\Omega
+\end{equation}
+%
+Thus, the solid angle is given by
+%
+\begin{equation}
+\Omega = \int_A \frac{\mathrm{d}A\cdot\cos\alpha}{r^2} \label{equ_solidangle}
+\end{equation}
+%
+The unit of the solid angle is a steradian (sr). The solid angle of an entire sphere is calculated by integration of equation (\ref{equ_dsolidangle}) over the zenith ($\theta$) and azimuth ($\phi$) angles, $0\le\theta\le\pi(180^\circ)$ and $0\le\phi\le2\pi(360^\circ)$, and is $4\pi$ sr. For example, the sun or moon seen from the Earth's surface appear to have a diameter of about $0.5^\circ$ which corresponds to a solid angle element of about $6.8\times 10^{-5}$ sr.
+
+When radiation travels through a medium it can be absorbed (the energy `taken up' by the material's atoms) or scattered (the direction of travel of the radiation randomly altered). Both of these phenomena affect the amount of radiation that reaches the `other end of the path' where the observer or sensor is located, and their effect depends on the length of the path. Once again, this informal description, is stated formally below.
+
+The processes responsible for the variation of the radiance $L(\lambda,\theta,\phi)$ as the radiation beam travels through any kind of material, are primarily absorption $a$ and scattering $b$, which are called inherent optical properties, because they depend only on the characteristics of the material itself and are independent of the light field. Radiance is added to the directly transmitted beam, coming from different directions, due to elastic scattering, by which a photon changes direction but not wavelength or energy level. An example of this is Raleigh scattering in very small particles, which causes the scattering of light in a rainbow. A further gain of radiance into the direct path is due to inelastic processes like fluorescence, where a photon is absorbed by the material and reemitted as a photon with a longer wavelength and lower energy level, and Raman scattering. The elastic and inelastic scattered radiance is denoted as $L^E$ and $L^I$, respectively. Internal sources of radiances, $L^S$, like bioluminescence of biological organisms or cells contribute also to the detected radiance. The path of the radiance through a thin horizontal layer with thickness d$z=z_1-z_0$ is shown schematically in Figure \ref{fig_radtrans}.
+%
+\begin{figure*}[htbp]
+\unitlength1cm
+\begin{picture}(10,6)
+\put(0,1){\line(1,0){10}}
+\put(0,5){\line(1,0){10}}
+\thicklines
+\put(7,1){\vector(1,-1){1}}
+\put(2,6){\vector(1,-1){1}}
+\thinlines
+\put(3,5){\line(1,-1){4}}
+\put(4,4){\circle*{0.25}}
+\put(6,2){\circle*{0.25}}
+\thicklines
+\put(4,4){\vector(1,1){0.53}}
+\put(4,4){\vector(1,0){0.75}}
+\put(4,4){\vector(-1,0){0.75}}
+\put(4,4){\vector(-1,-1){0.53}}
+\put(5.1,2){\vector(1,0){0.75}}
+\put(6.6,2.6){\vector(-1,-1){0.53}}
+\put(6,2){\vector(1,-1){0.75}}
+\thinlines
+\put(0,0.7){$z_1$}\put(0,4.7){$z_0$}
+\put(3.25,5.7){Incoming radiance}
+\put(3.25,5.2){$L(\theta,\phi)$}
+\put(5,4.5){Loss by absorption $a$}
+\put(5,4){and scattering $b$}
+\put(7,3){Gain by elastic}
+\put(7,2.5){scattered radiance}
+\put(7,2){$L^E$ into the path}
+\put(0.25,2.25){Gain by inelastic scattered}
+\put(0.25,1.75){radiance $L^I$ and internal}
+\put(0.25,1.25){sources $L^S$ into the path}
+\put(4.2,0.6){Outgoing radiance}
+\put(4.2,0.1){$L(\theta,\phi)$}
+%\put(5.7,0.1){$L(\theta,\phi)$}
+\end{picture}
+\caption[Path of the radiance in a thin layer.]{
+Path of the radiance and influences of absorbing and scattering particles in a thin homogeneous horizontal layer of air or water. The layer is separated from other layers of different characteristics by boundary lines at height $z_0$ and $z_1$.}\label{fig_radtrans}
+\end{figure*}
+
+Putting all this together, the radiative transfer equation is
+%
+\begin{equation}
+\cos\theta\,\frac{\mathrm{d}L}{\mathrm{d}z} = -(a+b)\cdot L + L^E + L^I + L^S \label{equ_rte}
+\end{equation}
+%
+The dependencies of $L$ on $\lambda$, $\theta$, and $\phi$ are omitted here for brevity. No exact analytical solution to the radiative transfer equation exists, hence it is necessary either to use numerical models or to make approximations and find an analytical parameterisation. A numerical model is for example the Monte Carlo method. The parameters of the light field can be simulated by modelling the paths of photons. For an infinite number of photons the light field parameters reach their exact values asymptotically. The advantage of the Monte Carlo method is a relatively simple structure of the program, and it simulates nature in a straightforward way, but its disadvantage is the time-consuming computation involved. Details of the Monte Carlo method are explained for example by \autocite{prahl89}, \autocite{Wang1995}\footnote{Their program is available from the website of \href{http://omlc.ogi.edu/software/mc/}{Oregon Medical Laser Center} at \href{http://omlc.ogi.edu/software/mc/}{http://omlc.ogi.edu/software/mc/}}, or \autocite{moble94}.
+
+The other way to solve the radiative transfer equation is through the development of analytical parameterisations by making approximations for all the quantities needed. In this case, the result is not exact, but it has the advantage of fast computing and the analytical equations can be inverted just as fast. This leads to the idealised case of a source-free ($L^S=0$) and non-scattering media, i.e.\ $b=0$ and therefore $L^E=L^I=0$. Then, equation \ref{equ_rte} can be integrated easily and yields
+%
+\begin{equation}
+%L(z_1) = L(z_0)\cdot\exp\left\{-\frac{a\cdot(z_1-z_0)}{\cos\theta}\right\} \label{eq:Beer-Lambert}
+L(z_1) = L(z_0)\cdot \mathrm{e}^{-\frac{a\cdot(z_1-z_0)}{\cos\theta}} \label{eq:Beer-Lambert}
+\end{equation}
+%
+The boundary value $L(z_0)$ is presumed known. This result is known as Beer's law (or Lambert's law, Bouguer's law, Beer-Lambert law), denotes any instance of exponential attenuation of light and is exact only for purely absorbing media---i.e.\ media that do not scatter radiation. It is of direct application in analytical chemistry, as it describes the direct proportionality of absorbance (\absb) to the concentration of a coloured solute in a transparent solvent.
+
+\begin{table*}[htbp]
+\caption{Physical quantities of light.}\label{tab:Phys:Quants}
+\begin{tabular}{ccp{7cm}} \toprule
+Symbol & Unit & Description \\ \midrule
+$\Phi=\frac{\partial \quantum}{\partial t}$ & W = J s$^{-1}$ & Radiant flux: absorbed or emitted energy per time interval \\ \addlinespace
+$\exposure=\frac{\partial \quantum}{\partial A}$ & J m$^{-2}$ & Exposure: energy towards a surface area. (In plant research this is called usually \emph{dose} (\dose), while in Physics \emph{dose} refers to absorbed radiation.)\\ \addlinespace
+$\irr=\frac{\partial \Phi}{\partial A}$ & W m$^{-2}$ & Irradiance: flux or radiation towards a surface area, radiant flux density \\ \addlinespace
+$\intensity=\frac{\partial \Phi}{\partial\Omega}$ & W sr$^{-1}$ & Radiant intensity: emitted radiant flux of a surface area per solid angle \\ \addlinespace
+$\emitt=\frac{\partial \Phi}{\partial A}$ & W m$^{-2}$ & Emittance: emitted radiant flux per surface area \\ \addlinespace
+$\radiance=\frac{\partial^2 \Phi}{\partial \Omega (\partial A\cdot \cos\alpha)}=\frac{\partial \intensity}{\partial A\cdot\cos\alpha}$ & W m$^{-2}$ sr$^{-1}$ & Radiance: emitted radiant flux per solid angle and surface area depending on the angle between radiant flux and surface perpendicular \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+
+Different physical quantities are used to describe the ``amount of radiation'' and their definitions and abbreviations are listed in Table\ \ref{tab:Phys:Quants}. Taking into account Equation \ref{equ_solidangle} and assuming a homogenous flux, the important correlation between irradiance $\irr$ and intensity $\intensity$ is
+%
+\begin{equation}
+E = \frac{\intensity \cdot \cos\alpha}{r^2} \label{equ_r2law}
+\end{equation}
+%
+The irradiance decreases by the square of the distance to the source and depends on the tilt of the detecting surface area. This is valid only for point sources. For outdoor measurements the sun can be assumed to be a point source. For artificial light sources simple LEDs (light-emitting diodes) without optics on top are also effectively point sources. However, LEDs with optics---and other artificial light sources with optics or reflectors designed to give a more focused dispersal of the light---deviate to various extents from the rule of a decrease of irradiance proportional to the square of the distance from the light source.
+%%%%%%%Matt - I can not follow the preceding sentence, it need to be rewriten from "deviate"
+
+Besides the physical quantities used for all electromagnetic radiation, there are also equivalent quantities to describe visible radiation, so called photometric quantities. The human eye as a detector led to these photometric units, and they are commonly used by lamp manufacturers to describe their artificial light sources. See Box \ref{box:photometric:quantities} on page \pageref{box:photometric:quantities} for a short description of these quantities and units.
+
+%\begin{example*}[htbp]
+%\begin{shaded}
+\subsection*{Photometric quantities}
+\label{sec:photometric:quantities}
+
+In contrast to (spectro-)radiometry, where the energy of any electromagnetic radiation is measured in terms of absolute power (\Js = $W$), photometry measures light as perceived by the human eye. Therefore, radiation is weighted by a luminosity function or visual sensitivity function describing the wavelength dependent response of the human eye. Due to the physiology of the eye, having rods and cones as light receptors, different sensitivity functions exist for the day (photopic vision) and night (scotopic vision), $V(\lambda)$ and $V'(\lambda)$, respectively. The maximum response during the day is at $\lambda=555$ nm and during night at $\lambda=507$ nm. Both response functions (normalised to their maximum) are shown in the figure below as established by the Commission Internationale de l'Éclairage (CIE, International Commission on Illumination, Vienna, Austria) in 1924 for photopic vision and 1951 for scotopic vision \autocite{Schwiegerling2004}. The data are available from the Colour and Vision Research Laboratory at \url{http://www.cvrl.org}. Until now, $V(\lambda)$ is the basis of all photometric measurements.
+\vspace{5pt}
+
+\begin{figure}[htb]
+%\centerline{\includegraphics[width=0.45\textwidth]{figures/eyesens}}
+<<echo=FALSE>>=
+plot(CIE1924_lef.spct, annotations = c("colour.guide", "segments", "labels"), w.band = VIS_bands())
+plot(CIE1951_scotopic_lef.spct, annotations = c("colour.guide", "segments", "labels"), w.band = VIS_bands())
+@
+\vspace{2pt}
+\label{fig_eye}
+\caption{Relative spectral intensity of human colour sensation during day (solid line) and night (dashed line), $V(\lambda)$ and $V'(\lambda)$ respectively.}
+%\centerline{\parbox{0.75\textwidth}{\textbf{Figure.} Relative spectral intensity of human colour sensation during day (solid line) and night (dashed line), $V(\lambda)$ and $V'(\lambda)$ respectively.}}
+\end{figure}
+%\vspace{5pt}
+
+Corresponding to the physical quantities of radiation summarized in the table \ref{tab:Phys:Quants},
+the equivalent photometric quantities are listed in the table below and have the subscript $\mathrm{v}$. The ratio between the (physiological) luminous flux $\Phi_\mathrm{v}$ and the (physical) radiant flux $\Phi$ is the (photopic) photometric equivalent $K(\lambda)=V(\lambda)\cdot K_m$ with $K_m=683$ lm W$^{-1}$ (lumen per watt) at 555 nm. The dark-adapted sensitivity of the eye (scotopic vision) has its maximum at 507 nm with 1700 lm W$^{-1}$. The base unit of luminous intensity is candela (cd). One candela is defined as the monochromatic intensity at 555 nm (540 THz) with $\intensity=\frac{1}{683}$ W sr$^{-1}$. The luminous flux of a normal candle is around 12 lm. Assuming a homogeneous emission into all directions, the luminous intensity is about $\intensity[v]=\frac{12\;\mathrm{lm}}{4\pi\;\mathrm{sr}}\approx 1$ cd.
+\vspace{5pt}
+
+\begin{table}[htb]
+%\centerline{\textbf{Table.} Photometric quantities of light.}
+\caption{Photometric quantities of light.}\label{tab:Photo:Quants}
+\begin{tabular}{ccp{7cm}} \toprule
+Symbol & Unit & Description \\ \midrule
+$\quantum_\mathrm{v}$ & lm s & Luminous energy or quantity of light  \\ %\addlinespace
+$\Phi_\mathrm{v}=\frac{\partial \quantum_\mathrm{v}}{\partial t}$ & lm & Luminous flux: absorbed or emitted luminous energy per time interval \\ %\addlinespace
+$\intensity[v]=\frac{\partial \Phi_\mathrm{v}}{\partial\Omega}$ & cd = lm sr$^{-1}$ & Luminous intensity: emitted luminous flux of a surface area per solid angle \\ %\addlinespace
+$\irr[v]=\frac{\partial \Phi_\mathrm{v}}{\partial A}$ & lux = lm m$^{-2}$ & Illuminance: luminous flux towards a surface area \\ %\addlinespace
+$\emitt[v]=\frac{\partial \Phi_\mathrm{v}}{\partial A}$ & lux & Luminous emittance: luminous flux per surface area \\ %\addlinespace
+$\exposure[v]=\frac{\partial \quantum_\mathrm{v}}{\partial A}$ & lux s & Light exposure: quantity of light towards a surface area \\ %\addlinespace
+$\radiance[v]=\frac{\partial^2 \Phi_\mathrm{v}}{\partial \Omega (\partial A\cdot \cos\alpha)}=\frac{\partial \intensity[v]}{\partial A\cdot\cos\alpha}$ & cd m$^{-2}$ & Luminance: luminous flux per solid angle and surface area depending on the angle between luminous flux and surface perpendicular \\ \bottomrule
+\end{tabular}
+\end{table}
+%\end{shaded}
+%\end{example*}
+
+%\begin{example*}[htpb]
+%\begin{shaded}
+\subsection*{Photon or quantum quantities of radiation.}
+%\caption{Photon or quantum quantities of radiation I.}
+\label{sec:quantum:quantities1}
+
+When we are interested in photochemical reactions, the most relevant radiation quantities are those expressed in photons. The reason for this is that, as discussed in section \ref{sec:photobio:principles} on page \pageref{sec:photobio:principles}, molecules are excited by the absorption of certain fixed amounts of energy or quanta. The surplus energy ``decays'' by non-photochemical processes. When studying photosynthesis, where many photons of different wavelengths are simultaneously important, we normally use photon irradiance to describe amount of \PAR. The name photosynthetic photon flux density, or \PPFD, is also frequently used when referring to \PAR photon irradiance. When dealing with energy balance of an object instead of photochemistry, we use (energy) irradiance. In meteorology both \UV and visible radiation, are quantified using energy-based quantities. When dealing with \UV photochemistry as in responses mediated by UVR8, an \UVB photoreceptor, the use of quantum quantities is preferred. According to the physical energetic quantities in the table \ref{tab:Phys:Quants}, the equivalent photon related quantities are listed in the table below and have the subscript $\mathrm{p}$.\vspace{-1mm}
+
+\begin{table*}[htb]
+\caption{Photon quantities of light.}\label{tab:Photon:Quants}
+%\centerline{\parbox{0.85\textwidth}{\textbf{Table.} Photon quantities of light.
+%\centerline{\textbf{Table.} Photon quantities of light.}
+\begin{tabular}{ccp{8cm}} \toprule
+%Symbol & Unit & Description \\ \midrule
+%$\Phi^p$ & s$^{-1}$ & Photon flux: number of photons per time interval \\ \addlinespace
+%$\pfd=\frac{\partial \Phi^p}{\partial A}$ & m$^{-2}$ s$^{-1}$ & Photon irradiance: photon flux towards a surface area, photon flux density \\ \addlinespace
+%$\qdose=\int_t\;\pfd\;\mathrm{d}t$ & m$^{-2}$ & Photon exposure: number of photons towards a surface area during a time interval, photon fluence \\ \addlinespace \bottomrule
+Symbol & Unit & Description \\ \midrule
+$\Phi_\mathrm{p}$ & s$^{-1}$ & Photon flux: number of photons per time interval \\ \addlinespace
+$\pfd=\frac{\partial \Phi_\mathrm{p}}{\partial A}$ & m$^{-2}$ s$^{-1}$ & Photon irradiance: photon flux towards a surface area, photon flux density (sometimes also symbolised by $\irr[p]$) \\ \addlinespace
+$\qdose=\int_t\;\pfd\;\mathrm{d}t$ & m$^{-2}$ & Photon exposure: number of photons towards a surface area during a time interval, photon fluence \\ \addlinespace \bottomrule
+\end{tabular}
+\end{table*}
+
+These quantities can be also used based on a `chemical' amount of moles by dividing the quantities by Avogadro's number\index{Avogadro's number} $N_A=6.022\times 10^{23}$ mol$^{-1}$.
+To determine a quantity in terms of photons, an energetic quantity has to be weighted by the number of photons, i.e.\ divided by the energy of a single photon at each wavelength as defined in equation \ref{equ_energy}. This yields for example
+%
+\begin{displaymath}
+\Phi_\mathrm{p} = \frac{\lambda}{h\;c}\cdot\frac{\partial\quantum}{\partial t}\hspace{1cm}\mathrm{and}\hspace{1cm}\pfd(\lambda) = \frac{\lambda}{h\;c}\cdot E(\lambda)
+\end{displaymath}
+%\end{shaded}
+%\end{example*}
+
+%\begin{example*}[htpb]
+%\begin{shaded}
+\subsection*{Photon or quantum quantities of radiation.}
+\label{box:quantum:quantities2}
+
+When dealing with bands of wavelengths, for example an integrated value like \PAR from 400 to 700~nm, it is necessary to repeat these calculations at each wavelength and then integrate over the wavelengths. For example, the \PAR photon irradiance or \PPFD in moles of photons is obtained by
+%
+\begin{displaymath}
+\PPFD = \frac{1}{N_\mathrm{A}}\int_{400\;\mathrm{nm}}^{700\,\mathrm{nm}}\frac{\lambda}{hc}\;E(\lambda)\;\mathrm{d}\lambda
+\end{displaymath}
+%
+For integrated values of \UVB or \UVA radiation the calculation is done analogously by integrating from 280 to 315~nm or 315 to 400~nm, respectively.
+
+If we have measured (energy) irradiance, and want to convert this value to photon irradiance, the exact conversion will be possible only if we have information about the spectral composition of the measured radiation. Conversion factors at different wavelengths are given in the table below. For \PAR, 1~\watt of ``average daylight'' is approximately 4.6~\umol. This is exact only if the radiation is equal from 400 to 700~nm, because the factor is the value at the central wavelength at 550~nm. Further details are discussed in section \ref{sec:basic:concepts} on page \pageref{sec:basic:concepts}.\vspace{1.5mm}
+
+\begin{table*}[htb]
+\caption{Conversion factors of photon and energy quantities at different wavelengths.}\label{tab:Conversion:Photon:Energy}
+%\centerline{\parbox{0.85\textwidth}{\textbf{Table.} Conversion factors of photon and energy quantities at different wavelengths.
+%\centerline{\textbf{Table.} Conversion factors of photon and energy quantities at different wavelengths.}
+\begin{tabular}{ccc} \toprule
+ & \watt to \umol & $\lambda$ (nm) \\ \midrule
+ & 2.34 & 280 \\ %\addlinespace
+ \UVB & 2.49 & 298 \\ %\addlinespace
+ & 2.63 & 315 \\ %\addlinespace
+\UVA & 2.99 & 358 \\ %\addlinespace
+ & 3.34 & 400 \\ %\addlinespace
+\PAR & 4.60 & 550 \\ %\addlinespace
+ & 5.85 & 700 \\ %\addlinespace
+ \bottomrule
+\end{tabular}
+\end{table*}
+
+%\end{shaded}
+%\end{example*}
+
+
+%\begin{example*}
+%  \begin{shaded}
+%    \caption{Photon or quantum quantities of radiation.}\label{ex:quantum:quantities}
+%    When we are interested in photochemical reactions, the most relevant radiation quantities are those expressed in photons. The reason for this is that as discussed in section \ref{sec:photobio:principles} on page \pageref{sec:photobio:principles} molecules are excited by the absorption of certain fixed amounts of energy or quanta. The surplus energy ``decays'' by non-photochemical processes. When studying photosynthesis we normally use photon irradiance to describe amount of PAR (The name photosynthetic photon flux density, or PPFD is also frequently used when referring to PAR photon irradiance.) When dealing with energy balance of an object instead of photochemistry, we use (energy) irradiance. Both \UV and visible radiation, in meteorology are quantified using energy based quantities. When dealing with \UV photochemistry as in responses mediated by UVR8, an \UVB photoreceptor, the use of quantum quantities is preferred.
+%    \vspace{5pt}
+%
+%%\begin{table*}[htb]
+%%\caption{Photon quantities of light.}\label{tab:Photon:Quants}
+%\centerline{\parbox{0.85\textwidth}{\textbf{Table.} Photon quantities of light.\authorNote{This needs to be edited! This is just the table for energy quantities copied and pasted here. Andreas: what are the equivalent symbols for quantum quantities?}}}
+%\begin{center}
+%\begin{tabular}{ccp{7cm}} \toprule
+%Symbol & Unit & Description \\ \midrule
+%$\Phi=\frac{\partial \quantum}{\partial t}$ & W = J s$^{-1}$ & Radiant flux: absorbed or emitted energy per time interval \\ \addlinespace
+%$\exposure=\frac{\partial \quantum}{\partial A}$ & J m$^{-2}$ & Exposure: energy towards a surface area. (In plant research this is called usually \emph{dose} (\dose), while in Physics \emph{dose} refers to absorbed radiation.)\\ \addlinespace
+%$\irr=\frac{\partial \Phi}{\partial A}$ & W m$^{-2}$ & Irradiance: flux or radiation towards a surface area, radiant flux density \\ \addlinespace
+%$\intensity=\frac{\partial \Phi}{\partial\Omega}$ & W sr$^{-1}$ & Radiant intensity: emitted radiant flux of a surface area per solid angle \\ \addlinespace
+%$\emitt=\frac{\partial \Phi}{\partial A}$ & W m$^{-2}$ & Emittance: emitted radiant flux per surface area \\ \addlinespace
+%$\radiance=\frac{\partial^2 \Phi}{\partial \Omega (\partial A\cdot \cos\alpha)}=\frac{\partial \intensity}{\partial A\cdot\cos\alpha}$ & W m$^{-2}$ sr$^{-1}$ & Radiance: emitted radiant flux per solid angle and surface area depending on the angle between radiant flux and surface perpendicular \\ \bottomrule
+%\end{tabular}
+%\end{center}
+%%\end{table*}
+%  \end{shaded}
+%\end{example*}
+
+There are, in principle, two possible approaches to measuring radiation. The first is to observe light from one specific direction or viewing angle, which is the radiance $\radiance$. The second is to use a detector, which senses radiation from more than one direction and measures the so-called irradiance $\irr$ of the entire sphere or hemisphere. The correlation between irradiance $\irr$ and radiance $\radiance$ of the wavelength $\lambda$ is given by integrating over all directions of incoming photons.
+%
+\begin{eqnarray}
+%\begin{align}
+\irr[0](\lambda) & = \int_\Omega \radiance(\lambda,\Omega) \mathrm{d}\Omega \label{equ_E0} \\
+\irr(\lambda) & = \int_\Omega \radiance(\lambda,\Omega) |\cos\alpha| \mathrm{d}\Omega \label{equ_E}
+\end{eqnarray}
+%\end{align}
+%
+Depending on the shape of a detector (which may be either planar or spherical) the irradiance is called (plane) irradiance $\irr$ or fluence rate (also called scalar irradiance) $\flrat$. A planar sensor detects incoming photons depending on the incident angle and a spherical sensor detects all photons equally weighted for all directions. See section \ref{sec:basic:concepts} on page \pageref{sec:basic:concepts} for a more detailed discussion.
+
+Here we have discussed the properties of light based on energy quantities. In photobiology there are good reasons to quantify radiation based on photons. See Box \ref{box:quantum:quantities} on page \pageref{box:quantum:quantities}, and section \ref{sec:basic:concepts} on page \pageref{sec:basic:concepts}.
+
+\index{UV radiation, physical properties|)}
+\index{visible radiation, physical properties|)}
+
+\section{Solar radiation}
+\label{sec:solar:radiation}
+% Pedro + Andreas
+\index{solar radiation|(}\index{radiation, solar|see{solar radiation}}
+
+When dealing with solar radiation, we frequently need to describe the position of the sun. The azimuth angle ($\phi$) is measured clockwise from the North on a horizontal plane. The position on the vertical plane is measured either as the zenith angle ($\theta$) downwards from the zenith, or as an elevation angle ($h$) upwards from the horizon. Consequently $h + \theta = 90\degree = \frac{\pi}{2}\,$radians. See Figure \ref{fig:solar:position} for a diagram. In contrast to Figure \ref{fig_space} and the discussion in section \ref{sec:radiation:properties} where the point radiation source is located at the origin of the system of coordinates, when describing the position of the sun as in Figure \ref{fig:solar:position} the observer is situated at the origin.
+
+\begin{figure*}[htbp]
+\includegraphics[width=0.6\textwidth]{figures/solar_position}%sun.jpg
+\caption[Solar position]{Position of the sun in the sky and the different angles used for its description by an observer located at point $A$. The azimuth angle is $\phi$, the elevation angle is $h$ and the zenith angle is $\theta$. These angles are measured on two perpendicular planes, one horizontal and one vertical. }\label{fig:solar:position}
+\end{figure*}
+
+Ultraviolet and visible radiation are part of solar radiation, which reaches the Earth's surface in about eight minutes ($t$ = time, $r_0$ = distance sun to earth, $c$ = velocity of light in vacuum):
+%
+\begin{displaymath}
+t = \frac{r_0}{c} \approx \frac{150 \times 10^9 ~\mathrm{m}}{3 \times 10^8 ~\frac{\mathrm{m}}{\mathrm{s}}} = 500 ~\mathrm{s} = 8.3 ~\mathrm{min}
+\end{displaymath}
+%
+The basis of all passive measurements is the incoming solar radiation, which can be estimated from the known activity of the sun (`productivity of photons'), that can be approximated by the emitted spectral radiance (\radiance[s]) described by Planck's law of black body radiation at temperature $T$, measured in degrees Kelvin (K):\index{Planck's law of black body radiation}\index{black body spectral radiance}
+%
+\begin{equation}
+%\radiance[s](\lambda,T) = \frac{2hc^2}{\lambda^5}\cdot\frac{1}{\exp\left\{hc/k_BT\lambda\right\}-1} \label{equ_planck}
+\radiance[s](\lambda,T) = \frac{2hc^2}{\lambda^5}\cdot\frac{1}{\mathrm{e}^{(hc/k_\mathrm{B}T\lambda)}-1} \label{equ_planck}
+\end{equation}
+%
+with Boltzmann's constant $k_\mathrm{B}=1.381\times 10^{-23}$ \Unit{J\,K^{-1}}. The brightness temperature of the sun can be determined by Wien's displacement law, which gives the peak wavelength of the radiation emitted by a blackbody as a function of its absolute temperature
+%
+\begin{equation}
+\lambda_{max} \cdot T = 2.898 \times 10^6 \,\mathrm{nm\,K} \label{equ_wien}
+\end{equation}
+%
+This means that for a maximum emission of the sun at about 500 nm the temperature of the sun surface is about 5800 K\index{sun temperature}. The spectral irradiance of the sun $\irr[s](\lambda)$ can be estimated assuming a homogeneous flux and using the correlation of intensity \intensity and radiance \radiance from their definitions in table \ref{tab:Phys:Quants}. The intensity of the sun $\intensity[s](\lambda)$ is given by the radiance $\radiance[s](\lambda)$ multiplied by the apparent sun surface (a non-tilted disk of radius $r_s=7\times 10^5$ km). To calculate the decreased solar irradiance at the moment of reaching the Earth's atmosphere, the distance of the sun to the Earth ($r_0=150\times 10^6$ km) has to be taken into account due to the inverse square law of irradiance of equation (\ref{equ_r2law}). Thus, the extraterrestrial solar irradiance is
+\begin{equation}
+\irr[s](\lambda)=\radiance[s](\lambda)\cdot\frac{\pi r_s^2}{r_0^2}\label{equ_extraterrestrial}
+\end{equation}
+%\authorNote{Which factor is the solid angle is not clear to me. Is it $\frac{\pi r_s^2}{r_0^2}$ ? r0 is distance to sun, and rs2 x Pi is area of the solar disc. Shouldn't Eq 1.9 be mentioned also? [Pedro]}
+Remembering the solid angle of equation (\ref{equ_solidangle}), the right multiplication factor represents the solid angle of the sun's disk as seen from the Earth's surface ($\approx 6.8\times 10^{-5}$ sr). Figure \ref{fig_sun} shows the spectrum of the measured extraterrestrial solar radiation (Wehrli, 1985)\footnote{Available as ASCII file at PMODWRC, \href{ftp://ftp.pmodwrc.ch/pub/publications/pmod615.asc}{ftp://ftp.pmodwrc.ch/pub/publications/pmod615.asc}} and the spectrum calculated by equation 1.14 using Planck’s law of equation 1.12 at a black body temperature of 5800~K.
+Integrated over all wavelengths, $\irr[s]$ is about 1361 to 1362 \Unit{W\,m^{-2}} at top of the atmosphere \autocite{Kopp2011}. This value is called the `solar constant'\index{solar constant}. In former times, depending on different measurements, $\irr[s]$ varies by a few percent \autocite{iqbal83}. For example, the irradiance at the top of the atmosphere (the integrated value) changes by $\pm 50$ \Unit{W\,m^{-2}} (3.7 \%) during the year due to distance variation caused by orbit excentricity \autocite{moble94}. More accurate measurements during the last 25 years by spaceborne radiometers show a variability of the solar radiation of a few tenth of a percent. A detailed analysis is given by \autocite{froeh04}. $\irr[s]$ can also be calculated by the Stefan-Boltzmann Law: the total energy emitted from the surface of a black body is proportional to the fourth power of its temperature\index{Stefan-Boltzmann law}. For an isotropically emitting source (Lambertian emitter), this means
+%
+\begin{equation}
+\radiance = \frac{\sigma}{\pi} \cdot T^4 \label{equ_boltzmann}
+\end{equation}
+%
+with the Stefan-Boltzmann constant $\sigma=5.6705\times 10^{-8}$ W m$^{-2}$ K$^{-4}$. With $T = 5800$~K equation \ref{equ_boltzmann} gives the radiance of the solar disc. From this value, we can obtain an approximation of the solar constant, by taking into account the distance from the Earth to the Sun and the apparent size of the solar disc (see equations \ref{equ_solidangle} and \ref{equ_r2law}).
+
+\begin{figure*}[htbp]
+%\centerline{\includegraphics[width=0.8\myfigwidth]{figures/fig_sun}}%sun.jpg
+\caption[Extraterrestrial solar spectrum]{Extraterrestrial solar spectrum after \autocite{wehrl85} (green line) and spectrum of a black body at 5800~K (red line), calculated using Planck's law (equation \ref{equ_planck}) and converted to extraterrestrial spectral irradiance with equation \ref{equ_extraterrestrial}.}\label{fig_sun}
+\end{figure*}
+
+The total solar irradiance covers a wide range of wavelengths. Using some of the `colours' introduced in table \ref{tab:Waverange}, table \ref{tab_sun} lists the irradiance and fraction of $\irr[s]$ of different wavelength intervals.
+
+\begin{table*}[htbp]
+\caption[Distribution of the solar constant in different wavelength intervals]{Distribution of the extraterrestrial solar irradiance $\irr[s]$ constant in different wavelength intervals calculated using the data of \autocite{wehrl85} shown in Figure \ref{fig_sun}.}\label{tab_sun}
+\begin{tabular}{cccc} \toprule
+Colour & Wavelength (nm) & Irradiance (\watt) & Fraction of $\irr[s]$ (\%) \\ \midrule
+\UVC & 100 -- 280 & 7 & 0.5 \\ %\hline
+\UVB & 280 -- 315 & 17 & 1.2 \\ %\hline
+\UVA & 315 -- 400 & 84 & 6.1 \\ %\hline
+VIS & 400 -- 700 & 531 & 38.9 \\ %\hline
+near IR & 700 -- 1\,000 & 309 & 22.6 \\ %\hline
+mid and far IR & $>$ 1\,000 & 419 & 30.7 \\ \midrule %\hline\hline
+total & & 1\,367 & 100.0 \\ \bottomrule%\hline
+\end{tabular}
+\end{table*}
+% Pedro
+The extraterrestrial solar spectrum differs from that at ground level due to the absorption of radiation by the atmosphere, because the absorption peaks of water, \COtwo and other components of the atmosphere, cause corresponding valleys to appear in the solar spectrum at ground level. For example, estimates from measurements of the total global irradiance at Helmholtz Zentrum M{\"u}nchen (11.60$\degree$ E, 48.22$\degree$ N, 490 m above sea level) on two sunny days (17$^\mathrm{th}$ April 1996, sun zenith angle of 38$^\circ$ and 27$^\mathrm{th}$ May 2005, 27$^\circ$) result in about 5\% for wavelengths below 400 nm, about 45\% from 400 to 700~nm, and about 50\% above 700~nm. In relation to plant research, only the coarse structure of peaks and valleys is relevant, because absorption spectra of pigments \emph{in vivo} have broad peaks and valleys. However, the solar spectrum has a much finer structure, due to emission and absorption lines of elements, which is not observable with the spectroradiometers normally used in plant research.
+
+At the Earth's surface, the incident radiation or \emph{\gls{global:rad}} has two components, \gls{direct:rad} and \gls{diffuse:rad}\index{global radiation}\index{direct radiation}\index{diffuse radiation}\index{scattered radiation}. Direct radiation is radiation travelling directly from the sun, while diffuse radiation is that scattered by the atmosphere. Diffuse radiation is what gives the blue colour to the sky and white colour to clouds. The relative contribution of direct and diffuse radiation to global radiation varies with wavelength and weather conditions. The contribution of diffuse radiation is larger in the UV region, and in the presence of clouds (Figures \ref{fig:sky:photos} and \ref{fig:diffuse:UV}).
+
+\begin{figure*}
+%    \includegraphics[width=\myfigwidth]{photos/Lasse_sky_composite}
+  \caption[Sky photos]{Sky photos in different portions of the light spectrum. They show that in the UV-A band
+  the diffuse component is proportionally larger than it is at longer wavelengths. This can be seen as reduced contrast. Photographs taken by L. Ylianttila at the fortress of Suomenlinna (\url{http://www.suomenlinna.fi/en}), Helsinki, Finland.}\label{fig:sky:photos}
+\end{figure*}
+
+\begin{figure*}
+  \centering
+%    \includegraphics[width=0.8\myfigwidth]{figures/fig_diffuse_TUV}
+  \caption[Diffuse component in solar UV]{Diffuse component in solar UV. Spectral irradiance of total downwelling radiation (lower panel, solid line), diffuse downwelling radiation (lower panel, long dashes), and ratio of diffuse downwelling to total downwelling spectral irradiance (upper panel, dashed line) are shown. Data from TUV model (version 4.1) for solar zenith angle =   $40^\circ 00^\prime$, cloud-free conditions, 300 Dobson units. Simulations done with the Quick TUV calculator at \url{http://cprm.acd.ucar.edu/Models/TUV/Interactive_TUV/}.}\label{fig:diffuse:UV}
+\end{figure*}
+
+Not only total irradiance, but also the wavelength distribution of the solar spectrum changes with the seasons of the year and time of day. The spectral wavelength distribution is also changed by the amount of \UV-absorbing ozone in the atmosphere, known as the ozone column\index{ozone depletion}. Figure \ref{fig:solar:spectra:one:day} shows how spectral irradiance changes throughout one day. When the whole spectrum is plotted using a linear scale the effect of ozone depletion is not visible, however, if we plot only the \UV region (Figure \ref{fig:solarUV:spectrum:noon}) or use a logarithmic scale (Figure \ref{fig:solar:spectra:one:day:log}), the effect becomes clearly visible. In addition, on a log scale, it is clear that the relative effect of ozone depletion on the spectral irradiance at a given wavelength increases with decreasing wavelength.
+
+
+\begin{figure*}
+%    \includegraphics[width=0.8\myfigwidth]{figures/fig000_norm_AMs}
+  \caption[The solar spectrum through half a day]{The solar spectrum through half a day. Simulations of global radiation (direct plus diffuse radiation) spectral irradiance on a horizontal surface at ground level) for a hypothetical 21 May with cloudless sky at Jokioinen (60$^\circ$49'N, 23$^\circ$30'E), under normal ozone column conditions. Effect of depletion is so small on the solar spectrum as a whole, that it would not visible in this figure. See \autocite{Kotilainen2011} for details about the simulations.}\label{fig:solar:spectra:one:day}
+\end{figure*}
+
+\begin{figure*}
+%    \includegraphics[width=0.8\myfigwidth]{figures/fig0_depl_norm_09UTC}
+  \caption[The solar UV spectrum at noon]{The effect of ozone depletion on the UV spectrum of global (direct plus diffuse) solar radiation at noon. See fig.\ \ref{fig:solar:spectra:one:day} for details.}\label{fig:solarUV:spectrum:noon}
+\end{figure*}
+
+\begin{figure*}
+%  \includegraphics[width=0.8\myfigwidth]{figures/fig1_depl_norm_log_am}
+  \caption[The solar UV spectrum through half a day]{The solar UV spectrum through half a day. The effect of ozone depletion on global (direct plus diffuse) radiation. A logarithmic scale is used for spectral irradiance. See fig.\ \ref{fig:solar:spectra:one:day} for details.}\label{fig:solar:spectra:one:day:log}
+\end{figure*}
+
+Seasonal variation in \UVB irradiance has a larger relative amplitude
+than variation in \PAR (Figure \ref{fig:diffuse.light})\index{seasonal variation in UV-B irradiance}. This causes a seasonal variation in the \UVB : \PAR ratio (Figure \ref{fig:UVB:Erlangen}). In addition to the regular seasonal variation, there is random variation as a result of changes in clouds (Figure \ref{fig:UVB:Erlangen}). Normal seasonal
+and spatial variation in \UV can be sensed by plants, and could play a
+role in their adaptation to seasons and/or their position in the
+canopy.
+
+\begin{figure*}
+%\includegraphics[width=0.4\myfigwidth]{figures/fig_diffuse_Flint}\
+%\includegraphics[width=0.4\myfigwidth]{figures/fig_seasonal_Brown}
+\caption[UV-B and PAR]{UV-B and PAR. Left: Diffuse radiation as percentage of
+total (direct + diffuse) radiation in the UV-B (solid
+line) and PAR (dashed line) wavebands for open areas in a humid temperate climate
+under a clear sky. In cloudy conditions the percentage of diffuse radiation increases.
+Day of year not specified. Redrawn from \autocite{Flint1998}. \index{light!diffuse percentage}%|FigEntry
+Right: Seasonal variation in modelled, clear sky, solar-noon,  UV-B (solid
+line) and PAR (dashed line) irradiance above the canopy for
+Maryland, USA. Irradiance expressed relative to annual maximum of each
+waveband. Adapted from \autocite{Brown1994}.\index{light!seasonal variation}}%|FigEntry
+\label{fig:diffuse.light}
+\end{figure*}
+
+\begin{figure*}
+%  \includegraphics[width=0.8\myfigwidth]{figures/fig_UVB_PAR_Erlangen}\\
+%  \includegraphics[width=0.8\myfigwidth]{figures/fig_UVB_Erlangen}
+  \caption[Seasonal variation in UV-B radiation]{Seasonal variation in UV-B radiation at Erlangen, Germany (54$^\circ$ 10' N, 07$^\circ$ 51' E, 280~m asl). (Top) UV-B:PAR energy ratio, calculated from daily exposures, and (bottom) UV-B daily exposure, measured with ELDONET instruments \autocite[see Figure 2 in][for details]{Haeder2007}. }\label{fig:UVB:Erlangen}
+\end{figure*}
+
+
+\UVB irradiance increases with elevation in mountains and with decreasing
+latitude\index{UV-B and elevation in mountains}\index{UV-B and latitude} (Figure  \ref{fig:UVB:latitude}) and
+is particularly high on high mountains
+in equatorial regions. This has been hypothesized to be a factor
+in the determination of the tree line\footnote{\emph{Tree line} is the
+highest elevation on a mountain slope at which tree species are naturally
+able to grow.} in these mountains \autocite{Flenley1992}.
+
+\begin{figure*}
+%  \includegraphics[width=0.8\myfigwidth]{figures/fig_UVB_latitude}
+  \caption[Latitudinal variation in UV-B radiation]{Latitudinal variation in UV-B radiation in the Northern hemisphere. UV-B annual exposure, measured with ELDONET instruments \autocite[see][for details]{Haeder2007}. }\label{fig:UVB:latitude}
+\end{figure*}
+
+An increase in the \UVB irradiance is caused by depletion of
+the ozone layer in the stratosphere\index{UV-B and ozone depletion},
+mainly as a consequence of the
+release of chlorofluorocarbons (CFCs), used in cooling devices such
+as refrigerators and air conditioners, and in some spray cans \autocite[see][]{Graedel1993}. The most dramatic
+manifestation of this has been the seasonal formation of an ``ozone hole''
+over Antarctica. It is controversial whether a true ozone hole has
+already formed in the Arctic, but strong depletion has occurred in year
+2011 \autocite{Manney2011} and atmospheric conditions needed for
+the formation of a ``deep'' ozone hole are not very different from
+those prevalent in recent years. Not so dramatic, but consistent,
+depletion has also been observed at mid-latitudes in both
+hemispheres. CFCs and some other halocarbons have been phased out
+following the Montreal agreement and later updates. However,
+as CFCs have a long half life in the atmosphere, of the order of 100
+years, their effect on the ozone layer will persist for many years,
+even after their use has been drastically reduced.
+%\authorNote{This section needs development
+%to mention phasing out and importance of other halocarbons.[Andy] I tried to improve it
+%but I think that it still needs some work. Need also to check some
+%of the citations.[Pedro]}
+Model-based predictions of changes in atmospheric circulation due to global climate change
+have been used to derive future trends in \UV index and ozone column thickness \autocite{Hegglin2009}.
+In addition,
+increased cloudiness and pollution, could lead to decreased \UV and
+\PAR, sometimes called `global dimming' \autocite[e.g.][]{Stanhill2001}.
+It should be noted that, through reflection, broken clouds can locally increase
+\UV irradiance to values above those under clear-sky conditions \autocite{Frederick1993,Diaz1996}.
+\index{solar radiation|)}
+
+\section{Radiation within plant canopies}
+\index{radiation within plant canopies|(}
+\index{plant canopies|(}
+% Pedro
+The attenuation of visible and \UV radiation by canopies is difficult to describe mathematically because it is a complex phenomenon. The spatial distribution of leaves is in most cases not uniform, the display angle of the leaves is not random, and may change with depth in the canopy, and even in some cases with time-of-day. Here we give only a description of the simplest approach, the use of an approximation based on Beer's law as modified by \autocite{Monsi1953}, reviewed by \autocite{Hirose2005}. Beer's law (Equation \ref{eq:Beer-Lambert}) assumes a homogeneous light absorbing medium such as a solution. However, a canopy is heterogenous, with discrete light absorbing objects (the leaves and stems) distributed in a transparent medium (air).
+\begin{equation}
+I_z = I_0\cdot\mathrm{e}^{-K\,L_z} \label{eq:Monsi:Saeki}
+\end{equation}
+Equation \ref{eq:Monsi:Saeki} describes the radiation attenuated as a function of leaf area index ($L$ or \LAI)
+at a given canopy depth ($z$). The equation does not explicitly account for the effects
+of the statistical spatial distribution of leaves and the effects of
+changing incidence angle of the radiation. Consequently, the empirical extinction
+coefficient ($K$) obtained may vary depending on these factors. $K$ is
+not only a function of plant species (through
+leaf optical properties, and how leaves are displayed), but also of
+time-of-day, and season-of-year---as a consequence of solar zenith angle---and
+degree of scattering of the incident radiation.
+As the degree of scattering depends on clouds, and also on wavelength,
+the extinction coefficient is different for \UV and
+visible radiation. Radiation extinction in canopies has yet to be studied in detail with
+respect to \UV radiation, mainly because of difficulties in the
+measurement of \UV radiation compared to \PAR, a spectral region which has been extensively studied.
+
+Ultraviolet radiation is strongly absorbed by plant
+surfaces, although cuticular waxes and pubescence on leaves can
+sometimes increase \UV reflectance. The diffuse component of \UV radiation is larger than that
+of visible light (Figure \ref{fig:diffuse.light}).
+In sunlit patches in forest gaps the diffuse radiation percentage is
+lower than in open areas, because \gls{direct:rad} is not attenuated
+but part of the sky is occluded by the surrounding forest.
+Attenuation
+with canopy depth is on average usually more gradual for \UV than for \PAR. The
+\UV irradiance decreases with depth in tree canopies, but the \UVPAR ratio\index{UV PAR@\UVPAR ratio in canopies}
+tends to increase \autocite[see][]{Brown1994}. In contrast, \autocite{Deckmyn2001} observed a decrease in \UVPAR ratio in white clover canopies with planophyle leaves. \autocite{Allen1975} modelled the
+\UVB penetration in plant canopies, under normal and depleted ozone conditions.
+\autocite{Parisi1996} measured
+\UVB doses within model plant canopies using dosimeters. The position of
+leaves affects \UVB exposure, and it has been observed that heliotropism
+can moderate exposure and could be a factor contributing to differences in tolerance
+among crop cultivars \autocite{Grant1998,Grant1999,Grant1999a,Grant2004}.
+
+Detailed accounts of different models describing the interaction of radiation and
+plant canopies, taking into account the properties of
+foliage, are given by \autocite{Campbell1998} and \autocite{Monteith2008}.
+\index{plant canopies|)}
+\index{radiation within plant canopies|)}

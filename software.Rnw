@@ -6,7 +6,7 @@ opts_knit$set(concordance=TRUE)
 \chapter{Software}\label{chap:software}
 
 \begin{abstract}
-  In this chapter we describe the software we used to run the code examples and typeset this handbook, and how to install it.
+  In this chapter we describe the software we used to run the code examples and typeset this handbook, and how to install it. Which is basically the same we use for everyday data analysis and typesetting.h
 \end{abstract}
 
 %%%%
@@ -17,34 +17,46 @@ opts_knit$set(concordance=TRUE)
 \sloppy
 The software used for typesetting this handbook and developing the \textsf{r4photobiology} suite is free and open source. All of it is available for the most common operating systems (Unix including OS X, Linux and its variants, and Windows). It is also possible to run everything described here on a Linux server running the server version of RStudio, and access the server through a web browser.
 
-For just running the examples in the handbook, you would need only to have R installed. That would be enough as long as you also have a text editor available. This is possible, but does not give a very smooth workflow for data analyses which are beyond the very simple. The next stage is to use a text editor which integrates to some extent with R, but still this is not ideal, specially for writing packages or long scrips. Currently the best option is to use the integrated development environment (IDE) called `RStudio'. This is an editor, but tightly integrated with R. Its advantages are especially noticeable in the case of errors and `debugging'. We also use a \hologo{LaTeX} for typesetting. Is what we used for the first handbook \autocite{Aphalo2012}, and what we routinely for reporting data analyses, and that PJA also uses for all `overhead' slides he writes for lectures. You, do not need to go this far to be able to profit from R and our suite, but the set up we will describe here, is what we currently use, it is by far the best one we have encountered in 18 years of using and teaching how to use R.
+For just running the examples in the handbook, you would need only to have R installed. That would be enough as long as you also have a text editor available. This is possible, but does not give a very smooth workflow for data analyses which are beyond the very simple. The next stage is to use a text editor which integrates to some extent with R, but still this is not ideal, specially for writing packages or long scripts. Currently the best option is to use the integrated development environment (IDE) called `RStudio'. This is an editor, but tightly integrated with R. Its advantages are especially noticeable in the case of errors and `debugging'. During the development of the packages, we used RStudio exclusively. 
 
-We will not give software installation instructions in this handbook, but will keep a web page with up-to-date instructions. In the following sections we briefly describe the different components of a full and comfortable working environment, but there many alternatives and the only piece that you cannot replace is R itself.
+The typesetting is done with \hologo{LaTeX} and the source of this handbook was edited using both the shareware editor WinEdt (which excels as a \hologo{LaTeX} editor) and RStudio which is better suited to the debugging of the code examples. We also used \hologo{LaTeX} for our first handbook \autocite{Aphalo2012}.
+
+Combining R with Markdown (Rmarkdown: Rmd files) or \hologo{LaTeX} (Rnw fiels) to produce \emph{literate} scripts is best for reproducible research and our suite of packages is well suited for this approach to data analysis. However, it is not required to go this far to be able to profit from R and our suite for simple analyses, but the set up we will describe here, is what we currently use, and it is by far the best one we have encountered in 18 years of using and teaching how to use R.
+
+We will not give software installation instructions in this handbook, but will keep a web page with up-to-date instructions. In the following sections we briefly describe the different components of a full and comfortable working environment, but there are many alternatives and the only piece that you cannot replace is R itself.
 
 %%%%
 \section{The different pieces}\label{sec:software:pieces}
 
 \subsection{R}
 
-You will not be able to profit from this handbook's `Cook Book' part, unless you have access to R. R (also called Gnu S) is both the name of a software system, and a dialect of the language S. The language S, although designed with data analysis and statistics in mind, is a computer language that is very powerful in its own way. It allows object oriented programming. Being based in a programming language, and being able to call and being called by programs and subroutine libraries written in several other programming languages, makes it easily extensible.
+You will not be able to profit from this handbook's `Cook Book' part, unless you have access to R. R (also called Gnu S) is both the name of a software system, and a dialect of the language S. The language S, although designed with data analysis and statistics in mind, is a computer language that is very powerful in its own way. It allows object oriented programming. Being based on a programming language, and being able to call and being called by programs and subroutine libraries written in several other programming languages, makes R easily extensible.
 
 R has a well defined mechanism for ``add-ons'' called packages, that are kept in the computer where R is running, in disk folders that conform the library. There is a standard mechanism for installing packages, that works across operating systems (OSs) and computer architectures. There is also a Comprehensive R Archive Network (CRAN) where publicly released versions of packages are kept. Packages can be installed and updated from CRAN and similar repositories directly from within R.
 
-If you are not familiar with R, please, go through the Appendixes \ref{chap:R:as:calc}, \ref{chap:R:scripts}, \ref{chap:R:scripts}, and \ref{chap:R:plotting},
+The \emph{engine} behind the production of the pages of this handbook is the R package \texttt{knitr} which allows almost seamless integration of R code and text marked up using \hologo{LaTeX}. We have used in addition several other packages, both by using them as building blocks in our packages, and for the production of the examples. The most notable ones are: \texttt{data.table}, \texttt{lubridate}, and \texttt{ggplot2}. Packages \texttt{devtools} and \texttt{testthat} significantly easied the task of package development and coding.
+
+If you are not familiar with R, please, go through the separately available Supplements \ref{chap:R:as:calc}, \ref{chap:R:scripts}, \ref{chap:R:scripts}, and \ref{chap:R:plotting},
 and/or learn from some of the books listed in Appendix \ref{chap:R:reading}, before delving into our `Cook Book'.
 
 \subsection{RStudio}
 
-RStudio exists in two versions with identical user interface: a desktop version and a server version. The server version can be used remotely through a web browser. It can be for example run in the 'cloud', for example, as an AWS instance (Amazon Web Services) quite easily and cheaply, or on one's own server hardware.
+RStudio exists in two versions with identical user interface: a desktop version and a server version. The server version can be used remotely through a web browser. It can be run in the 'cloud', for example, as an AWS instance (Amazon Web Services) quite easily and cheaply, or on one's own server hardware. RStudio is under active development, and constantly improved (visit \url{http://www.rstudio.org/} for an up-to-date description and download and installation instructions.
 
 \subsection{Version control: Git and Subversion}
 
-Version control systems help with keeping track of the history of software development, data analysis, or even manuscript writing. They make it possible for several programmers, data analysts, authors and or editors to work on the same files in parallel and then merge their edits. They also allow easy transfer of whole `projects' between computers. Git is very popular, and Github and Bitbucket are popular hosts for repositories. Git itself is free software, and can be also run locally, or as one's own private server, either as an AWS instance or on other hosting service, or on your own hardware.
+Version control systems help by keeping track of the history of software development, data analysis, or even manuscript writing. They make it possible for several programmers, data analysts, authors and or editors to work on the same files in parallel and then merge their edits. They also allow easy transfer of whole `projects' between computers. Git is very popular, and Github and Bitbucket are popular hosts for repositories. Git itself is free software, was designed by Linus Tordvals of Linux fame, and can be also run locally, or as one's own private server, either as an AWS instance or on other hosting service, or on your own hardware.
 
 \subsection{C++ compiler}
 
-Although R is an interpreted language, a few functions in our suite are written in C++ to achieve better performance. On OS X and Windows, the normal practice is to install binary packages, which are ready compiled. In other systems like Linux and Unix it is the normal practice to install source packages that are compiled at the time of installation.
+Although R is an interpreted language, a few functions in our suite are written in C++ to achieve better performance. On OS X and Windows, the normal practice is to install binary packages, which are ready compiled. In other systems like Linux and Unix it is the normal practice to install source packages that are compiled at the time of installation. With suitable build tools (e.g.\ RTools for Windows) source packages can be installed and developed in any of the operating systems on which R runs.
 
 \subsection{\LaTeX}
 
-\hologo{LaTeX} is built on top of \hologo{TeX}. \hologo{TeX} code and features were `frozen' (only bugs are fixed) long ago. There are currently a few `improved' derivatives: \hologo{pdfTeX}, \hologo{XeTeX}, and \hologo{LuaTeX}. Currently the most popular \hologo{TeX} in western countries is pdftex which can directly output PDF files. \hologo{XeTeX} can handle text both written from left to right and right to left, even in the same document, and is the most popular \hologo{TeX} engine in China and other Asian countries.
+\hologo{LaTeX} is built on top of \hologo{TeX}. \hologo{TeX} code and features were `frozen' (only bugs are fixed) long ago. There are currently a few `improved' derivatives: \hologo{pdfTeX}, \hologo{XeTeX}, and \hologo{LuaTeX}. Currently the most popular \hologo{TeX} in western countries is pdftex which can directly output PDF files. \hologo{XeTeX} can handle text both written from left to right and right to left, even in the same document and additional font forats, and is the most popular \hologo{TeX} engine in China and other Asian countries.
+
+For the typesetting of this handbook we used several \hologo{LaTeX} packages, of which those that most affected appearance are \texttt{memoir}, \texttt{hyperref}, \texttt{booktabs}, \texttt{pgf/tikz} and \texttt{biblatex}. The \hologo{TeX} distribution we used is Mik\hologo{TeX}.
+
+\subsection{Markdown}
+
+Markdown is a simple markup language, which although offering somehow less flexibility that \hologo{LaTeX} is much easier to learn and which can be easily converted to various different output formats in addition to PDF. 
