@@ -1,30 +1,30 @@
-\documentclass[a4paper,10pt]{memoir}
-
-\usepackage[utf8]{inputenc}
-\usepackage{abbrev}
-\usepackage{r4photobiology}
-
-\begin{document}
-
-% knitr setup
-
-<<setup, include=FALSE, cache=FALSE>>=
-opts_knit$set(child.command = 'include')
-opts_knit$set(self.contained=FALSE)
-opts_knit$set(concordance=TRUE)
-opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=FALSE)
-opts_chunk$set(tidy=FALSE)
-options(replace.assign=TRUE,width=50)
-@
-
-<<fig-setup, include=FALSE, cache=FALSE>>=
-opts_fig_wide <- list(fig.width=8, fig.height=4, out.width='.95\\textwidth')
-opts_fig_wide_square <- list(fig.width=6, fig.height=6, out.width='.95\\textwidth')
-opts_fig_narrow <- list(fig.width=4, fig.height=4, out.width='.47\\textwidth')
-opts_fig_very_narrow <- list(fig.width=3, fig.height=3, out.width='.32\\textwidth')
-opts_fig_medium <- list(fig.width=6, fig.height=4, out.width='.64\\textwidth')
-opts_chunk$set(opts_fig_narrow)
-@
+%\documentclass[a4paper,10pt]{memoir}
+%
+%\usepackage[utf8]{inputenc}
+%\usepackage{abbrev}
+%\usepackage{r4photobiology}
+%
+%\begin{document}
+%
+%% knitr setup
+%
+%<<setup, include=FALSE, cache=FALSE>>=
+%opts_knit$set(child.command = 'include')
+%opts_knit$set(self.contained=FALSE)
+%opts_knit$set(concordance=TRUE)
+%opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=FALSE)
+%opts_chunk$set(tidy=FALSE)
+%options(replace.assign=TRUE,width=50)
+%@
+%
+%<<fig-setup, include=FALSE, cache=FALSE>>=
+%opts_fig_wide <- list(fig.width=8, fig.height=4, out.width='.95\\textwidth')
+%opts_fig_wide_square <- list(fig.width=6, fig.height=6, out.width='.95\\textwidth')
+%opts_fig_narrow <- list(fig.width=4, fig.height=4, out.width='.47\\textwidth')
+%opts_fig_very_narrow <- list(fig.width=3, fig.height=3, out.width='.32\\textwidth')
+%opts_fig_medium <- list(fig.width=6, fig.height=4, out.width='.64\\textwidth')
+%opts_chunk$set(opts_fig_narrow)
+%@
 
 
 \chapter{Optimizing performance}
@@ -42,7 +42,7 @@ library(photobiologyWavebands)
 library(microbenchmark)
 @
 
-Although not a recommended practice, just to keep the examples shorter, we \code{attach} a data set for the solar spectrum:
+%Although not a recommended practice, just to keep the examples shorter, we \code{attach} a data set for the solar spectrum:
 
 %%%%
 \section{Introduction}\label{sec:perf:intro}
@@ -58,7 +58,7 @@ This type of `good style' optimizations have been done throughout the suite's co
 %%%%
 \section{Task: avoiding repeated validation}\label{sec:perf:check}
 \sloppy
-In the case of doing calculations repeatedly on the same spectrum, a small improvement in performance can be achieved by setting the parameter \code{check.spectrum=FALSE} for all but the first call to \code{irradiance()}, or \code{photon\_irradiance()}, or \code{energy\_irradiance()}, or the equivalent functions for ratios. It is also possible to set this parameter to FALSE in all calls, and do the check beforehand by explicitly calling \code{check\_spectrum()}.
+In the case of doing calculations repeatedly on the same spectrum, a small improvement in performance can be achieved by setting the parameter \code{check.spectrum=FALSE} for all but the first call to \code{irradiance()}, or \code{photon\_irradiance()}, or \code{energy\_irradiance()}, or the equivalent functions for ratios. It is also possible to set this parameter to FALSE in all calls, and do the check beforehand by explicitly calling \code{check\_spectrum()}. When using spectral objects data is checked only at object creation. 
 
 %%%%
 \section{Task: caching of multipliers}\label{sec:perf:caching}
@@ -68,10 +68,10 @@ In the case of calculating weighted irradiances on many spectra having exactly t
 %%%%
 \section{Task: benchmarking}\label{sec:perf:benchmark}
 
-You can use the package \code{microbenchmark} to time the code and find the parts that slow it down. I have used it, and also
+Package \code{microbenchmark} can be used to time the code and find the parts that slow it down. I have used it, and also
 I have used profiling to optimize the code for speed. The examples below show how choosing different values from the defaults
 can speed up calculations when the same calculations are done repeatedly on spectra measured at exactly the same wavelengths, something which is usual when analyzing spectra measured with the same instrument. The choice of defaults is based on what is
-best when processing a moderate number of spectra, say less than a few hundreds, as opposed to many thousands.
+best when processing a moderate number of spectra, say up to a few hundred spectra, as opposed to many thousands.
 
 <<>>=
 attach(sun.spct)
@@ -498,4 +498,4 @@ try(detach(package:microbenchmark))
 try(detach(package:ggplot2))
 @
 
-\end{document}
+%\end{document}

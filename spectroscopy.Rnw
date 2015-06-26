@@ -1,0 +1,45 @@
+<<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
+opts_knit$get()
+search()
+getwd()
+@
+
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Quantification and spectroscopy}\label{chap:spectroscopy}
+
+\begin{abstract}
+  In this chapter we explain the basis of spectral measurements, including radiation spectra, transmission and reflectance spectra.
+\end{abstract}
+
+\section{Radiation and molecules}
+
+\subsection{Fluorescence}
+
+\subsection{Phosphorescence}
+
+\section{Surface phenomena}
+
+\subsection{Refraction}
+
+\subsection{Difraction}
+
+\section{Geometrical considerations}
+
+\subsection{Scatering}
+
+\subsection{Angle of incidence}
+
+\section{Measured quantities}
+
+\subsection{Irradiance, radiance, and fluence}
+
+\subsection{Specular and total reflectance}
+
+\subsection{Internal and total transmittance}
+
+\subsection{Absorbance and transmittance}
+

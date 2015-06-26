@@ -6,8 +6,22 @@ opts_knit$set(concordance=TRUE)
 \chapter{Photochemistry}\label{chap:photochemistry}
 
 \begin{abstract}
-  In this chapter we explain how to .
+  In this chapter we explain how UV and VIS radiation can drive chemical reactions, both in inorganic and organic molecules, both \emph{in vitro} and within living organisms. We also describe how action- and response spectra are measured.
 \end{abstract}
 
 %%%%
-\section{Task: }\label{sec:}
+\section{Light driven reactions}
+
+\section{Silver salts and photographic films}
+
+\section{Bleaching by UV radiation}
+
+\section{Chlorophyll}
+
+\section{Plant photoreceptors}
+
+\section{Animal photoreceptors}
+
+\section{Action spectroscopy}
+
+\section{Photoreception tuning} 

@@ -10,14 +10,11 @@ opts_knit$set(concordance=TRUE)
 \end{abstract}
 
 %%%%
-\section{Task: }\label{sec:}
-
-%%%%
 \section{Introduction}\label{sec:software:intro}
 \sloppy
 The software used for typesetting this handbook and developing the \textsf{r4photobiology} suite is free and open source. All of it is available for the most common operating systems (Unix including OS X, Linux and its variants, and Windows). It is also possible to run everything described here on a Linux server running the server version of RStudio, and access the server through a web browser.
 
-For just running the examples in the handbook, you would need only to have R installed. That would be enough as long as you also have a text editor available. This is possible, but does not give a very smooth workflow for data analyses which are beyond the very simple. The next stage is to use a text editor which integrates to some extent with R, but still this is not ideal, specially for writing packages or long scripts. Currently the best option is to use the integrated development environment (IDE) called `RStudio'. This is an editor, but tightly integrated with R. Its advantages are especially noticeable in the case of errors and `debugging'. During the development of the packages, we used RStudio exclusively. 
+For just running the examples in the handbook, you would need only to have R installed. That would be enough as long as you also have a text editor available. This is possible, but does not give a very smooth workflow for data analyses which are beyond the very simple. The next stage is to use a text editor which integrates to some extent with R, but still this is not ideal, specially for writing packages or long scripts. Currently the best option is to use the integrated development environment (IDE) called `RStudio'. This is an editor, but tightly integrated with R. Its advantages are especially noticeable in the case of errors and `debugging'. During the development of the packages, we used RStudio exclusively.
 
 The typesetting is done with \hologo{LaTeX} and the source of this handbook was edited using both the shareware editor WinEdt (which excels as a \hologo{LaTeX} editor) and RStudio which is better suited to the debugging of the code examples. We also used \hologo{LaTeX} for our first handbook \autocite{Aphalo2012}.
 

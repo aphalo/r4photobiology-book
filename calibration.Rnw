@@ -6,8 +6,16 @@ opts_knit$set(concordance=TRUE)
 \chapter{Calibration}\label{chap:calibration}
 
 \begin{abstract}
-  In this chapter we explain how to .
+  In this chapter we explain the calculations involved in applying calibrations to raw spectrometer counts or sensor electrical output. We also describe an example of more involved calculations for corrections based on a measured slit function and stray light estimation and removal from data acquired with an array spectrometer.
 \end{abstract}
 
 %%%%
-\section{Task: }\label{sec:}
+\section{Task: Calibration of broadband sensors}\label{sec:}
+
+\authorNote{Here we will describe how to estimate errors due to spectral mismatch between the calibration reference and the light source being measured.}
+
+\section{Task: Correcting for non-linearity of sensor response}
+
+\section{Task: Applying a spectral calibration to raw spectral data}
+
+\section{Task: Wavelength calibration and peak fitting} 

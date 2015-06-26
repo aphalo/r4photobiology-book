@@ -6,7 +6,7 @@ opts_knit$set(concordance=TRUE)
 \chapter{Radiation sources}\label{chap:sources}
 
 \begin{abstract}
-  In this chapter we explain how to use the spectral data for light sources, and describe the data supplied in the packages.
+  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on light sources useful for photobiological research.
 \end{abstract}
 
 \section{Packages used in this chapter}
@@ -17,24 +17,17 @@ library(photobiology)
 library(photobiologySun)
 library(photobiologyLamps)
 library(photobiologyLEDs)
-library(photobiologyWavebands)
-library(ggplot2)
-library(ggtern)
-library(photobiologygg)
 @
 
 %%%%
 \section{Introduction}\label{sec:sources:intro}
 
 %%%%
-\section{Task: using the data}\label{sec:}
-
-%%%%
-\section{Task: extraterrestrial solar radiation spectra}\label{sec:}
+\section{Data: extraterrestrial solar radiation spectra}\label{sec:}
 
 
 %%%%
-\section{Task: terrestrial  solar radiation spectra}\label{sec:}
+\section{Data: terrestrial  solar radiation spectra}\label{sec:}
 
 % from Titta
 
@@ -54,13 +47,17 @@ library(photobiologygg)
   \item There is no standard sun spectrum specified separately for plant photobiology or horticulture.
   \item Plant photobiologists refer to these SMARTS derived spectrum as well.
   \item The global irradiance spectrum can be considered to be more relevant for plant photobiology and horticulture.
-\end{itemize}         
+\end{itemize}
+
+\section{Data: radiation within plant canopies}
+
+
+\section{Data: radiation in water bodies}
+
+\section{Data: incandescent lamps}\label{sec:}
 
 %%%%
-\section{Task: incandescent lamps}\label{sec:}
+\section{Data: discharge lamps}\label{sec:}
 
 %%%%
-\section{Task: discharge lamps}\label{sec:}
-
-%%%%
-\section{Task: LEDs}\label{sec:}
+\section{Data: LEDs}\label{sec:}

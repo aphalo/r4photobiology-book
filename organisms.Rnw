@@ -1,0 +1,44 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Example data for organisms}\label{chap:photoreceptors}
+
+\begin{abstract}
+  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on the photobiology of organisms.
+\end{abstract}
+
+\section{Plants}
+
+\subsection{Data: Surface properties of organs}
+
+\subsection{Data: Photoreceptors}
+
+\subsection{Data: Photosynthesis}
+
+\subsection{Data: Damage}
+
+\subsection{Data: Metabolites}
+
+\section{Animals, including humans}
+
+\subsection{Data: Surface properties of organs}
+
+\subsection{Data: Photoreceptors}
+
+\subsection{Data: Light driven synthesis}
+
+\subsection{Data: Damage}
+
+\subsection{Data: Metabolites}
+
+\section{Microbes}
+
+\subsection{Data: Photoreceptors}
+
+\subsection{Data: Light driven synthesis}
+
+\subsection{Data: Damage}
+
+\subsection{Data: Metabolites}

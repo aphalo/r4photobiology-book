@@ -130,7 +130,7 @@ are short and terse.
 <<child-r-data, child='R.data.Rnw', eval=TRUE>>=
 @
 
-<<child-r-plotting, child='R.plotting.Rnw', eval=FALSE>>=
+<<child-r-plotting, child='R.plotting.Rnw', eval=TRUE>>=
 @
 
 \end{document}

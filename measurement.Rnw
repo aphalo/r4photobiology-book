@@ -6,8 +6,26 @@ opts_knit$set(concordance=TRUE)
 \chapter{Measurement}\label{chap:measurement}
 
 \begin{abstract}
-  In this chapter we explain how to .
+  In this chapter we explain how to import into R data acquired with other software and also how to directly acquire data from instruments directly from within R code. In addition we discuss how to convert the acquired and or imported data into a format suitable for use in calculations with our R packages.
 \end{abstract}
 
+\section{Importing data acquired externally to R}
 %%%%
-\section{Task: }\label{sec:}
+\subsection{Task: Import data from Ocean Optics instruments and software}\label{sec:}
+
+\subsection{Task: Import data from Avantes instruments and software}\label{sec:}
+
+\subsection{Task: Import data from Macam instruments and software}\label{sec:}
+
+\subsection{Task: Import data from LI-COR instruments and software}\label{sec:}
+
+\subsection{Task: Import data from Bentham instruments and software}\label{sec:}
+
+\section{Acquiring data directly from within R}
+%%%%
+\subsection{Task: Acquiring data from Ocean Optics instruments and software}\label{sec:}
+
+\subsection{Task: Acquiring data from sglux instruments and software}\label{sec:}
+
+\subsection{Task: Acquiring data from YoctoPuce modules and servers}\label{sec:}
+

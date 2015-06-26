@@ -1,0 +1,35 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Optical properties of inanimate objects}\label{chap:filters}
+
+\begin{abstract}
+  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data for inanimate objects used in experiments or relevant to photobiology.
+\end{abstract}
+
+\section{Packages used in this chapter}
+
+For accessing the example data listed in this chapter you need first to load the following packages from the library:
+<<eval=FALSE>>=
+library(photobiology)
+library(photobiologyFilters)
+library(photobiologyReflectors)
+@
+
+%%%%
+\section{Introduction}\label{sec:objects:intro}
+
+%%%%
+\section{Data: spectral transmittance of filters}\label{sec:trans:filters}
+
+%%%%
+\section{Data: spectral reflectance of filters}\label{sec:refl:filters}
+
+%%%%
+\section{Data: spectral transmittance of common materials}\label{sec:trans:materials}
+
+%%%%
+\section{Data: spectral reflectance of common materials}\label{sec:refl:materials}
+

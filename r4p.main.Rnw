@@ -135,6 +135,9 @@ A handbook}}\par
 
 \newcommand{\gls}[1]{} % until start building the glossary.
 
+\newcommand{\authorNote}[1]{\textcolor{blue}{\textsf{Authors' note:\ \textit{#1}}}\xspace}
+%\newcommand{\authorNote}[1]{}
+
 \newcommand{\examplename}{Example}
 \newcommand{\listexamplename}{List of Examples}
 \newlistof{listofexamples}{xpl}{\listexamplename}
@@ -167,9 +170,9 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- FALSE
+incl_all <- TRUE
 incl_chaps <- TRUE || incl_all
-incl_ckbk <- TRUE || incl_all
+incl_ckbk <- FALSE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
 incl_apdx <- FALSE # || incl_all
@@ -223,16 +226,19 @@ options(datatable.print.topn=2)
 
 \setsecnumdepth{subsection}
 
-\part{Preliminaries}
-
-<<child-intro, child='introduction.Rnw', eval=incl_chaps>>=
-@
+\part{Theory behind calculations}
 
 <<child-optics, child='optics.Rnw', eval=incl_chaps>>=
 @
 
+<<child-photochemistry, child='spectroscopy.Rnw', eval=incl_chaps>>=
+@
+
 <<child-photochemistry, child='photochemistry.Rnw', eval=incl_chaps>>=
 @
+
+\part{Tools used for calculations}
+
 
 <<child-software, child='software.Rnw', eval=incl_chaps>>=
 @
@@ -268,7 +274,7 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-wtirrad, child='transmittance.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-astronomy, child='astronomy.Rnw', eval=FALSE>>=
+<<child-astronomy, child='astronomy.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-colour, child='colour.Rnw', eval=incl_ckbk>>=
@@ -285,23 +291,10 @@ current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
 
-\part{Catalogue of data sources}
-
-<<child-sources, child='sources.Rnw', eval=incl_data>>=
-@
-
-<<child-filters, child='filters.Rnw', eval=incl_data>>=
-@
-
-<<child-photoreceptors, child='photoreceptors.Rnw', eval=incl_data>>=
-@
-
-<<echo=FALSE, include=FALSE>>=
-current_ls <- ls()
-rm(list = setdiff(current_ls, main_ls))
-@
-
 \part{Data acquisition and modelling}
+
+<<child-measurement, child='measurement.Rnw', eval=incl_acq>>=
+@
 
 <<child-calibration, child='calibration.Rnw', eval=incl_acq>>=
 @
@@ -309,7 +302,20 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-simulation, child='simulation.Rnw', eval=incl_acq>>=
 @
 
-<<child-measurement, child='measurement.Rnw', eval=incl_acq>>=
+<<echo=FALSE, include=FALSE>>=
+current_ls <- ls()
+rm(list = setdiff(current_ls, main_ls))
+@
+
+\part{Catalogue of example data}
+
+<<child-sources, child='sources.Rnw', eval=incl_data>>=
+@
+
+<<child-filters, child='objects.Rnw', eval=incl_data>>=
+@
+
+<<child-photoreceptors, child='organisms.Rnw', eval=incl_data>>=
 @
 
 <<echo=FALSE, include=FALSE>>=
@@ -317,13 +323,19 @@ current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
 
+
+\part{Optimizing computation speed}
+
 <<child-performance, child='performance.Rnw', eval=FALSE>>=
 @
 
+\authorNote{Chapter not included as example code is giving errors at the moment.}
+
 \include{R.readings.tr}
 
-
 \printbibliography
+
+\part{Appendix}
 
 \appendix
 
