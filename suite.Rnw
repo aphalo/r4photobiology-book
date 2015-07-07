@@ -22,22 +22,111 @@ The aim of the suite is to both provide a framework for teaching VIS and UV radi
 
 Given the expected audience of both students and biologists, rather than data analysts, or experienced programmers, we have aimed at designing a consistent and easy to understand paradigm for the analysis of spectral data. The design is based on our own user experience, and on feedback from our students and `early adopters'.
 
-\section{The design of the user interface}
+\begin{sidewaysfigure}
+\centering
+  \begin{tikzpicture}[auto]
+    \node [c] (ACQ) {\textbf{A:} acquire};
+    \node [b, dashed, below = of ACQ] (acquisition) {\textsl{Data acquisition}};
+    \node [a, dashed, below = of acquisition] (raw) {Raw spectral data};
+    \path [lr, dashed] (acquisition) -- (raw) node[near start, right]{};
+
+    \node [c, right = of ACQ] (PROCESS) {\textbf{B:} process};
+    \node [b, dashed, below = of PROCESS] (calibration) {Instrument-dependent corrections and calibration};
+    \path [lr, dashed] (raw) -- (calibration) node[near start, above]{};
+    \node [b, below = of calibration] (eda) {EDA (plotting)};
+    \path [l] (calibration) -- (eda) node[near start, right]{};
+    \node [b, below = of eda] (validation) {Validation\\ (sanity checks)};
+    \path [l] (eda) -- (validation) node[near start, right]{};
+    \node [a, below = of validation] (spectrum) {spectral data};
+    \path [lr] (validation) -- (spectrum) node[near start, right]{};
+
+    \node [c, right = of PROCESS] (SUMMARIZE) {\textbf{C:} summarize};
+    \node [b, below = of SUMMARIZE] (combine) {Operations on multiple spectra};
+    \path [lr] (spectrum) -- (combine) node[near start, above]{};
+    \node [b, below = of combine] (summaries) {Summaries\\ (weighting,\\ integration, colour)};
+    \path [l] (combine) -- (summaries) node[near start, above]{};
+    \node [b, below = of summaries] (validation2) {Validation\\ (sanity checks)};
+    \path [l] (summaries) -- (validation2) node[near start, right]{};
+    \node [a, below = of validation2] (summdata) {Summary data};
+    \path [lr] (validation2) -- (summdata) node[near start, right]{};
+
+    \node [c, right = of SUMMARIZE] (USE) {\textbf{D:} analyse};
+    \node [d, dotted, below = of USE] (stats) {Analysis\\ (time series, model fitting)};
+    \path [lr, dotted] (summdata) -- (stats) node[near start, below]{};
+
+\end{tikzpicture}
+
+  \caption[Spectral data \emph{pipeline}]{Data ``pipeline'' from acquisition to analysis of spectral data}\label{fig:data:pipeline}
+\end{sidewaysfigure}
+
+
+\section{The design of the framework}
 
 \begin{figure}
-\caption{The elements of the suite.}\label{fig:diagram:paradigm}
+\caption{The elements of the framework used by all packages in the suite.}\label{fig:diagram:paradigm}
   \begin{framed}
   \noindent
     \begin{description}
-      \item[\texttt{\_spct}] Spectral objects are containers for different types of spectral data, data which is referenced to wavelength. These data normally originate in measurements or simulation with models.
+      \item[\texttt{\textunderscore spct}] Spectral objects are containers for different types of spectral data, data which is referenced to wavelength. These data normally originate in measurements or simulation with models.
+      \item[\texttt{\textunderscore multi\textunderscore spct}] Containers for spectral objects are used to store related spectral objects, such as time series of spectral objects or spectral images.
       \item[\texttt{wavebands}] Waveband objects are containers of `instructions' for the quantification of spectral data. In addition to the everyday definition as a range of wavelengths, we include the spectral weighting functions used in the calculation of what are frequently called weighted or effective exposures and doses.
       \item[summary functions] Different summary functions return different quantities through integration over wavelengths and take as arguments spectra and wavebands.
-      \item[maths operators and functions] Are used to combine and/or transform spectral data, and in some cases to apply weights defined by wavebands.  
+      \item[maths operators and functions] Are used to combine and/or transform spectral data, and in some cases to apply weights defined by wavebands.
     \end{description}
   \end{framed}
 \end{figure}
 
-The design of the `high level' interface is based on the idea of achieving simplicity of use by hiding the computational difficulties and exposing objects, functions and operators that map directly to physical concepts. Computations and plotting of spectral data centers on two types of objects: \emph{spectra} and \emph{wavebands} (Figure \ref{fig:diagram:paradigm}). Al spectra have in common that all observations are referenced to a wavelength value, there are different types spectral objects, e.g.\ for light sources and responses to light. Waveband objects include much more than information about a range of wavelengths, they can also include information about a transformation of the spectral data, like a biological spectral weighting function (BSWF). In addition to functions for calculating summary quantities like irradiance from spectral irradiance, the packages define operators for spectra and wavebands. The use of operators simplifies the syntax and makes the interface easier to use.
+The design of the `high level' interface is based on the idea of achieving simplicity of use by hiding the computational difficulties and exposing objects, functions and operators that map directly to physical concepts. Computations and plotting of spectral data centers on two types of objects: \emph{spectra} and \emph{wavebands} (Figure \ref{fig:diagram:paradigm}). Al spectra have in common that observations are referenced to a wavelength value. However, there are different types spectral objects, e.g.\ for light sources and responses to light. Waveband objects include much more than information about a range of wavelengths, they can also include information about a transformation of the spectral data, like a biological spectral weighting function (BSWF). In addition to functions for calculating summary quantities like irradiance from spectral irradiance, the packages define operators for spectra and wavebands. The use of operators simplifies the syntax and makes the interface easier to use.
+
+A consistent naming scheme as well as consistency in the order of function arguments across the suite.... Data objects are \emph{tidy} as defined by in \autocite{Wickham2013}, in other words data on a row always corresponds to a single observation event, although such an observation can consist in more than one measured or derived quantity. Data from different observations are stored in different objects, or if in the same object they are \emph{keyed} using and index variable.
+
+The same summary methods, are available for \texttt{\textunderscore spct} and \textunderscore multi\textunderscore spct}, in the first case returning a vector, and in the second case, a \texttt{data.frame} object.
+
+Package \texttt{photobiology} can be thought as a framework defining a way of storing spectral data plus `pieces' from which specific summaries can be constructed. Extensibility and reuse is at the core of the design. This is achieved by using the weakest possible assumptions or expectations about data properties and avoiding as much as possible the hard-coding of any constants or size limits. This, of course, has a cost in possibly slower execution speed. Within these constraints an effort has been made to remove performance bottleneck by means of C++ code and passing data objects by reference when possible.
+
+\begin{figure}
+ \tikzstyle{every node}=[draw=black,thick,anchor=west,fill=blue!10]
+ \tikzstyle{root}=[dashed,fill=gray!50]
+  \centering
+  \begin{tikzpicture}[%
+  grow via three points={one child at (0.5,-0.7) and
+  two children at (0.5,-0.7) and (0.5,-1.4)},
+  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+  \node [root] {data.table}
+      child { node {generic\textunderscore spct}
+          child { node {cps\textunderscore spct}}
+          child { node {source\textunderscore spct}}
+          child { node {response\textunderscore spct}}
+          child { node {filter\textunderscore spct}}
+          child { node {reflector\textunderscore spct}}
+          child { node {object\textunderscore spct}}
+          child { node {chroma\textunderscore spct}}
+    };
+  \end{tikzpicture}
+  \caption{Classes used to contain different types of spectral data}\label{fig:spct:hierarchy}
+\end{figure}
+
+\begin{figure}
+ \tikzstyle{every node}=[draw=black,thick,anchor=west,fill=blue!10]
+ \tikzstyle{root}=[dashed,fill=gray!50]
+  \centering
+  \begin{tikzpicture}[%
+  grow via three points={one child at (0.5,-0.7) and
+  two children at (0.5,-0.7) and (0.5,-1.4)},
+  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+  \node [root] {list}
+      child { node {generic\textunderscore multi\textunderscore spct}
+          child { node {cps\textunderscore multi\textunderscore spct}}
+          child { node {source\textunderscore multi\textunderscore spct}}
+          child { node {response\textunderscore multi\textunderscore spct}}
+          child { node {filter\textunderscore multi\textunderscore spct}}
+          child { node {reflector\textunderscore multi\textunderscore spct}}
+          child { node {object\textunderscore multi\textunderscore spct}}
+          child { node {chroma\textunderscore multi\textunderscore spct}}
+    };
+  \end{tikzpicture}
+  \caption{Classes used to contain multiple spectral objects}\label{fig:spct:hierarchy}
+\end{figure}
 
 <<suite-design-example, eval=FALSE>>=
 e_irrad(sun.spct * polyester.new.spc, CIE())

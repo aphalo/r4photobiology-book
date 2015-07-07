@@ -133,6 +133,39 @@ A handbook}}\par
 \definecolor{brown}{rgb}{0.5,0.2,0.2}
 \definecolor{darkred}{rgb}{0.75,0,0.1}
 
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,arrows,trees}
+
+\tikzset{
+ a/.style
+%  = {node distance=4em, text width=10em, minimum height=4em},
+  = {rectangle, draw, fill=red!10, node distance=3em, text width=12em,
+     text centered, rounded corners, minimum height=4.5em, thick},
+ b/.style
+  = {rectangle, draw, fill=blue!10, node distance=3em, text width=12em,
+     text centered, rounded corners, minimum height=4.5em, thick},
+ c/.style
+  = {rectangle, draw, color=white, fill=blue!90, node distance=3em, text width=12em,
+     text centered, minimum height=2.5em, thin},
+ d/.style
+  = {rectangle, draw, dashed, fill=blue!10, node distance=3em, text width=12em,
+     text centered, rounded corners, minimum height=4.5em, thick},
+ l/.style
+  = {draw, -latex, thick},
+ lr/.style
+  = {draw, -latex, thick, red},
+ lb/.style
+  = {draw, -latex, thick, blue},
+  lo/.style
+  = {draw, -latex, thick, orange},
+  lg/.style
+  = {draw, -latex, thick, green},
+  mylabel/.style
+  ={text width=6.5em, text centered}
+}
+
+\usepackage{rotating}
+
 \newcommand{\gls}[1]{} % until start building the glossary.
 
 \newcommand{\authorNote}[1]{\textcolor{blue}{\textsf{Authors' note:\ \textit{#1}}}\xspace}
@@ -170,8 +203,8 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- TRUE
-incl_chaps <- TRUE || incl_all
+incl_all <- FALSE
+incl_chaps <- FALSE || incl_all
 incl_ckbk <- FALSE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
@@ -243,7 +276,7 @@ options(datatable.print.topn=2)
 <<child-software, child='software.Rnw', eval=incl_chaps>>=
 @
 
-<<child-suite, child='suite.Rnw', eval=incl_chaps>>=
+<<child-suite, child='suite.Rnw', eval=TRUE>>=
 @
 
 <<echo=FALSE, include=FALSE>>=
@@ -278,6 +311,9 @@ rm(list = setdiff(current_ls, main_ls))
 @
 
 <<child-colour, child='colour.Rnw', eval=incl_ckbk>>=
+@
+
+<<child-colour, child='indexes.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-plots, child='plots.Rnw', eval=incl_ckbk>>=

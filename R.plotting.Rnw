@@ -16,10 +16,10 @@ library(grid)
 library(Hmisc)
 library(ggplot2)
 library(scales)
-# library(rgdal)
-# library(ggtern)
-# library(ggmap)
-# library(GGally)
+library(rgdal)
+library(ggtern)
+library(ggmap)
+library(GGally)
 @
 
 <<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
@@ -601,8 +601,8 @@ My version using \code{ggplot2}:
 <<>>=
 # we rearrange the data
 my.mat <- matrix(as.matrix(anscombe), ncol=2)
-my.anscombe <- data.frame(x = my.mat[ , 1], 
-                          y = my.mat[ , 2], 
+my.anscombe <- data.frame(x = my.mat[ , 1],
+                          y = my.mat[ , 2],
                           case=factor(rep(1:4, rep(11,4))))
 # we draw the figure
 ggplot(my.anscombe, aes(x,y)) +

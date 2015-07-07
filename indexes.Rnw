@@ -1,0 +1,61 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Colour based indexes}\label{chap:colour:indexes}
+
+\begin{abstract}
+  In this chapter we explain how calculate colour-based indexes like NVI and give some hints on how to objectively create ad-hoc indexes for special uses. Here the focus is from the perspective of describing the information carried by spectral cues in the environment of organisms. However, the same calculations apply to remote sensing and analysis of ground-based and even hyper-spectral data with other aims.
+\end{abstract}
+
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologygg)
+library(photobiologyPlants)
+library(hsdar)
+@
+
+%%%%
+\section{What are colour-based indexes?}
+
+\section{Task: Calculation of the value of a known index from spectral data}
+
+We will start with a very well-known index used in remote sensing, Normalized Difference Vegetation Index (NDVI). We must be aware that an NDVI value calculated from spectral data on ``first principles'' may deviate from that obtained by means of non-spectral wide- or narrow-band sensors as used in used in satellites. Package hsdar supplies spectral responses for satellites. So for remote sensing applications the use of this package is recommended.
+
+We here demonstrate how to transfer a spectrum to hsdar, and one example of index calculation with this package. The hsdar package can not only be used for individual spectra but also for hyperspectral images. Be aware, that this package seems to aim at data of rather low spectral resolution.
+
+<<>>=
+Solidago_hs.spct <- with(Solidago_upper_adax.spct, speclib(Rfr, w.length))
+plot(Solidago_hs.spct)
+ndvi <- vegindex(Solidago_hs.spct, "NDVI")
+@
+
+We now calculate a similar index by integrating reflectance for two wavebands,
+
+<<>>=
+normalized_diff_ind(Solidago_upper_adax.spct,
+                    waveband(c(700, 1100)),
+                    waveband(c(400, 700)),
+                    reflectance)
+@
+
+This returns a different value because, the wavebands are un-weighted, while weighting functions would be needed to reproduce NDVI.
+
+\section{Task: Estimation of an optimal index for discrimination}
+
+\section{Task: Fitting a simple optimal index for prediction of a continuous variable}
+
+\section{Task: PCA or PCoA applied to spectral data}
+
+\section{Task: Working with spectral images}
+
+<<>>=
+try(detach(package:hsdar))
+try(detach(package:photobiologyPlants))
+try(detach(package:photobiologygg))
+try(detach(package:photobiology))
+@
