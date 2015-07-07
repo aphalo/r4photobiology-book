@@ -17,9 +17,9 @@ library(Hmisc)
 library(ggplot2)
 library(scales)
 library(rgdal)
-library(ggtern)
-library(ggmap)
-library(GGally)
+#library(ggtern)
+#library(ggmap)
+#library(GGally)
 @
 
 <<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
