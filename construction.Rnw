@@ -158,51 +158,47 @@ by 10, and each value in the vector of spectral irradiances is divided by 1000.
 
 `Traditional' conversion functions with names given by names of classes preceded by \code{as.} (e.g.\ \texttt{as.source\_spct}. These functions accept data frames, data tables, and lists with components of equal length as arguments. These functions are less flexible, as the component variables in the argument should be named using one of the names recognized. Table \ref{tab:obj:units} lists the different `names' understood by these constructor functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
 
-We can create a new object of class \code{source\_spct} by making a copy of a data frame or a data table and converting it into a source spectrum:
-
+We first use a \code{data.frame} containing suitable spectral data. Object \code{sun.data} is included as part of package \PB. Using \code{head} we can check that the names of the variables are the expected ones, and that the wavelength values are expressed in nanometres:
 <<>>=
-my.df <- data.frame(w.length = 300:500, s.e.irrad = 1)
-my.spct <- as.source_spct(my.df)
+is.data.frame(sun.data)
+head(sun.data, 3)
 @
 
-In this case \texttt{sun.data} remains independent, and whatever change we make to my.spct does not affect \texttt{sun.data}:
-
+Subsequently we create a new \code{source\_spct} object by copy:
 <<>>=
-my.spct <- my.spct * 2
-my.spct
-head(my.df)
+first.sun.spct <- as.source_spct(sun.data)
+is.source_spct(first.sun.spct)
 @
 
-These functions, in the same way as constructors, accept attributes as arguments.
+In this case \code{sun.data} remains independent, and whatever change we make to \code{my.sun.spct} does not affect \texttt{sun.data}.
+The \code{as.} functions, first make a copy of the data frame or data table, and then call one of the \code{set} functions described in section the section to convert the copy into a \code{\_spct} object. Table \ref{tab:obj:units} lists the different `names' understood by these copy functions and the required and optional components of the different spectral object classes. The new object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{as.} functions accept attributes such as \code{time.unit} as arguments.
 
-Using a technical term, we have used a copy constructor, which is the normal behaviour in R.
+Using a technical term, \code{as.} functions are \emph{copy constructors}, which follow the \emph{normal} behaviour of the R language.
 
 \subsection{Task: Convert a data frame into a spectral object}
 
-The last possibility, is to use a syntax that is unusual for R, but which is some settings will lead to faster execution: convert an existing data frame or data table, \emph{in situ} or by reference, into a \code{source\_spct} object. These \texttt{set} functions have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}. Table \ref{tab:obj:units} lists the different `names' understood by these conversion functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
+The last possibility, is to use a syntax that is unusual for the R language, but which in some settings will lead to faster execution: convert an existing data frame or data table, \emph{in situ} or by reference, into a \code{source\_spct} object. The \texttt{set} functions defined in package \PB have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}. Table \ref{tab:obj:units} lists the different `names' understood by these conversion functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{set} functions accept attributes such as \code{time.unit} as arguments.
 
 <<>>=
-my.ref.spct <- setSourceSpct(my.df)
-is.source_spct(my.df)
+second.sun.spct <- copy(sun.data)
+setSourceSpct(second.sun.spct)
+is.source_spct(second.sun.spct)
 @
 
-If we combine the above code with an assignment, we end up having two names for the \emph{same} object, which has been converted to a \code{source\_spct} object. (At the moment we get a copy!)
+We normally do not use the value returned by \code{set} functions as it is just a reference the original object, and assigning this value to another name will result in two names pointing to the same object.
 
-<<>>=
-my.ref.spct <- my.ref.spct * 2
-my.ref.spct
-my.df
-@
 
 In fact, the assignment is unnecessary, as the class of \texttt{my.df} is set:
 
 <<>>=
-setSourceSpct(my.df)
+third.sun.spct <- copy(sun.data)
+fourth.sun.spct <- setSourceSpct(second.sun.spct)
+third.sun.spct
+fourth.sun.spct$s.e.irrad <- NA
+third.sun.spct
 @
 
-These functions, in the same way as constructors, accept attributes as arguments.
-
-Using a technical term, we have converted an object by \emph{reference}, which is \emph{not} the normal behaviour in R.\footnote{Avoiding copying can improve performance for huge objects, but will rarely make a tangible difference for individual spectra of moderate size.}
+Using a technical term, \code{set} functions convert an object by \emph{reference}, which is \emph{not} the normal behaviour in the R language.\footnote{Avoiding copying can improve performance for huge objects, but will rarely make a tangible difference for individual spectra of moderate size.}
 
 \subsection{Task: trimming a spectrum}\label{sec:base:trim}
 
@@ -316,7 +312,7 @@ waveband(sun.spct)
 waveband(c(400, 300))
 @
 
-As you can see above, a name and label are created automatically for the new \code{waveband}. The user can also supply these as arguments, but must be careful not to duplicate existing names\footnote{It is preferable that \code{wb.name} complies with the requirements for R object names and file names, while labels have fewer restrictions as they are meant to be used only for output text labels.}.
+As you can see above, a name and label are created automatically for the new \code{waveband}. The user can also supply these as arguments, but must be careful not to duplicate existing names\footnote{It is preferable that \code{wb.name} complies with the requirements for R object names and file names, while labels have fewer restrictions as they are meant to be used only as text labels when printing and plotting.}.
 
 <<>>=
 waveband(c(300, 400), wb.name="a.name")

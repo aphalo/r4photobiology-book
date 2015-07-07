@@ -293,7 +293,7 @@ my_sun.spct
 
 In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \texttt{q2e} as for \code{source\_spct} objects, the appropriate conversion is applied.
 
-\subsubsection{Task: Using options to change default behaviour of maths operators and functions}
+\subsubsection{Task: Using options to change default behaviour of maths operators and functions}\label{sec:oper:options}
 
 Table \ref{tab:options} lists all the recognized options, and their default values. Within the suite all functions have a default value which is used when the options are undefined. Options are set using base R's function \texttt{options}, and queried with functions \texttt{options} and \texttt{getOption}. Using options can result in more compact and terse code, but the user should clearly document the use of non-default values for options to avoid surprising the reader of the code.
 
@@ -346,7 +346,7 @@ options(photobiology.radiation.unit = "energy")
 sun.spct * UVB()
 @
 
-For filters, an option controls whether transmittance, the default, or absorbance is use in the operations, and returned.
+For filters, an option controls whether transmittance, the default, or absorbance is use in the operations, and the controls the returned quantity. It is important to remember that absorbance, $A$, is always expressed on a logarithmic scale, while transmittance, $T$, is always expressed on a linear scale. So to simulate the effect of stacking two layers of polyester film, we need to sum, or in this case as there are two layers of the same material, multiply by two the spectral absorbances, while we need to multiply the spectral transmittances of stacked filters, or use a power when the layers are identical.
 
 <<>>=
 options(photobiology.filter.qty = "absorbance")
@@ -355,7 +355,7 @@ options(photobiology.filter.qty = "transmittance")
 polyester.new.spct ^ 2
 @
 
-Either option can be unset, by means of the \texttt{NULL} value.
+Either option can be unset, by means of the \texttt{NULL} value\footnote{If you are planning to continue working through the examples in later sections, do reset the options as shown in this chunk, as otherwise, the results of later calculations will differ from those shown.}.
 <<>>=
 options(photobiology.radiation.unit = NULL)
 options(photobiology.filter.qty = NULL)
@@ -363,7 +363,7 @@ options(photobiology.filter.qty = NULL)
 
 The proper use of trimming of wavebands is important, and option \texttt{photobiology.waveband.trim} makes changing the behaviour of the \texttt{trim\_spct} function and other functions accepting wavebands easier. The need to carefully assess the validity of trimming and how it can affect the interpretation of results is further discussed in Chapter \ref{chap:uw:irrad} and Chapter \ref{chap:wt:irrad}.
 
-Other options affect the optimization for performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \texttt{data.table} affect printing of output.
+Other options affect the optimization of performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \texttt{data.table} affect printing of output (Table \ref{tab:options}).
 
 \section{Wavebands}\label{sec:wb:objects}
 

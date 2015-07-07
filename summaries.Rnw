@@ -15,6 +15,7 @@ opts_chunk$set(opts_fig_wide)
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
+library(photobiologyWavebands)
 library(photobiologygg)
 library(photobiologyLamps)
 library(photobiologyFilters)
@@ -299,5 +300,6 @@ try(detach(package:photobiologyReflectors))
 try(detach(package:photobiologyFilters))
 try(detach(package:photobiologyLamps))
 try(detach(package:photobiologygg))
+try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @
