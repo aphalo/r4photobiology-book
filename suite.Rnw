@@ -107,6 +107,7 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
       }
     };
   \end{tikzpicture}
+  \vspace{2ex}
 
   \begin{tikzpicture}[%
   grow via three points={one child at (0.5,-0.7) and
@@ -123,7 +124,8 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
           child { node {chroma\textunderscore multi\textunderscore spct}}
     };
   \end{tikzpicture}
- 
+   \vspace{4ex}
+
  \begin{tikzpicture}[%
   grow via three points={one child at (0.5,-0.7) and
   two children at (0.5,-0.7) and (0.5,-1.4)},

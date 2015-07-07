@@ -206,8 +206,8 @@ opts_chunk$set(opts_fig_narrow)
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
 incl_all <- FALSE
-incl_chaps <- FALSE || incl_all
-incl_ckbk <- FALSE || incl_all
+incl_chaps <- TRUE || incl_all
+incl_ckbk <- TRUE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
 incl_apdx <- FALSE # || incl_all

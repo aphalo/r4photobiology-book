@@ -15,6 +15,8 @@ For executing the examples listed in this chapter you need first to load the fol
 <<>>=
 library(photobiology)
 library(photobiologyWavebands)
+library(photobiologyLamps)
+library(lubridate)
 @
 
 %%%%
@@ -25,7 +27,7 @@ Weighted irradiance is usually reported in weighted energy units, but it is also
 Most SWFs are defined using measured action spectra or spectra derived by combining different measured action spectra. As these spectra have been measured under different conditions, what is of interest is the shape of the curve as a function of wavelength, but not the absolute values. Because of this, SWFs are normalized to an action of one at an arbitrary wavelength. In many cases there is no consensus about the wavelength to use. Normalization is simple, it consists in dividing all action values along the curve by the action value at the selected normalization wavelengths.
 
 Another complication is that it is not always clear if a given SWF definition is based on energy or photon units for the fluence rate or irradiances. In photobiology using photon units for expressing action spectra is the norm, but SWFs based on them have rather frequently been used as weights for spectral energy irradiance. The current package makes this difference explicit, and uses the correct weights depending on the spectral data, as long as the \code{waveband} objects have been correctly defined. In the case of the definitions in package \PBWB, we have used, whenever possible the correct interpretation when described in the literature, or the common practice when information has been unavailable.
- 
+
 %%%%
 \section{Task: specifying the normalization wavelength}\label{sec:wt:intro}
 
@@ -122,23 +124,55 @@ q_irrad(sun.spct, GEN.G())
 @
 
 %%%
-\section{Task: calculate daily effective energy exposure}\label{sec:wt:eirrad}
+\section{Task: calculate daily effective energy exposure}\label{sec:wt:exposure}
 
-To calculate daily exposure values, we need to apply the same code as used above, but using spectral daily exposure instead of spectral irradiance as starting point:
+\subsection{From spectral daily exposure}
+
+To calculate daily exposure values, if we have available spectral daily exposure (time-integrated spectral irradiance for a whole day) we need to apply the same code as used above, but using the spectral daily exposure instead of spectral irradiance as starting point:
 
 <<>>=
 e_irrad(sun.daily.spct, GEN.G())
 @
 
-the output from the code above is in units of \jday, the code below returns the same result in the more common uints of \kjday:
+the output from the code above is in units of \jday, the code below returns the same result in the more common units of \kjday:
 
 <<>>=
 e_irrad(sun.daily.spct, GEN.G()) * 1e-3
 @
 by comparing these result to those for effective irradiances above, it can be seen that the \code{time.unit} attribute of the spectral data is copied to the result, allowing us to distinguish irradiance values (\code{time.unit="second"}) from daily exposure values (\code{time.unit="day"}).
 
+\subsection{From spectral irradiance}
+
+To calculate daily exposure values, from a known constant irradiance, we need to take into account the total length of exposure per day. This is equivalent to calculating fluence.
+
 <<>>=
+fluence(qpanel.uvb313.spct, GEN.G(), 
+        exposure.time = duration(6, "hours"))
+@
+
+the output from the code above is in units of \jday, the code below returns the same result in the more common units of \kjday:
+
+<<>>=
+fluence(qpanel.uvb313.spct, GEN.G(), 
+        exposure.time = duration(6, "hours")) * 1e-3
+@
+
+by comparing these result to those for effective irradiances above, it can be seen that the \code{exposure.duration} supplied is copied to the result, allowing us to know the exposure has been.
+
+\section{Task: calculate fluence for an irradiation event}\label{sec:wt:fluence}
+
+Please see the section \ref{sec:wt:exposure} above for additional details. The use of function \code{fluence} facilitates the calculation as it accepts the length of time of the exposure as a \code{lubridate::duration}, making it easy to enter the duration using different units, or even calculate the duration as the difference between two times. Of course, the spectral irradiance should be measured at the position where the material being exposed was located during irradiation. The following example is for a red fluorescent tube as sometimes used in seed germination experiments to study phytochrome-mediated responses.
+
+<<>>=
+fluence(philips.tld36w.15.spct,
+        exposure.time = duration(5, "minutes"))
+@
+
+<<>>=
+try(detach(package:lubridate))
+try(detach(package:photobiologyLamps))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @
 
+  
