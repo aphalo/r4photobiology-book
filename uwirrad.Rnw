@@ -317,6 +317,26 @@ with(sun.spct,
 
 \end{small}
 
+\section{Task: calculate fluence for an irradiation event}\label{sec:wt:fluence}
+
+The task to be completed is to calculate the (energy) fluence ($\fluence$) in \joule from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
+
+\begin{equation}
+\fluence[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr \times t \mathrm{d}\ \lambda
+\label{eq:energy:irrad}
+\end{equation}
+
+\authorNote{Needs to be edited for fluence!}
+Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_irrad} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
+The use of function \code{fluence} facilitates the calculation as it accepts the length of time of the exposure as a \code{lubridate::duration}, making it easy to enter the duration using different units, or even calculate the duration as the difference between two times. Of course, the spectral irradiance should be measured at the position where the material being exposed was located during irradiation. The following example is for a red fluorescent tube as sometimes used in seed germination experiments to study phytochrome-mediated responses.
+
+<<>>=
+fluence(philips.tld36w.15.spct,
+        exposure.time = duration(5, "minutes"))
+@
+
+Please see the sections \ref{sec:wt:exposure} for additional details. 
 %%%%
 \section{Task: photon ratios}\label{sec:photon:ratio}
 
