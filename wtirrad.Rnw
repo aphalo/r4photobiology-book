@@ -146,27 +146,18 @@ by comparing these result to those for effective irradiances above, it can be se
 To calculate daily exposure values, from a known constant irradiance, we need to take into account the total length of exposure per day. This is equivalent to calculating fluence.
 
 <<>>=
-fluence(qpanel.uvb313.spct, GEN.G(), 
+fluence(qpanel.uvb313.spct, GEN.G(),
         exposure.time = duration(6, "hours"))
 @
 
 the output from the code above is in units of \jday, the code below returns the same result in the more common units of \kjday:
 
 <<>>=
-fluence(qpanel.uvb313.spct, GEN.G(), 
+fluence(qpanel.uvb313.spct, GEN.G(),
         exposure.time = duration(6, "hours")) * 1e-3
 @
 
 by comparing these result to those for effective irradiances above, it can be seen that the \code{exposure.duration} supplied is copied to the result, allowing us to know the exposure has been.
-
-\section{Task: calculate fluence for an irradiation event}\label{sec:wt:fluence}
-
-Please see the section \ref{sec:wt:exposure} above for additional details. The use of function \code{fluence} facilitates the calculation as it accepts the length of time of the exposure as a \code{lubridate::duration}, making it easy to enter the duration using different units, or even calculate the duration as the difference between two times. Of course, the spectral irradiance should be measured at the position where the material being exposed was located during irradiation. The following example is for a red fluorescent tube as sometimes used in seed germination experiments to study phytochrome-mediated responses.
-
-<<>>=
-fluence(philips.tld36w.15.spct,
-        exposure.time = duration(5, "minutes"))
-@
 
 <<>>=
 try(detach(package:lubridate))
@@ -175,4 +166,3 @@ try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @
 
-  
