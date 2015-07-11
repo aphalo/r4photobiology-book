@@ -167,12 +167,11 @@ A handbook}}\par
 
 \usepackage{rotating}
 
-\newcommand{\gls}[1]{} % until start building the glossary.
 
 \newcommand{\authorNote}[1]{\textcolor{blue}{\textsf{Authors' note:\ \textit{#1}}}\xspace}
 %\newcommand{\authorNote}[1]{}
 
-\newcommand{\textboxname}{textbox}
+\newcommand{\textboxname}{Box}
 \newcommand{\listtextboxname}{List of Text Boxes}
 \newlistof{listoftextboxes}{txtbx}{\listtextboxname}
 \newfloat[chapter]{textbox}{txtbx}{\textboxname}
@@ -181,6 +180,20 @@ A handbook}}\par
 \setfloatadjustment{figure}{\sffamily\centering}
 \setfloatadjustment{table}{\sffamily\footnotesize\centering}
 \setfloatadjustment{textbox}{\sffamily\small}
+
+%\newcommand{\gls}[1]{} % until start building the glossary.
+\usepackage{glossaries}%[acronym]
+
+
+%\renewcommand{\glossarypreamble}{\begin{multicols}{2}}
+%\renewcommand{\glossarypostamble}{\end{multicols}}
+\glstoctrue
+%\loadglsentries{gp_glossary}
+%\loadglsentries[acronym]{gp_acronyms}
+\makeglossaries
+\loadglsentries{r4p_glossary_tr}
+
+\makeindex
 
 \begin{document}
 
@@ -207,7 +220,7 @@ opts_chunk$set(opts_fig_narrow)
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
 incl_all <- FALSE
 incl_chaps <- TRUE || incl_all
-incl_ckbk <- TRUE || incl_all
+incl_ckbk <- FALSE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
 incl_apdx <- FALSE # || incl_all
@@ -372,6 +385,10 @@ rm(list = setdiff(current_ls, main_ls))
 \include{R.readings.tr}
 
 \printbibliography
+
+\printglossary
+
+\printindex
 
 \part{Appendix}
 

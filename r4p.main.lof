@@ -17,23 +17,16 @@
 \contentsline {figure}{\numberline {1.11}{\ignorespaces UV-B and PAR}}{19}{figure.1.11}
 \contentsline {figure}{\numberline {1.12}{\ignorespaces Seasonal variation in UV-B radiation}}{19}{figure.1.12}
 \contentsline {figure}{\numberline {1.13}{\ignorespaces Latitudinal variation in UV-B radiation}}{20}{figure.1.13}
+\contentsline {figure}{\numberline {1.14}{\ignorespaces Spectral irradiance for a 60~W incandescent lamp}}{21}{figure.1.14}
+\contentsline {figure}{\numberline {1.15}{\ignorespaces Spectral irradiance for a `germicidal' low pressure mercury lamp.}}{21}{figure.1.15}
+\contentsline {figure}{\numberline {1.16}{\ignorespaces Spectral irradiance for a `daylight', approx. 5200~K, fluorescent tube (Philips~36W~950).}}{22}{figure.1.16}
+\contentsline {figure}{\numberline {1.17}{\ignorespaces Spectral irradiance for a blue LED array (Huey Jann, 50~W).}}{23}{figure.1.17}
+\contentsline {figure}{\numberline {1.18}{\ignorespaces Spectral irradiance for `neutral white LED', 4000~K, array (Lumitronix SmartArray Q36 LED-Module, 39W, using Nichia 757 LEDs).}}{23}{figure.1.18}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Spectral data \emph {pipeline}}}{36}{figure.5.1}
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Object classes used in the packages}}{39}{figure.5.2}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Spectral data \emph {pipeline}}}{38}{figure.5.1}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Object classes used in the packages}}{41}{figure.5.2}
 \addvspace {10pt}
 \addvspace {10pt}

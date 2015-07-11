@@ -1,0 +1,16 @@
+\glossaryentry{global radiation?\glossentry{global:rad}|glsseeformat[\seename ]{direct:rad}}{Z}
+\glossaryentry{isotropic?\glossentry{isotropic}|glsseeformat[\seename ]{diffuse:rad}}{Z}
+\glossaryentry{absorptance?\glossentry{absorptance}|setentrycounter[]{page}\glsnumberformat}{ix}
+\glossaryentry{reflectance?\glossentry{reflectance}|setentrycounter[]{page}\glsnumberformat}{ix}
+\glossaryentry{transmittance?\glossentry{transmittance}|setentrycounter[]{page}\glsnumberformat}{ix}
+\glossaryentry{absorbance?\glossentry{absorbance}|setentrycounter[]{page}\glsnumberformat}{ix}
+\glossaryentry{biological spectral weighting function?\glossentry{BSWF}|setentrycounter[]{page}\glsnumberformat}{ix}
+\glossaryentry{photosynthetically active radiation?\glossentry{PAR}|setentrycounter[]{page}\glsnumberformat}{x}
+\glossaryentry{proportional-integral-derivative?\glossentry{PID}|setentrycounter[]{page}\glsnumberformat}{x}
+\glossaryentry{photosynthetic photon flux density?\glossentry{PPFD}|setentrycounter[]{page}\glsnumberformat}{x}
+\glossaryentry{radiation amplification factor?\glossentry{RAF}|setentrycounter[]{page}\glsnumberformat}{x}
+\glossaryentry{global radiation?\glossentry{global:rad}|setentrycounter[]{page}\glsnumberformat}{16}
+\glossaryentry{direct radiation?\glossentry{direct:rad}|setentrycounter[]{page}\glsnumberformat}{16}
+\glossaryentry{scattered or `diffuse' radiation?\glossentry{diffuse:rad}|setentrycounter[]{page}\glsnumberformat}{16}
+\glossaryentry{direct radiation?\glossentry{direct:rad}|setentrycounter[]{page}\glsnumberformat}{25}
+\glossaryentry{CRAN, Comprehensive R Archive Network?\glossentry{CRAN}|setentrycounter[]{page}\glsnumberformat}{41}

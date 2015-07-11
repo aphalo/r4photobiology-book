@@ -18,6 +18,8 @@ library(photobiology)
 library(photobiologygg)
 library(photobiologyWavebands)
 library(photobiologySun)
+library(photobiologyLamps)
+library(photobiologyLEDs)
 @
 \section{Ultraviolet and visible radiation}
 %%%%
@@ -502,23 +504,64 @@ It should be noted that, through reflection, broken clouds can locally increase
 
 \section{Artificial radiation}
 
-Different types of man-made VIS and UV radiation sources exist, based on exploiting different physical phenomena. 
+Different types of man-made VIS and UV radiation sources exist, based on exploiting different physical phenomena.
 
-Incandescent light sources are are ``black bodies'' heated at a very high temperature. Normal incandescent lamps are made from a Tungsten (also called Wolfram) wire heated at between 2500 and 3500 K by passing an electric current through it). The glass bulb enclosing it helps maintain the temperature and the low pressure inert gases filling it help slow down the evaporation of the metal (which can be seen in old lamps as a blackish deposit on the inside of glass bulb surface). These lamps produce a continuous spectrum, close to that from a true black body at the same temperature.
+Incandescent light sources are ``black bodies'' heated at a very high temperature. Normal incandescent lamps are made from a Tungsten (also called Wolfram) wire heated at between 2500 and 3500 K by passing an electric current through it). The glass bulb enclosing it helps maintain the temperature and the low pressure inert gases filling it help slow down the evaporation of the metal (which can be seen in old lamps as a blackish deposit on the inside of glass bulb surface). These lamps produce a continuous spectrum (without well defined emission peaks), close to that from a true black body at the same temperature. Lamps with certain types of built-in reflectors may display a somewhat distorted spectrum as a result of interference or because of wavelength-selective properties (e.g.\ it is not unusual for lamps to have a reflector with high reflectivity for visible radiation but relatively high transmisivity for infra-red radiation).
 
-Carbon arc lamps produce light by means of an electric "arc" in a gas between two carbon electrodes, the arc heats the gas, in many cases just air, in-between the electrodes inducing light emission. Xenon arc lamps use Xenon gas enclosed in a special glass bulb. Some Xenon lamps do not emit continuously, such as modern ``electronic'' flashes used in photographic cameras. In such lamps the flash is produced by slowly charging a capacitor at a high voltage, and subsequently using this electrical charge to generate a short-lived arc in the lamp. Flash duration varies, but can be as short 0.1 ms in flashes used by photographers.
+\begin{figure}
+  \centering
+<<fig-incandescent, echo=FALSE>>=
+plot(incandescent.60w.spct)
+@
+  \caption{Spectral irradiance for a 60~W incandescent lamp}\label{fig:incandescent}
+\end{figure}
 
-Other gas-discharge lamps use other gases or "vapours" or mixes of them. In these lamps, the elemental emission lines (corresponding to transitions between allowed energy states) are very well defined as long as the glass ampoule is not coated with special fluorescent compounds, and in many cases can be used as wavelength standards for calibration of spectrometers. The low pressure sodium lamps, easily recognizable by the orange light they emit, emit the same orange colour as that emitted by the flame of a gas ring in a cooker when water containing salt boils over from a pot. Low pressure mercury "vapour" lamps, such as germicidal ones made with an un-coated quartz-glass tube (technically called envelope) emit clearly at the know emission lines of mercury. Being the container UV and VIS transmitting the line at 253.xx nm is very active as a germicidal agent. The ``normal'' fluorescent tubes used for illumination are enclosed in a tube coated with a so-called "phosphor" which absorbs UV radiation and re-emits it as visible radiation. The spectrum of the emitted radiation is a combination of radiation emitted by the gaseous mercury, in particular those lines in the VIS region and to some extent in the UVA region, together with visible radiation re-emitted by the coating.
+Carbon arc lamps produce light by means of an electric "arc" between two carbon electrodes, the arc heats the electrodes and carbon evaporates and because of its high temperature in-between the electrodes inducing light emission. The spectrum is broad but rather different to sunlight. Carbon arc lamps can be very bright and used in cinema projectors. They were invented before the incandescent tungsten lamp. Xenon arc lamps use Xenon gas enclosed in a special glass bulb. Xenon arc lamps have an emission spectrum rather similar to that of solar radiation, and together with UV-absorbing filters are frequently used in solar simulators. Some Xenon lamps do not emit continuously, such as modern ``electronic'' flashes used in photographic cameras. In such lamps the flash is produced by slowly charging a capacitor at a high voltage, and subsequently using this electrical charge to generate a short-lived arc in the lamp. Flash duration varies, but can be as short 0.1 ms in flashes used by photographers.
 
-A more recent development is light generated by solid-state semiconductor devices or light-emitting diodes, once again light emission is the result of a transition between energy states of matter, but although emission takes place as a single peak, the peak is not as narrow or well defined as for elemental emission lines in discharge lamps. Emission peaks have usually HFW of between 10 and 30 nm and their central wavelength may slightly shift depending on temperature and electrical current flowing through them. True LEDs always have a single peak of emission. White LEDs are based on a similar idea to that of fluorescent lamps: blue (or in some cases UVA) emitting LEDs are combined with a ``phosphor'' which absorbs in part the emitted radiation and re-emits the energy as radiation at longer wavelengths. In some designs the phosphor is coated close to the semiconductor die, but in other cases, especially some arrays, the phosphor is in or on the encapsulating polymer.
+\begin{figure}
+  \centering
+<<fig-germicidal, echo=FALSE>>=
+plot(germicidal.spct)
+@
+  \caption{Spectral irradiance for a `germicidal' low pressure mercury lamp.}\label{fig:germicidal}
+\end{figure}
 
-Finally lasers, are different in that a laser is not another type of primary source of radiation. Lasing is a phenomenon which allows the generation of coherent radiation from a beam of incoherent radiation by means of a ``cavity''. Different primary sources of radiation can be used in lasers. In the case of laser diodes, an LED is the primary source of radiation. There are different possible types of cavities, for example gas-filled or solid state. Lasers are pulsed light sources, they do not emit continuously, although in many cases the frequency at which pulses are produced can be high. Even though laser pointers and other readily available lasers seem to us as being a continuous source of radiation, they are not. In fact, they are pulsed, and the duty cycle is low (pulses are brief compared to `gaps') but each pulse has high energy. As radiation is in addition in a very narrow beam and almost of a single wavelength, a laser delivers spatially and temporarily concentrated energy pulses, that can make the beam from a 1 mW laser pointer easily visible at a distance of tens of meters in a lecture hall illuminated with lamps emitting in total hundreds of watts of visible radiation in the room as a whole. For the same reason, even lasers emitting as little 1 mW if pointed directly into the eyes can cause permanent eye-sight damage.
+Other gas-discharge lamps use other gases or "vapours" or mixes of them. In these lamps, the elemental emission lines (corresponding to transitions between allowed energy states) are very well defined as long as the glass ampoule is not coated with special fluorescent compounds, and in many cases can be used as wavelength standards for calibration of spectrometers. The low pressure sodium lamps, easily recognizable by the orange light they emit, emit the same orange colour as that emitted by the flame of a gas ring in a cooker when water containing salt boils over from a pot. Low pressure mercury "vapour" lamps, such as germicidal ones made with an un-coated quartz-glass tube (technically called envelope) emit clearly at the know emission lines of mercury (Fig.\ \ref{fig:germicidal}). Being the container UV and VIS transmitting the strong line at 253.xx nm is very active as a germicidal agent. The ``normal'' fluorescent tubes used for illumination are enclosed in a tube coated with a so-called ``phosphor" which absorbs UV radiation and re-emits it as visible radiation (Fig.\ \ref{fig:white:fluorescent}). The spectrum of the emitted radiation is a combination of radiation emitted by the gaseous mercury, in particular those lines in the VIS region and to some extent in the UVA region, together with visible radiation re-emitted by the coating.
+
+\begin{figure}
+  \centering
+<<fig-fluorescent, echo=FALSE>>=
+plot(philips.tll36w.950.spct)
+@
+  \caption{Spectral irradiance for a `daylight', approx. 5200~K, fluorescent tube (Philips~36W~950).}\label{fig:white:fluorescent}
+\end{figure}
+
+
+A more recent development is light generated by solid-state semiconductor devices or light-emitting diodes, once again light emission is the result of a transition between energy states of matter, but although emission takes place as a single peak, the peak is not as narrow or well defined as for elemental emission lines in discharge lamps (Fig.\ \ref{fig:blue:led}). Emission peaks have usually HFW of between 10 and 30~nm and their central wavelength may slightly shift depending on temperature and electrical current flowing through them. True LEDs always have a single peak of emission. White LEDs are based on a similar idea to that of fluorescent lamps: blue (or in some cases UVA) emitting LEDs are combined with a ``phosphor'' which absorbs in part the emitted radiation and re-emits the energy as radiation at longer wavelengths (Fig.\ \ref{fig:white:led}). In some designs the phosphor is coated close to the semiconductor die, but in other cases, especially some arrays, the phosphor is in or on the encapsulating polymer.
+
+\begin{figure}
+  \centering
+<<fig-blue-led, echo=FALSE>>=
+plot(HJ_Blue.spct)
+@
+  \caption{Spectral irradiance for a blue LED array (Huey Jann, 50~W).}\label{fig:blue:led}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<fig-white-led, echo=FALSE>>=
+plot(LUMITRONIX_white.spct)
+@
+  \caption{Spectral irradiance for `neutral white LED', 4000~K, array (Lumitronix SmartArray Q36 LED-Module, 39W, using Nichia 757 LEDs).}\label{fig:white:led}
+\end{figure}
+
+Finally lasers, are different in that a laser is not another type of primary source of radiation. Lasing is a phenomenon which allows the generation of coherent radiation from a beam of incoherent radiation by means of a ``cavity''. Different primary sources of radiation can be used in lasers. In the case of laser diodes, an LED is the primary source of radiation. There are different possible types of cavities, for example gas-filled or solid state. Lasers are pulsed light sources, they do not emit continuously, although in many cases the frequency at which pulses are produced can be high. Even though laser pointers and other readily available lasers seem to us as being a continuous source of radiation, they are not. In fact, they are pulsed, and the duty cycle is low (pulses are brief compared to `gaps') but each pulse has high energy. As radiation is in addition in a very narrow beam and almost of a single wavelength, a laser delivers spatially and temporarily concentrated energy pulses, that can make the beam from a 1~mW laser pointer easily visible at a distance of tens of meters in a lecture hall illuminated with lamps emitting in total hundreds of watts of visible radiation. For the same reason, even lasers emitting as little 1~mW if pointed directly into the eyes can cause permanent eye-sight damage.
 
 \section{Absorption and reflection of radiation}
 
 \authorNote{We need to explain here the physics of absorption and reflection from the point of view of optical properties. Photochemistry will be introduced in a separate chapter.}
 
-\section{Radiaiton interactions in tissues and cells}
+\section{Radiation interactions in tissues and cells}
 
 \section{Radiation interactions in plant canopies}
 \index{radiation within plant canopies|(}
@@ -563,7 +606,10 @@ among crop cultivars \autocite{Grant1998,Grant1999,Grant1999a,Grant2004}.
 
 Detailed accounts of different models describing the interaction of radiation and
 plant canopies, taking into account the properties of
-foliage, are given by \autocite{Campbell1998} and \autocite{Monteith2008}.
+foliage, are given by \autocite{Campbell1998} and \autocite{Monteith2008}. 
+
+\authorNote{ Add Chelle, Ross?}
+
 \index{plant canopies|)}
 \index{radiation within plant canopies|)}
 
