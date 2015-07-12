@@ -39,7 +39,7 @@
             ]{hyperref}
 %\chapterstyle{veelo}
 
-\usepackage{color,calc,soul}%,graphicx,fourier
+\usepackage{calc,soul}%,graphicx,fourier
 %\definecolor{nicegreen}{rgb}{.129,.647,.149}
 \definecolor{maincolor}{rgb}{.1,.1,.7} % really blue
 \definecolor{grey50}{rgb}{.5,.5,.5}
@@ -117,23 +117,20 @@ A handbook}}\par
 \addbibresource{guidelines.bib}
 \addbibresource{andreas.bib}
 
-%\makeindex
-%\makeglossaries
-%\loadglsentries{gp_glossary}
-
-\usepackage{colortbl}
+\usepackage{multirow}
+%\usepackage{colortbl}
 \usepackage{tabularx}
 \usepackage{rotating}
 
 
-\definecolor{darklila}{rgb}{0.5,0,0.5}
-\definecolor{lila}{rgb}{1,0,1}
-\definecolor{darkgreen}{rgb}{0,0.7,0}
-\definecolor{darkyellow}{rgb}{1,0.8,0}
-\definecolor{orange}{rgb}{1,0.5,0}
-\definecolor{brown}{rgb}{0.5,0.2,0.2}
-\definecolor{darkred}{rgb}{0.75,0,0.1}
-
+%\definecolor{darklila}{rgb}{0.5,0,0.5}
+%\definecolor{lila}{rgb}{1,0,1}
+%\definecolor{darkgreen}{rgb}{0,0.7,0}
+%\definecolor{darkyellow}{rgb}{1,0.8,0}
+%\definecolor{orange}{rgb}{1,0.5,0}
+%\definecolor{brown}{rgb}{0.5,0.2,0.2}
+%\definecolor{darkred}{rgb}{0.75,0,0.1}
+%
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,arrows,trees}
 
@@ -218,12 +215,11 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- FALSE
+incl_all <- TRUE
 incl_chaps <- TRUE || incl_all
 incl_ckbk <- FALSE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
-incl_apdx <- FALSE # || incl_all
 eval_diag <- FALSE
 @
 
@@ -276,7 +272,7 @@ options(datatable.print.topn=2)
 
 \part{Theory behind calculations}
 
-<<child-optics, child='optics.Rnw', eval=incl_chaps>>=
+<<child-optics, child='optics.Rnw', eval=TRUE>>=
 @
 
 <<child-photochemistry, child='spectroscopy.Rnw', eval=incl_chaps>>=
@@ -291,7 +287,7 @@ options(datatable.print.topn=2)
 <<child-software, child='software.Rnw', eval=incl_chaps>>=
 @
 
-<<child-suite, child='suite.Rnw', eval=TRUE>>=
+<<child-suite, child='suite.Rnw', eval=incl_chaps>>=
 @
 
 <<echo=FALSE, include=FALSE>>=

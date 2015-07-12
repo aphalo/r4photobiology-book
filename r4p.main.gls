@@ -2,12 +2,12 @@
 \begin{theglossary}\glossaryheader
 \glsgroupheading{A}\relax \glsresetentrylist %
 \glossentry{absorbance}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{ix}}}%
+		\setentrycounter[]{page}\glsnumberformat{xiii}}}%
 \glossentry{absorptance}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{ix}}}\glsgroupskip
+		\setentrycounter[]{page}\glsnumberformat{xiii}}}\glsgroupskip
 \glsgroupheading{B}\relax \glsresetentrylist %
 \glossentry{BSWF}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{ix}}}\glsgroupskip
+		\setentrycounter[]{page}\glsnumberformat{xiii}}}\glsgroupskip
 \glsgroupheading{C}\relax \glsresetentrylist %
 \glossentry{CRAN}{\glossaryentrynumbers{\relax 
 		\setentrycounter[]{page}\glsnumberformat{41}}}\glsgroupskip
@@ -24,20 +24,20 @@
 		\glsseeformat[\seename ]{diffuse:rad}{Z}}}\glsgroupskip
 \glsgroupheading{P}\relax \glsresetentrylist %
 \glossentry{PPFD}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{x}}}%
+		\setentrycounter[]{page}\glsnumberformat{xiv}}}%
 \glossentry{PAR}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{x}}}%
+		\setentrycounter[]{page}\glsnumberformat{xiv}}}%
 \glossentry{PID}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{x}}}\glsgroupskip
+		\setentrycounter[]{page}\glsnumberformat{xiv}}}\glsgroupskip
 \glsgroupheading{R}\relax \glsresetentrylist %
 \glossentry{RAF}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{x}}}%
+		\setentrycounter[]{page}\glsnumberformat{xiv}}}%
 \glossentry{reflectance}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{ix}}}\glsgroupskip
+		\setentrycounter[]{page}\glsnumberformat{xiii}}}\glsgroupskip
 \glsgroupheading{S}\relax \glsresetentrylist %
 \glossentry{diffuse:rad}{\glossaryentrynumbers{\relax 
 		\setentrycounter[]{page}\glsnumberformat{16}}}\glsgroupskip
 \glsgroupheading{T}\relax \glsresetentrylist %
 \glossentry{transmittance}{\glossaryentrynumbers{\relax 
-		\setentrycounter[]{page}\glsnumberformat{ix}}}%
+		\setentrycounter[]{page}\glsnumberformat{xiii}}}%
 \end{theglossary}\glossarypostamble

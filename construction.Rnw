@@ -21,7 +21,7 @@ library(photobiologyWavebands)
 %%%%
 \section{Introduction}
 
-The suite uses object-oriented programming for its higher level `user-friendly' syntax. Objects are implemented using ``S3'' classes. The two main distinct kinds of objects are different types of spectra, and wavebands. Spectral objects contain, as their name implies, spectral data. Wavebands contain the information needed to calculate irradiance, non-weighted or weighted (effective), and a name and a label to be used in output printing. Functions and operators are defined for operations on these objects, alone and in combination. We will first describe spectra, and then wavebands, in each case describing operators and functions.
+The suite uses object-oriented programming for its higher level `user-friendly' syntax. Objects are implemented using ``S3'' classes. The two main distinct kinds of objects are different types of spectra, and wavebands. Spectral objects contain, as their name implies, spectral data. Wavebands contain the information needed to calculate irradiance, non-weighted or weighted (effective), and a name and a label to be used in output printing. Functions and operators are defined for operations on these objects, alone and in combination. We will first describe spectra, and then wavebands, in each case describing operators and functions. See Chapter \ref{chap:suite} on page \pageref{chap:suite} for a detailed description of the classes defined by the packages.
 
 \section{Spectra}\label{sec:spct:objects}
 
@@ -283,6 +283,19 @@ If a character string is supplied as argument, then this will be used as the nam
 <<>>=
 rbindspct(list(sun = sun.spct, shade = shade.spct), idfactor = "ID")
 @
+
+\subsection{Task: Merging spectra}
+
+Merging consists in merging different \emph{columns} from two spectra into a new combined spectrum. Another name for this type of operations, as used in package \texttt{dplyr}, is `join'. No wavelength interpolation is carried out, the two spectra must share wavelength values.
+
+
+\section{Collections of multiple spectra}
+
+\subsection{Task: Constructing \texttt{\_multi\_spct} objects}
+
+\subsection{Task: Retrieving \texttt{\textunderscore spct} objects}
+
+\subsection{Task: Subsetting \texttt{\_multi\_spct} objects}
 
 \section{Internal-use functions}\label{sec:base:internal}
 

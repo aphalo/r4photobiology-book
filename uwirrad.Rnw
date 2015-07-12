@@ -21,6 +21,8 @@ For executing the examples listed in this chapter you need first to load the fol
 <<>>=
 library(photobiology)
 library(photobiologyWavebands)
+library(photobiologyLamps)
+library(lubridate)
 @
 
 %%%%
@@ -161,7 +163,7 @@ UV_bands()
 The task to be completed is to calculate the (energy) irradiance ($\irr$) in \watt from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
 \begin{equation}
-\irr[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \mathrm{d}\ \lambda
+\irr[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \mathrm{d}\lambda
 \label{eq:energy:irrad}
 \end{equation}
 
@@ -236,7 +238,7 @@ The task to be completed is to calculate the photon irradiance ($\pfd$) in \mol 
 Combining equations \ref{eq:energy:irrad} and \ref{eq:energy:mol:photons} we obtain:
 
 \begin{equation}
-\pfd[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \frac{h' \cdot c}{\lambda} \mathrm{d}\ \lambda
+\pfd[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \frac{h' \cdot c}{\lambda}\ \mathrm{d}\lambda
 \end{equation}
 
 Let's assume that we want to calculate photosynthetically active radiation (PAR) photon irradiance (frequently called PPFD or photosynthetic photon flux density), for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
@@ -322,7 +324,7 @@ with(sun.spct,
 The task to be completed is to calculate the (energy) fluence ($\fluence$) in \joule from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
 \begin{equation}
-\fluence[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr \times t \mathrm{d}\ \lambda
+\fluence[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr \times t\ \mathrm{d}\lambda
 \label{eq:energy:irrad}
 \end{equation}
 
@@ -336,7 +338,7 @@ fluence(philips.tld36w.15.spct,
         exposure.time = duration(5, "minutes"))
 @
 
-Please see the sections \ref{sec:wt:exposure} for additional details. 
+Please see the sections \ref{sec:wt:exposure} for additional details.
 %%%%
 \section{Task: photon ratios}\label{sec:photon:ratio}
 
@@ -565,6 +567,8 @@ with(sun.spct,
 @
 
 <<>>=
+try(detach(package:lubridate))
+try(detach(package:photobiologyLamps))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @

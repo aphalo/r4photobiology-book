@@ -205,7 +205,6 @@ with the Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecon
 %
 \begin{equation}
 \molequanta = h' \cdot \nu = h' \cdot \frac{c}{\lambda} \label{equ:molenergy}
-\label{eq:energy:mol:photons}
 \end{equation}
 %
 with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}.

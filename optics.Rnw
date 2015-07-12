@@ -43,25 +43,55 @@ with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}. Exampl
 
 %\authorNote{Andreas, I added the value for $c$ so that the reader can follow the calculations. This was needed because some time ago I changed the order of some of the text. Also having another example for a wavelength in the \UVB, 300~nm exemplifies how \molequanta varies as a function of wavelength. Changed your example from 500~nm to 600~nm to make the comparison of the two wavelengths easier.}
 
-\begin{table*}[tbp]
-\caption[Regions of the electromagnetic radiation associated with colours]{Regions of the electromagnetic radiation associated with colours, after \autocite{iqbal83} and \autocite{bergm33} with alterations.}\label{tab:Waverange}
-\begin{tabular}{ccccc} \toprule
-& Colour & Wavelength (nm) & Frequency (THz) \\ \midrule
-\cellcolor{black} & \UVC & 100 -- 280 & 3000 -- 1070 & \cellcolor{black} \\
-\cellcolor{black} & \UVB & 280 -- 315 & 1070 -- 950 & \cellcolor{black} \\
-\cellcolor{darklila} & \color{darklila}{\UVA} & \color{darklila}{315 -- 400} & \color{darklila}{950 -- 750} & \cellcolor{darklila}\\
-\cellcolor{lila} & \color{lila}{violet} & \color{lila}{400 -- 455} & \color{lila}{750 -- 660} & \cellcolor{lila} \\
-\cellcolor{blue} & \color{blue}{blue} & \color{blue}{455 -- 492} & \color{blue}{660 -- 610} & \cellcolor{blue} \\
-\cellcolor{green} & \color{darkgreen}{green} & \color{darkgreen}{492 -- 577} & \color{darkgreen}{610 -- 520} & \cellcolor{green}\\
-\cellcolor{yellow} & \color{darkyellow}{yellow} & \color{darkyellow}{577 -- 597} & \color{darkyellow}{520 -- 502} & \cellcolor{yellow}\\
-\cellcolor{orange} & \color{orange}{orange} & \color{orange}{597 -- 622} & \color{orange}{502 -- 482} & \cellcolor{orange}\\
-\cellcolor{red} & \color{red}{red} & \color{red}{622 -- 700} & \color{red}{482 -- 428} & \cellcolor{red}\\
-\cellcolor{darkred} & \color{darkred}{far red} & \color{darkred}{700 -- 770} & \color{darkred}{428 -- 390} & \cellcolor{darkred}\\
-\cellcolor{brown} & \color{brown}{near IR} & \color{brown}{770 -- 3000} & \color{brown}{390 -- 100} & \cellcolor{brown}\\
-\cellcolor{black} & mid IR & 3000 -- 50000 & 100 -- 6 & \cellcolor{black} \\
-\cellcolor{black} & far IR & 50000 -- 10$^6$ & 6 -- 0.3 & \cellcolor{black} \\ \bottomrule
-\end{tabular}
-\end{table*}
+%\begin{table*}[tbp]
+%\caption[Regions of the electromagnetic radiation associated with colours]{Regions of the electromagnetic radiation associated with colours, after \autocite{iqbal83} and \autocite{bergm33} with alterations.}\label{tab:Waverange}
+%\begin{tabular}{ccccc} \toprule
+%& Colour & Wavelength (nm) & Frequency (THz) \\ \midrule
+%\cellcolor{black} & \UVC & 100 -- 280 & 3000 -- 1070 & \cellcolor{black} \\
+%\cellcolor{black} & \UVB & 280 -- 315 & 1070 -- 950 & \cellcolor{black} \\
+%\cellcolor{darklila} & \color{darklila}{\UVA} & \color{darklila}{315 -- 400} & \color{darklila}{950 -- 750} & \cellcolor{darklila}\\
+%\cellcolor{lila} & \color{lila}{violet} & \color{lila}{400 -- 455} & \color{lila}{750 -- 660} & \cellcolor{lila} \\
+%\cellcolor{blue} & \color{blue}{blue} & \color{blue}{455 -- 492} & \color{blue}{660 -- 610} & \cellcolor{blue} \\
+%\cellcolor{green} & \color{darkgreen}{green} & \color{darkgreen}{492 -- 577} & \color{darkgreen}{610 -- 520} & \cellcolor{green}\\
+%\cellcolor{yellow} & \color{darkyellow}{yellow} & \color{darkyellow}{577 -- 597} & \color{darkyellow}{520 -- 502} & \cellcolor{yellow}\\
+%\cellcolor{orange} & \color{orange}{orange} & \color{orange}{597 -- 622} & \color{orange}{502 -- 482} & \cellcolor{orange}\\
+%\cellcolor{red} & \color{red}{red} & \color{red}{622 -- 700} & \color{red}{482 -- 428} & \cellcolor{red}\\
+%\cellcolor{darkred} & \color{darkred}{far red} & \color{darkred}{700 -- 770} & \color{darkred}{428 -- 390} & \cellcolor{darkred}\\
+%\cellcolor{brown} & \color{brown}{near IR} & \color{brown}{770 -- 3000} & \color{brown}{390 -- 100} & \cellcolor{brown}\\
+%\cellcolor{black} & mid IR & 3000 -- 50000 & 100 -- 6 & \cellcolor{black} \\
+%\cellcolor{black} & far IR & 50000 -- 10$^6$ & 6 -- 0.3 & \cellcolor{black} \\ \bottomrule
+%\end{tabular}
+%\end{table*}
+
+\begin{sidewaystable}
+  \caption[Regions of the electromagnetic radiation spectrum]{Regions of the electromagnetic radiation spectrum according to different authorities, standards or in common use. The use of what we have called \emph{medical} and \emph{common} definitions of the UV bands should be avoided, as it makes interpretation of experimental results and comparison of radiation quantities with studies using the accepted international standard very difficult. ISO 21348 \autocite{ISO21348:2007}, BTV \autocite{Aphalo2012}, Smith \autocite{Smith1981a}, Sellaro \autocite{Sellaro2010}.} \label{tab:Waverange}
+  \centering
+  \begin{tabular}{lcccccc}
+    \toprule
+    \multirow{2}[3]{*}{Waveband name} & \multicolumn{6}{l}{Wavelength range (nm)} \\
+    \cmidrule(l){2-7}
+                  & ISO 21348 & BTV & Smith & Sellaro &  \emph{medical} & \emph{common} \\
+    \midrule
+    UV  & 100$ \leq \lambda < $400 & 100$ \leq \lambda < $400 &   &  &  &  \\
+    UVC & 100$ \leq \lambda < $280 & 100$ \leq \lambda < $280 &   &  & 220 $ \leq \lambda < $290 & 200$ \leq \lambda < $280 \\
+    UVB & 280$ \leq \lambda < $315 & 280$ \leq \lambda < $315 &   &  & 290$ \leq \lambda < $320 & 280$ \leq \lambda < $320 \\
+    UVA & 315$ \leq \lambda < $400 & 315$ \leq \lambda < $400 &   &  &  & 320$ \leq \lambda < $400 \\
+    \midrule
+    VIS & 380$ \leq \lambda < $760 &  &   &  &  \\
+    Purple (Violet) & 360$ \leq \lambda < $450 & 400$ \leq \lambda < $455 &  &  &  &  \\
+    Blue & 450$ \leq \lambda < $500 & 455$ \leq \lambda < $492 &   & 420$ \leq \lambda < $490 &  &  \\
+    Green & 500$ \leq \lambda < $570 & 492$ \leq \lambda < $577 &   & 500$ \leq \lambda < $570 &  &  \\
+    Yellow & 570$ \leq \lambda < $591 & 577$ \leq \lambda < $597 &   &   &  &  \\
+    Orange & 591$ \leq \lambda < $610 & 597$ \leq \lambda < $622 &   &   &  &  \\
+    Red & 610$ \leq \lambda < $760 & 622$ \leq \lambda < $700 & 655$ \leq \lambda < $665 & 620$ \leq \lambda < $680 &  &  \\
+    Far red &  & (700$ \leq \lambda < $770)  & 725$ \leq \lambda < $735 & 700$ \leq \lambda < $750 &  &  \\
+    \midrule
+    IR-A (near IR) & 760$ \leq \lambda < $1400 & 770$ \leq \lambda < $3000 &  &  &  &  \\
+    IR-B (mid IR) & 1400$ \leq \lambda < $3000 & 3000$ \leq \lambda < $50000 &  &  &  &  \\
+    IR-C (far IR) & 3000$ \leq \lambda < $10$^6$ & 50000$ \leq \lambda < $10$^6$ &  &  &  &  \\
+    \bottomrule
+  \end{tabular}
+\end{sidewaystable}
 
 One way of understanding the relationship between the distance and positions of source and observer (or sensor) on the amount of radiation received is to use a geometric model. Bellow we describe such a model, in which a point source is located at the centre or origin of an imaginary sphere. As the distance from the origin increases, the surface area of the sphere at this distance increases. The relationship between the distance increase and area increase is, obviously, not linear. In addition, according to the well known cosine law, the amount of radiation received per unit area depends on the angle of incidence. This informal description, will is formally described below.
 
@@ -188,11 +218,11 @@ Besides the physical quantities used for all electromagnetic radiation, there ar
 In contrast to (spectro-)radiometry, where the energy of any electromagnetic radiation is measured in terms of absolute power (\Js = $W$), photometry measures light as perceived by the human eye. Therefore, radiation is weighted by a luminosity function or visual sensitivity function describing the wavelength dependent response of the human eye. Due to the physiology of the eye, having rods and cones as light receptors, different sensitivity functions exist for the day (photopic vision) and night (scotopic vision), $V(\lambda)$ and $V'(\lambda)$, respectively. The maximum response during the day is at $\lambda=555$ nm and during night at $\lambda=507$ nm. Both response functions (normalised to their maximum) are shown in the figure below as established by the Commission Internationale de l'Éclairage (CIE, International Commission on Illumination, Vienna, Austria) in 1924 for photopic vision and 1951 for scotopic vision \autocite{Schwiegerling2004}. The data are available from the Colour and Vision Research Laboratory at \url{http://www.cvrl.org}. Until now, $V(\lambda)$ is the basis of all photometric measurements.
 \vspace{5pt}
 
-\begin{figure}[htb]
+\begin{figure}[tbh]
 %\centerline{\includegraphics[width=0.45\textwidth]{figures/eyesens}}
-<<echo=FALSE>>=
-plot(CIE1924_lef.spct, annotations = c("colour.guide", "segments", "labels"), w.band = VIS_bands())
-plot(CIE1951_scotopic_lef.spct, annotations = c("colour.guide", "segments", "labels"), w.band = VIS_bands())
+<<echo=FALSE, warning=FALSE, message=FALSE>>=
+plot(CIE1924_lef.spct, annotations = c("colour.guide", "segments", "labels"), w.band = VIS_bands()) + xlim(350, 850)
+plot(CIE1951_scotopic_lef.spct, annotations = c("colour.guide", "segments", "labels"), w.band = VIS_bands()) + xlim(350, 850)
 @
 \vspace{2pt}
 \label{fig_eye}
@@ -606,7 +636,7 @@ among crop cultivars \autocite{Grant1998,Grant1999,Grant1999a,Grant2004}.
 
 Detailed accounts of different models describing the interaction of radiation and
 plant canopies, taking into account the properties of
-foliage, are given by \autocite{Campbell1998} and \autocite{Monteith2008}. 
+foliage, are given by \autocite{Campbell1998} and \autocite{Monteith2008}.
 
 \authorNote{ Add Chelle, Ross?}
 
