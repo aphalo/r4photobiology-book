@@ -166,7 +166,7 @@ is_photon_based(sun.spct)
 If we delete the energy based spectral data, the result of the test changes.
 
 <<>>=
-my.spct <- copy(sun.spct)
+my.spct <- sun.spct
 my.spct$s.e.irrad <- NULL
 head(my.spct)
 is_energy_based(my.spct)

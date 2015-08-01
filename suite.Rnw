@@ -68,7 +68,7 @@ Given the expected audience of both students and biologists, rather than data an
   \noindent
     \begin{description}
       \item[\texttt{\textunderscore spct}] Spectral objects are containers for different types of spectral data, data which is referenced to wavelength. These data normally originate in measurements or simulation with models.
-      \item[\texttt{\textunderscore multi\textunderscore spct}] Containers for spectral objects are used to store related spectral objects, such as time series of spectral objects or spectral images.
+      \item[\texttt{\textunderscore mspct}] Containers for spectral objects are used to store related spectral objects, such as time series of spectral objects or spectral images.
       \item[\texttt{wavebands}] Waveband objects are containers of `instructions' for the quantification of spectral data. In addition to the everyday definition as a range of wavelengths, we include the spectral weighting functions used in the calculation of what are frequently called weighted or effective exposures and doses.
       \item[summary functions] Different summary functions return different quantities through integration over wavelengths and take as arguments spectra and wavebands.
       \item[maths operators and functions] Are used to combine and/or transform spectral data, and in some cases to apply weights defined by wavebands.
@@ -80,7 +80,7 @@ The design of the `high level' interface is based on the idea of achieving simpl
 
 A consistent naming scheme for methods as well as consistency in the order of arguments across the suite should reduce the number of \emph{names} to remember. Data objects are \emph{tidy} as defined by in \autocite{Wickham2014a}, in other words data on a row always corresponds to a single observation event, although such an observation can consist in more than one measured or derived quantity. Data from different observations are stored in different objects, or if in the same object they are \emph{keyed} using and index variable.
 
-The same summary methods, are available for \texttt{\textunderscore spct} and \texttt{\textunderscore multi\textunderscore spct}, in the first case returning a vector, and in the second case, a \texttt{data.frame} object.
+The same summary methods, are available for \texttt{\textunderscore spct} and \texttt{\textunderscore mspct}, in the first case returning a vector, and in the second case, a \texttt{data.frame} object.
 
 Package \texttt{photobiology} can be thought as a framework defining a way of storing spectral data plus `pieces' from which specific summaries can be constructed. Extensibility and reuse is at the core of the design. This is achieved by using the weakest possible assumptions or expectations about data properties and avoiding as much as possible the hard-coding of any constants or size limits. This, of course, has a cost in possibly slower execution speed. Within these constraints an effort has been made to remove performance bottleneck by means of C++ code and passing data objects by reference when possible.
 
@@ -95,7 +95,6 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
   three children at (0.5,-1.4) and (0.5,-2.1)},
   edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
   \node [base] {data.frame}
-    child { node [contrib] {data.table}
       child { node {generic\textunderscore spct}
           child { node {cps\textunderscore spct}}
           child { node {source\textunderscore spct}}
@@ -104,7 +103,6 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
           child { node {reflector\textunderscore spct}}
           child { node {object\textunderscore spct}}
           child { node {chroma\textunderscore spct}}
-      }
     };
   \end{tikzpicture}
   \vspace{2ex}
@@ -114,14 +112,14 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
   two children at (0.5,-0.7) and (0.5,-1.4)},
   edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
   \node [base] {list}
-      child { node {generic\textunderscore multi\textunderscore spct}
-          child { node {cps\textunderscore multi\textunderscore spct}}
-          child { node {source\textunderscore multi\textunderscore spct}}
-          child { node {response\textunderscore multi\textunderscore spct}}
-          child { node {filter\textunderscore multi\textunderscore spct}}
-          child { node {reflector\textunderscore multi\textunderscore spct}}
-          child { node {object\textunderscore multi\textunderscore spct}}
-          child { node {chroma\textunderscore multi\textunderscore spct}}
+      child { node {generic\textunderscore mspct}
+          child { node {cps\textunderscore mspct}}
+          child { node {source\textunderscore mspct}}
+          child { node {response\textunderscore mspct}}
+          child { node {filter\textunderscore mspct}}
+          child { node {reflector\textunderscore mspct}}
+          child { node {object\textunderscore mspct}}
+          child { node {chroma\textunderscore mspct}}
     };
   \end{tikzpicture}
    \vspace{4ex}
@@ -134,7 +132,7 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
       child { node {waveband}
     };
   \end{tikzpicture}
-  \caption[Object classes used in the packages]{Object classes used in the packages. Objects of \texttt{\textunderscore spct} classes are used to store spectra, in most cases a single spectrum. Objects of \texttt{\textunderscore multi\textunderscore spct} classes can be used to store \emph{collections} of \texttt{\textunderscore spct} objects, in most cases all belonging to the same class. Objects of class \texttt{waveband} contain information used for quantification: boundaries of a wavelength range and, optionally, spectral weighting functions. Gray-filled boxes represent classes defined in base R, yellow-filled boxes represent classes defined by contributed packages available through \gls{CRAN}, and blue-filled boxes represent classes defined in package \PB.}\label{fig:photobio:classes}
+  \caption[Object classes used in the packages]{Object classes used in the packages. Objects of \texttt{\textunderscore spct} classes are used to store spectra, in most cases a single spectrum. Objects of \texttt{\textunderscore mspct} classes can be used to store \emph{collections} of \texttt{\textunderscore spct} objects, in most cases all belonging to the same class. Objects of class \texttt{waveband} contain information used for quantification: boundaries of a wavelength range and, optionally, spectral weighting functions. Gray-filled boxes represent classes defined in base R, yellow-filled boxes represent classes defined by contributed packages available through \gls{CRAN}, and blue-filled boxes represent classes defined in package \PB.}\label{fig:photobio:classes}
 \end{figure}
 
 <<suite-design-example, eval=FALSE>>=

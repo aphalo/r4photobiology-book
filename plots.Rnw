@@ -27,6 +27,7 @@ library(ggplot2)
 library(scales)
 library(ggtern)
 library(gridExtra)
+library(dplyr)
 library(photobiology)
 library(photobiologyFilters)
 library(photobiologyWavebands)
@@ -523,7 +524,7 @@ When we want to colour-label individual spectral values, for example, by plottin
 
 First we define some new scales for use for plotting with \code{ggplot} when plotting wavelength derived colours. In the future something equivalent may be included in package \code{photobiologygg} as predefined scales. We define two very similar scales, one for colour, and one for fill aesthetics.
 
-<<plot-scales-1>>=
+<<plot-scales-1, eval=FALSE>>=
 scale_colour_tgspct <-
   function(...,
            tg.spct,
@@ -551,7 +552,7 @@ scale_colour_tgspct <-
 }
 @
 
-<<plot-scales-2>>=
+<<plot-scales-2, eval=FALSE>>=
 scale_fill_tgspct <-
   function(...,
            tg.spct,
@@ -585,8 +586,7 @@ scale_fill_tgspct <-
 We start by describing how to tag a spectrum, and then show how to use tagged spectra for plotting data. Tagging consist in adding wavelength-derived colour data and waveband-related data to a spectral object. We start with a very simple example.
 
 <<plot-tag-1>>=
-cp.sun.spct <- copy(sun.spct)
-tag(cp.sun.spct)
+cp.sun.spct <- tag(sun.spct)
 @
 
 As no waveband information was supplied as input, only wavelength-dependent colour information is added to the spectrum plus a factor \code{wb.f} with only \code{NA} level.
@@ -594,8 +594,7 @@ As no waveband information was supplied as input, only wavelength-dependent colo
 If we instead provide a waveband as input then both wavelength-dependent colour and waveband information are added to the spectral data object.
 
 <<plot-tag-2>>=
-uvb.sun.spct <- copy(sun.spct)
-tag(uvb.sun.spct, UVB())
+uvb.sun.spct <- tag(sun.spct, UVB())
 levels(uvb.sun.spct[["wb.f"]])
 @
 
@@ -604,7 +603,7 @@ The output contains the same variables (columns) but now the factor \code{wb.f} 
 We can alter the name used for the \code{wb.f} factor levels by using a named list as argument.
 
 <<plot-tag-3>>=
-tag(uvb.sun.spct, list('ultraviolet-B' = UVB()))
+uvb.sun.spct <- tag(uvb.sun.spct, list('ultraviolet-B' = UVB()))
 levels(uvb.sun.spct[["wb.f"]])
 @
 
@@ -613,8 +612,7 @@ This example also shows, that re-tagging a spectrum replaces the old tagging dat
 If we use a list of wavebands then the tagging is based on all of them, but be aware that the wavelength ranges of the wavebands overlap, the result is undefined.
 
 <<plot-tag-4>>=
-plant.sun.spct <- copy(sun.spct)
-tag(plant.sun.spct, Plant_bands())
+plant.sun.spct <- tag(sun.spct, Plant_bands())
 levels(plant.sun.spct[["wb.f"]])
 @
 
@@ -628,8 +626,7 @@ attr(uvb.sun.spct, "spct.tag")
 We now tag a spectrum for use in our first plot example.
 
 <<plot-tag-6>>=
-par.sun.spct <- copy(sun.spct)
-tag(par.sun.spct, PAR())
+par.sun.spct <- tag(sun.spct, PAR())
 @
 
 Here we simply use the \code{wb.f} factor that was added as part of the tagging, with the default colour scale of \code{ggplot2}, which results in a palette unrelated to the real colour of the different wavelengths.
@@ -682,8 +679,7 @@ fig_sun.t01
 As part of the tagging colour information was also added to the spectral data object\footnote{We may want to increase the number of `observations' in the spectrum by interpolation if there are too few observations for a smooth colour gradient.}. We tag each observation in the solar spectrum with human vision colours as defined by ISO.
 
 <<plot-tag-vis-1>>=
-tg.sun.spct <- copy(sun.spct)
-tag(tg.sun.spct, VIS_bands())
+tg.sun.spct <- tag(sun.spct, VIS_bands())
 @
 
 See section \ref{sec:plot:scales} on page \pageref{sec:plot:scales} for the definition of the colour and fill scales used for tagged spectra. These definitions are needed for most of the plots in the remaining of the present and next sections. These scales retrieve information about the wavebands both from the data itself and from the attribute described above.
@@ -723,8 +719,7 @@ fig_sun.t03 + theme_bw()
 In the next example we tag the solar spectrum with colours using the definitions of plant sensory `colours'.
 
 <<plot-tag-plants-1>>=
-pl.sun.spct <- copy(sun.spct)
-tag(pl.sun.spct, Plant_bands())
+pl.sun.spct <- tag(sun.spct, Plant_bands())
 @
 
 Here we plot the wavebands corresponding to plant sensory `colours', using the spectrum we tagged in the previous code chunk.
@@ -773,8 +768,7 @@ We tag the VIS region of the spectrum with 150 narrow wavebands. As `hinges' are
 like. However, the longer spectrum should not be used for statistical calculations, not even plotting using \code{geom\_smooth}.
 
 <<plot-split-VIS-1>>=
-splt.sun.spct <- copy(sun.spct)
-tag(splt.sun.spct, split_bands(VIS(), length.out=150))
+splt.sun.spct <- tag(sun.spct, split_bands(VIS(), length.out=150))
 @
 
 In the code above, we made a copy of \code{sun.spct} because being part of the package, it is write protected, and \code{tag} works by modifying its argument.
@@ -796,9 +790,7 @@ fig_sun.splt0 + theme_bw()
 In this other example we tag the whole spectrum, dividing it into 200 wavebands.
 
 <<plot-split-all-1>>=
-splt1.sun.spct <- copy(sun.spct)
-# splt1.sun.spct <- interpolate_spct(splt1.sun.spct, length.out=1000)
-tag(splt1.sun.spct, split_bands(sun.spct, length.out=200))
+splt1.sun.spct <- tag(sun.spct, split_bands(sun.spct, length.out=200))
 @
 
 We use \code{geom\_area} and \code{fill}, and colour the area under the curve. This does not work with \code{geom\_line} because there would not be anything to fill, here we use \code{geom\_area} instead.
@@ -1145,8 +1137,7 @@ fig_sun.z12 + theme_bw()
 Of course it is possible to combine tagged data spectra and tagged spectra created from wavebands. The tagging is consistent, so, as demonstrated in the next figure, the same aesthetic `link' works for both spectra. In this case the fill scale and the setting of fill to \code{wb.f} work accross different `data' and yield a consistent look. This figure also shows that when assigning a constant to an aesthetic, it is possible to use a vector, which in the present example, saves us some work compared to adding a column to the data and using an identity scale. Contrary to earleir examples where we have added layers to a previously saved plot, here we show the whole code needed to build the figure.
 
 <<>>=
-my.sun.spct <- sun.daily.spct
-tag(my.sun.spct, list(UVB(), UVA()))
+my.sun.spct <- tag(sun.daily.spct, list(UVB(), UVA()))
 annotation.spct <- wb2rect_spct(list(UVB(), UVA()))
 fig_sun.uv1 <- ggplot(my.sun.spct,
                       aes(x=w.length,
@@ -1154,7 +1145,7 @@ fig_sun.uv1 <- ggplot(my.sun.spct,
                           fill=wb.f)) +
   scale_fill_grey(na.value=NA, guide="none") +
   geom_area() + geom_line() +
-  labs(x = "Wvelength (nm)",
+  labs(x = "Wavelength (nm)",
        y =  expression(atop(Spectral~~daily~~exposure,
                        (kJ~~m^{-2}~d^{-1}~nm^{-1}))),
        fill = "",
@@ -1164,7 +1155,7 @@ fig_sun.uv1 <- ggplot(my.sun.spct,
             aes(xmin=wl.low, xmax=wl.high, ymin=30, ymax=32)) +
   geom_text(data=annotation.spct,
             aes(label=as.character(wb.f), y=31),
-            color=c("white","black"), size=4) +
+            color=c("black", "white"), size=4) +
   theme_bw()
 
 fig_sun.uv1
@@ -1224,19 +1215,17 @@ opts_chunk$set(opts_fig_wide_square)
 @
 
 <<plot-eff-cie-1>>=
-sun.eff.cie.nf.spct <- sun.spct * CIE()
-sun.eff.cie.pe.spct <- sun.spct * polyester.new.spct * CIE()
-sun.eff.cie.226.spct <- sun.spct * uv.226.new.spct * CIE()
-tag(sun.eff.cie.nf.spct, UV_bands())
-tag(sun.eff.cie.pe.spct, UV_bands())
-tag(sun.eff.cie.226.spct, UV_bands())
-invisible(sun.eff.cie.nf.spct[ , filter := 'no filter'])
-invisible(sun.eff.cie.pe.spct[ , filter := 'polyester'])
-invisible(sun.eff.cie.226.spct[ , filter := 'Rosco #226'])
-sun.eff.cie.spct <- rbindspct(list(sun.eff.cie.nf.spct,
-                                   sun.eff.cie.pe.spct,
-                                   sun.eff.cie.226.spct))
-invisible(sun.eff.cie.spct[ , filter := factor(filter)])
+sun.eff.cie.nf.spct <- 
+    tag(sun.spct * CIE(), UV_bands())
+sun.eff.cie.pe.spct <- 
+    tag(sun.spct * polyester.new.spct * CIE(), UV_bands())
+sun.eff.cie.226.spct <- 
+    tag(sun.spct * uv.226.new.spct * CIE(), UV_bands())
+sun.eff.cie.spct <- 
+    rbindspct(list('no filter' = sun.eff.cie.nf.spct,
+                   'polyester' = sun.eff.cie.pe.spct,
+                   'Rosco #226' = sun.eff.cie.226.spct),
+              idfactor = "filter")
 
 fig_sun.cie0 <-
   ggplot(data=sun.eff.cie.spct, aes(x=w.length, y=s.e.irrad, fill=wb.f)) +
@@ -1279,7 +1268,7 @@ We assemble a data table by concatenating the irradiance and adding factors for 
 defining the factors, we use \code{levels} to make sure that the levels are ordered as we would like to plot them.
 
 <<plot-bar-cie-1>>=
-cie.dt <- data.table(
+cie.dt <- data_frame(
   cie.irrad = c(cie.nf.irrad, cie.pe.irrad, cie.226.irrad),
   filter = factor(rep(c('none', 'polyester', 'Rosco #226'), c(2,2,2)),
                   levels=c('none', 'polyester', 'Rosco #226')),
@@ -1357,7 +1346,7 @@ for (i in 1:num.bands) {
 }
 
 q.irrad.bands.sun <- q_irrad(sun.spct, many.bands)
-q.irrad.sun.spct <- data.table(q.irrad = q.irrad.bands.sun,
+q.irrad.sun.spct <- data_frame(q.irrad = q.irrad.bands.sun,
                                    w.length = w.length,
                                    wb.color = wb.color,
                                    wb.name = wb.name)

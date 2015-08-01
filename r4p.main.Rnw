@@ -90,7 +90,7 @@
 \colorbox{maincolor}{\textcolor{white}{\slshape\Large
 A handbook}}\par
 \vspace{\drop}
-{\Large Pedro J. Aphalo,\\ Andreas Albert\\ and\\ Titta Kotilainen}\par
+{\Large Pedro J. Aphalo,\\ Andreas Albert\\ T. Matthew Robson\\ and\\ Titta Kotilainen}\par
 \vfill
 {\footnotesize Git: tag\gitVtagn , committed with hash \gitAbbrevHash\ on \gitAuthorIsoDate\\ by\ \gitAuthorName \\PDF created \today\\ \copyright\ 2013--2015 by the authors}\par
 \vspace*{\drop}
@@ -216,8 +216,8 @@ opts_chunk$set(opts_fig_narrow)
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
 incl_all <- TRUE
-incl_chaps <- TRUE || incl_all
-incl_ckbk <- FALSE || incl_all
+incl_chaps <- FALSE || incl_all
+incl_ckbk <- TRUE || incl_all
 incl_data <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
 eval_diag <- FALSE
@@ -235,10 +235,9 @@ main_ls <- c(ls(), "main_ls")
 @
 
 <<set-up-printing, echo=FALSE, include=FALSE>>=
-options(datatable.print.nrows=10)
-options(datatable.print.topn=2)
+options(dplyr.print_max=5)
+options(dplyr.print_min=5)
 @
-
 
 \thispagestyle{empty}
 \titleLL
@@ -272,7 +271,7 @@ options(datatable.print.topn=2)
 
 \part{Theory behind calculations}
 
-<<child-optics, child='optics.Rnw', eval=TRUE>>=
+<<child-optics, child='optics.Rnw', eval=incl_chaps>>=
 @
 
 <<child-photochemistry, child='spectroscopy.Rnw', eval=incl_chaps>>=
@@ -298,6 +297,10 @@ rm(list = setdiff(current_ls, main_ls))
 \part{Cookbook of calculations}
 
 <<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
+@
+
+<<flag, eval=FALSE>>=
+incl_ckbk <- FALSE
 @
 
 <<child-baseoper, child='baseoper.Rnw', eval=incl_ckbk>>=

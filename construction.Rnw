@@ -27,12 +27,12 @@ The suite uses object-oriented programming for its higher level `user-friendly' 
 
 \subsection{How are spectra stored?}
 
-For spectra the classes are a specialization of \code{data.table} which are in turn a specialization of \code{data.frame}. This means that they are \emph{mostly} compatible with functions that operate on these classes.
+For spectra the classes are a specialization of \code{data.frame}. This means that they are compatible with functions that operate on objects of this class.
 
 \sloppy
 The suite defines a \code{generic\_spct} class, from which other specialized classes, `\code{filter\_spct}, \code{reflector\_spct}, \code{object\_spct}, \code{source\_spct}, \code{response\_spct}, \code{response\_spct}, \code{chroma\_spct} and \code{cps\_spct} are derived. Having this class structure allows us to create special methods and operators, which use the same `names' than the generic ones defined by R itself, but take into account the special properties of spectra.
 
-Except for \emph{special} cases each spectral object holds only spectral data from a single measurement. When spectral data from more than one measurement is contained in a single object, the data for the different measurements are stored \emph{melted}, in other words, in the same variable(s), and distinguished by means of an index factor. When a single measurement consists in several different quantities being measured, then these are stored in different variables, or columns, in the same spectral object. The name used for variables containing spectral data for a given quantity have mandatory names, and are always stored using the same units. Spectral objects also carry additional information in attributes, such a text comment, sorting key, time unit used for expression, and additional attributes indicating properties such as whether reflectance is \textbf{specular} or \textbf{total}. These strict rules allow the functions in the package to handle unit conversions, and units in labels and plots automatically. It also allows the use of operators like (`+') with spectra, and some sanity checks on the supplied spectral data and restriction of \emph{some} invalid operations. Table \ref{tab:spct:classes} lists the mandatory names of variables and attributes for each of the classes. In Table \ref{tab:spct:units} for each mandatory variable name, plus the additional names recognized by constructors are listed together with the respective units. Additional columns are allowed in the spectral objects, and deleted or set to \code{NA} only when the meaning of an operation on the whole spectrum is for these columns ambiguous.
+In most cases each spectral object holds only spectral data from a single measurement event. When spectral data from more than one measurement is contained in a single object, the data for the different measurements are stored \emph{lengthwise}, in other words, in the same variable(s), and distinguished by means of an index factor. When a single measurement consists in several different quantities being measured, then these are stored in different variables, or columns, in the same spectral object. The name used for variables containing spectral data for a given quantity have mandatory names, and are always stored using the same units. Spectral objects also carry additional information in attributes, such a text comment, sorting key, time unit used for expression, and additional attributes indicating properties such as whether reflectance is \textbf{specular} or \textbf{total}. These strict rules allow the functions in the package to handle unit conversions, and units in labels and plots automatically. It also allows the use of operators like (`+') with spectra, and some sanity checks on the supplied spectral data and restriction of \emph{some} invalid operations. Table \ref{tab:spct:classes} lists the mandatory names of variables and attributes for each of the classes. In Table \ref{tab:spct:units} for each mandatory variable name, plus the additional names recognized by constructors are listed together with the respective units. Additional columns are allowed in the spectral objects, and deleted or set to \code{NA} only when the meaning of an operation on the whole spectrum is for these columns ambiguous.
 
 \begin{table}
 \caption{Classes for spectral data and \emph{mandatory} variable and attribute names}\label{tab:spct:classes}
@@ -177,10 +177,10 @@ Using a technical term, \code{as.} functions are \emph{copy constructors}, which
 
 \subsection{Task: Convert a data frame into a spectral object}
 
-The last possibility, is to use a syntax that is unusual for the R language, but which in some settings will lead to faster execution: convert an existing data frame or data table, \emph{in situ} or by reference, into a \code{source\_spct} object. The \texttt{set} functions defined in package \PB have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}. Table \ref{tab:obj:units} lists the different `names' understood by these conversion functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{set} functions accept attributes such as \code{time.unit} as arguments.
+The last possibility, is to use a syntax that is unusual for the R language, but which in some settings will lead to faster execution: convert an existing data frame, \emph{in situ} or by reference, into a \code{source\_spct} object. The \texttt{set} functions defined in package \PB have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}. Table \ref{tab:obj:units} lists the different `names' understood by these conversion functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{set} functions accept attributes such as \code{time.unit} as arguments.
 
 <<>>=
-second.sun.spct <- copy(sun.data)
+second.sun.spct <- sun.data
 setSourceSpct(second.sun.spct)
 is.source_spct(second.sun.spct)
 @
@@ -191,7 +191,7 @@ We normally do not use the value returned by \code{set} functions as it is just 
 In fact, the assignment is unnecessary, as the class of \texttt{my.df} is set:
 
 <<>>=
-third.sun.spct <- copy(sun.data)
+third.sun.spct <- sun.data
 fourth.sun.spct <- setSourceSpct(second.sun.spct)
 third.sun.spct
 fourth.sun.spct$s.e.irrad <- NA
@@ -252,13 +252,12 @@ A future version of the package will include a \code{smooth\_spectrum} function,
 
 Sometimes, especially for plotting, we may want to row-bind spectra. When the aim is that the returned object
 retains its class attributes, and other spectrum related attributes like the time unit, functions \texttt{rbind}
-from base R, and its reimplementation from package \texttt{data.table}, and function \texttt{rbindlist} also
-defined in package \texttt{data.table} should NOT be used. Package \PB provides function \texttt{rbinspct} for
+from base R, should NOT be used. Package \PB provides function \texttt{rbinspct} for
 row-binding spectra, with the necessary checks for consistency of the bound spectra.
 
 <<>>=
 # STOPGAP
-shade.spct <- copy(sun.spct)
+shade.spct <- sun.spct
 @
 
 <<>>=
@@ -291,11 +290,11 @@ Merging consists in merging different \emph{columns} from two spectra into a new
 
 \section{Collections of multiple spectra}
 
-\subsection{Task: Constructing \texttt{\_multi\_spct} objects}
+\subsection{Task: Constructing \texttt{\textunderscore mspct} objects}
 
-\subsection{Task: Retrieving \texttt{\textunderscore spct} objects}
+\subsection{Task: Retrieving \texttt{\textunderscore spct} objects from \texttt{\textunderscore mspct} objects}
 
-\subsection{Task: Subsetting \texttt{\_multi\_spct} objects}
+\subsection{Task: Subsetting \texttt{\textunderscore mspct} objects}
 
 \section{Internal-use functions}\label{sec:base:internal}
 

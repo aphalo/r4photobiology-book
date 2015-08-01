@@ -78,16 +78,16 @@ Instead of these functions, the package defines generic functions and specialize
 Using \code{filter\_spct} objects, the calculations become very simple.
 
 <<>>=
-my_gg400.spct <- copy(gg400.spct)
+my_gg400.spct <- gg400.spct
 T2A(my_gg400.spct)
 a.gg400.spct <- T2A(my_gg400.spct, action="replace")
 @
 
-It is also possible to use \code{data.table} syntax as follows, as in addition to the \code{T2A} method for \code{filter\_spct} there is a \code{T2A} method available for numeric vectors.
-  
+As in addition to the \code{T2A} method for \code{filter\_spct} there is a \code{T2A} method available for numeric vectors.
+
 <<>>=
-my_gg400.spct <- copy(gg400.spct)
-my_gg400.spct[ , A := T2A(Tfr)]
+my_gg400.spct <- gg400.spct
+my_gg400.spct$A <- T2A(my_gg400.spct$Tfr)
 my_gg400.spct
 @
 
@@ -117,8 +117,8 @@ class(gg400.spct)
 @
 
 <<>>=
-my_sun.spct <- copy(sun.spct)
-my_gg400.spct <- copy(gg400.spct)
+my_sun.spct <- sun.spct
+my_gg400.spct <- gg400.spct
 filtered_sun.spct <- sun.spct * gg400.spct
 class(filtered_sun.spct)
 head(filtered_sun.spct)
