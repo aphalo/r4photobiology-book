@@ -9,21 +9,193 @@ opts_knit$set(concordance=TRUE)
   In this chapter we explain how to import into R data acquired with other software and also how to directly acquire data from instruments directly from within R code. In addition we discuss how to convert the acquired and or imported data into a format suitable for use in calculations with our R packages.
 \end{abstract}
 
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologyInOut)
+library(lubridate)
+@
+
+
 \section{Importing data acquired externally to R}
 %%%%
-\subsection{Task: Import data from Ocean Optics instruments and software}\label{sec:}
+\subsection{Task: Import data from Ocean Optics instruments and software}\label{sec:OO:import}
 
-\subsection{Task: Import data from Avantes instruments and software}\label{sec:}
+Reading spectral (energy) irradiance from a file saved in Ocean Optics SpectraSuite software, now superseded
+by OceanView. 
+ 
+<<oo-io-01>>=
+ooss.spct <- read_ooss_file("inout/spectrum.SSIrrad")
+ooss.spct
+@
 
-\subsection{Task: Import data from Macam instruments and software}\label{sec:}
+The function accepts several optional arguments. Although the function by default attempts to
+read all information from the files, values like the date can be overridden. It also possible
+to select a range of wavelengths.
 
-\subsection{Task: Import data from LI-COR instruments and software}\label{sec:}
+<<oo-io-02>>=
+ooss1.spct <- read_ooss_file("inout/spectrum.SSIrrad",
+                            range = c(300, 800),
+                            date = today())
+ooss1.spct
+@
 
-\subsection{Task: Import data from Bentham instruments and software}\label{sec:}
+Files saved by Ocean Optics \emph{Jaz} spectrometers have a slightly different format, and a
+function different function is to be used.
+
+<<oojz-io-01>>=
+jaz.spct <- read_oojaz_file("inout/spectrum.JazIrrad")
+jaz.spct
+@
+
+Function \code{read\_oojaz\_file} accepts the same arguments as function \code{read\_ooss\_file}.
+
+<<oojz-io-02>>=
+jaz1.spct <- read_oojaz_file("inout/spectrum.JazIrrad",
+                            range = c(300, 800),
+                            date = today())
+jaz1.spct
+@
+
+  
+\subsection{Task: Import data from Avantes instruments and software}\label{sec:Ava:import}
+
+\subsection{Task: Import data from Macam instruments and software}\label{sec:Macam:import}
+
+The Macam PC-1900 spectroradiometer and its companion software save data in a simple text
+file. Data is always stored as spectral (energy) irradiance, so spectral data can be easily 
+decoded. All the files we have tested had the name tag ``.DTA''.
+
+<<macam-io-01>>=
+macam.spct <- read_macam_file("inout/spectrum.DTA")
+macam.spct
+@
+
+Function \code{read\_licor\_file} accepts the same arguments as function \code{read\_ooss\_file}.
+
+<<macam-io-02>>=
+macam1.spct <- read_macam_file("inout/spectrum.DTA",
+                            range = c(300, 600),
+                            date = today())
+macam1.spct
+@
+
+
+\subsection{Task: Import data from LI-COR instruments and software}\label{sec:LI:import}
+
+The LI-COR LI-1800 spectroradiometer and its companion software can save data either as
+spectral photon irradiance or spectral (energy) irradiance. As files are labelled accordingly,
+our function, automatically detects the type of data being read. Be aware that the function
+is not able to decode the binary files ``.DAT''. Only ``.PRN'' as converted by LI-COR's
+PC1800 software can be decoded.
+
+<<li-io-01>>=
+licor.spct <- read_licor_file("inout/spectrum.PRN")
+licor.spct
+@
+
+Function \code{read\_licor\_file} accepts the same arguments as function \code{read\_ooss\_file}.
+
+<<li-io-02>>=
+licor1.spct <- read_licor_file("inout/spectrum.PRN",
+                            range = c(350, 800),
+                            date = today())
+licor1.spct
+@
+
+\subsection{Task: Import data from Bentham instruments and software}\label{sec:Ben:import}
 
 \section{Acquiring data directly from within R}
-%%%%
-\subsection{Task: Acquiring data from Ocean Optics instruments and software}\label{sec:}
+
+In this section, the code is not run when compiling the text, as then producing a PDF would
+require instruments to be available.
+
+\subsection{Task: Acquiring data from Ocean Optics instruments and software}\label{sec:OO:ctrl}
+
+For the examples in this section to work, you will need to have Java and the OmniDriver runtime installed.
+In addition examples as shown assume that an Ocean Optics spectrometer is connected. The output
+will depend on the model(s) and configuration(s) of the instrument(s) connected. The plural is correct,
+you can acquire spectra from more than one instrument, and from instruments with more than
+one channel.
+
+Package \code{rOmniDriver} is just a thin wrapper on the low-level access functions supplied
+by the driver.
+The names for functions in package \code{rOminiDriver} are verbose, this is because we have respected the names used in the
+driver itself, written in Java. Thus was done so that information in the driver documentation can be
+found easily. 
+
+First step is to load the package \code{rOmniDriver} which is a low level wrapper on the driver
+supplied by Ocean Optics for their instruments. The runtime is free, and is all what you need
+for simple tasks as documentation is available both from Ocean Optics web site and as R help.
+ 
+<<oo-acq-1, eval=FALSE>>=
+library(rOmniDrive)
+@
+
+After physically connecting the spectrometer through USB, the data connection needs to be
+initiated and the instrument id obtained. This function returns a `Java wrapper' object
+that will be used for all later operations and needs to be saved to variable. The second
+statement queries the number of spectrometers, or spectrometer modules in the case of the
+\emph{Jaz}. 
+
+<<oo-acq-2, eval=FALSE>>=
+srs <- init_srs()
+num_srs <- number_srs()
+@
+
+Indexing starts at zero, contrary to R's way, so the first spectrometer has index `0', the
+second index `1', etc.
+
+We will now assume that only one spectrometer is attached to the computer, and just rely on the
+default index value of 0, which always points to the first available spectrometer. The next step,
+unless we always use the same instrument is to query for a description of the optical bench of 
+the attached instrument.
+
+<<oo-acq-3, eval=FALSE>>=
+get_name(srs)
+get_serial_number(srs)
+get_bench(srs)
+@ 
+
+If you are writing a script that should work with different instruments, you may need to
+query whether a certain function is available or not in the attached instrument. On the
+other functions like those used for setting the integration time can be just assumed to
+be always available. Many functions come in pairs of \code{set} and \code{get}. The only
+thing to be careful with is that in some cases, the \code{set} functions can be silently
+ignored. For this reason, scripts have to written so that these functions are not assumed
+to always work. The most important case, setting the integration time, be be easily dealt 
+with in to different ways: 1) being careful the set function is passed as argument an
+off-range time value, or even more reliably, 2) always using the corresponding get
+function after each call to set, to obtain the value actually stored in the memory of
+the spectrometer. Not following these steps can result in errors of any size, and render
+the data useless.   
+
+<<oo-acq-4, eval=FALSE>>=
+set_integration_time(srs, time.usec = 100)
+get_integration_time(srs)
+@
+
+We can similarly set the number of scans to average.
+
+<<oo-acq-5, eval=FALSE>>=
+set_scans_to_avg(srs, 5)
+get_scans_to_avg(srs)
+@
+
+To obtain data we use function \code{get\_spectrum} 
+
+<<oo-acq-6, eval=FALSE>>=
+counts <- get_spectrum(srs)
+@
+
+<<oo-acq-7, eval=FALSE>>=
+srs_close(srs)
+@
+
+More advanced tasks like downloading calibration data from a spectrometer are not
+yet implemented, but will be added soon.
 
 \subsection{Task: Acquiring data from sglux instruments and software}\label{sec:}
 

@@ -7,13 +7,16 @@
 % \pretitle{\begin{center}\LARGE}
 % \posttitle{\par\end{center}\vskip 0.5em}
 
-% using Lucida bright using now free package from PC TeX
-\usepackage[lucidasmallscale,nofontinfo,seriftt=true,math-style=iso]{lucimatx}
-% replace option altbullet
-\renewcommand{\labelitemi}{%
- {\UseTextSymbol{OMS}\textbullet}}
-% needed for Lucida
-\linespread{1.04}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+
+%% using Lucida bright using now free package from PC TeX
+%\usepackage[lucidasmallscale,nofontinfo,seriftt=true,math-style=iso]{lucimatx}
+%% replace option altbullet
+%\renewcommand{\labelitemi}{%
+% {\UseTextSymbol{OMS}\textbullet}}
+%% needed for Lucida
+%\linespread{1.04}
 
 \usepackage[footinfo, missing={`none'}]{gitinfo} % remember to setup Git hooks
 
@@ -217,9 +220,9 @@ opts_chunk$set(opts_fig_narrow)
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
 incl_all <- TRUE
 incl_chaps <- FALSE || incl_all
-incl_ckbk <- TRUE || incl_all
+incl_ckbk <- FALSE || incl_all
 incl_data <- FALSE || incl_all
-incl_acq <- FALSE || incl_all
+incl_acq <- TRUE || incl_all
 eval_diag <- FALSE
 @
 
