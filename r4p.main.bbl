@@ -400,7 +400,7 @@
       \field{datelabelsource}{}
       \field{labelnamesource}{editor}
       \field{labeltitlesource}{title}
-      \field{isbn}{978-90-74134-17-0}
+      \field{isbn}{9789074134170}
       \field{pagetotal}{279}
       \field{title}{Greenhouse climate control: An integrated approach}
       \field{year}{1995}
@@ -815,7 +815,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Environmental UV Photobiology}
-      \field{isbn}{0-306-44443-7}
+      \field{isbn}{0306444437}
       \field{title}{Simulation of daylight ultraviolet radiation and effects of ozone depletion}
       \field{year}{1993}
       \field{pages}{41\bibrangedash 71}
@@ -1242,7 +1242,7 @@
       \field{labeltitlesource}{title}
       \field{abstract}{The use of BSWF in assessing the ozone reduction issue is clearly highly important. Even small differences among BSWF can have large consequences when employed in various predictions of RAF values, latitudinal gradients and in experimental design involving lamp systems. It is unlikely that the same BSWF will be appropriate for all responses to UV radiation. Thus, realistic testing of these BSWF under polychromatic radiation, especially under field conditions, is critical.}
       \field{booktitle}{Environmental UV Radiation: Impact on Ecosystems and Human Health and Predictive Models}
-      \field{isbn}{978-1-4020-3695-8}
+      \field{isbn}{9781402036958}
       \field{journaltitle}{Environmental UV Radiation: Impact on Ecosystems and Human Health and Predictive Models}
       \field{note}{Proceedings of the NATO Advanced Study Institute on Environmental UV Radiation: Impact on Ecosystems and Human Health and Predictive Models Pisa, Italy June 2001}
       \field{series}{NATO Science Series}
@@ -1355,7 +1355,7 @@
       \field{labeltitlesource}{title}
       \field{booktitle}{An Introduction to Environmental Biophysics}
       \field{edition}{2}
-      \field{isbn}{0-387-94937-2}
+      \field{isbn}{0387949372}
       \field{pagetotal}{286}
       \field{title}{An Introduction to Environmental Biophysics}
       \field{year}{1998}
@@ -1676,7 +1676,7 @@
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{isbn}{0-471-56040-5}
+      \field{isbn}{0471560405}
       \field{title}{{Statistical Computing: An Introduction to Data Analysis using \{S\}-Plus}}
       \field{year}{2002}
       \field{pages}{x + 761}
@@ -1833,7 +1833,7 @@
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{isbn}{0 387 95475 9}
+      \field{isbn}{0387954759}
       \field{series}{Statistics and Computing}
       \field{title}{{Introductory Statistics with R}}
       \field{year}{2002}
@@ -5363,7 +5363,7 @@
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{isbn}{1-584-88486-X}
+      \field{isbn}{158488486X}
       \field{title}{{R Graphics}}
       \field{year}{2005}
       \field{pages}{301}
@@ -5711,7 +5711,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{UV radiation in global climate change: measurements, modeling and effects on ecosystems}
-      \field{isbn}{978-3-642-03312-4}
+      \field{isbn}{9783642033124}
       \field{title}{Techniques for solar dosimetry in different environments}
       \field{year}{2010}
       \field{pages}{192\bibrangedash 204}
@@ -6253,7 +6253,7 @@
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{isbn}{0-521-00976-6}
+      \field{isbn}{0521009766}
       \field{pagetotal}{xvii + 537}
       \field{title}{Experimental Design and Data Analysis for Biologists}
       \field{year}{2002}
@@ -7617,7 +7617,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{UV-B Radiation and Ozone Depletion: Effects on Humans, Animals, Plants, Microorganisms, and Materials}
-      \field{isbn}{0-87371-911-5}
+      \field{isbn}{0873719115}
       \field{title}{Effects of Enhanced {UV}-{B} Radiation on Terrestrial Plants}
       \field{year}{1993}
       \field{pages}{125\bibrangedash 153}
@@ -7938,7 +7938,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{3rd}
-      \field{isbn}{0 387 98825 4}
+      \field{isbn}{0387988254}
       \field{series}{Statistics and Computing}
       \field{title}{{Modern Applied Statistics with \{S-PLUS\}}}
       \field{year}{1999}
@@ -7965,7 +7965,7 @@
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{isbn}{0 387 98966 8}
+      \field{isbn}{0387989668}
       \field{series}{Statistics and Computing}
       \field{title}{{S Programming}}
       \field{year}{2000}
@@ -7993,7 +7993,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{4th}
-      \field{isbn}{0-387-95457-0}
+      \field{isbn}{0387954570}
       \field{title}{{Modern Applied Statistics with \{S\}}}
       \field{year}{2002}
       \verb{url}
@@ -8354,11 +8354,9 @@
       \field{extrayear}{2}
       \field{labelyear}{2014}
       \field{labelmonth}{9}
-      \field{labelday}{12}
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{day}{12}
       \field{issn}{1548-7660}
       \field{journaltitle}{Journal of Statistical Software}
       \field{month}{9}
@@ -8594,7 +8592,7 @@
       \field{datelabelsource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{isbn}{978-0-387-87457-9}
+      \field{isbn}{9780387874579}
       \field{title}{{Mixed Effects Models and Extensions in Ecology with R}}
       \field{year}{2009}
       \field{pages}{574}

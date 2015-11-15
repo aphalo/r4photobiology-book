@@ -572,3 +572,30 @@ try(detach(package:photobiologyLamps))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @
+
+\section[Task: calculate overlap between spectra]{Task: calculate the spectral overlap between two light sources}\label{sec:split:energy}
+
+The first case assumes that we use the same photon irradiance for both sources, in this case two different types of LEDs.
+
+The first step is to scale both spectra so that the photon irradiance is the same, in this case equal to one.
+
+<<>>=
+green.spct <- fscale(Norlux_G.spct, 
+                     range = c(400, 700), 
+                     f = "total", 
+                     unit.out = "photon")
+blue.spct <- fscale(Norlux_B.spct, 
+                    range = c(400, 700), 
+                    f = "total", 
+                    unit.out = "photon")
+
+overlapBG.s.q.irrad <- ifelse(green.spct$s.q.irrad < blue.spct$s.q.irrad, 
+                              green.spct$s.q.irrad,
+                              blue.spct$s.q.irrad)
+                              
+overlapBG.spct <- source_spct(w.length = blue.spct$w.length, 
+                              s.q.irrad = overlapBG.s.q.irrad)
+
+integrate_spct(overlapBG.spct) / 
+    (integrate_spct(green.spct) + integrate_spct(blue.spct)) * 1e2
+@

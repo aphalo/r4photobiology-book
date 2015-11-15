@@ -24,21 +24,20 @@ library(lubridate)
 \subsection{Task: Import data from Ocean Optics instruments and software}\label{sec:OO:import}
 
 Reading spectral (energy) irradiance from a file saved in Ocean Optics SpectraSuite software, now superseded
-by OceanView. 
- 
+by OceanView.
+
 <<oo-io-01>>=
-ooss.spct <- read_ooss_file("inout/spectrum.SSIrrad")
+ooss.spct <- read_oo_sstxt("inout/spectrum.SSIrrad")
 ooss.spct
 @
 
 The function accepts several optional arguments. Although the function by default attempts to
-read all information from the files, values like the date can be overridden. It also possible
-to select a range of wavelengths.
+read all information from the files, values like the date can be overridden and geocode
+can be set.
 
 <<oo-io-02>>=
-ooss1.spct <- read_ooss_file("inout/spectrum.SSIrrad",
-                            range = c(300, 800),
-                            date = today())
+ooss1.spct <- read_oo_sstxt("inout/spectrum.SSIrrad",
+                            date = now())
 ooss1.spct
 @
 
@@ -46,39 +45,42 @@ Files saved by Ocean Optics \emph{Jaz} spectrometers have a slightly different f
 function different function is to be used.
 
 <<oojz-io-01>>=
-jaz.spct <- read_oojaz_file("inout/spectrum.JazIrrad")
+jaz.spct <- read_oo_jazirrad("inout/spectrum.JazIrrad")
 jaz.spct
 @
 
 Function \code{read\_oojaz\_file} accepts the same arguments as function \code{read\_ooss\_file}.
 
 <<oojz-io-02>>=
-jaz1.spct <- read_oojaz_file("inout/spectrum.JazIrrad",
-                            range = c(300, 800),
-                            date = today())
+jaz1.spct <- read_oo_jazirrad("inout/spectrum.JazIrrad",
+                            date = now())
 jaz1.spct
 @
 
-  
 \subsection{Task: Import data from Avantes instruments and software}\label{sec:Ava:import}
+
+<<avaspec>>=
+avantes.spct <- read_avaspec_csv("inout/spectrum-avaspec.csv",
+                               date = now())
+avantes.spct
+@
 
 \subsection{Task: Import data from Macam instruments and software}\label{sec:Macam:import}
 
 The Macam PC-1900 spectroradiometer and its companion software save data in a simple text
-file. Data is always stored as spectral (energy) irradiance, so spectral data can be easily 
+file. Data is always stored as spectral (energy) irradiance, so spectral data can be easily
 decoded. All the files we have tested had the name tag ``.DTA''.
 
 <<macam-io-01>>=
-macam.spct <- read_macam_file("inout/spectrum.DTA")
+macam.spct <- read_macam_dta("inout/spectrum.DTA")
 macam.spct
 @
 
 Function \code{read\_licor\_file} accepts the same arguments as function \code{read\_ooss\_file}.
 
 <<macam-io-02>>=
-macam1.spct <- read_macam_file("inout/spectrum.DTA",
-                            range = c(300, 600),
-                            date = today())
+macam1.spct <- read_macam_dta("inout/spectrum.DTA",
+                            date = now())
 macam1.spct
 @
 
@@ -92,16 +94,15 @@ is not able to decode the binary files ``.DAT''. Only ``.PRN'' as converted by L
 PC1800 software can be decoded.
 
 <<li-io-01>>=
-licor.spct <- read_licor_file("inout/spectrum.PRN")
+licor.spct <- read_licor_prn("inout/spectrum.PRN")
 licor.spct
 @
 
 Function \code{read\_licor\_file} accepts the same arguments as function \code{read\_ooss\_file}.
 
 <<li-io-02>>=
-licor1.spct <- read_licor_file("inout/spectrum.PRN",
-                            range = c(350, 800),
-                            date = today())
+licor1.spct <- read_licor_prn("inout/spectrum.PRN",
+                               date = now())
 licor1.spct
 @
 
@@ -124,12 +125,12 @@ Package \code{rOmniDriver} is just a thin wrapper on the low-level access functi
 by the driver.
 The names for functions in package \code{rOminiDriver} are verbose, this is because we have respected the names used in the
 driver itself, written in Java. Thus was done so that information in the driver documentation can be
-found easily. 
+found easily.
 
 First step is to load the package \code{rOmniDriver} which is a low level wrapper on the driver
 supplied by Ocean Optics for their instruments. The runtime is free, and is all what you need
 for simple tasks as documentation is available both from Ocean Optics web site and as R help.
- 
+
 <<oo-acq-1, eval=FALSE>>=
 library(rOmniDrive)
 @
@@ -138,7 +139,7 @@ After physically connecting the spectrometer through USB, the data connection ne
 initiated and the instrument id obtained. This function returns a `Java wrapper' object
 that will be used for all later operations and needs to be saved to variable. The second
 statement queries the number of spectrometers, or spectrometer modules in the case of the
-\emph{Jaz}. 
+\emph{Jaz}.
 
 <<oo-acq-2, eval=FALSE>>=
 srs <- init_srs()
@@ -150,14 +151,14 @@ second index `1', etc.
 
 We will now assume that only one spectrometer is attached to the computer, and just rely on the
 default index value of 0, which always points to the first available spectrometer. The next step,
-unless we always use the same instrument is to query for a description of the optical bench of 
+unless we always use the same instrument is to query for a description of the optical bench of
 the attached instrument.
 
 <<oo-acq-3, eval=FALSE>>=
 get_name(srs)
 get_serial_number(srs)
 get_bench(srs)
-@ 
+@
 
 If you are writing a script that should work with different instruments, you may need to
 query whether a certain function is available or not in the attached instrument. On the
@@ -165,12 +166,12 @@ other functions like those used for setting the integration time can be just ass
 be always available. Many functions come in pairs of \code{set} and \code{get}. The only
 thing to be careful with is that in some cases, the \code{set} functions can be silently
 ignored. For this reason, scripts have to written so that these functions are not assumed
-to always work. The most important case, setting the integration time, be be easily dealt 
+to always work. The most important case, setting the integration time, be be easily dealt
 with in to different ways: 1) being careful the set function is passed as argument an
 off-range time value, or even more reliably, 2) always using the corresponding get
 function after each call to set, to obtain the value actually stored in the memory of
 the spectrometer. Not following these steps can result in errors of any size, and render
-the data useless.   
+the data useless.
 
 <<oo-acq-4, eval=FALSE>>=
 set_integration_time(srs, time.usec = 100)
@@ -184,7 +185,7 @@ set_scans_to_avg(srs, 5)
 get_scans_to_avg(srs)
 @
 
-To obtain data we use function \code{get\_spectrum} 
+To obtain data we use function \code{get\_spectrum}
 
 <<oo-acq-6, eval=FALSE>>=
 counts <- get_spectrum(srs)

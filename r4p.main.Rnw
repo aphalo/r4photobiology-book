@@ -237,6 +237,11 @@ getwd()
 main_ls <- c(ls(), "main_ls")
 @
 
+<<set-tz, echo=FALSE, include=FALSE>>=
+# this is needed as some Windows TZ strings are not recognized by R
+Sys.setenv(TZ='UTC') # this is needed for output to be the same in all time zones.
+@
+
 <<set-up-printing, echo=FALSE, include=FALSE>>=
 options(dplyr.print_max=5)
 options(dplyr.print_min=5)
