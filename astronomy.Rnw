@@ -17,6 +17,8 @@ library(photobiology)
 library(lubridate)
 library(ggplot2)
 library(ggmap)
+
+cache <- TRUE
 @
 
 %%%%
@@ -39,7 +41,7 @@ Similar functions including hours, minutes and seconds are defined by \code{lubr
 
 For astronomical calculations we also need as argument the geographical coordinates. It is, of course, possible to enter latitude and longitude values recorded with a GPS instrument or manually obtained from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates by means of a query from within R using packages \code{RgoogleMaps}, or package \code{ggmap}, as done here. When inputing coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree).
 
-<<astro-geocode-1, message=FALSE, cache=TRUE>>=
+<<astro-geocode-1, message=FALSE, cache=cache>>=
 geocode("Helsinki")
 geocode("Viikinkaari 1, 00790 Helsinki, Finland")
 @
@@ -161,7 +163,7 @@ Functions \code{day\_night} from our \code{photobiology} package uses function \
 
 In the examples we use \code{geocode} to get the latitude and longitude of cities. \code{geocode} accepts any valid Google Maps search terms, including street addresses, and postal codes within cities. \code{day\_length} returns a numeric vector. This first example is for Buenos Aires on two different dates, by use of the optional argument \code{tz} we request the results to be expressed in local time for Buenos Aires.
 
-<<astro-geocode-2, message=FALSE, cache=TRUE>>=
+<<astro-geocode-2, message=FALSE, cache=cache>>=
 geo_code_BA <- geocode("Buenos Aires")
 day_night(ymd("2013-12-21"),
           lon = geo_code_BA[["lon"]],
@@ -171,7 +173,7 @@ day_night(ymd("2013-12-21"),
 
 And with \texttt{unit.out} set to \texttt{"hour"}
 
-<<astro-geocode-2a, message=FALSE, cache=TRUE>>=
+<<astro-geocode-2a, message=FALSE, cache=cache>>=
 day_night(ymd("2013-12-21"),
           lon = geo_code_BA[["lon"]],
           lat = geo_code_BA[["lat"]],
@@ -181,7 +183,7 @@ day_night(ymd("2013-12-21"),
 
 Next, we calculate day length  based on different definitions of twilight for Helsinki, at the equinox:
 
-<<astro-geocode-4, message=FALSE, cache=TRUE>>=
+<<astro-geocode-4, message=FALSE, cache=cache>>=
 geo_code_He <- geocode("Helsinki")
 geo_code_He
 day_length(ymd("2013-09-21"),
@@ -207,7 +209,7 @@ day_length(ymd("2013-09-21"),
 
 In addition, function \texttt{day\_night} returns a list containing all the quantities returned by the other functions. As other functions described in this chapter, \texttt{day\_night} is vectorized for the \texttt{date} parameter.
 
-<<astro-geocode-A2, message=FALSE, cache=TRUE>>=
+<<astro-geocode-A2, message=FALSE, cache=cache>>=
 day_night(ymd("2013-12-21"),
           lon = geo_code_BA[["lon"]],
           lat = geo_code_BA[["lat"]],
@@ -216,7 +218,7 @@ day_night(ymd("2013-12-21"),
 
 And with \texttt{unit.out} set to \texttt{"hour"}
 
-<<astro-geocode-A2a, message=FALSE, cache=TRUE>>=
+<<astro-geocode-A2a, message=FALSE, cache=cache>>=
 day_night(ymd("2013-12-21"),
           lon = geo_code_BA[["lon"]],
           lat = geo_code_BA[["lat"]],
@@ -228,7 +230,7 @@ day_night(ymd("2013-12-21"),
 
 \code{sun\_angles} not only returns solar elevation, but all the angles defining the position of the sun. The time argument to \code{sun\_angles} is internally converted to UTC (universal time coordinates, which is equal to GMT) time zone, so time defined for any time zone is valid input. The time zone used for the output is by default that currently in use in the computer on which R is running, but we can easily specify the time coordinates used for the output with parameter \code{tz}, using any string accepted by package \code{lubridate}.
 
-<<astro-geocode-5, message=FALSE, cache=TRUE>>=
+<<astro-geocode-5, message=FALSE, cache=cache>>=
 geo_code_Jo <- geocode("Joensuu")
 geo_code_Jo
 my_time <- ymd_hms("2014-05-29 18:00:00", tz="EET")
@@ -251,7 +253,7 @@ Function \code{sun\_angles} described above is vectorized, so it is very easy to
 opts_chunk$set(opts_fig_wide)
 @
 
-<<astro-6, cache=TRUE>>=
+<<astro-6, cache=cache>>=
 hours <- seq(from=ymd("2014-06-23", tz="EET"),
              by="10 min",
              length=24 * 6)
@@ -267,7 +269,7 @@ sun_elev_hel <- data.frame(time_eet = hours,
 
 We also create a small data frame with data for plotting and labeling the different twilight conventions.
 
-<<astro-7, cache=TRUE>>=
+<<astro-7, cache=cache>>=
 twilight <-
   data.frame(angle = c(0, -6, -12, -18),
              label = c("Horizon", "Civil twilight",
@@ -297,14 +299,14 @@ ggplot(sun_elev_hel,
 
 For this we first need to generate a sequence of dates. We use \code{seq} as in the previous section, but instead of supplying a length as argument we supply an ending time. Instead of giving \code{by} in minutes as above, we now use days:
 
-<<astro-9, cache=TRUE>>=
+<<astro-9, cache=cache>>=
 days <- seq(from=ymd("2014-01-01"), to=ymd("2014-12-31"),
             by="3 day")
 @
 
 To calculate the length of each day, we need to use an explicit loop as function \code{day\_night} is not vectorized. We repeat the calculations for three locations at different latitudes, then row bind the data frames into a single data frame. Each individual data frame contains information to identify the sites:
 
-<<astro-geocode-10a, message=FALSE, cache=TRUE>>=
+<<astro-geocode-10a, message=FALSE, cache=cache>>=
 geo_code_He <- geocode("Helsinki")
 daylengths_hel <-
   data.frame(day = days,
@@ -317,7 +319,7 @@ daylengths_hel <-
              lat = geo_code_He[["lat"]])
 @
 
-<<astro-geocode-10b, message=FALSE, cache=TRUE>>=
+<<astro-geocode-10b, message=FALSE, cache=cache>>=
 geo_code_Iv <- geocode("Ivalo")
 daylengths_ivalo <-
   data.frame(day = days,
@@ -330,7 +332,7 @@ daylengths_ivalo <-
              lat = geo_code_Iv[["lat"]])
 @
 
-<<astro-geocode-10c, message=FALSE, cache=TRUE>>=
+<<astro-geocode-10c, message=FALSE, cache=cache>>=
 geo_code_At <- geocode("Athens, Greece")
 daylengths_athens <-
   data.frame(day = days,
@@ -363,7 +365,7 @@ ggplot(daylengths,
 
 For this we reuse \texttt{days} from the previous sections. We repeat the calculations for three locations at different latitudes, then row bind the data frames into a single data frame. Data frames contain information to identify the sites:
 
-<<astro-geocode-11a, message=FALSE, cache=TRUE>>=
+<<astro-geocode-11a, message=FALSE, cache=cache>>=
 geo_code_He <- geocode("Helsinki")
 sunrise_hel <-
   data.frame(day = days,
@@ -376,7 +378,7 @@ sunrise_hel <-
              lat = geo_code_He[["lat"]])
 @
 
-<<astro-geocode-11b, message=FALSE, cache=TRUE>>=
+<<astro-geocode-11b, message=FALSE, cache=cache>>=
 geo_code_Iv <- geocode("Ivalo")
 sunrise_ivalo <-
   data.frame(day = days,
@@ -389,7 +391,7 @@ sunrise_ivalo <-
              lat = geo_code_Iv[["lat"]])
 @
 
-<<astro-geocode-11c, message=FALSE, cache=TRUE>>=
+<<astro-geocode-11c, message=FALSE, cache=cache>>=
 geo_code_At <- geocode("Athens, Greece")
 sunrise_athens <-
   data.frame(day = days,
@@ -402,7 +404,7 @@ sunrise_athens <-
              lat = geo_code_At[["lat"]])
 @
 
-<<astro-geocode-11d, message=FALSE, cache=TRUE>>=
+<<astro-geocode-11d, message=FALSE, cache=cache>>=
 sunrises <- rbind(sunrise_hel,
                   sunrise_ivalo,
                   sunrise_athens)

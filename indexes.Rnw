@@ -14,7 +14,7 @@ opts_knit$set(concordance=TRUE)
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
-library(photobiologygg)
+library(ggspectra)
 library(photobiologyPlants)
 library(hsdar)
 @
@@ -56,6 +56,6 @@ This returns a different value because, the wavebands are un-weighted, while wei
 <<>>=
 try(detach(package:hsdar))
 try(detach(package:photobiologyPlants))
-try(detach(package:photobiologygg))
+try(detach(package:ggspectra))
 try(detach(package:photobiology))
 @

@@ -16,7 +16,8 @@ For executing the examples listed in this chapter you need first to load the fol
 <<>>=
 library(photobiology)
 library(photobiologyWavebands)
-library(photobiologygg)
+library(ggplot2)
+library(ggspectra)
 library(photobiologyLamps)
 library(photobiologyFilters)
 library(photobiologyReflectors)
@@ -82,32 +83,32 @@ R method \texttt{class} can be used with any R object, including spectra.
 
 <<>>=
 class(sun.spct)
-class(polyester.new.spct)
+class(polyester.spct)
 @
 
 The method \texttt{class\_spct} is a convenience wrapped on \texttt{class} which returns only class attributes corresponding to spectral classes defined in package \PB.
 
 <<>>=
 class_spct(sun.spct)
-class_spct(polyester.new.spct)
+class_spct(polyester.spct)
 @
 
 The method \texttt{is.any\_spct} is a synonym of \texttt{is.generic\_spct} as \texttt{generic\_spct} is the base class from which all spectral classes are derived.
 <<>>=
 is.any_spct(sun.spct)
-is.any_spct(polyester.new.spct)
+is.any_spct(polyester.spct)
 @
 
 Equivalent methods exist for all the classes defined in package \PB. We show two examples below, with a radiation source and a filter.
 
 <<>>=
 is.source_spct(sun.spct)
-is.source_spct(polyester.new.spct)
+is.source_spct(polyester.spct)
 @
 
 <<>>=
 is.filter_spct(sun.spct)
-is.filter_spct(polyester.new.spct)
+is.filter_spct(polyester.spct)
 @
 
 \section{Task: Querying other attributes}\label{sec:summaries:attributes}
@@ -143,7 +144,7 @@ is_scaled(sun.scaled.spct)
 We now consider \texttt{filter\_spct} objects (see Chapter \ref{chap:trans:refl} for an explanation of the meaning of these attributes and how they affect calculations).
 
 <<>>=
-getTfrType(polyester.new.spct)
+getTfrType(polyester.spct)
 @
 
 and  \texttt{reflector\_spct} objects.
@@ -176,8 +177,8 @@ is_photon_based(my.spct)
 We now consider \texttt{filter\_spct} objects.
 
 <<>>=
-is_transmittance_based(polyester.new.spct)
-is_absorbance_based(polyester.new.spct)
+is_transmittance_based(polyester.spct)
+is_absorbance_based(polyester.spct)
 @
 
 \section{Task: Querying about `origin' of data}
@@ -204,7 +205,7 @@ plot(sun.spct)
 @
 
 <<>>=
-plot(polyester.new.spct)
+plot(polyester.spct)
 @
 
 \section{Task: Other R's methods}
@@ -227,8 +228,8 @@ peaks(philips.tl12.spct, span = 50)
 @
 
 <<>>=
-valleys(kg5.spct)
-peaks(kg5.spct, filter.qty = "absorbance")
+valleys(schott.mspct$KG5)
+peaks(schott.mspct$KG5, filter.qty = "absorbance")
 @
 
 \subsection{Obtaining the location of peaks as an index into the spectral data}
@@ -299,7 +300,7 @@ ggplot(data = fitted_peak.spct, aes(w.length, s.e.irrad)) +
 try(detach(package:photobiologyReflectors))
 try(detach(package:photobiologyFilters))
 try(detach(package:photobiologyLamps))
-try(detach(package:photobiologygg))
+try(detach(package:ggspectra))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @

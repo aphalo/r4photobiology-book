@@ -14,7 +14,6 @@ opts_knit$set(concordance=TRUE)
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
-library(photobiologyFilters)
 library(photobiologyWavebands)
 @
 
@@ -42,7 +41,8 @@ In most cases each spectral object holds only spectral data from a single measur
 Name & Variables & Attributes\\
 \midrule
 generic\_spct & w.length & \\
-cps\_spct & w.length, cps & \\
+raw\_spct & w.length, counts & instr.desc, instr.settings\\
+cps\_spct & w.length, cps & instr.desc, instr.settings\\
 source\_spct & w.length, s.e.irrad, s.q.irrad & time.unit, bswf \\
 filter\_spct & w.length, Tfr, A & Tfr.type \\
 reflector\_spct & w.length, Rfr & Rfr.type \\
@@ -63,6 +63,7 @@ Variables & Unit of expression & Attribute value \\
 A: stored & & \\
 \midrule
 w.length & nm &  \\
+counts & number & \\
 cps & \cps & \\
 s.e.irrad &  \wattnm & time.unit = "second" \\
 s.e.irrad &  \jdaynm & time.unit = "day" \\
@@ -205,19 +206,19 @@ Using a technical term, \code{set} functions convert an object by \emph{referenc
 This is basically a subsetting operation, but our functions operate only based on wavelengths, while R \code{subset} is more general. On the other hand, our functions \code{trim\_spct} and \code{trim\_tails} add a few `bells and whistles'. The trimming is based on wavelengths and by default the cut points are inserted by interpolation, so that the spectrum returned includes the limits given as arguments. In addition, by default the trimming is done by deleting both spectral irradiance and wavelength values outside the range delimited by the limits (just like \code{subset} does), but through parameter \code{fill} the values outside the limits can be replaced by any value desired (most commonly \code{NA} or 0.) It is possible to supply a only one, or both of \code{low.limit} and \code{high.limit}, depending on the desired trimming, or use a \code{waveband} definition or a numeric vector as an argument for \texttt{range}. If the limits are outside the original data set, then the output spectrum is expanded and the tails filled with the value given as argument for \code{fill} unless \code{fill} is equal to \texttt{NA}, which is the default.
 
 <<>>=
-trim_spct(sun.spct, range = UV())
-trim_spct(sun.spct, range = UV(), fill = 0)
-trim_spct(sun.spct, low.limit = 400)
-trim_spct(sun.spct, low.limit = 250, fill = 0.0)
-trim_spct(sun.spct, range = c(300, 400, 500, 600))
+trim_wl(sun.spct, range = UV())
+trim_wl(sun.spct, range = UV(), fill = 0)
+trim_wl(sun.spct, range = c(400, NA))
+trim_wl(sun.spct, range = c(250, NA), fill = 0.0)
+trim_wl(sun.spct, range = c(300, 400, 500, 600))
 @
 
 If the limits are outside the range of the input spectral data, and \code{fill} is set to a value other than \code{NULL} the output is expanded up to the limits and filled.
 
 <<>>=
-trim_spct(sun.spct, range=c(300, 1000))
-trim_spct(sun.spct, range=c(300, 1000), fill = NA)
-trim_spct(sun.spct, range=c(300, 1000), fill = 0.0)
+trim_wl(sun.spct, range=c(300, 1000))
+trim_wl(sun.spct, range=c(300, 1000), fill = NA)
+trim_wl(sun.spct, range=c(300, 1000), fill = 0.0)
 @
 
 Function \code{trim\_tails} can be used for trimming spectra when data is available as vectors.
@@ -237,7 +238,7 @@ interpolate_spct(sun.spct, seq(290, 300, by=0.1), fill=0.0)
 \code{interpolate\_spct} accepts any spectral object, and returns an object of the same type as its input.
 
 <<>>=
-interpolate_spct(polyester.new.spct, seq(290, 300, by=0.1))
+interpolate_spct(polyester.spct, seq(290, 300, by=0.1))
 @
 
 Function \code{interpolate\_spectrum} takes numeric vectors as arguments, but is otherwise functionally equivalent.
@@ -353,14 +354,13 @@ See chapter \ref{chap:wt:irrad} on page \pageref{chap:wt:irrad}, in particular s
 This operation either changes the boundaries of \texttt{waveband} objects, or deletes \texttt{waveband} objects from a list of waveband.  The first argument can be either a \texttt{waveband} object or a list of \texttt{waveband} objects. Those wavebands fully outside the limits are always discarded and those fully within the limits always kept. In the case of those wavebands crossing a limit, if the argument \texttt{trim} is set to \texttt{FALSE}, they are discarded, but if \texttt{trim} is set to \texttt{TRUE} their boundary is moved to be at the trimming limit. Trimming is based on wavelengths and by default the cut points are inserted.  Trimming is done by shrinking the waveband, expansion is not possible. During trimming labels stored in the \texttt{waveband} object are `edited' to reflect the altered boundaries. Trimming does not affect weighting functions stored within the waveband.
 
 <<>>=
-trim_waveband(UV(), range = UVB())
-trim_waveband(VIS_bands(), low.limit = 400, trim = FALSE)
-trim_waveband(VIS_bands(), low.limit = 400, trim = TRUE)
-trim_waveband(VIS_bands(), range = c(500, 600))
+trim_wl(UV(), range = UVB())
+trim_wl(VIS_bands(), low.limit = 400, trim = FALSE)
+trim_wl(VIS_bands(), low.limit = 400, trim = TRUE)
+trim_wl(VIS_bands(), range = c(500, 600))
 @
 
 <<>>=
 try(detach(package:photobiologyWavebands))
-try(detach(package:photobiologyFilters))
 try(detach(package:photobiology))
 @

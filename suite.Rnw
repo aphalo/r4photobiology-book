@@ -136,7 +136,7 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
 \end{figure}
 
 <<suite-design-example, eval=FALSE>>=
-e_irrad(sun.spct * polyester.new.spct, CIE())
+e_irrad(sun.spct * polyester.spct, CIE())
 @
 
 Is all what is needed to obtain the CIE98-weigthed energy irradiance simulating the effect of a polyester filter on the example solar spectrum, which of course, can be substituted by other spectral irradiance and filter data.
@@ -171,7 +171,7 @@ green bullet \gblt.}\label{tab:suite}
       &                   &                 & class methods and example data \\
 \yblt & photobiologyInOut     &  functions  & data import/export functions \\
 \gblt & photobiologyWavebands   &  definitions & quantification of radiation \\
-\gblt & photobiologygg  & functions       & extensions to package \code{ggplot2} \\
+\gblt & ggspectra  & functions       & extensions to package \code{ggplot2} \\
 \midrule
 \midrule
 \gblt & photobiologySun   &  data        & spectral data for solar radiation \\
@@ -251,7 +251,7 @@ In RStudio, after adding the \textsf{r4photobiology} repository as shown above, 
 
 They can be also installed at the R command prompt with the following command:
 <<eval=FALSE>>=
-install.packages(c("photobiologyAll", "photobiologygg"))
+install.packages(c("photobiologyAll", "ggspectra"))
 @
 
 

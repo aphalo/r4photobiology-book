@@ -16,12 +16,12 @@ For executing the examples listed in this chapter you need first to load the fol
 <<>>=
 library(photobiology)
 library(photobiologyWavebands)
-library(photobiologygg)
+library(ggspectra)
 @
 
 \section{Task: Printing spectra}
 
-A \texttt{print} method for \texttt{waveband} objects is defines in package \PB, which in the example below is called implicitly. 
+A \texttt{print} method for \texttt{waveband} objects is defines in package \PB, which in the example below is called implicitly.
 
 <<>>=
 VIS()
@@ -110,7 +110,7 @@ plot(cie.wb)
 @
 
 <<>>=
-try(detach(package:photobiologygg))
+try(detach(package:ggspectra))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @

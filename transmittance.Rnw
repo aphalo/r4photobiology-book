@@ -78,7 +78,7 @@ Instead of these functions, the package defines generic functions and specialize
 Using \code{filter\_spct} objects, the calculations become very simple.
 
 <<>>=
-my_gg400.spct <- gg400.spct
+my_gg400.spct <- schott.mspct$GG400
 T2A(my_gg400.spct)
 a.gg400.spct <- T2A(my_gg400.spct, action="replace")
 @
@@ -86,7 +86,7 @@ a.gg400.spct <- T2A(my_gg400.spct, action="replace")
 As in addition to the \code{T2A} method for \code{filter\_spct} there is a \code{T2A} method available for numeric vectors.
 
 <<>>=
-my_gg400.spct <- gg400.spct
+my_gg400.spct <- schott.mspct$GG400
 my_gg400.spct$A <- T2A(my_gg400.spct$Tfr)
 my_gg400.spct
 @
@@ -113,13 +113,13 @@ When we multiply a \code{source\_spct} by a \code{filter\_spct} or by a \code{re
 
 <<>>=
 class(sun.spct)
-class(gg400.spct)
+class(schott.mspct$GG400)
 @
 
 <<>>=
 my_sun.spct <- sun.spct
-my_gg400.spct <- gg400.spct
-filtered_sun.spct <- sun.spct * gg400.spct
+my_gg400.spct <- schott.mspct$GG400
+filtered_sun.spct <- sun.spct * schott.mspct$GG400
 class(filtered_sun.spct)
 head(filtered_sun.spct)
 @
@@ -130,7 +130,7 @@ The result of the calculation can be directly used as an argument, for example, 
 q_irrad(sun.spct, UV()) * 1e6
 q_irrad(my_sun.spct, UV()) * 1e6
 q_irrad(filtered_sun.spct, UV()) * 1e6
-q_irrad(sun.spct * gg400.spct, UV()) * 1e6
+q_irrad(sun.spct * schott.mspct$GG400, UV()) * 1e6
 q_irrad(my_sun.spct * my_gg400.spct, UV()) * 1e6
 @
 
@@ -144,11 +144,11 @@ Remember, that if we want to predict the output of a light source composed of di
 
 <<>>=
 my_luminaire <-
-  (0.5 * Norlux_B.spct + Norlux_R.spct) *  PLX0A000_XT.spct
+  (0.5 * Norlux_B.spct + Norlux_R.spct) *  plexiglas.mspct$Clear_0A000_XT
 my_luminaire
 # equivalent
 my_luminaire <-
-  (Norlux_B.spct * 0.5 + Norlux_R.spct) *  PLX0A000_XT.spct
+  (Norlux_B.spct * 0.5 + Norlux_R.spct) *  plexiglas.mspct$Clear_0A000_XT
 my_luminaire
 
 q_ratio(my_luminaire,

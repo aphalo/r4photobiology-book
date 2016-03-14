@@ -70,7 +70,7 @@ Table \ref{} list the available operators and the operands accepted as legal, to
 We can convolute the emission spectrum of a light source and the transmittance spectrum of a filter by simply multiplying them.
 
 <<>>=
-sun.spct * polyester.new.spct
+sun.spct * polyester.spct
 @
 
 \section{Operators and operations between a spectrum and a numeric vector}
@@ -98,13 +98,13 @@ log10(sun.spct)
 Package \code{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \code{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
 
 <<>>=
-sun.spct * gg400.spct
+sun.spct * schott.mspct$GG400
 @
 
 The GG440 data is for internal transmittance, consequently the results above would be close to the truth only for filters treated with an anti-reflexion multicoating. Let's assume a filter with 9\% reflectance across all wavelengths (a coarse approximation for uncoated glass):
 
 <<>>=
-sun.spct * gg400.spct * (100 - 9) / 100
+sun.spct * schott.mspct$GG400 * (100 - 9) / 100
 @
 
 Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work, even when, as in this example, the wavelength values do not coincide between the two spectra.
@@ -315,9 +315,9 @@ For filters, an option controls whether transmittance, the default, or absorbanc
 
 <<>>=
 options(photobiology.filter.qty = "absorbance")
-polyester.new.spct * 2
+polyester.spct * 2
 options(photobiology.filter.qty = "transmittance")
-polyester.new.spct ^ 2
+polyester.spct ^ 2
 @
 
 Either option can be unset, by means of the \texttt{NULL} value\footnote{If you are planning to continue working through the examples in later sections, do reset the options as shown in this chunk, as otherwise, the results of later calculations will differ from those shown.}.

@@ -15,7 +15,7 @@ getwd()
 @
 
 \begin{abstract}
-  In this chapter we explain how to plot spectra and colours, using packages \code{ggplot2}, \code{ggtern}, and the functions in our package \code{photobiologygg}. Both \code{ggtern} for ternary plots and \code{photobiologygg} for annotating spectra build new functionality on top of the \code{ggplot2} package. We also use several functions and data from package \code{photobiology} in the examples.
+  In this chapter we explain how to plot spectra and colours, using packages \code{ggplot2}, \code{ggtern}, and the functions in our package \code{ggspectra}. Both \code{ggtern} for ternary plots and \code{ggspectra} for annotating spectra build new functionality on top of the \code{ggplot2} package. We also use several functions and data from package \code{photobiology} in the examples.
 \end{abstract}
 
 
@@ -31,7 +31,7 @@ library(dplyr)
 library(photobiology)
 library(photobiologyFilters)
 library(photobiologyWavebands)
-library(photobiologygg)
+library(ggspectra)
 @
 
 <<echo=FALSE, include=FALSE, cache=FALSE>>=
@@ -82,7 +82,7 @@ present chapter.
 %%%%
 \section{Task: simple plotting of spectra}\label{sec:simple:plot:spc}
 
-Pakage \code{photobiologygg} defines specializations of the generic \code{plot} function of R. These functions are available for spectral objects. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows. As the spectral objects have spectral irradiance expressed in known energy or photon units, and an attribute indicating the time unit, the axis labels are produced automatically. The two plots that follow show spectral irradiance, and spectral daily exposure, respectively.
+Pakage \code{ggspectra} defines specializations of the generic \code{plot} function of R. These functions are available for spectral objects. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows. As the spectral objects have spectral irradiance expressed in known energy or photon units, and an attribute indicating the time unit, the axis labels are produced automatically. The two plots that follow show spectral irradiance, and spectral daily exposure, respectively.
 
 <<plot-sun-default-0>>=
 plot(sun.spct)
@@ -115,7 +115,7 @@ plot(sun.spct, w.band = waveband(sun.spct))
 Of course the arguments to these parameters can be supplied in different combinations, and combined with other functions as need. This last example shows how to plot using photon-based units, selecting only a specific region of the spectrum, annotated with the red and far-red photon irradiances, using Prof.\ Harry Smith's definitions for these two wavebands.
 
 <<plot-sun-default-6>>=
-plot(trim_spct(sun.spct, waveband(c(600,800))),
+plot(trim_wl(sun.spct, waveband(c(600,800))),
      w.band = list(Red("Smith20"), Far_red("Smith20")), unit.out = "photon")
 @
 
@@ -127,7 +127,7 @@ plot(sun.spct,
 @
 
 <<plot-sun-default-8>>=
-plot(trim_spct(sun.spct, PAR()),
+plot(trim_wl(sun.spct, PAR()),
      w.band=split_bands(PAR(), length.out = 6), unit.out = "photon")
 @
 
@@ -276,7 +276,7 @@ parameters \code{span} and \code{ignore\_threshold} difficult to grasp from the 
 \section{Task: annotating peaks and valleys in spectra}\label{sec:stat:pk:vly}
 
 Here we show an example of the use the new \code{ggplot} `statistics' \code{stat\_peaks}
-from our package \code{photobiologygg}. It uses the same parameter names and take the
+from our package \code{ggspectra}. It uses the same parameter names and take the
 same arguments as the \code{get\_peaks} function described in section \ref{sec:get:pk:vly}.
 We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc}.
 
@@ -465,7 +465,7 @@ This type of annotations can be also easily done for effective exposures or dose
 fig_dsun <-
   ggplot(data=sun.daily.spct * polythene.new.spct,
          aes(x=w.length, y=s.e.irrad * 1e-3)) + geom_line() +
-  geom_line(data=sun.daily.spct * polyester.new.spct,
+  geom_line(data=sun.daily.spct * polyester.spct,
             colour="red") +
   geom_line(data=sun.daily.spct * PC.spct,
             colour="blue") +
@@ -476,7 +476,7 @@ fig_dsun <-
 cie.pe <-
   e_irrad(sun.daily.spct * polythene.new.spct, CIE()) * 1e-3
 cie.ps <-
-  e_irrad(sun.daily.spct * polyester.new.spct, CIE()) * 1e-3
+  e_irrad(sun.daily.spct * polyester.spct, CIE()) * 1e-3
 cie.pc <-
   e_irrad(sun.daily.spct * PC.spct, CIE()) * 1e-3
 y.pos <- 22.5
@@ -522,7 +522,7 @@ When we want to colour-label individual spectral values, for example, by plottin
 
 \subsection{Scale definitions}\label{sec:plot:scales}
 
-First we define some new scales for use for plotting with \code{ggplot} when plotting wavelength derived colours. In the future something equivalent may be included in package \code{photobiologygg} as predefined scales. We define two very similar scales, one for colour, and one for fill aesthetics.
+First we define some new scales for use for plotting with \code{ggplot} when plotting wavelength derived colours. In the future something equivalent may be included in package \code{ggspectra} as predefined scales. We define two very similar scales, one for colour, and one for fill aesthetics.
 
 <<plot-scales-1, eval=FALSE>>=
 scale_colour_tgspct <-
@@ -1215,13 +1215,13 @@ opts_chunk$set(opts_fig_wide_square)
 @
 
 <<plot-eff-cie-1>>=
-sun.eff.cie.nf.spct <- 
+sun.eff.cie.nf.spct <-
     tag(sun.spct * CIE(), UV_bands())
-sun.eff.cie.pe.spct <- 
-    tag(sun.spct * polyester.new.spct * CIE(), UV_bands())
-sun.eff.cie.226.spct <- 
+sun.eff.cie.pe.spct <-
+    tag(sun.spct * polyester.spct * CIE(), UV_bands())
+sun.eff.cie.226.spct <-
     tag(sun.spct * uv.226.new.spct * CIE(), UV_bands())
-sun.eff.cie.spct <- 
+sun.eff.cie.spct <-
     rbindspct(list('no filter' = sun.eff.cie.nf.spct,
                    'polyester' = sun.eff.cie.pe.spct,
                    'Rosco #226' = sun.eff.cie.226.spct),
@@ -1258,7 +1258,7 @@ In this task we aim at creating bar plots depicting the contributions of the UVB
 <<plot-bar-cie-0>>=
 cie.nf.irrad <- e_irrad(sun.spct * CIE(),
                         list(UVB(), UVA()))
-cie.pe.irrad <- e_irrad(sun.spct * polyester.new.spct * CIE(),
+cie.pe.irrad <- e_irrad(sun.spct * polyester.spct * CIE(),
                         list(UVB(), UVA()))
 cie.226.irrad <- e_irrad(sun.spct * uv.226.new.spct * CIE(),
                          list(UVB(), UVA()))
@@ -1406,7 +1406,7 @@ The calculations we will demonstrate here, in addition are geared to compare a b
 The assessment of the perceived `colour difference' between background and foreground objects requires taking into consideration several spectra: the incident `light' spectrum, the reflectance spectra of the two objects, and the sensitivity spectra of three photoreceptors in the case of trichromic vision. In addition to these data, we need to take into consideration the shape of the dose response of the photoreceptors.
 
 <<plot-clean>>=
-try(detach(package:photobiologygg))
+try(detach(package:ggspectra))
 try(detach(package:ggtern))
 try(detach(package:ggplot2))
 try(detach(package:gridExtra))

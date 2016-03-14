@@ -15,7 +15,8 @@ opts_chunk$set(opts_fig_wide)
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(photobiology)
-library(photobiologygg)
+library(ggplot2)
+library(ggspectra)
 library(photobiologyWavebands)
 library(photobiologySun)
 library(photobiologyLamps)

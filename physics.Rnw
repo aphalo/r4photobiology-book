@@ -14,7 +14,7 @@ opts_knit$set(concordance=TRUE)
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
 library(ggplot2)
-library(photobiologygg)
+library(ggspectra)
 library(photobiology)
 library(photobiologyFilters)
 @
@@ -114,7 +114,7 @@ ggplot(data=data.frame(Tabs=c(2000,7000)), aes(x=Tabs)) +
 
 <<>>=
 try(detach(package:photobiologyFilters))
-try(detach(package:photobiologygg))
+try(detach(package:ggspectra))
 try(detach(package:photobiology))
 try(detach(package:ggplot2))
 @
