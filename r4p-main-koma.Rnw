@@ -247,7 +247,7 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- FALSE
+incl_all <- TRUE
 incl_chaps <- FALSE || incl_all
 incl_ckbk <- FALSE || incl_all
 incl_data <- FALSE || incl_all
@@ -328,7 +328,7 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
 @
 
-<<flag, eval=TRUE>>=
+<<flag, eval=FALSE>>=
 incl_ckbk <- FALSE
 @
 
