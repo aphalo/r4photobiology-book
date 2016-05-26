@@ -10,6 +10,10 @@ opts_knit$set(concordance=TRUE)
 %\end{abstract}
 
 %%%%
-\section{Task: Calling TUV in batch mode}\label{sec:}
+\section{Task: Running TUV in batch mode}\label{sec:tuv:run}
 
-\section{Task: Importing into R simulated spectral data from TUV}\label{sec:}
+\section{Task: Importing into R simulated spectral data from TUV}\label{sec:tuv:import}
+
+\section{Task: Running libRadtran in batch mode}\label{sec:tuv:run}
+
+\section{Task: Importing into R simulated spectral data from libRadtran}\label{sec:libradtran:import}

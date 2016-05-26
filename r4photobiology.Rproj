@@ -10,8 +10,8 @@ NumSpacesForTab: 2
 Encoding: UTF-8
 
 RnwWeave: knitr
-LaTeX: pdfLaTeX
-RootDocument: r4p.main.Rnw
+LaTeX: XeLaTeX
+RootDocument: r4p-main-koma.Rnw
 
 AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
