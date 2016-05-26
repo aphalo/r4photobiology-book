@@ -11,9 +11,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Quantification and spectroscopy}\label{chap:spectroscopy}
 
-\begin{abstract}
-  In this chapter we explain the basis of spectral measurements, including radiation spectra, transmission and reflectance spectra.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain the basis of spectral measurements, including radiation spectra, transmission and reflectance spectra.
+%\end{abstract}
 
 \section{Radiation and molecules}
 

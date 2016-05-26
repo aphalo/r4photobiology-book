@@ -10,10 +10,10 @@ opts_knit$set(concordance=TRUE)
 @
 
 \chapter{Unweighted irradiance}\label{chap:uw:irrad}
-
-\begin{abstract}
-  In this chapter we explain how to calculate unweighted energy and photon irradiances from spectral irradiance.
-\end{abstract}
+%
+%\begin{abstract}
+%  In this chapter we explain how to calculate unweighted energy and photon irradiances from spectral irradiance.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

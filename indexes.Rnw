@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Colour based indexes}\label{chap:colour:indexes}
 
-\begin{abstract}
-  In this chapter we explain how calculate colour-based indexes like NVI and give some hints on how to objectively create ad-hoc indexes for special uses. Here the focus is from the perspective of describing the information carried by spectral cues in the environment of organisms. However, the same calculations apply to remote sensing and analysis of ground-based and even hyper-spectral data with other aims.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how calculate colour-based indexes like NVI and give some hints on how to objectively create ad-hoc indexes for special uses. Here the focus is from the perspective of describing the information carried by spectral cues in the environment of organisms. However, the same calculations apply to remote sensing and analysis of ground-based and even hyper-spectral data with other aims.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

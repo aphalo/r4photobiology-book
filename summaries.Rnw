@@ -6,9 +6,9 @@ opts_chunk$set(opts_fig_wide)
 
 \chapter{Spectra: simple summaries and features}\label{chap:summ:spct}
 
-\begin{abstract}
-  In this chapter we explain how to obtain different summaries common to all types of spectral data. In addition we describe how to extract spectral features from spectral data.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to obtain different summaries common to all types of spectral data. In addition we describe how to extract spectral features from spectral data.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

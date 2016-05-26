@@ -6,9 +6,9 @@ opts_chunk$set(opts_fig_wide)
 
 \chapter{Wavebands: simple summaries and features}\label{chap:summ:wb}
 
-\begin{abstract}
-  In this chapter we explain how to obtain different summaries and query features from wavebands.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to obtain different summaries and query features from wavebands.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Storing data}\label{chap:construct}
 
-\begin{abstract}
-  In this chapter we describe the objects used to store data and functions and operators for basic operations. We also give some examples of operating on these objects and their components using normal R functions and operators.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we describe the objects used to store data and functions and operators for basic operations. We also give some examples of operating on these objects and their components using normal R functions and operators.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 
@@ -161,8 +161,8 @@ by 10, and each value in the vector of spectral irradiances is divided by 1000.
 
 We first use a \code{data.frame} containing suitable spectral data. Object \code{sun.data} is included as part of package \PB. Using \code{head} we can check that the names of the variables are the expected ones, and that the wavelength values are expressed in nanometres:
 <<>>=
-is.data.frame(sun.data)
-head(sun.data, 3)
+#is.data.frame(sun.data)
+#head(sun.data, 3)
 @
 
 Subsequently we create a new \code{source\_spct} object by copy:

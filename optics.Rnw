@@ -6,9 +6,9 @@ opts_chunk$set(opts_fig_wide)
 
 \chapter{Radiation physics}\label{chap:optics}
 
-\begin{abstract}
-  In this chapter we explain how to .
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to .
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Radiation sources}\label{chap:sources}
 
-\begin{abstract}
-  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on light sources useful for photobiological research.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on light sources useful for photobiological research.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

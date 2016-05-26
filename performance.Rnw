@@ -29,9 +29,9 @@
 
 \chapter{Optimizing performance}
 
-\begin{abstract}
-  In this chapter we explain how to make your photobiology calculations execute as fast as possible. The code has been profiled and the performance bottlenecks removed in most cases the implementing some functions in C++. Furthermore copying of spectra is minimized by using package \code{data.table} as the base class of all objects where spectral data is stored. However, it is possible to improve performance even more by changing some defaults and writing efficient user code. This is what is discussed in the present chapter, and should not be of concern unless several thousands of spectra need to be processed.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to make your photobiology calculations execute as fast as possible. The code has been profiled and the performance bottlenecks removed in most cases the implementing some functions in C++. Furthermore copying of spectra is minimized by using package \code{data.table} as the base class of all objects where spectral data is stored. However, it is possible to improve performance even more by changing some defaults and writing efficient user code. This is what is discussed in the present chapter, and should not be of concern unless several thousands of spectra need to be processed.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 
@@ -58,7 +58,7 @@ This type of `good style' optimizations have been done throughout the suite's co
 %%%%
 \section{Task: avoiding repeated validation}\label{sec:perf:check}
 \sloppy
-In the case of doing calculations repeatedly on the same spectrum, a small improvement in performance can be achieved by setting the parameter \code{check.spectrum=FALSE} for all but the first call to \code{irradiance()}, or \code{photon\_irradiance()}, or \code{energy\_irradiance()}, or the equivalent functions for ratios. It is also possible to set this parameter to FALSE in all calls, and do the check beforehand by explicitly calling \code{check\_spectrum()}. When using spectral objects data is checked only at object creation. 
+In the case of doing calculations repeatedly on the same spectrum, a small improvement in performance can be achieved by setting the parameter \code{check.spectrum=FALSE} for all but the first call to \code{irradiance()}, or \code{photon\_irradiance()}, or \code{energy\_irradiance()}, or the equivalent functions for ratios. It is also possible to set this parameter to FALSE in all calls, and do the check beforehand by explicitly calling \code{check\_spectrum()}. When using spectral objects data is checked only at object creation.
 
 %%%%
 \section{Task: caching of multipliers}\label{sec:perf:caching}

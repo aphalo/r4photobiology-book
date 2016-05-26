@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Optical properties of inanimate objects}\label{chap:filters}
 
-\begin{abstract}
-  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data for inanimate objects used in experiments or relevant to photobiology.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data for inanimate objects used in experiments or relevant to photobiology.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

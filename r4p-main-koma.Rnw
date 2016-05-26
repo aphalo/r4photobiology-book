@@ -1,129 +1,78 @@
-\documentclass[a4paper,10pt]{memoir}
+\documentclass[paper=a4,headsepline,BCOR=12mm,DIV=15,twoside,open=right,%
+titlepage,headings=small,fontsize=10pt,index=totoc,bibliography=totoc,%
+captions=tableheading,captions=nooneline]{scrbook}
 
-\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{scrlayer-scrpage}
 
-% \title{R for Photobiology: a handbook}
-% \author{Pedro J. Aphalo \and others}
-% \pretitle{\begin{center}\LARGE}
-% \posttitle{\par\end{center}\vskip 0.5em}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{unicode-math}
 
-\usepackage{lmodern}
-\usepackage[T1]{fontenc}
+% We set the Lucida OTF fonts as default
+%\usepackage{luatextra}
+\usepackage{fontspec}
+\setmainfont{Lucida Bright OT}
+\setsansfont{Lucida Sans OT}
+\setmonofont{Lucida Console DK}
 
-%% using Lucida bright using now free package from PC TeX
-%\usepackage[lucidasmallscale,nofontinfo,seriftt=true,math-style=iso]{lucimatx}
-%% replace option altbullet
-%\renewcommand{\labelitemi}{%
-% {\UseTextSymbol{OMS}\textbullet}}
-%% needed for Lucida
-%\linespread{1.04}
+\newfontfamily\wingdingsfont{Wingdings}
+\newcommand\wingdings[1]{{\wingdingsfont\symbol{#1}}}
 
-\usepackage[footinfo, missing={`none'}]{gitinfo} % remember to setup Git hooks
+\newfontfamily\wingdingsfontdos{Wingdings2}
+\newcommand\wingdingsdos[1]{{\wingdingsfontdos\symbol{#1}}}
+
+\newfontfamily\wingdingsfonttres{Wingdings3}
+\newcommand\wingdingstres[1]{{\wingdingsfonttres\symbol{#1}}}
+
+\usepackage{polyglossia}
+\setdefaultlanguage[variant = british, ordinalmonthday = false]{english}
+
+\usepackage{gitinfo2} % remember to setup Git hooks
 
 \usepackage{hologo}
 
-\usepackage[british]{babel}
+%\usepackage[british]{babel}
 \usepackage{csquotes}
 
-%\chapterstyle{ell}
 \usepackage{graphicx}
-\DeclareGraphicsExtensions{.jpg,.pdf}
+\DeclareGraphicsExtensions{.jpg,.pdf,.png}
 
-\usepackage{microtype}
-\usepackage[style=authoryear-comp,firstinits,sortcites,maxcitenames=2,%
+\usepackage[style=authoryear-comp,giveninits,sortcites,maxcitenames=2,%
     mincitenames=1,maxbibnames=10,minbibnames=10,backref,uniquename=mininit,%
-    uniquelist=minyear,sortfirstinits=true]{biblatex}%,refsection=chapter
-
-\usepackage[hyperindex,bookmarks,pdfview=FitB,%backref,
-            pdftitle={R for Photobiology},%
-            pdfkeywords={photobiology, visible radiation, ultraviolet radiation, R, quantification, methods, calculations},%
-            pdfsubject={Photobiology},%
-            pdfauthor={Pedro J. Aphalo, Andreas Albert, Titta Kotilainen}%
-            ]{hyperref}
-%\chapterstyle{veelo}
-
-\usepackage{calc,soul}%,graphicx,fourier
-%\definecolor{nicegreen}{rgb}{.129,.647,.149}
-\definecolor{maincolor}{rgb}{.1,.1,.7} % really blue
-\definecolor{grey50}{rgb}{.5,.5,.5}
-\makeatletter
-\newlength\dlf@normtxtw
-\setlength\dlf@normtxtw{\textwidth}
-%\def\myhelvetfont{\def\sfdefault{mdput}}
-\newsavebox{\feline@chapter}
-\newcommand\feline@chapter@marker[1][4cm]{%
-\sbox\feline@chapter{%
-\resizebox{!}{#1}{\fboxsep=1pt%
-\colorbox{maincolor}{\color{white}\normalfont\bfseries\thechapter}%\sffamily
-}}%
-\rotatebox{90}{%
-\resizebox{%
-\heightof{\usebox{\feline@chapter}}+\depthof{\usebox{\feline@chapter}}}%
-{!}{\scshape\so\@chapapp}}\quad%
-\raisebox{\depthof{\usebox{\feline@chapter}}}{\usebox{\feline@chapter}}%
-}
-\newcommand\feline@chm[1][4cm]{%
-\sbox\feline@chapter{\feline@chapter@marker[#1]}%
-\makebox[0pt][l]{% aka \rlap
-\makebox[1cm][r]{\usebox\feline@chapter}%
-}}
-\makechapterstyle{daleif1}{
-\renewcommand\chapnamefont{\normalfont\Large\scshape\raggedleft\so}
-\renewcommand\chaptitlefont{\normalfont\huge\bfseries\upshape\color{maincolor}}%\sffamily
-\renewcommand\chapternamenum{}
-\renewcommand\printchaptername{}
-\renewcommand\printchapternum{\null\hfill\feline@chm[2.5cm]\par}
-\renewcommand\afterchapternum{\par\vskip\midchapskip}
-\renewcommand\printchaptertitle[1]{\chaptitlefont\raggedleft ##1\par}
-}
-\makeatother
-\chapterstyle{daleif1}
-
-\newlength{\drop}
-%% Some shades
-
-\newcommand*{\titleLL}{\begingroup% Lost Languages
-\drop=0.1\textheight
-\fboxsep 0.5\baselineskip
-\sffamily
-\vspace*{\drop}
-\centering
-{\textcolor{maincolor}{\HUGE R for Photobiology}}\par
-\vspace{0.5\drop}
-\colorbox{maincolor}{\textcolor{white}{\slshape\Large
-A handbook}}\par
-\vspace{\drop}
-{\Large Pedro J. Aphalo,\\ Andreas Albert\\ T. Matthew Robson\\ and\\ Titta Kotilainen}\par
-\vfill
-{\footnotesize Git: tag\gitVtagn , committed with hash \gitAbbrevHash\ on \gitAuthorIsoDate\\ by\ \gitAuthorName \\PDF created \today\\ \copyright\ 2013--2015 by the authors}\par
-\vspace*{\drop}
-\endgroup}
-
-\maxsecnumdepth{subsection}
-\maxtocdepth{section}
-
-\usepackage{siunitx}
-\usepackage{framed}
-\renewenvironment{shaded}{%
-  \def\FrameCommand{\fboxsep=\FrameSep \colorbox{shadecolor}}%
-  \MakeFramed{\advance\hsize-\width \FrameRestore\FrameRestore}}%
- {\endMakeFramed}
-\definecolor{shadecolor}{gray}{0.80}
-
-\usepackage{abbrev}
-\usepackage{r4photobiology}
-%\usepackage{glossaries}
-%\usepackage{imakeidx}
+    uniquelist=minyear,sortgiveninits=true,backend=biber]{biblatex}%,refsection=chapter
 
 \addbibresource{rbooks.bib}
 \addbibresource{handbook.bib}
 \addbibresource{guidelines.bib}
 \addbibresource{andreas.bib}
 
-\usepackage{multirow}
-%\usepackage{colortbl}
-\usepackage{tabularx}
-\usepackage{rotating}
+\usepackage[unicode,hyperindex,bookmarks,pdfview=FitB,%backref,
+            pdftitle={Notes on using R},%
+            pdfkeywords={R, statistics, data analysis, plotting},%
+            pdfsubject={R},%
+            pdfauthor={Pedro J. Aphalo}%
+            ]{hyperref}
+
+%\makeindex
+
+
+
+
+%\maxsecnumdepth{subsection}
+%\maxtocdepth{section}
+
+%\usepackage{framed}
+%\renewenvironment{shaded}{%
+%  \def\FrameCommand{\fboxsep=\FrameSep \colorbox{shadecolor}}%
+%  \MakeFramed{\advance\hsize-\width \FrameRestore\FrameRestore}}%
+% {\endMakeFramed}
+%\definecolor{shadecolor}{gray}{0.80}
+
+\usepackage{abbrev}
+\usepackage{r4photobiology}
+%\usepackage{glossaries}
+%\usepackage{imakeidx}
+
 
 
 %\definecolor{darklila}{rgb}{0.5,0,0.5}
@@ -165,21 +114,73 @@ A handbook}}\par
   ={text width=6.5em, text centered}
 }
 
+\usepackage{listings}
+\usepackage[olditem]{paralist}%,oldenum
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{tabularx}
 \usepackage{rotating}
+\usepackage{bigstrut}
+\usepackage{siunitx}
+\usepackage[newcommands]{ragged2e}
+\usepackage{framed}
+\usepackage{multirow}
 
 
-\newcommand{\authorNote}[1]{\textcolor{blue}{\textsf{Authors' note:\ \textit{#1}}}\xspace}
-%\newcommand{\authorNote}[1]{}
+% New float "example" and corresponding "list of examples"
+%\DeclareNewTOC[type=example,types=examples,float,counterwithin=chapter]{loe}
+\DeclareNewTOC[name=Box,listname=List of Text Boxes, type=example,types=examples,float,counterwithin=chapter,%
+]{lotxb}
 
-\newcommand{\textboxname}{Box}
-\newcommand{\listtextboxname}{List of Text Boxes}
-\newlistof{listoftextboxes}{txtbx}{\listtextboxname}
-\newfloat[chapter]{textbox}{txtbx}{\textboxname}
-\newlistentry{textbox}{txtbx}{0}
+% changing the style of float captions
+\addtokomafont{caption}{\sffamily\small}
+\setkomafont{captionlabel}{\sffamily\bfseries}
+\setcapindent{0em}
 
-\setfloatadjustment{figure}{\sffamily\centering}
-\setfloatadjustment{table}{\sffamily\footnotesize\centering}
-\setfloatadjustment{textbox}{\sffamily\small}
+\setlength{\columnsep}{18pt}
+
+% finetuning tocs
+\makeatletter
+\renewcommand*\l@figure{\@dottedtocline{1}{0em}{2.6em}}
+\renewcommand*\l@table{\@dottedtocline{1}{0em}{2.6em}}
+\renewcommand*\l@example{\@dottedtocline{1}{0em}{2.3em}}
+\renewcommand{\@pnumwidth}{2.66em}
+\makeatother
+
+% add pdf bookmarks to tocs
+\makeatletter
+\BeforeTOCHead{%
+  \cleardoublepage
+    \edef\@tempa{%
+      \noexpand\pdfbookmark[0]{\list@fname}{\@currext}%
+    }\@tempa
+}
+\makeatother
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{4}
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.90}
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\floatpagefraction}{0.70}
+\renewcommand{\dbltopfraction}{0.90}
+\renewcommand{\dblfloatpagefraction}{0.70}
+
+% Some font changes
+\setkomafont{title}{\sffamily\mdseries\LARGE}
+\setkomafont{subtitle}{\sffamily\mdseries\LARGE}
+\setkomafont{chapter}{\sffamily\bfseries\Huge}
+
+\newcommand{\blankpage}{
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+}
+
+%\newcommand{\authorNote}[1]{\textcolor{blue}{Authors' note:\ \it #1}\xspace}
+\newcommand{\authorNote}[1]{}
 
 %\newcommand{\gls}[1]{} % until start building the glossary.
 \usepackage{glossaries}%[acronym]
@@ -188,14 +189,42 @@ A handbook}}\par
 %\renewcommand{\glossarypreamble}{\begin{multicols}{2}}
 %\renewcommand{\glossarypostamble}{\end{multicols}}
 \glstoctrue
-%\loadglsentries{gp_glossary}
-%\loadglsentries[acronym]{gp_acronyms}
 \makeglossaries
 \loadglsentries{r4p_glossary_tr}
 
 \makeindex
 
 \begin{document}
+
+% customize chapter format:
+\KOMAoption{headings}{twolinechapter}
+\renewcommand*\chapterformat{\thechapter\autodot\hspace{1em}}
+
+% customize dictum format:
+\setkomafont{dictumtext}{\itshape\small}
+\setkomafont{dictumauthor}{\normalfont}
+\renewcommand*\dictumwidth{0.7\linewidth}
+\renewcommand*\dictumauthorformat[1]{--- #1}
+%\renewcommand*\dictumrule{}
+
+\extratitle{A handbook of theory and recipes}
+
+\title{R for Photobiology}
+
+\subtitle{Git hash: \gitAbbrevHash; Git date: \gitAuthorIsoDate}
+
+\author{Pedro J. Aphalo,\\ Andreas Albert\\ T. Matthew Robson\\ and\\ Titta Kotilainen}
+
+\date{Helsinki, \today}
+
+\publishers{Draft, 60\% done\\Available through \href{https://leanpub.com/learnr}{Leanpub}}
+
+\uppertitleback{\copyright\ 20012--2016 by the authors\\
+Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative Commons licenses} as indicated, or when not explicitly indicated, under the \href{http://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0 license}.}
+
+\lowertitleback{Typeset with \href{http://www.latex-project.org/}{\hologo{XeLaTeX}}\ in Lucida Bright and \textsf{Lucida Sans} using the KOMA-Script book class.\\
+The manuscript was written using \href{http://www.r-project.org/}{R} with package knitr. The manuscript was edited in \href{http://www.winedt.com/}{WinEdt} and \href{http://www.rstudio.com/}{RStudio}.
+The source files for the whole book are available at \url{https://bitbucket.org/aphalo/using-r}.}
 
 % knitr setup
 
@@ -247,17 +276,9 @@ options(dplyr.print_max=5)
 options(dplyr.print_min=5)
 @
 
-\thispagestyle{empty}
-\titleLL
-\clearpage
-
-
 \frontmatter
-%\begin{titlingpage}
-%  \maketitle
-%\titleLL
-%\end{titlingpage}
 
+\maketitle
 \tableofcontents
 
 \newpage
@@ -267,7 +288,7 @@ options(dplyr.print_min=5)
 \listoffigures
 
 \newpage
-\listoftextboxes
+\listofexamples
 
 \include{preface.tr}
 
@@ -275,7 +296,7 @@ options(dplyr.print_min=5)
 
 \mainmatter
 
-\setsecnumdepth{subsection}
+%\setsecnumdepth{subsection}
 
 \part{Theory behind calculations}
 
@@ -307,6 +328,10 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
 @
 
+<<flag, eval=TRUE>>=
+incl_ckbk <- FALSE
+@
+
 <<child-baseoper, child='baseoper.Rnw', eval=incl_ckbk>>=
 @
 
@@ -334,11 +359,7 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-indexes, child='indexes.Rnw', eval=incl_ckbk>>=
 @
 
-<<flag, eval=FALSE>>=
-incl_ckbk <- FALSE
-@
-
-<<child-plots, child='plots.Rnw', eval=TRUE>>=
+<<child-plots, child='plots.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-physics, child='physics.Rnw', eval=incl_ckbk>>=
@@ -395,7 +416,7 @@ rm(list = setdiff(current_ls, main_ls))
 
 \printglossary
 
-\printindex
+%\printindex
 
 \part{Appendix}
 

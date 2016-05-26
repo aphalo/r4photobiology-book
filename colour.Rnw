@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Colour}\label{chap:colour}
 
-\begin{abstract}
-  In this chapter we explain how to use colours according to visual sensitivity. For example calculating red-green-blue (RGB) values for humans.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to use colours according to visual sensitivity. For example calculating red-green-blue (RGB) values for humans.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

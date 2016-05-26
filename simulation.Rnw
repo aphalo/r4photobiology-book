@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Simulation}\label{chap:simulation}
 
-\begin{abstract}
-  In this chapter we explain how to use one spectral simulation model and analyse the resulting data.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to use one spectral simulation model and analyse the resulting data.
+%\end{abstract}
 
 %%%%
 \section{Task: Calling TUV in batch mode}\label{sec:}

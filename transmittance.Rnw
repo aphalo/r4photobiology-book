@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Transmission and reflection}\label{chap:trans:refl}
 
-\begin{abstract}
-In this chapter we explain how to do calculations related to the description of absortion and reflection of UV and VIS radiation.
-\end{abstract}
+%\begin{abstract}
+%In this chapter we explain how to do calculations related to the description of absortion and reflection of UV and VIS radiation.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Math operators and functions}\label{chap:baseoper}
 
-\begin{abstract}
-  In this chapter we describe math functions and operators for spectra and wavebands. Many of these are specializations of the generic operators and functions existing in R.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we describe math functions and operators for spectra and wavebands. Many of these are specializations of the generic operators and functions existing in R.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

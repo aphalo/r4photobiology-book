@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Example data for organisms}\label{chap:photoreceptors}
 
-\begin{abstract}
-  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on the photobiology of organisms.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on the photobiology of organisms.
+%\end{abstract}
 
 \section{Plants}
 

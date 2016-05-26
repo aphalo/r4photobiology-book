@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Software}\label{chap:software}
 
-\begin{abstract}
-  In this chapter we describe the software we used to run the code examples and typeset this handbook, and how to install it. Which is basically the same we use for everyday data analysis and typesetting.h
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we describe the software we used to run the code examples and typeset this handbook, and how to install it. Which is basically the same we use for everyday data analysis and typesetting.h
+%\end{abstract}
 
 %%%%
 \section{Introduction}\label{sec:software:intro}

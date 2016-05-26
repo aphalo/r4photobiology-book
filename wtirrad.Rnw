@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Weighted and effective irradiance}\label{chap:wt:irrad}
 
-\begin{abstract}
-  In this chapter we explain how to calculate weighted energy and photon irradiances from spectral irradiance.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to calculate weighted energy and photon irradiances from spectral irradiance.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 

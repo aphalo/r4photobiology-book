@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Measurement}\label{chap:measurement}
 
-\begin{abstract}
-  In this chapter we explain how to import into R data acquired with other software and also how to directly acquire data from instruments directly from within R code. In addition we discuss how to convert the acquired and or imported data into a format suitable for use in calculations with our R packages.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to import into R data acquired with other software and also how to directly acquire data from instruments directly from within R code. In addition we discuss how to convert the acquired and or imported data into a format suitable for use in calculations with our R packages.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 
@@ -27,7 +27,7 @@ Reading spectral (energy) irradiance from a file saved in Ocean Optics SpectraSu
 by OceanView.
 
 <<oo-io-01>>=
-ooss.spct <- read_oo_sstxt("inout/spectrum.SSIrrad")
+ooss.spct <- read_oo_ssirrad("inout/spectrum.SSIrrad")
 ooss.spct
 @
 
@@ -36,7 +36,7 @@ read all information from the files, values like the date can be overridden and 
 can be set.
 
 <<oo-io-02>>=
-ooss1.spct <- read_oo_sstxt("inout/spectrum.SSIrrad",
+ooss1.spct <- read_oo_ssirrad("inout/spectrum.SSIrrad",
                             date = now())
 ooss1.spct
 @

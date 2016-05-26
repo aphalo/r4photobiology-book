@@ -11,9 +11,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Photobiology R packages}\label{chap:suite}
 
-\begin{abstract}
-  In this chapter we describe the suite of R packages for photobiological calculations `\textsf{r4photobiology}', and explain how to install them.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we describe the suite of R packages for photobiological calculations `\textsf{r4photobiology}', and explain how to install them.
+%\end{abstract}
 
 %%%%
 \section{Expected use and users}
@@ -62,7 +62,7 @@ Given the expected audience of both students and biologists, rather than data an
 
 \section{The design of the framework}
 
-\begin{textbox}
+\begin{example}
 \caption[Elements of the framework]{Elements of the framework used by all packages in the suite.}\label{fig:diagram:paradigm}
   \begin{framed}
   \noindent
@@ -74,7 +74,7 @@ Given the expected audience of both students and biologists, rather than data an
       \item[maths operators and functions] Are used to combine and/or transform spectral data, and in some cases to apply weights defined by wavebands.
     \end{description}
   \end{framed}
-\end{textbox}
+\end{example}
 
 The design of the `high level' interface is based on the idea of achieving simplicity of use by hiding the computational difficulties and exposing objects, functions and operators that map directly to physical concepts. Computations and plotting of spectral data centers on two types of objects: \emph{spectra} and \emph{wavebands} (Figure \ref{fig:diagram:paradigm}). Al spectra have in common that observations are referenced to a wavelength value. However, there are different types spectral objects, e.g.\ for light sources and responses to light. Waveband objects include much more than information about a range of wavelengths, they can also include information about a transformation of the spectral data, like a biological spectral weighting function (BSWF). In addition to functions for calculating summary quantities like irradiance from spectral irradiance, the packages define operators for spectra and wavebands. The use of operators simplifies the syntax and makes the interface easier to use.
 
@@ -96,6 +96,7 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
   edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
   \node [base] {data.frame}
       child { node {generic\textunderscore spct}
+          child { node {raw\textunderscore spct}}
           child { node {cps\textunderscore spct}}
           child { node {source\textunderscore spct}}
           child { node {response\textunderscore spct}}
@@ -113,6 +114,7 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
   edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
   \node [base] {list}
       child { node {generic\textunderscore mspct}
+          child { node {raw\textunderscore mspct}}
           child { node {cps\textunderscore mspct}}
           child { node {source\textunderscore mspct}}
           child { node {response\textunderscore mspct}}

@@ -5,9 +5,9 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Radiation physics}\label{chap:physics}
 
-\begin{abstract}
-  In this chapter we explain how to code some optics and physics computations in R.
-\end{abstract}
+%\begin{abstract}
+%  In this chapter we explain how to code some optics and physics computations in R.
+%\end{abstract}
 
 \section{Packages used in this chapter}
 
