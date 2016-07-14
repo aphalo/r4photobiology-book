@@ -1,4 +1,4 @@
-\documentclass[paper=a4,headsepline,BCOR=12mm,DIV=15,twoside,open=right,%
+\documentclass[paper=a4,headsepline,BCOR=12mm,DIV=11,twoside,open=right,%
 titlepage,headings=small,fontsize=10pt,index=totoc,bibliography=totoc,%
 captions=tableheading,captions=nooneline]{scrbook}
 
@@ -182,6 +182,9 @@ captions=tableheading,captions=nooneline]{scrbook}
 %\newcommand{\authorNote}[1]{\textcolor{blue}{Authors' note:\ \it #1}\xspace}
 \newcommand{\authorNote}[1]{}
 
+\usepackage{lipsum}
+\newcommand{\placeHolder}{\lipsum[1]}
+
 %\newcommand{\gls}[1]{} % until start building the glossary.
 \usepackage{glossaries}%[acronym]
 
@@ -238,11 +241,11 @@ options(replace.assign=TRUE,width=50)
 @
 
 <<fig-setup, include=FALSE, cache=FALSE>>=
-opts_fig_wide <- list(fig.width=8, fig.height=5, out.width='.95\\textwidth')
-opts_fig_wide_square <- list(fig.width=7, fig.height=7, out.width='.95\\textwidth')
-opts_fig_narrow <- list(fig.width=5, fig.height=5, out.width='.47\\textwidth')
-opts_fig_very_narrow <- list(fig.width=4, fig.height=4, out.width='.32\\textwidth')
-opts_fig_medium <- list(fig.width=6, fig.height=5, out.width='.64\\textwidth')
+opts_fig_wide <- list(fig.width=6, fig.height=4, out.width='.8\\textwidth')
+opts_fig_wide_square <- list(fig.width=6, fig.height=6, out.width='.8\\textwidth')
+opts_fig_narrow <- list(fig.width=5, fig.height=5, out.width='.4\\textwidth')
+opts_fig_very_narrow <- list(fig.width=4, fig.height=4, out.width='.3\\textwidth')
+opts_fig_medium <- list(fig.width=5, fig.height=3.5, out.width='.6\\textwidth')
 opts_chunk$set(opts_fig_narrow)
 @
 
