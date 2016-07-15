@@ -12,7 +12,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(readr)
 library(readxl)
 library(photobiology)

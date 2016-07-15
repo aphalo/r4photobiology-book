@@ -176,9 +176,9 @@ captions=tableheading,captions=nooneline]{scrbook}
 \renewcommand{\dblfloatpagefraction}{0.70}
 
 % Some font changes
-\setkomafont{title}{\sffamily\mdseries\LARGE}
+\setkomafont{title}{\sffamily\mdseries\Huge}
 \setkomafont{subtitle}{\sffamily\mdseries\LARGE}
-\setkomafont{chapter}{\sffamily\bfseries\Huge}
+\setkomafont{chapter}{\sffamily\bfseries\LARGE}
 
 \newcommand{\blankpage}{
 \newpage
@@ -211,7 +211,7 @@ captions=tableheading,captions=nooneline]{scrbook}
 
 % customize chapter format:
 \KOMAoption{headings}{twolinechapter}
-\renewcommand*\chapterformat{\thechapter\autodot\hspace{1em}}
+\renewcommand*\chapterformat{{\fbox{\Huge\thechapter}\hspace{1em}}}
 
 % customize dictum format:
 \setkomafont{dictumtext}{\itshape\small}
@@ -226,13 +226,13 @@ captions=tableheading,captions=nooneline]{scrbook}
 
 \title{R for Photobiology}
 
-\subtitle{Draft, 60\% done}
+\subtitle{Theory and recipes for common calculations}
 
 \author{Pedro J. Aphalo,\\ Andreas Albert\\ T. Matthew Robson\\ and\\ Titta Kotilainen}
 
 \date{Helsinki, \today}
 
-\publishers{Available through \href{https://leanpub.com/learnr}{Leanpub}}
+\publishers{Available through \href{https://leanpub.com/r4photobiology}{Leanpub}}
 
 \uppertitleback{\copyright\ 20012--2016 by the authors\\
 Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative Commons licenses} as indicated, or when not explicitly indicated, under the \href{http://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0 license}.}
