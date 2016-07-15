@@ -33,27 +33,32 @@ R has a well defined mechanism for ``add-ons'' called packages, that are kept in
 
 The \emph{engine} behind the production of the pages of this handbook is the R package \texttt{knitr} which allows almost seamless integration of R code and text marked up using \hologo{LaTeX}. We have used in addition several other packages, both by using them as building blocks in our packages, and for the production of the examples. The most notable ones are: \texttt{data.table}, \texttt{lubridate}, and \texttt{ggplot2}. Packages \texttt{devtools} and \texttt{testthat} significantly easied the task of package development and coding.
 
-If you are not familiar with R, please, go through the separately available Supplements \ref{chap:R:as:calc}, \ref{chap:R:scripts}, \ref{chap:R:scripts}, and \ref{chap:R:plotting},
-and/or learn from some of the books listed in Appendix \ref{chap:R:reading}, before delving into our `Cook Book'.
+If you are not familiar with R, please, before continuing reading this handbook read a book on the R \emph{language} itself---rather than a book on statistics with R. The book `Learning R \ldots as you learnt your mother tongue' \autocite{Aphalo2016} takes the approach of learning the R language through exploration, which is the way many experienced R programmers unravel the intricacies of the language. In contrast the more concise book `R Programming for Data Science' \autocite{Peng2015} takes a more direct and possibly less chalenging approach to teaching the R language. There is also a free introduction to R \autocite{Paradis2005} available at \url{https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf} and a `student's Guide to R' \autocite{Horton2015} at \url{https://cran.r-project.org/doc/contrib/Horton+Pruim+Kaplan_MOSAIC-StudentGuide.pdf}.
 
 \subsection{RStudio}
 
+RStudio is an intergrated development environment (IDE). The difference between an IDE and an editor is that an IDE integrates additional tools that facilitate the interaction with R. RStudio highlights the R code according to the syntax, offers auto-completion while typing, highlights invalid code on the fly. When a script is run, if an error is triggered, it automatically find the location of the error. RStudio also supports the concept of projects allowing saving of settings separately. It also integrates support for file version control (see next section).
+
 RStudio exists in two versions with identical user interface: a desktop version and a server version. The server version can be used remotely through a web browser. It can be run in the 'cloud', for example, as an AWS instance (Amazon Web Services) quite easily and cheaply, or on one's own server hardware. RStudio is under active development, and constantly improved (visit \url{http://www.rstudio.org/} for an up-to-date description and download and installation instructions.
+
+Two books \autocite{vanderLoo2012,Hillebrand2015} describe and teach how to use RStudio without going in depth into data analysis or statistics, however, as RStudio is under very active development new features are or will be missing from these books as time goes by. You will find tutorials and up-to-date cheat sheets at \url{http://www.rstudio.org/}.
 
 \subsection{Version control: Git and Subversion}
 
 Version control systems help by keeping track of the history of software development, data analysis, or even manuscript writing. They make it possible for several programmers, data analysts, authors and or editors to work on the same files in parallel and then merge their edits. They also allow easy transfer of whole `projects' between computers. Git is very popular, and Github and Bitbucket are popular hosts for repositories. Git itself is free software, was designed by Linus Tordvals of Linux fame, and can be also run locally, or as one's own private server, either as an AWS instance or on other hosting service, or on your own hardware.
 
+The books `Git: Version Control for Everyone' \autocite{Somasundaram2013} and `Pragmatic Guide to Git' \autocite{Swicegood2010} are good introductions to revision control with Git. Free introductory videos and cheatsheets are available at \url{https://git-scm.com/doc}.
+
 \subsection{C++ compiler}
 
 Although R is an interpreted language, a few functions in our suite are written in C++ to achieve better performance. On OS X and Windows, the normal practice is to install binary packages, which are ready compiled. In other systems like Linux and Unix it is the normal practice to install source packages that are compiled at the time of installation. With suitable build tools (e.g.\ RTools for Windows) source packages can be installed and developed in any of the operating systems on which R runs.
 
-\subsection{\LaTeX}
+\subsection{\hologo{LaTeX}}
 
-\hologo{LaTeX} is built on top of \hologo{TeX}. \hologo{TeX} code and features were `frozen' (only bugs are fixed) long ago. There are currently a few `improved' derivatives: \hologo{pdfTeX}, \hologo{XeTeX}, and \hologo{LuaTeX}. Currently the most popular \hologo{TeX} in western countries is pdftex which can directly output PDF files. \hologo{XeTeX} can handle text both written from left to right and right to left, even in the same document and additional font forats, and is the most popular \hologo{TeX} engine in China and other Asian countries.
+\hologo{LaTeX} is built on top of \hologo{TeX}. \hologo{TeX} code and features were `frozen' (only bugs are fixed) long ago. There are currently a few `improved' derivatives: \hologo{pdfTeX}, \hologo{XeTeX}, and \hologo{LuaTeX}. Currently the most popular \hologo{TeX} in western countries is \hologo{pdfTeX} which can directly output PDF files. \hologo{XeTeX} can handle text both written from left to right and right to left, even in the same document and additional font forats, and is the most popular \hologo{TeX} engine in China and other Asian countries. Both \hologo{XeLaTeX} and \hologo{LuaTeX} are rapidly becoming popular also for typesetting texts in variants of Latin and Greek alphabets as these new \hologo{TeX} engines natively support large charcter sets and modern font formats such as TTF and OTF.
 
-For the typesetting of this handbook we used several \hologo{LaTeX} packages, of which those that most affected appearance are \texttt{memoir}, \texttt{hyperref}, \texttt{booktabs}, \texttt{pgf/tikz} and \texttt{biblatex}. The \hologo{TeX} distribution we used is Mik\hologo{TeX}.
+For the typesetting of this handbook we used several \hologo{LaTeX} packages, of which those that most affected appearance are \texttt{KOMA script book class}, \texttt{hyperref}, \texttt{booktabs}, \texttt{pgf/tikz} and \texttt{biblatex}. The \hologo{TeX} distribution we used is Mik\hologo{TeX}.
 
 \subsection{Markdown}
 
-Markdown is a simple markup language, which although offering somehow less flexibility that \hologo{LaTeX} is much easier to learn and which can be easily converted to various different output formats in addition to PDF. 
+Markdown is a simple markup language, which although offering somehow less flexibility that \hologo{LaTeX} is much easier to learn and which can be easily converted to various output formats such as HTMLand XTML in addition to PDF.  RStudio supports editing markdown and the variants R Markdown and Bookdown. Documentation on Rmarkdown is available on-line at \url{http://rmarkdown.rstudio.com/} and on Bookdown at \url{https://bookdown.org/}.

@@ -9,7 +9,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Quantification and spectroscopy}\label{chap:spectroscopy}
+\chapter{Physics and biophysics}\label{chap:spectroscopy}
 
 %\begin{abstract}
 %  In this chapter we explain the basis of spectral measurements, including radiation spectra, transmission and reflectance spectra.
@@ -17,29 +17,81 @@ opts_knit$set(concordance=TRUE)
 
 \section{Radiation and molecules}
 
+\subsection{Absorption}
+
 \subsection{Fluorescence}
 
 \subsection{Phosphorescence}
 
-\section{Surface phenomena}
+\section{Radiation and simple objects}
+
+\subsection{Angle of incidence}
 
 \subsection{Refraction}
 
 \subsection{Difraction}
 
-\section{Geometrical considerations}
-
 \subsection{Scatering}
 
-\subsection{Angle of incidence}
+\section{Radiation in tissues and cells}
 
-\section{Measured quantities}
+\section{Radiation interactions in plant canopies}
+\index{radiation within plant canopies|(}
+\index{plant canopies|(}
+%% Pedro
+The attenuation of visible and \UV radiation by canopies is difficult to describe mathematically because it is a complex phenomenon. The spatial distribution of leaves is in most cases not uniform, the display angle of the leaves is not random, and may change with depth in the canopy, and even in some cases with time-of-day. Here we give only a description of the simplest approach, the use of an approximation based on Beer's law as modified by \autocite{Monsi1953}, reviewed by \autocite{Hirose2005}. Beer's law (Equation \ref{eq:Beer-Lambert}) assumes a homogeneous light absorbing medium such as a solution. However, a canopy is heterogenous, with discrete light absorbing objects (the leaves and stems) distributed in a transparent medium (air).
+\begin{equation}
+I_z = I_0\cdot\mathrm{e}^{-K\,L_z} \label{eq:Monsi:Saeki}
+\end{equation}
+Equation \ref{eq:Monsi:Saeki} describes the radiation attenuated as a function of leaf area index ($L$ or \LAI)
+at a given canopy depth ($z$). The equation does not explicitly account for the effects
+of the statistical spatial distribution of leaves and the effects of
+changing incidence angle of the radiation. Consequently, the empirical extinction
+coefficient ($K$) obtained may vary depending on these factors. $K$ is
+not only a function of plant species (through
+leaf optical properties, and how leaves are displayed), but also of
+time-of-day, and season-of-year---as a consequence of solar zenith angle---and
+degree of scattering of the incident radiation.
+As the degree of scattering depends on clouds, and also on wavelength,
+the extinction coefficient is different for \UV and
+visible radiation. Radiation extinction in canopies has yet to be studied in detail with
+respect to \UV radiation, mainly because of difficulties in the
+measurement of \UV radiation compared to \PAR, a spectral region which has been extensively studied.
 
-\subsection{Irradiance, radiance, and fluence}
+Ultraviolet radiation is strongly absorbed by plant
+surfaces, although cuticular waxes and pubescence on leaves can
+sometimes increase \UV reflectance. The diffuse component of \UV radiation is larger than that
+of visible light (Figure \ref{fig:diffuse.light}).
+In sunlit patches in forest gaps the diffuse radiation percentage is
+lower than in open areas, because \gls{direct:rad} is not attenuated
+but part of the sky is occluded by the surrounding forest.
+Attenuation
+with canopy depth is on average usually more gradual for \UV than for \PAR. The
+\UV irradiance decreases with depth in tree canopies, but the \UVPAR ratio\index{UV PAR@\UVPAR ratio in canopies}
+tends to increase \autocite[see][]{Brown1994}. In contrast, \autocite{Deckmyn2001} observed a decrease in \UVPAR ratio in white clover canopies with planophyle leaves. \autocite{Allen1975} modelled the
+\UVB penetration in plant canopies, under normal and depleted ozone conditions.
+\autocite{Parisi1996} measured
+\UVB doses within model plant canopies using dosimeters. The position of
+leaves affects \UVB exposure, and it has been observed that heliotropism
+can moderate exposure and could be a factor contributing to differences in tolerance
+among crop cultivars \autocite{Grant1998,Grant1999,Grant1999a,Grant2004}.
 
-\subsection{Specular and total reflectance}
+Detailed accounts of different models describing the interaction of radiation and
+plant canopies, taking into account the properties of
+foliage, are given by \autocite{Campbell1998} and \autocite{Monteith2008}.
 
-\subsection{Internal and total transmittance}
+\authorNote{We could add Chelle's modeling of spectral irradiance on plant surfaces}
 
-\subsection{Absorbance and transmittance}
+\authorNote{What about Juha Ross, Pola and Hessu Smolander?}
+
+\authorNote{Could Matt or Titta add to this section?}
+
+\index{plant canopies|)}
+\index{radiation within plant canopies|)}
+
+\section{Radiation interactions in water bodies}
+
+\placeHolder
+
+\authorNote{Andreas, could you be the lead author of this section?}
 

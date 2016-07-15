@@ -225,13 +225,17 @@ multiplot(fig_sun.q  + labs(y = ylab_umol_atop),
 @
 
 <<echo=FALSE, include=FALSE>>=
-opts_chunk$set(opts_fig_wide)
+opts_chunk$set(opts_fig_wide_full)
 @
 
-<<plot-par-multiple-2>>=
+<<plot-par-multiple-2,>>=
 multiplot(fig_sun.q  + labs(y = ylab_umol),
           fig_sun.e1 + labs(y = ylab_watt),
           cols = 2)
+@
+
+<<echo=FALSE, include=FALSE>>=
+opts_chunk$set(opts_fig_wide)
 @
 
 \section{Task: finding peaks and valleys in spectra}\label{sec:get:pk:vly}

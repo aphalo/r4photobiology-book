@@ -4,7 +4,7 @@ opts_knit$set(concordance=TRUE)
 opts_chunk$set(opts_fig_wide)
 @
 
-\chapter{Radiation physics}\label{chap:optics}
+\chapter{Radiation properties}\label{chap:optics}
 
 %\begin{abstract}
 %  In this chapter we explain how to .
@@ -621,94 +621,3 @@ plot(LUMITRONIX_white.spct)
 \end{figure}
 
 Finally lasers, are different in that a laser is not another type of primary source of radiation. Lasing is a phenomenon which allows the generation of coherent radiation from a beam of incoherent radiation by means of a ``cavity''. Different primary sources of radiation can be used in lasers. In the case of laser diodes, an LED is the primary source of radiation. There are different possible types of cavities, for example gas-filled or solid state. Lasers are pulsed light sources, they do not emit continuously, although in many cases the frequency at which pulses are produced can be high. Even though laser pointers and other readily available lasers seem to us as being a continuous source of radiation, they are not. In fact, they are pulsed, and the duty cycle is low (pulses are brief compared to `gaps') but each pulse has high energy. As radiation is in addition in a very narrow beam and almost of a single wavelength, a laser delivers spatially and temporarily concentrated energy pulses, that can make the beam from a 1~mW laser pointer easily visible at a distance of tens of meters in a lecture hall illuminated with lamps emitting in total hundreds of watts of visible radiation. For the same reason, even lasers emitting as little 1~mW if pointed directly into the eyes can cause permanent eye-sight damage.
-
-\section{Absorption and reflection of radiation}
-
-\authorNote{We need to explain here the physics of absorption and reflection from the point of view of optical properties. Photochemistry will be introduced in a separate chapter.}
-
-\placeHolder
-
-\subsection{Reflectance}
-
-specular, scattered, total
-
-\placeHolder
-
-\subsection{Absorptance}
-
-what is the equivalent of total and internal?
-
-\placeHolder
-
-\subsection{Transmittance}
-
-total vs.\ internal
-
-\placeHolder
-
-\subsection{Refraction}
-
-\placeHolder
-
-\section{Radiation interactions in tissues and cells}
-
-\section{Radiation interactions in plant canopies}
-\index{radiation within plant canopies|(}
-\index{plant canopies|(}
-%% Pedro
-The attenuation of visible and \UV radiation by canopies is difficult to describe mathematically because it is a complex phenomenon. The spatial distribution of leaves is in most cases not uniform, the display angle of the leaves is not random, and may change with depth in the canopy, and even in some cases with time-of-day. Here we give only a description of the simplest approach, the use of an approximation based on Beer's law as modified by \autocite{Monsi1953}, reviewed by \autocite{Hirose2005}. Beer's law (Equation \ref{eq:Beer-Lambert}) assumes a homogeneous light absorbing medium such as a solution. However, a canopy is heterogenous, with discrete light absorbing objects (the leaves and stems) distributed in a transparent medium (air).
-\begin{equation}
-I_z = I_0\cdot\mathrm{e}^{-K\,L_z} \label{eq:Monsi:Saeki}
-\end{equation}
-Equation \ref{eq:Monsi:Saeki} describes the radiation attenuated as a function of leaf area index ($L$ or \LAI)
-at a given canopy depth ($z$). The equation does not explicitly account for the effects
-of the statistical spatial distribution of leaves and the effects of
-changing incidence angle of the radiation. Consequently, the empirical extinction
-coefficient ($K$) obtained may vary depending on these factors. $K$ is
-not only a function of plant species (through
-leaf optical properties, and how leaves are displayed), but also of
-time-of-day, and season-of-year---as a consequence of solar zenith angle---and
-degree of scattering of the incident radiation.
-As the degree of scattering depends on clouds, and also on wavelength,
-the extinction coefficient is different for \UV and
-visible radiation. Radiation extinction in canopies has yet to be studied in detail with
-respect to \UV radiation, mainly because of difficulties in the
-measurement of \UV radiation compared to \PAR, a spectral region which has been extensively studied.
-
-Ultraviolet radiation is strongly absorbed by plant
-surfaces, although cuticular waxes and pubescence on leaves can
-sometimes increase \UV reflectance. The diffuse component of \UV radiation is larger than that
-of visible light (Figure \ref{fig:diffuse.light}).
-In sunlit patches in forest gaps the diffuse radiation percentage is
-lower than in open areas, because \gls{direct:rad} is not attenuated
-but part of the sky is occluded by the surrounding forest.
-Attenuation
-with canopy depth is on average usually more gradual for \UV than for \PAR. The
-\UV irradiance decreases with depth in tree canopies, but the \UVPAR ratio\index{UV PAR@\UVPAR ratio in canopies}
-tends to increase \autocite[see][]{Brown1994}. In contrast, \autocite{Deckmyn2001} observed a decrease in \UVPAR ratio in white clover canopies with planophyle leaves. \autocite{Allen1975} modelled the
-\UVB penetration in plant canopies, under normal and depleted ozone conditions.
-\autocite{Parisi1996} measured
-\UVB doses within model plant canopies using dosimeters. The position of
-leaves affects \UVB exposure, and it has been observed that heliotropism
-can moderate exposure and could be a factor contributing to differences in tolerance
-among crop cultivars \autocite{Grant1998,Grant1999,Grant1999a,Grant2004}.
-
-Detailed accounts of different models describing the interaction of radiation and
-plant canopies, taking into account the properties of
-foliage, are given by \autocite{Campbell1998} and \autocite{Monteith2008}.
-
-\authorNote{We could add Chelle's modeling of spectral irradiance on plant surfaces}
-
-\authorNote{What about Juha Ross, Pola and Hessu Smolander?}
-
-\authorNote{Could Matt or Titta add to this section?}
-
-\index{plant canopies|)}
-\index{radiation within plant canopies|)}
-
-\section{Radiation interactions in water bodies}
-
-\placeHolder
-
-\authorNote{Andreas, could you be the lead author of this section?}
-

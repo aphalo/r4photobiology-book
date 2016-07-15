@@ -29,6 +29,7 @@ The suite uses object-oriented programming for its higher level `user-friendly' 
 \newcommand{\Nrd}{\textcolor{red}{\small N}}
 \newcommand{\Ygrn}{\textcolor{green}{\small Y}}
 \caption[Binary operators]{Binary operators and operands. Validity and class of result. All operations marked `\Ygrn' are allowed, those marked `\Nrd' are forbidden and return \texttt{NA} and issue a warning.}\label{tab:operators}\vspace{0.75ex}
+\centering
 \begin{tabular}{lcccccll}
 \toprule
 e1 & \verb|+| & \verb|-| & \verb|*| & \verb|/| & \verb|^| & e2 & result \\

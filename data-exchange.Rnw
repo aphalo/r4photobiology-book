@@ -1,0 +1,29 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Importing and exporting `R' data}\label{chap:measurement}
+
+%\begin{abstract}
+%  In this chapter we explain how to import into R data acquired with other software and also how to directly acquire data from instruments directly from within R code. In addition we discuss how to convert the acquired and or imported data into a format suitable for use in calculations with our R packages.
+%\end{abstract}
+
+\section{Packages used in this chapter}
+
+For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<>>=
+library(photobiology)
+library(photobiologyInOut)
+library(hyperSpec)
+library(colorSpec)
+library(pavo)
+@
+
+\section{Reading and writing common file formats}
+
+\subsection{Package \texttt{hyperSpec}}
+
+\subsection{Package \texttt{colorSpec}}
+
+\subsection{Package \texttt{pavo}}

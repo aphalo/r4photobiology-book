@@ -2,11 +2,21 @@
 titlepage,headings=small,fontsize=10pt,index=totoc,bibliography=totoc,%
 captions=tableheading,captions=nooneline]{scrbook}
 
-\usepackage{color}
-\usepackage{scrlayer-scrpage}
+%%% We use OTF fonts through XeLaTeX
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{unicode-math}
+
+\usepackage{color}
+\usepackage{scrlayer-scrpage}
+
+\usepackage{chapterthumb}
+\pagestyle{scrheadings}
+\AddLayersToPageStyle{@everystyle@}{chapterthumb}
+\addtokomafont{chapterthumb}{\bfseries}
+\renewcommand*{\chapterthumbwidth}{.036\paperheight}
+\renewcommand*{\chapterthumbskip}{.034\paperheight}
+\renewcommand*{\chapterthumbformat}{\thechapter}
 
 % We set the Lucida OTF fonts as default
 %\usepackage{luatextra}
@@ -15,6 +25,7 @@ captions=tableheading,captions=nooneline]{scrbook}
 \setsansfont{Lucida Sans OT}
 \setmonofont{Lucida Console DK}
 
+% We set up some other symbol fonts
 \newfontfamily\wingdingsfont{Wingdings}
 \newcommand\wingdings[1]{{\wingdingsfont\symbol{#1}}}
 
@@ -24,10 +35,20 @@ captions=tableheading,captions=nooneline]{scrbook}
 \newfontfamily\wingdingsfonttres{Wingdings3}
 \newcommand\wingdingstres[1]{{\wingdingsfonttres\symbol{#1}}}
 
+\newfontfamily\meteoconsfont{Meteocons}
+\newcommand\meteocons[1]{{\meteoconsfont\symbol{#1}}}
+\newcommand\meteosun{\metecons{"0042}}
+\newcommand\meteosolidsun{\metecons{"0031}}
+
+\newfontfamily\typiconsfont{Typicons}
+\newcommand\typicons[1]{{\typiconsfont\symbol{#1}}}
+\newcommand\typiattn{\typicons{"E136}}
+
+% set language
 \usepackage{polyglossia}
 \setdefaultlanguage[variant = british, ordinalmonthday = false]{english}
 
-\usepackage{gitinfo2} % remember to setup Git hooks
+% \usepackage{gitinfo2} % remember to setup Git hooks
 
 \usepackage{hologo}
 
@@ -36,6 +57,8 @@ captions=tableheading,captions=nooneline]{scrbook}
 
 \usepackage{graphicx}
 \DeclareGraphicsExtensions{.jpg,.pdf,.png}
+
+% Bibliography
 
 \usepackage[style=authoryear-comp,giveninits,sortcites,maxcitenames=2,%
     mincitenames=1,maxbibnames=10,minbibnames=10,backref,uniquename=mininit,%
@@ -46,6 +69,8 @@ captions=tableheading,captions=nooneline]{scrbook}
 \addbibresource{guidelines.bib}
 \addbibresource{andreas.bib}
 
+% Hypertext
+
 \usepackage[unicode,hyperindex,bookmarks,pdfview=FitB,%backref,
             pdftitle={Notes on using R},%
             pdfkeywords={R, statistics, data analysis, plotting},%
@@ -55,34 +80,16 @@ captions=tableheading,captions=nooneline]{scrbook}
 
 %\makeindex
 
-
-
-
 %\maxsecnumdepth{subsection}
 %\maxtocdepth{section}
 
-%\usepackage{framed}
-%\renewenvironment{shaded}{%
-%  \def\FrameCommand{\fboxsep=\FrameSep \colorbox{shadecolor}}%
-%  \MakeFramed{\advance\hsize-\width \FrameRestore\FrameRestore}}%
-% {\endMakeFramed}
-%\definecolor{shadecolor}{gray}{0.80}
-
+% Definitions of symbols, abbreviations and units
 \usepackage{abbrev}
 \usepackage{r4photobiology}
+
 %\usepackage{glossaries}
 %\usepackage{imakeidx}
 
-
-
-%\definecolor{darklila}{rgb}{0.5,0,0.5}
-%\definecolor{lila}{rgb}{1,0,1}
-%\definecolor{darkgreen}{rgb}{0,0.7,0}
-%\definecolor{darkyellow}{rgb}{1,0.8,0}
-%\definecolor{orange}{rgb}{1,0.5,0}
-%\definecolor{brown}{rgb}{0.5,0.2,0.2}
-%\definecolor{darkred}{rgb}{0.75,0,0.1}
-%
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,arrows,trees}
 
@@ -127,6 +134,7 @@ captions=tableheading,captions=nooneline]{scrbook}
 \usepackage{framed}
 \usepackage{multirow}
 
+%%% Adjust graphic design
 
 % New float "example" and corresponding "list of examples"
 %\DeclareNewTOC[type=example,types=examples,float,counterwithin=chapter]{loe}
@@ -183,7 +191,7 @@ captions=tableheading,captions=nooneline]{scrbook}
 \newcommand{\authorNote}[1]{}
 
 \usepackage{lipsum}
-\newcommand{\placeHolder}{\lipsum[1]}
+\newcommand{\placeHolder}{Missing for now\ldots}
 
 %\newcommand{\gls}[1]{} % until start building the glossary.
 \usepackage{glossaries}%[acronym]
@@ -196,6 +204,8 @@ captions=tableheading,captions=nooneline]{scrbook}
 \loadglsentries{r4p_glossary_tr}
 
 \makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
@@ -210,17 +220,19 @@ captions=tableheading,captions=nooneline]{scrbook}
 \renewcommand*\dictumauthorformat[1]{--- #1}
 %\renewcommand*\dictumrule{}
 
+%%% START OF FRONT MATTER TEXT
+
 \extratitle{A handbook of theory and recipes}
 
 \title{R for Photobiology}
 
-\subtitle{Git hash: \gitAbbrevHash; Git date: \gitAuthorIsoDate}
+\subtitle{Draft, 60\% done}
 
 \author{Pedro J. Aphalo,\\ Andreas Albert\\ T. Matthew Robson\\ and\\ Titta Kotilainen}
 
 \date{Helsinki, \today}
 
-\publishers{Draft, 60\% done\\Available through \href{https://leanpub.com/learnr}{Leanpub}}
+\publishers{Available through \href{https://leanpub.com/learnr}{Leanpub}}
 
 \uppertitleback{\copyright\ 20012--2016 by the authors\\
 Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative Commons licenses} as indicated, or when not explicitly indicated, under the \href{http://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0 license}.}
@@ -241,6 +253,7 @@ options(replace.assign=TRUE,width=50)
 @
 
 <<fig-setup, include=FALSE, cache=FALSE>>=
+opts_fig_wide_full <- list(fig.width=8, fig.height=4, out.width='.98\\textwidth')
 opts_fig_wide <- list(fig.width=6, fig.height=4, out.width='.8\\textwidth')
 opts_fig_wide_square <- list(fig.width=6, fig.height=6, out.width='.8\\textwidth')
 opts_fig_narrow <- list(fig.width=5, fig.height=5, out.width='.4\\textwidth')
@@ -250,11 +263,11 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- TRUE
-incl_chaps <- FALSE || incl_all
-incl_ckbk <- FALSE || incl_all
-incl_data <- FALSE || incl_all
-incl_acq <- FALSE || incl_all
+incl_all <- FALSE
+incl_chaps <- TRUE || incl_all
+incl_ckbk <- TRUE || incl_all
+incl_acq <- TRUE || incl_all
+incl_data <- TRUE || incl_all
 eval_diag <- FALSE
 @
 
@@ -306,14 +319,13 @@ options(dplyr.print_min=5)
 <<child-optics, child='optics.Rnw', eval=incl_chaps>>=
 @
 
-<<child-photochemistry, child='spectroscopy.Rnw', eval=incl_chaps>>=
+<<child-photochemistry, child='physics-theory.Rnw', eval=incl_chaps>>=
 @
 
 <<child-photochemistry, child='photochemistry.Rnw', eval=incl_chaps>>=
 @
 
 \part{Tools used for calculations}
-
 
 <<child-software, child='software.Rnw', eval=incl_chaps>>=
 @
@@ -331,7 +343,7 @@ rm(list = setdiff(current_ls, main_ls))
 <<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
 @
 
-<<flag, eval=FALSE>>=
+<<flag, eval=FALSE, echo=FALSE>>=
 incl_ckbk <- FALSE
 @
 
@@ -373,7 +385,10 @@ current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
 
-\part{Data acquisition and modelling}
+\part{Data acquisition and exchange}
+
+<<child-exchange, child='data-exchange.Rnw', eval=incl_acq>>=
+@
 
 <<child-measurement, child='measurement.Rnw', eval=incl_acq>>=
 @
@@ -404,14 +419,6 @@ rm(list = setdiff(current_ls, main_ls))
 current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
-
-
-\part{Optimizing computation speed}
-
-<<child-performance, child='performance.Rnw', eval=FALSE>>=
-@
-
-\authorNote{Chapter not included as example code is giving errors at the moment.}
 
 \include{R.readings.tr}
 

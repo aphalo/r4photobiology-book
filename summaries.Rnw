@@ -210,11 +210,11 @@ plot(polyester.spct)
 
 \section{Task: Other R's methods}
 
-Methods \texttt{names} and \texttt{comment} should work as usual. In the case of the comment attribute, most operations on spectral objects preserve comments, sometimes with additions, or by merging of comments from operands. Comments are optional, so for some objects \texttt{comment} may return a \texttt{NULL}.
+Methods \texttt{names} and \texttt{comment} should work as usual. In the case of the comment attribute, most operations on spectral objects preserve comments, sometimes with additions, or by merging of comments from operands. Comments are optional, so for some objects \texttt{comment} may return a \texttt{NULL}. As some comments contain new line characters, to get them printed nicely we need to use \texttt{cat}.
 
 <<>>=
 names(sun.spct)
-comment(sun.spct)
+cat(comment(sun.spct))
 @
 
 \section{Task: Find peaks and valleys}\label{sec:summaries:peaks}

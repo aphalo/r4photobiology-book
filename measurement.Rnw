@@ -3,7 +3,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Measurement}\label{chap:measurement}
+\chapter{Importing and exporting `foreign' data}\label{chap:measurement}
 
 %\begin{abstract}
 %  In this chapter we explain how to import into R data acquired with other software and also how to directly acquire data from instruments directly from within R code. In addition we discuss how to convert the acquired and or imported data into a format suitable for use in calculations with our R packages.
@@ -13,6 +13,8 @@ opts_knit$set(concordance=TRUE)
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<>>=
+library(readr)
+library(readxl)
 library(photobiology)
 library(photobiologyInOut)
 #library(ooacquire}
@@ -20,8 +22,13 @@ library(photobiologyInOut)
 library(lubridate)
 @
 
+\section{Reading and writing common file formats}
 
-\section{Importing data acquired externally to R}
+\subsection{Task: Read and write text files}
+
+\subsection{Task: Read and write worksheets}
+
+\section{Reading instrument-output files}
 %%%%
 \subsection{Task: Import data from Ocean Optics instruments and software}\label{sec:OO:import}
 
