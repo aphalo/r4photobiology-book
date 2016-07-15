@@ -12,7 +12,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(ggplot2)
 library(ggspectra)
 library(photobiology)
@@ -56,7 +56,7 @@ We can use the function for calculating black body emission spectra for differen
 black_body_spectrum(500, 5000)
 @
 
-The function is vectorized:
+The function is vectorised:
 <<>>=
 black_body_spectrum(c(300,400,500), 5000)
 @
@@ -71,7 +71,7 @@ We aware that if two vectors are supplied, then the elements in each one are mat
 black_body_spectrum(c(500, 500, 600, 600), c(4500,5000)) # tricky!
 @
 
-We can use the function defined above for plotting black body emission spectra for different temperatures. We use \code{ggplot2} and directly plot a function using \code{stat\_function}, using \code{args} to pass the additional argument giving the absolute temperature to be used. We plot three lines using three different temperatures (5600~K, 4500~K, and 3700~K):
+We can use the function defined above for plotting black body emission spectra for different temperatures. We use \pckg{ggplot2} and directly plot a function using \code{stat\_function}, using \code{args} to pass the additional argument giving the absolute temperature to be used. We plot three lines using three different temperatures (5600~K, 4500~K, and 3700~K):
 
 <<tidy=FALSE>>=
 ggplot(data=data.frame(x=c(50,1500)), aes(x)) +

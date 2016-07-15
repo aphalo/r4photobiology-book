@@ -13,7 +13,7 @@ opts_chunk$set(opts_fig_wide)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
 library(photobiologyWavebands)
 library(ggspectra)
@@ -21,14 +21,14 @@ library(ggspectra)
 
 \section{Task: Printing spectra}
 
-A \texttt{print} method for \texttt{waveband} objects is defines in package \PB, which in the example below is called implicitly.
+A \code{print} method for \code{waveband} objects is defines in package \PB, which in the example below is called implicitly.
 
 <<>>=
 VIS()
 CIE()
 @
 
-To print the internals (the underlying components) of the object, one can use method \texttt{unclass}.
+To print the internals (the underlying components) of the object, one can use method \code{unclass}.
 
 <<>>=
 unclass(VIS())
@@ -37,7 +37,7 @@ unclass(CIE())
 
 \section{Task: Summaries related to object properties}\label{sec:summarieswb:wavelength}
 
-In the case of the \texttt{summary} method, specializations for \texttt{source\_spct} and \ldots are provided. But for other spectral objects, the \texttt{summary} method for \texttt{data.table} is called. For the \texttt{summary} specializations defined, the corresponding \texttt{print} method specializations are also defined.
+In the case of the \code{summary} method and their corresponding print method, specializations for all classes of spectral objects are provided---i.e.\ all classes with names ending in \code{\_spct}.
 
 <<>>=
 my.wb <- waveband(c(400,500))
@@ -56,7 +56,7 @@ summary(cie.wb)
 %%%%
 \section{Task: Summaries related to wavelength}\label{sec:summarieswb:wavelength}
 
-Functions \texttt{max}, \texttt{min}, \texttt{range}, \texttt{midpoint} when used with an object of class \texttt{waveband} return the result of applying these functions to the wavelength component boundaries of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
+Functions \code{max}, \code{min}, \code{range}, \code{midpoint} when used with an object of class \code{waveband} return the result of applying these functions to the wavelength component boundaries of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
 
 <<>>=
 range(vis.wb)
@@ -65,7 +65,7 @@ max(vis.wb)
 min(vis.wb)
 @
 
-Functions \texttt{spread} are \texttt{stepsize} are generics defined in package \PB. \texttt{spread} returns maximum less minimum wavelengths values in nanometres, while \texttt{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
+Functions \code{spread} are \code{stepsize} are generics defined in package \PB. \code{spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
 
 <<>>=
 spread(vis.wb)
@@ -73,7 +73,7 @@ spread(vis.wb)
 
 \section{Task: Querying other properties}\label{sec:summarieswb:other}
 
-It is possible to query whether a \texttt{waveband} object includes a weighting function using function \texttt{is\_effective}. Weighting functions are used for the calculation \emph{effective irradiances} and \emph{effecctive exposures}.
+It is possible to query whether a \code{waveband} object includes a weighting function using function \code{is\_effective}. Weighting functions are used for the calculation \emph{effective irradiances} and \emph{effective exposures}.
 
 <<>>=
 is_effective(vis.wb)
@@ -82,7 +82,7 @@ is_effective(cie.wb)
 
 \section{Task: R's methods}
 
-The ``labels'' can be retrieved with R's method \texttt{labels}. Waveband objects have two slots for names, normally used when wavebands are plotted or printed.
+The ``labels'' can be retrieved with R's method \code{labels}. Waveband objects have two slots for names, normally used when wavebands are plotted or printed.
 
 <<>>=
 labels(my.wb)
@@ -90,7 +90,7 @@ labels(vis.wb)
 labels(cie.wb)
 @
 
-As with any R object, method \texttt{names} returns a vector of names of the object's components.
+As with any R object, method \code{names} returns a vector of names of the object's components.
 
 <<>>=
 names(vis.wb)
@@ -99,7 +99,7 @@ names(cie.wb)
 
 \section{Task: Plotting a waveband}
 
-Method \texttt{plot} is defined for \texttt{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
+Method \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
 
 <<>>=
 plot(vis.wb)

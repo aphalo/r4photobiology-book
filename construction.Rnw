@@ -31,7 +31,7 @@ For spectra the classes are a specialization of \code{data.frame}. This means th
 \sloppy
 The suite defines a \code{generic\_spct} class, from which other specialized classes, `\code{filter\_spct}, \code{reflector\_spct}, \code{object\_spct}, \code{source\_spct}, \code{response\_spct}, \code{response\_spct}, \code{chroma\_spct} and \code{cps\_spct} are derived. Having this class structure allows us to create special methods and operators, which use the same `names' than the generic ones defined by R itself, but take into account the special properties of spectra.
 
-In most cases each spectral object holds only spectral data from a single measurement event. When spectral data from more than one measurement is contained in a single object, the data for the different measurements are stored \emph{lengthwise}, in other words, in the same variable(s), and distinguished by means of an index factor. When a single measurement consists in several different quantities being measured, then these are stored in different variables, or columns, in the same spectral object. The name used for variables containing spectral data for a given quantity have mandatory names, and are always stored using the same units. Spectral objects also carry additional information in attributes, such a text comment, sorting key, time unit used for expression, and additional attributes indicating properties such as whether reflectance is \textbf{specular} or \textbf{total}. These strict rules allow the functions in the package to handle unit conversions, and units in labels and plots automatically. It also allows the use of operators like (`+') with spectra, and some sanity checks on the supplied spectral data and restriction of \emph{some} invalid operations. Table \ref{tab:spct:classes} lists the mandatory names of variables and attributes for each of the classes. In Table \ref{tab:spct:units} for each mandatory variable name, plus the additional names recognized by constructors are listed together with the respective units. Additional columns are allowed in the spectral objects, and deleted or set to \code{NA} only when the meaning of an operation on the whole spectrum is for these columns ambiguous.
+In most cases each spectral object holds only spectral data from a single measurement event. When spectral data from more than one measurement is contained in a single object, the data for the different measurements are stored \emph{lengthwise}, in other words, in the same variable(s), and distinguished by means of an index factor. When a single measurement consists in several different quantities being measured, then these are stored in different variables, or columns, in the same spectral object. Variables containing spectral data for a given quantity have consistent \emph{mandatory} names, and data are always stored using the same units. Spectral objects also carry additional information in attributes, such a text `comment', the time unit used for expression, and additional attributes indicating properties such as whether reflectance is \textbf{specular} or \textbf{total}. Optional attributes with mandatory naming are used to store metadata such as the time and geographical coordinates of a measurement in a consistent way. These strict rules allow the functions in the package to handle unit conversions, and units in labels and plots automatically. It also allows the use of operators like (`+') with spectra, and some sanity checks on the supplied spectral data and prevention of \emph{some} invalid operations. Table \ref{tab:spct:classes} lists the mandatory names of variables and attributes for each of the classes. In Table \ref{tab:spct:units} for each mandatory variable name, plus the additional names recognized by constructors are listed together with the respective units. Additional columns are allowed in the spectral objects, and deleted or set to \code{NA} only when the meaning of an operation on the whole spectrum is for these columns ambiguous. The \emph{User Guide} of package \pckg{photobiology} contains detailed tables of classes, operators and methods.
 
 \begin{table}
 \caption{Classes for spectral data and \emph{mandatory} variable and attribute names}\label{tab:spct:classes}
@@ -54,7 +54,7 @@ chroma\_spct & w.length, x, y, z & \\
 \end{table}
 
 \begin{table}
-\caption[Variables for spectral data]{Variables used for spectral data and their units of expression: A: as stored in objects of the spectral classes, B: also recognized by the \texttt{set} family of functions for spectra and automatically converted. \texttt{time.unit} accepts in addition to the character strings listed in the table, objects of classes \texttt{lubridate::duration} and \texttt{period}, in addition \texttt{numeric} values are interpreted as seconds. \texttt{exposure.time} accepts these same values, but not the character strings.}\label{tab:spct:units}
+\caption[Variables for spectral data]{Variables used for spectral data and their units of expression: A: as stored in objects of the spectral classes, B: also recognized by the \code{set} family of functions for spectra and automatically converted. \code{time.unit} accepts in addition to the character strings listed in the table, objects of classes \code{lubridate::duration} and \code{period}, in addition \code{numeric} values are interpreted as seconds. \code{exposure.time} accepts these same values, but not the character strings.}\label{tab:spct:units}
 \centering
 \begin{tabular}{lll}
 \toprule
@@ -102,18 +102,18 @@ counts.per.second $\to$ cps & \cps &  \\
 
 \subsection{Spectral data assumptions}
 
-The packages' code assumes that wavelengths are always expressed in nanometres ($1~\Unit{nm} = 1 \cdot 10^{-9}\,\Unit{m}$). If the data to be analysed uses different units for wavelengths, e.g.\ Ångstrom ($1~\Unit{Å} = 1 \cdot 10^{-10}\,\Unit{m}$), the values need to be re-scaled before any calculations. The assumptions related to the expression of spectral data should be followed strictly as otherwise the results returned by calculations will be erroneous. Table \ref{tab:spct:units} lists the units of expression for the different variables listed in Table  \ref{tab:spct:classes}. Object constructors accept, if properly instructed, spectral data expressed in some cases differently than the format used for storage. In such cases unit connversion during object creation is automatic. For example, although transmittance is always stored as a fraction of one in variable \texttt{Tfr}, the constructors recognize variable \texttt{Tpc} as expressed as a percent and convert the data and rename the variable.
+The packages' code assumes that wavelengths are always expressed in nanometres ($1~\Unit{nm} = 1 \cdot 10^{-9}\,\Unit{m}$). If the data to be analysed uses different units for wavelengths, e.g.\ Ångstrom ($1~\Unit{Å} = 1 \cdot 10^{-10}\,\Unit{m}$), the values need to be re-scaled before any calculations. The assumptions related to the expression of spectral data should be followed strictly as otherwise the results returned by calculations will be erroneous. Table \ref{tab:spct:units} lists the units of expression for the different variables listed in Table  \ref{tab:spct:classes}. Object constructors accept, if properly instructed, spectral data expressed in some cases differently than the format used for storage. In such cases unit conversion during object creation is automatic. For example, although transmittance is always stored as a fraction of one in variable \code{Tfr}, the constructors recognize variable \code{Tpc} as expressed as a percent and convert the data and rename the variable.
 
 The attributes related to the stored quantities add additional flexibility, and are normally set when an object spectral object is created, either to a default or a value supplied by the user. Attribute values can be also retrieved and set from existing objects.
 
 \begin{framed}
 \noindent
-Not respecting data assumptions will yield completely wrong results! It is extremely important to make sure that the wavelengths are in nanometres as this is what all functions expect. If wavelength values are in the wrong units, the action-spectra weights and quantum conversions will be wrongly calculated, and the values returned by most functions completely wrong, without warning. The assumptions related to spectral data need also to be strictly followed, as the packages do automatically use the assumed units of expression when printing and plotting results.
+\ilAttention Not respecting data assumptions will yield completely wrong results! It is extremely important to make sure that the wavelengths are in nanometres as this is what all functions expect. If wavelength values are in the wrong units, the action-spectra weights and quantum conversions will be wrongly calculated, and the values returned by most functions completely wrong, without warning. The assumptions related to spectral data need also to be strictly followed, as the packages do automatically use the assumed units of expression when printing and plotting results.
 \end{framed}
 
 \subsection{Task: Create a spectral object from numeric vectors}
 
-`Traditional' constructor functions are available, and possibly easiest to use to those used R programming style. Constructor functions have the same name as the classes (e.g.\ \texttt{source\_spct}). The constructor functions accept numeric vectors as arguments, and these can be ``renamed'' on the fly. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
+`Traditional' constructor functions are available, and possibly easiest to use to those used R programming style. Constructor functions have the same name as the classes (e.g.\ \code{source\_spct}). The constructor functions accept numeric vectors as arguments, and these can be ``renamed'' on the fly. The object is checked for consistency and within-range data, and missing required components are set to \code{NA}. We use \code{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
 
 We can create a new object of class \code{source\_spct} from two \code{numeric} vectors, and as shown below, recycling applies.
 
@@ -127,13 +127,13 @@ The code above uses defaults for all attributes, and assumes that spectral energ
 source_spct(w.length = 300:500, s.q.irrad = 1)
 @
 
-Spectral objects have attributes, which store additional information needed for correct handling of units of expression, printing and plotting. The defaults need frequently to be changed, for example when spectral exposure is expressed as a daily integral, or other arbitrary exposure time. This length of time or \texttt{duration} should be set, whenever the unit of time used is different to second.
+Spectral objects have attributes, which store additional information needed for correct handling of units of expression, printing and plotting. The defaults need frequently to be changed, for example when spectral exposure is expressed as a daily integral, or other arbitrary exposure time. This length of time or \code{duration} should be set, whenever the unit of time used is different to second.
 
 <<>>=
 source_spct(w.length = 300:500, s.q.irrad = 1, time.unit = "day")
 @
 
-In addition to the character strings \texttt{"second"}, \texttt{"hour"}, and \texttt{"day"}, any object belonging to the class \texttt{duration} defined in package \texttt{lubridate} can be used. This means, that any arbitrary time duration can be used.
+In addition to the character strings \code{"second"}, \code{"hour"}, and \code{"day"}, any object belonging to the class \code{duration} defined in package \pckg{lubridate} can be used. This means, that any arbitrary time duration can be used.
 
 Please, see Tables \ref{tab:spct:classes} and \ref{tab:spct:units} for the attributes defined for the different classes of spectral objects.
 
@@ -153,11 +153,11 @@ my.spct <-
 
 In the example above, we take advantage of the behaviour of the S language: an operation between a scalar and vector, is equivalent to applying this operation to each member of the vector.
 Consequently, in the code above, each value from the vector of wavelengths is divided
-by 10, and each value in the vector of spectral irradiances is divided by 1000.
+by 10, and each value in the vector of spectral irradiance is divided by 1000.
 
 \subsection{Task: Create a spectral object from a data frame}
 
-`Traditional' conversion functions with names given by names of classes preceded by \code{as.} (e.g.\ \texttt{as.source\_spct}. These functions accept data frames, data tables, and lists with components of equal length as arguments. These functions are less flexible, as the component variables in the argument should be named using one of the names recognized. Table \ref{tab:obj:units} lists the different `names' understood by these constructor functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
+`Traditional' conversion functions with names given by names of classes preceded by \code{as.} (e.g.\ \code{as.source\_spct}. These functions accept data frames, data tables, and lists with components of equal length as arguments. These functions are less flexible, as the component variables in the argument should be named using one of the names recognized. Table \ref{tab:obj:units} lists the different `names' understood by these constructor functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \code{NA}. We use \code{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
 
 We first use a \code{data.frame} containing suitable spectral data. Object \code{sun.data} is included as part of package \PB. Using \code{head} we can check that the names of the variables are the expected ones, and that the wavelength values are expressed in nanometres:
 <<>>=
@@ -171,14 +171,14 @@ first.sun.spct <- as.source_spct(sun.data)
 is.source_spct(first.sun.spct)
 @
 
-In this case \code{sun.data} remains independent, and whatever change we make to \code{my.sun.spct} does not affect \texttt{sun.data}.
-The \code{as.} functions, first make a copy of the data frame or data table, and then call one of the \code{set} functions described in section the section to convert the copy into a \code{\_spct} object. Table \ref{tab:obj:units} lists the different `names' understood by these copy functions and the required and optional components of the different spectral object classes. The new object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{as.} functions accept attributes such as \code{time.unit} as arguments.
+In this case \code{sun.data} remains independent, and whatever change we make to \code{my.sun.spct} does not affect \code{sun.data}.
+The \code{as.} functions, first make a copy of the data frame or data table, and then call one of the \code{set} functions described in section the section to convert the copy into a \code{\_spct} object. Table \ref{tab:obj:units} lists the different `names' understood by these copy functions and the required and optional components of the different spectral object classes. The new object is checked for consistency and within-range data, and missing required components are set to \code{NA}. We use \code{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{as.} functions accept attributes such as \code{time.unit} as arguments.
 
 Using a technical term, \code{as.} functions are \emph{copy constructors}, which follow the \emph{normal} behaviour of the R language.
 
 \subsection{Task: Convert a data frame into a spectral object}
 
-The last possibility, is to use a syntax that is unusual for the R language, but which in some settings will lead to faster execution: convert an existing data frame, \emph{in situ} or by reference, into a \code{source\_spct} object. The \texttt{set} functions defined in package \PB have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}. Table \ref{tab:obj:units} lists the different `names' understood by these conversion functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \texttt{NA}. We use \texttt{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{set} functions accept attributes such as \code{time.unit} as arguments.
+The last possibility, is to use a syntax that is unusual for the R language, but which in some settings will lead to faster execution: convert an existing data frame, \emph{in situ} or by reference, into a \code{source\_spct} object. The \code{set} functions defined in package \PB have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}. Table \ref{tab:obj:units} lists the different `names' understood by these conversion functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \code{NA}. We use \code{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{set} functions accept attributes such as \code{time.unit} as arguments.
 
 <<>>=
 second.sun.spct <- sun.data
@@ -189,7 +189,7 @@ is.source_spct(second.sun.spct)
 We normally do not use the value returned by \code{set} functions as it is just a reference the original object, and assigning this value to another name will result in two names pointing to the same object.
 
 
-In fact, the assignment is unnecessary, as the class of \texttt{my.df} is set:
+In fact, the assignment is unnecessary, as the class of \code{my.df} is set:
 
 <<>>=
 third.sun.spct <- sun.data
@@ -203,7 +203,7 @@ Using a technical term, \code{set} functions convert an object by \emph{referenc
 
 \subsection{Task: trimming a spectrum}\label{sec:base:trim}
 
-This is basically a subsetting operation, but our functions operate only based on wavelengths, while R \code{subset} is more general. On the other hand, our functions \code{trim\_spct} and \code{trim\_tails} add a few `bells and whistles'. The trimming is based on wavelengths and by default the cut points are inserted by interpolation, so that the spectrum returned includes the limits given as arguments. In addition, by default the trimming is done by deleting both spectral irradiance and wavelength values outside the range delimited by the limits (just like \code{subset} does), but through parameter \code{fill} the values outside the limits can be replaced by any value desired (most commonly \code{NA} or 0.) It is possible to supply a only one, or both of \code{low.limit} and \code{high.limit}, depending on the desired trimming, or use a \code{waveband} definition or a numeric vector as an argument for \texttt{range}. If the limits are outside the original data set, then the output spectrum is expanded and the tails filled with the value given as argument for \code{fill} unless \code{fill} is equal to \texttt{NA}, which is the default.
+This is basically a subsetting operation, but our functions operate only based on wavelengths, while R \code{subset} is more general. On the other hand, our functions \code{trim\_spct} and \code{trim\_tails} add a few `bells and whistles'. The trimming is based on wavelengths and by default the cut points are inserted by interpolation, so that the spectrum returned includes the limits given as arguments. In addition, by default the trimming is done by deleting both spectral irradiance and wavelength values outside the range delimited by the limits (just like \code{subset} does), but through parameter \code{fill} the values outside the limits can be replaced by any value desired (most commonly \code{NA} or 0.) It is possible to supply a only one, or both of \code{low.limit} and \code{high.limit}, depending on the desired trimming, or use a \code{waveband} definition or a numeric vector as an argument for \code{range}. If the limits are outside the original data set, then the output spectrum is expanded and the tails filled with the value given as argument for \code{fill} unless \code{fill} is equal to \code{NA}, which is the default.
 
 <<>>=
 trim_wl(sun.spct, range = UV())
@@ -252,8 +252,8 @@ A future version of the package will include a \code{smooth\_spectrum} function,
 \subsection{Task: Row binding spectra}
 
 Sometimes, especially for plotting, we may want to row-bind spectra. When the aim is that the returned object
-retains its class attributes, and other spectrum related attributes like the time unit, functions \texttt{rbind}
-from base R, should NOT be used. Package \PB provides function \texttt{rbinspct} for
+retains its class attributes, and other spectrum related attributes like the time unit, functions \code{rbind}
+from base R, should NOT be used. Package \PB provides function \code{rbinspct} for
 row-binding spectra, with the necessary checks for consistency of the bound spectra.
 
 <<>>=
@@ -286,16 +286,16 @@ rbindspct(list(sun = sun.spct, shade = shade.spct), idfactor = "ID")
 
 \subsection{Task: Merging spectra}
 
-Merging consists in merging different \emph{columns} from two spectra into a new combined spectrum. Another name for this type of operations, as used in package \texttt{dplyr}, is `join'. No wavelength interpolation is carried out, the two spectra must share wavelength values.
+Merging consists in merging different \emph{columns} from two spectra into a new combined spectrum. Another name for this type of operations, as used in package \pckg{dplyr}, is `join'. No wavelength interpolation is carried out, the two spectra must share wavelength values.
 
 
 \section{Collections of multiple spectra}
 
-\subsection{Task: Constructing \texttt{\textunderscore mspct} objects}
+\subsection{Task: Constructing \code{\textunderscore mspct} objects}
 
-\subsection{Task: Retrieving \texttt{\textunderscore spct} objects from \texttt{\textunderscore mspct} objects}
+\subsection{Task: Retrieving \code{\textunderscore spct} objects from \code{\textunderscore mspct} objects}
 
-\subsection{Task: Subsetting \texttt{\textunderscore mspct} objects}
+\subsection{Task: Subsetting \code{\textunderscore mspct} objects}
 
 \section{Internal-use functions}\label{sec:base:internal}
 
@@ -317,7 +317,7 @@ Wavebands are created by means of function \code{waveband} which have in additio
 
 The simplest \code{waveband} creation call is one supplying as argument just any R object for which the \code{range} function returns the wavelength limits of the desired band in nanometres. Such a call yields a \code{waveband} object defining an un-weighted range of wavelengths.
 
-Any numeric vector of at least two elements, any spectral object or any existing \code{waveband} object for which a \texttt{range} method exists is valid input, as long as the values can be interpreted as wavelengths in nanometres.
+Any numeric vector of at least two elements, any spectral object or any existing \code{waveband} object for which a \code{range} method exists is valid input, as long as the values can be interpreted as wavelengths in nanometres.
 
 <<>>=
 waveband(c(300, 400))
@@ -351,7 +351,7 @@ See chapter \ref{chap:wt:irrad} on page \pageref{chap:wt:irrad}, in particular s
 
 \subsection{Task: trimming a waveband}\label{sec:base:trim}
 
-This operation either changes the boundaries of \texttt{waveband} objects, or deletes \texttt{waveband} objects from a list of waveband.  The first argument can be either a \texttt{waveband} object or a list of \texttt{waveband} objects. Those wavebands fully outside the limits are always discarded and those fully within the limits always kept. In the case of those wavebands crossing a limit, if the argument \texttt{trim} is set to \texttt{FALSE}, they are discarded, but if \texttt{trim} is set to \texttt{TRUE} their boundary is moved to be at the trimming limit. Trimming is based on wavelengths and by default the cut points are inserted.  Trimming is done by shrinking the waveband, expansion is not possible. During trimming labels stored in the \texttt{waveband} object are `edited' to reflect the altered boundaries. Trimming does not affect weighting functions stored within the waveband.
+This operation either changes the boundaries of \code{waveband} objects, or deletes \code{waveband} objects from a list of waveband.  The first argument can be either a \code{waveband} object or a list of \code{waveband} objects. Those wavebands fully outside the limits are always discarded and those fully within the limits always kept. In the case of those wavebands crossing a limit, if the argument \code{trim} is set to \code{FALSE}, they are discarded, but if \code{trim} is set to \code{TRUE} their boundary is moved to be at the trimming limit. Trimming is based on wavelengths and by default the cut points are inserted.  Trimming is done by shrinking the waveband, expansion is not possible. During trimming labels stored in the \code{waveband} object are `edited' to reflect the altered boundaries. Trimming does not affect weighting functions stored within the waveband.
 
 <<>>=
 trim_wl(UV(), range = UVB())

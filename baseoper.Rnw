@@ -12,7 +12,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
 library(photobiologyWavebands)
 library(photobiologyFilters)
@@ -28,7 +28,7 @@ The suite uses object-oriented programming for its higher level `user-friendly' 
 \begin{table}
 \newcommand{\Nrd}{\textcolor{red}{\small N}}
 \newcommand{\Ygrn}{\textcolor{green}{\small Y}}
-\caption[Binary operators]{Binary operators and operands. Validity and class of result. All operations marked `\Ygrn' are allowed, those marked `\Nrd' are forbidden and return \texttt{NA} and issue a warning.}\label{tab:operators}\vspace{0.75ex}
+\caption[Binary operators]{Binary operators and operands. Validity and class of result. All operations marked `\Ygrn' are allowed, those marked `\Nrd' are forbidden and return \code{NA} and issue a warning.}\label{tab:operators}\vspace{0.75ex}
 \centering
 \begin{tabular}{lcccccll}
 \toprule
@@ -96,13 +96,13 @@ log10(sun.spct)
 
 \section{Task: Simulating spectral irradiance under a filter}
 
-Package \code{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \code{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
+Package \pckg{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \pckg{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
 
 <<>>=
 sun.spct * schott.mspct$GG400
 @
 
-The GG440 data is for internal transmittance, consequently the results above would be close to the truth only for filters treated with an anti-reflexion multicoating. Let's assume a filter with 9\% reflectance across all wavelengths (a coarse approximation for uncoated glass):
+The GG440 data is for internal transmittance, consequently the results above would be close to the truth only for filters treated with an anti-reflection multicoating. Let's assume a filter with 9\% reflectance across all wavelengths (a coarse approximation for uncoated glass):
 
 <<>>=
 sun.spct * schott.mspct$GG400 * (100 - 9) / 100
@@ -125,7 +125,7 @@ All four basic binary operators (\code{+, -, *, /}) can be used in the same way.
 %%%%
 \subsection{Task: Arithmetic operations within one spectrum}\label{sec:base:internal}
 
-As spectral objects behave in many respects as data frames it is possible to do calculations involving columns as usual, e.g.\ using \texttt{with} or explicit selectors. A non-nonsensical example follows using R syntax on a data frame, returning a vector.
+As spectral objects behave in many respects as data frames it is possible to do calculations involving columns as usual, e.g.\ using \code{with} or explicit selectors. A non-nonsensical example follows using R syntax on a data frame, returning a vector.
 
 Using data frame syntax on a data frame, data table or spectral object, returning a vector:
 
@@ -142,7 +142,7 @@ with(sun.spct, s.e.irrad^2 / w.length)
 
 \subsection{Task: Using operators on underlying vectors}\label{sec:base:binoper}
 
-If data for two spectra are available for the same wavelength values, then we can simply use the built in R math operators on the component vectors. These operators are vectorized, which means that an addition between two vectors adds the elements at the same index position in the two vectors with data, in this case for two different spectra.
+If data for two spectra are available for the same wavelength values, then we can simply use the built in R math operators on the component vectors. These operators are vectorised, which means that an addition between two vectors adds the elements at the same index position in the two vectors with data, in this case for two different spectra.
 
 However, we can achieve the same result, with simpler syntax, using spectral objects and the corresponding operators.
 
@@ -154,7 +154,7 @@ sun.spct + sun.spct
 e2q(sun.spct + sun.spct)
 @
 
-In both cases only spectral energy irradiance is calculated during the summing operation, while in the second example, it is simple to convert the returned spectral energy irradiance values into spectral photon irradiance. The class of the returned spectrum depends on the classes of the operands.  In this case returned objects are \texttt{source\_spct}.
+In both cases only spectral energy irradiance is calculated during the summing operation, while in the second example, it is simple to convert the returned spectral energy irradiance values into spectral photon irradiance. The class of the returned spectrum depends on the classes of the operands.  In this case returned objects are \code{source\_spct}.
 
 The function \code{oper\_spectra} takes the operator to use as an argument, and this abstraction both simplifies the package code, and also makes it easy for users to add other operators if needed:
 
@@ -183,7 +183,7 @@ with the Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecon
 %
 with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}.
 
-\subsubsection{\texttt{numeric} vectors}
+\subsubsection{\code{numeric} vectors}
 
 Function \code{as\_quantum} converts \watt into \textit{number of photons} per square meter per second, and \code{as\_quantum\_mol} does the same conversion but returns \mol. Function \code{as\_quantum} is based on the equation \ref{equ:energy} while \code{as\_quantum\_mol} uses equation \ref{equ:molenergy}. To obtain \umol we multiply by $10^6$:
 
@@ -193,7 +193,7 @@ as_quantum_mol(550, 200) * 1e6
 
 The calculation above is for monochromatic light (200 \watt at 550 \Unit{nm}).
 
-The functions are vectorized, so they can be applied to whole spectra (when data are available as vectors), to convert \wattnm to \molnm:
+The functions are vectorised, so they can be applied to whole spectra (when data are available as vectors), to convert \wattnm to \molnm:
 
 <<>>=
 head(sun.spct$s.e.irrad, 10)
@@ -202,7 +202,7 @@ s.q.irrad <- with(sun.spct,
 head(s.q.irrad, 10)
 @
 
-\subsubsection{\texttt{source\_spct} objects}
+\subsubsection{\code{source\_spct} objects}
 
 Once again, easiest is to use spectral objects. The default is to add \code{s.q.irrad} to the source spectrum, unless it is already present in the object in which case values are not recalculated. It can also be used as a roundabout way of removing a \code{s.e.irrad} column, which could be useful in some cases.
 
@@ -217,15 +217,15 @@ sun.spct
 e2q(sun.spct, "replace", byref = FALSE)
 @
 
-\subsubsection{\texttt{response\_spct} objects}
+\subsubsection{\code{response\_spct} objects}
 
-In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \texttt{e2q} as for \code{source\_spct} objects, the appropriate conversion is applied.
+In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \code{e2q} as for \code{source\_spct} objects, the appropriate conversion is applied.
 
 \subsection{Task: conversion from photon to energy base}\label{sec:base:q2e}
 
 \code{as\_energy} is the inverse function of \code{as\_quantum\_mol}:
 
-\subsubsection{\texttt{numeric} vectors}
+\subsubsection{\code{numeric} vectors}
 
 In \cite{Aphalo2012} it is written: ``Example 1: red light at 600~nm has about 200 \kjmole, therefore, 1~$\mymu$mol photons has 0.2~J. Example 2: \UVB radiation at 300~nm has about 400 \kjmole, therefore, 1~$\mymu$mol photons has 0.4~J. Equations \ref{equ:energy} and \ref{equ:molenergy} are valid for all kinds of electromagnetic waves.'' Let's re-calculate the exact values---as the output from \code{as\_energy} is expressed in \jmole we multiply the result by $10^{-3}$ to obtain \kjmole:
 
@@ -240,7 +240,7 @@ Because of vectorization we can also operate on a whole spectrum:
 s.e.irrad <- with(sun.data, as_energy(w.length, s.q.irrad))
 @
 
-\subsubsection{\texttt{source\_spct} objects}
+\subsubsection{\code{source\_spct} objects}
 
 Function \code{q2e} is the reverse of \code{e2q}, converting spectral energy irradiance in \wattnm to spectral photon irradiance in \molnm. It can also be used as a roundabout way of removing a \code{s.e.irrad} column, which could be useful in some cases.
 
@@ -256,13 +256,13 @@ my_sun.spct <- sun.spct
 q2e(my_sun.spct, byref = TRUE)
 @
 
-\subsubsection{\texttt{response\_spct} objects}
+\subsubsection{\code{response\_spct} objects}
 
-In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \texttt{q2e} as for \code{source\_spct} objects, the appropriate conversion is applied.
+In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \code{q2e} as for \code{source\_spct} objects, the appropriate conversion is applied.
 
 \subsubsection{Task: Using options to change default behaviour of maths operators and functions}\label{sec:oper:options}
 
-Table \ref{tab:options} lists all the recognized options, and their default values. Within the suite all functions have a default value which is used when the options are undefined. Options are set using base R's function \texttt{options}, and queried with functions \texttt{options} and \texttt{getOption}. Using options can result in more compact and terse code, but the user should clearly document the use of non-default values for options to avoid surprising the reader of the code.
+Table \ref{tab:options} lists all the recognized options, and their default values. Within the suite all functions have a default value which is used when the options are undefined. Options are set using base R's function \code{options}, and queried with functions \code{options} and \code{getOption}. Using options can result in more compact and terse code, but the user should clearly document the use of non-default values for options to avoid surprising the reader of the code.
 
 \begin{table}
 \caption[Options]{Options affecting calculations by functions and operators in the \PB package and their possible values. Options controlling the printing of the returned values are also listed.\label{tab:options}}\vspace{0.75ex}
@@ -275,27 +275,27 @@ Table \ref{tab:options} lists all the recognized options, and their default valu
 \midrule
 \textbf{Base R} & & \\
 \addlinespace
-digits & 7 & $d - 3$ used by \texttt{summary} \\
+digits & 7 & $d - 3$ used by \code{summary} \\
 \midrule
-\textbf{Package \texttt{dplyr}} & & \\
+\textbf{Package \pckg{dplyr}} & & \\
 \addlinespace
 dplyr.print\_max & $n_\mathrm{max}$ = 20 & nrow(\emph{spct}) $> n_\mathrm{max}$ print $n_\mathrm{min}$ lines \\
 dplyr.print\_min & $n_\mathrm{min}$ = 10 & nrow(\emph{spct}) $> n_\mathrm{max}$ print $n_\mathrm{min}$ lines \\
 \midrule
 \textbf{R4photobioloy suite} & & \\
 \addlinespace
-photobiology.radiation.unit & \texttt{"energy"} & output (\wattnm) \\
-                            & \texttt{"photon"} & output (\molnm) \\
-photobiology.filter.qty & \texttt{"transmittance"} & output ($/1$) \\
-                        & \texttt{"absorptance"} & output ($/1$) \\
-                        & \texttt{"absorbance"} & output (a.u. $\log_10$ base) \\
-photobiology.use.hinges & \texttt{NULL} & guess automatically \\
-                        & \texttt{TRUE} & do not insert hinges \\
-                        & \texttt{FALSE} & do insert hinges \\
+photobiology.radiation.unit & \code{"energy"} & output (\wattnm) \\
+                            & \code{"photon"} & output (\molnm) \\
+photobiology.filter.qty & \code{"transmittance"} & output ($/1$) \\
+                        & \code{"absorptance"} & output ($/1$) \\
+                        & \code{"absorbance"} & output (a.u. $\log_10$ base) \\
+photobiology.use.hinges & \code{NULL} & guess automatically \\
+                        & \code{TRUE} & do not insert hinges \\
+                        & \code{FALSE} & do insert hinges \\
 photobiology.auto.hinges.limit & 0.5 & wavelength step (nm) \\
-photobiology.waveband.trim & \texttt{TRUE} & trim or exclude \\
-photobiology.use.cached.mult & \texttt{FALSE} & cache intermediate results or not \\
-photobiology.verbose & \texttt{FALSE} & give verbose output or not \\
+photobiology.waveband.trim & \code{TRUE} & trim or exclude \\
+photobiology.use.cached.mult & \code{FALSE} & cache intermediate results or not \\
+photobiology.verbose & \code{FALSE} & give verbose output or not \\
 \bottomrule
 \end{tabular}
 \end{footnotesize}
@@ -312,7 +312,7 @@ options(photobiology.radiation.unit = "energy")
 sun.spct * UVB()
 @
 
-For filters, an option controls whether transmittance, the default, or absorbance is use in the operations, and the controls the returned quantity. It is important to remember that absorbance, $A$, is always expressed on a logarithmic scale, while transmittance, $T$, is always expressed on a linear scale. So to simulate the effect of stacking two layers of polyester film, we need to sum, or in this case as there are two layers of the same material, multiply by two the spectral absorbances, while we need to multiply the spectral transmittances of stacked filters, or use a power when the layers are identical.
+For filters, an option controls whether transmittance, the default, or absorbance is use in the operations, and the controls the returned quantity. It is important to remember that absorbance, $A$, is always expressed on a logarithmic scale, while transmittance, $T$, is always expressed on a linear scale. So to simulate the effect of stacking two layers of polyester film, we need to sum, or in this case as there are two layers of the same material, multiply by two the spectral absorbance values, while we need to multiply the spectral transmittances of stacked filters, or use a power when the layers are identical.
 
 <<>>=
 options(photobiology.filter.qty = "absorbance")
@@ -321,16 +321,16 @@ options(photobiology.filter.qty = "transmittance")
 polyester.spct ^ 2
 @
 
-Either option can be unset, by means of the \texttt{NULL} value\footnote{If you are planning to continue working through the examples in later sections, do reset the options as shown in this chunk, as otherwise, the results of later calculations will differ from those shown.}.
+Either option can be unset, by means of the \code{NULL} value\footnote{If you are planning to continue working through the examples in later sections, do reset the options as shown in this chunk, as otherwise, the results of later calculations will differ from those shown.}.
 <<>>=
 options(photobiology.radiation.unit = NULL)
 options(photobiology.filter.qty = NULL)
 @
 
 \sloppy
-The proper use of trimming of wavebands is important, and option \texttt{photobiology.waveband.trim} makes changing the behaviour of the \texttt{trim\_spct} function and other functions accepting wavebands easier. The need to carefully assess the validity of trimming and how it can affect the interpretation of results is further discussed in Chapter \ref{chap:uw:irrad} and Chapter \ref{chap:wt:irrad}.
+The proper use of trimming of wavebands is important, and option \code{photobiology.waveband.trim} makes changing the behaviour of the \code{trim\_spct} function and other functions accepting wavebands easier. The need to carefully assess the validity of trimming and how it can affect the interpretation of results is further discussed in Chapter \ref{chap:uw:irrad} and Chapter \ref{chap:wt:irrad}.
 
-Other options affect the optimization of performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \texttt{dplyr} affect printing of output (Table \ref{tab:options}).
+Other options affect the optimization of performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \pckg{dplyr} affect printing of output (Table \ref{tab:options}).
 
 \section{Wavebands}\label{sec:wb:objects}
 
@@ -347,7 +347,7 @@ is_effective(UVA())
 sun.spct * UVA()
 @
 
-Multiplying a \texttt{source\_spct} object by a weighted waveband convolutes the spectrum with weights, yielding effective spectral irradiance.
+Multiplying a \code{source\_spct} object by a weighted waveband convolutes the spectrum with weights, yielding effective spectral irradiance.
 
 <<>>=
 is_effective(CIE())

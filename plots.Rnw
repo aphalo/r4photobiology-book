@@ -15,14 +15,14 @@ getwd()
 @
 
 %\begin{abstract}
-%  In this chapter we explain how to plot spectra and colours, using packages \code{ggplot2}, \code{ggtern}, and the functions in our package \code{ggspectra}. Both \code{ggtern} for ternary plots and \code{ggspectra} for annotating spectra build new functionality on top of the \code{ggplot2} package. We also use several functions and data from package \code{photobiology} in the examples.
+%  In this chapter we explain how to plot spectra and colours, using packages \pckg{ggplot2}, \code{ggtern}, and the functions in our package \pckg{ggspectra}. Both \pckg{ggtern} for ternary plots and \pckg{ggspectra} for annotating spectra build new functionality on top of the \pckg{ggplot2} package. We also use several functions and data from package \pckg{photobiology} in the examples.
 %\end{abstract}
 
 
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<cache=FALSE>>=
+<<cache=FALSE,message=FALSE>>=
 library(ggplot2)
 library(scales)
 library(ggtern)
@@ -42,17 +42,17 @@ opts_chunk$set(opts_fig_wide)
 \section{Introduction to plotting spectra}\label{sec:plot:intro}
 
 We show in this chapter examples of how spectral data can be plotted. All the examples
-are done with package \code{ggplot2}, sometimes using in addition other packages.
-\code{ggplot2} provides the most recent, but stable, type of plotting functionality in R, and is
+are done with package \pckg{ggplot2}, sometimes using in addition other packages.
+\pckg{ggplot2} provides the most recent, but stable, type of plotting functionality in R, and is
 what we use here for most examples. Both \code{base} graphic functions, part of
-R itself and `trellis' graphics provided by package \code{lattice} are other popular
-alternatives. The new package \code{ggvis} uses similar grammar as \code{ggplot2} but
+R itself and `trellis' graphics provided by package \pckg{lattice} are other popular
+alternatives. The new package \pckg{ggvis} uses similar grammar as \pckg{ggplot2} but
 drastically improves on functionality for interactive plots.
 Several of the functions used in this chapter are extensions to
-package \code{ggplot2}\footnote{\code{ggplot2} is feature-frozen, in other words the user interface
+package \pckg{ggplot2}\footnote{\pckg{ggplot2} is feature-frozen, in other words the user interface
 defined by the functions and their arguments will not change in future versions. Consequently
 it is a good basis for adding application-specific functionality through separate
-packages. \code{ggplot2} uses the \emph{grammar
+packages. \pckg{ggplot2} uses the \emph{grammar
 of graphics} for describing the plots. This grammar, because it is consistent,
 tends to be easier to understand, and makes it easier to design new functionality
 that uses extensions based on the same `language grammar' as used by the original package.}
@@ -65,7 +65,7 @@ of the spectrum. Adding a bar with the colours corresponding to the different
 wavelengths, facilitates the reading of the plot for people not familiar with the
 interpretation on wavelengths expressed in nanometres. Labeling regions of the spectrum
 with waveband names also facilitates the understanding of plotted spectral data.
-A basic line plot of spectral data can be easily done with \code{ggplot2} or any of the
+A basic line plot of spectral data can be easily done with \pckg{ggplot2} or any of the
 other plotting functions in R. In this chapter we focus on how to add to basic line and
 dot plots all the `fancy decorations' that can so much facilitate their reading and
 interpretation.
@@ -75,7 +75,7 @@ for human vision on a ternary plot, and show how to do a ternary plot for GBU
 (green-blue-ultraviolet) flower colours for honeybee vision using as reference the reflectance
 of a background.
 
-If you are not familiar with \code{ggplot2} and \code{ggtern} plotting, please read Appendix
+If you are not familiar with \pckg{ggplot2} and \code{ggtern} plotting, please read Appendix
 \ref{chap:R:plotting} on page \pageref{chap:R:plotting} before continuing reading the
 present chapter.
 
@@ -137,7 +137,7 @@ As the current implementation uses annotations rather than a \code{ggplot} `stat
 \end{framed}
 
 %%%%
-\section[Task: plotting spectra with ggplot2]{Task: plotting spectra with \code{ggplot2}}\label{sec:plot:spc}
+\section[Task: plotting spectra with ggplot2]{Task: plotting spectra with \pckg{ggplot2}}\label{sec:plot:spc}
 
 We create a simple line plot, assign it to a variable called \code{fig\_sun.e0} and then on the next line \code{print} it\footnote{we could have used \code{print(fig\_sun.e0)} explicitly, but this is needed only in scripts because printing takes places automatically when working at the R console.}. We obtain a plot with the axis labeled with the names of the variables, which is enough to check the data, but not good enough for publication.
 
@@ -216,7 +216,7 @@ fig_sun.e1 <-
   labs(x = xlab_nm)
 @
 
-We can use function \code{multiplot} to make a single plot from two separate ggplots, and put them side by or on top of each other. We use different $y$-axis labels in the two cases to make better use of the available space.
+We can use function \code{multiplot} to make a single plot from two separate ggplot objects, and put them side by or on top of each other. We use different $y$-axis labels in the two cases to make better use of the available space.
 
 <<plot-par-multiple-1>>=
 multiplot(fig_sun.q  + labs(y = ylab_umol_atop),
@@ -280,7 +280,7 @@ parameters \code{span} and \code{ignore\_threshold} difficult to grasp from the 
 \section{Task: annotating peaks and valleys in spectra}\label{sec:stat:pk:vly}
 
 Here we show an example of the use the new \code{ggplot} `statistics' \code{stat\_peaks}
-from our package \code{ggspectra}. It uses the same parameter names and take the
+from our package \pckg{ggspectra}. It uses the same parameter names and take the
 same arguments as the \code{get\_peaks} function described in section \ref{sec:get:pk:vly}.
 We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc}.
 
@@ -289,9 +289,9 @@ fig_sun.e0 + stat_peaks(span=31)
 @
 
 \sloppy
-Now we play with \texttt{ggplot2} to show different ways of plotting the peaks and valleys.
-It behaves as a \code{ggplot2} \code{stat\_xxxx} function accepting a \code{geom} argument
-and all the aesthetics valid for the chosen geom. By default \code{geom\_text} is used.
+Now we play with package \pckg{ggplot2} to show different ways of plotting the peaks and valleys.
+It behaves as a \pckg{ggplot2} \code{stat\_xxxx} function accepting a \code{geom} argument
+and all the aesthetics valid for the chosen \code{geom}. By default \code{geom\_text} is used.
 
 We can change aesthetics, for example the colour:
 <<plot-peaks-valleys-3>>=
@@ -299,7 +299,7 @@ fig_sun.e0 + stat_peaks(colour="red", span=31) +
             stat_valleys(colour="blue", span=51)
 @
 
-We can also use a different geom, in this case \code{geom\_point}, however, be aware that the \code{geom} parameter takes as argument a character string giving the name of the geom, in this case \code{"point"}.
+We can also use a different \code{geom}, in this case \code{geom\_point}, however, be aware that the \code{geom} parameter takes as argument a character string giving the name of the \code{geom}, in this case \code{"point"}.
 We change a few additional aesthetics of the points: we set \code{shape} to a character, and set its size to 6.
 
 <<plot-peaks-4>>=
@@ -308,7 +308,7 @@ fig_sun.e0 +
              shape="|", size=6, span=31)
 @
 
-We can add the same \code{stat} two or more times to a ggplot, in this example, each time with a different \code{geom}. First we add points to mark the peaks, and afterwards add labels showing the wavelengths at which they are located using geom \code{"text"}. For the \code{shape}, or type of symbol, we use one that supports `fill', and set the \code{fill} to \code{"white"} but keep the border of the symbol \code{"red"} by setting \code{colour}, we also change the \code{size}. With the labels we use \code{vjust} to `justify' the text moving the labels vertically, so that they do not overlap the line depicting the spectrum\footnote{The default position of labels is to have them centred on the coordinates of the peak or valley. Unless we rotate the label, \code{vjust} can be used to shift the label along the $y$-axis, however, justification is a property of the text, not the plot, so the vertical direction is referenced to the position of the text of the label. A value of 0.5 indicates centering, a negative value `up' and a positive value `down'. For example a value of -1 puts the $x, y$ coordinates of the peak or valley at the lower edge of the `bounding box' of the text. For \code{hjust} values of -1 and 1 right and left justify the label with respect to the $x, y$ coordinates supplied. Values other than -1, 0.5, and 1, are valid input, but are rather tricky to use for \code{hjust} as the displacement is computed relative to the width of the bounding box of the label, the displacement being different for the same numerical value depending on the length of the label text.}
+We can add the same \code{stat} two or more times to a \code{ggplot} object, in this example, each time with a different \code{geom}. First we add points to mark the peaks, and afterwards add labels showing the wavelengths at which they are located using geom \code{"text"}. For the \code{shape}, or type of symbol, we use one that supports `fill', and set the \code{fill} to \code{"white"} but keep the border of the symbol \code{"red"} by setting \code{colour}, we also change the \code{size}. With the labels we use \code{vjust} to `justify' the text moving the labels vertically, so that they do not overlap the line depicting the spectrum\footnote{The default position of labels is to have them centred on the coordinates of the peak or valley. Unless we rotate the label, \code{vjust} can be used to shift the label along the $y$-axis, however, justification is a property of the text, not the plot, so the vertical direction is referenced to the position of the text of the label. A value of 0.5 indicates centering, a negative value `up' and a positive value `down'. For example a value of -1 puts the $x, y$ coordinates of the peak or valley at the lower edge of the `bounding box' of the text. For \code{hjust} values of -1 and 1 right and left justify the label with respect to the $x, y$ coordinates supplied. Values other than -1, 0.5, and 1, are valid input, but are rather tricky to use for \code{hjust} as the displacement is computed relative to the width of the bounding box of the label, the displacement being different for the same numerical value depending on the length of the label text.}
 In addition we expand the $y$-axis scale so that all labels fall within the plotting area.
 
 <<plot-peaks-5>>=
@@ -335,7 +335,7 @@ See section \ref{?} in chapter \ref{chap:sources} for an example these stats tog
 
 The function \code{annotate\_waveband} can be used to highlight a waveband in a plot of spectral data. Its first argument should be a \code{waveband} object, and the second argument a \code{geom} as a character string. The positions on the x-axis are calculated automatically by default, but they can be overridden by explicit arguments. The vertical positions have no default, except for \code{ymin} which is equal to zero by default. The colour has a default value calculated from waveband definition, in addition x is by default set to the midpoint of the waveband along the wavelength limits. The default value of the labels is the `name' of the waveband as returned by \code{labels.waveband}.
 
-Here is an example for \PAR using defaults, and with arguments supplied only for parameters with no defaults. The example does the annotation using two different `geoms', \code{"rect"} for marking the region, and \code{"text"} for the labels.
+Here is an example for \PAR using defaults, and with arguments supplied only for parameters with no defaults. The example does the annotation using two different \code{geom}s, \code{"rect"} for marking the region, and \code{"text"} for the labels.
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide)
@@ -343,7 +343,7 @@ opts_chunk$set(opts_fig_wide)
 
 ADD EXAMPLES HERE
 
-Now an example that is more complex, and demonstrates the flexibility of plots produced with \code{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two `geoms' and some labels are rotated and justified. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}. A much simpler, but less flexible approach for adding annotations for several wavebands is described on page \pageref{chunk:plot:ann:tag}.
+Now an example that is more complex, and demonstrates the flexibility of plots produced with \pckg{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two \code{geom}s and some labels are rotated and justified. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}. A much simpler, but less flexible approach for adding annotations for several wavebands is described on page \pageref{chunk:plot:ann:tag}.
 
 ADD EXAMPLES HERE
 
@@ -520,7 +520,7 @@ We now tag a spectrum for use in our first plot example.
 par.sun.spct <- tag(sun.spct, PAR())
 @
 
-Here we simply use the \code{wb.f} factor that was added as part of the tagging, with the default colour scale of \code{ggplot2}, which results in a palette unrelated to the real colour of the different wavelengths.
+Here we simply use the \code{wb.f} factor that was added as part of the tagging, with the default colour scale of \pckg{ggplot2}, which results in a palette unrelated to the real colour of the different wavelengths.
 
 <<plot-tag-par-2>>=
 fig_sun.t00 <-
@@ -535,7 +535,7 @@ fig_sun.t00 <-
 fig_sun.t00
 @
 
-We can also use other geoms like \code{geom\_area} in the next chunk, together with, as an example, a grey fill scale from \code{ggplot2}.
+We can also use other \code{geom}s like \code{geom\_area} in the next chunk, together with, as an example, a grey fill scale from \pckg{ggplot2}.
 
 <<plot-tag-par-3>>=
 fig_sun.t01 <-
@@ -575,7 +575,7 @@ tg.sun.spct <- tag(sun.spct, VIS_bands())
 
 See section \ref{sec:plot:scales} on page \pageref{sec:plot:scales} for the definition of the colour and fill scales used for tagged spectra. These definitions are needed for most of the plots in the remaining of the present and next sections. These scales retrieve information about the wavebands both from the data itself and from the attribute described above.
 
-Here we plot using colours by waveband---using the colour definitions by ISO---, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.  One can play with the \code{size} of points until ones get the result wanted. The default `shape' used by \code{ggplot2} do not accept a \code{fill} aesthetic, while shape `21' gives circles that can be `filled'.
+Here we plot using colours by waveband---using the colour definitions by ISO---, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.  One can play with the \code{size} of points until ones get the result wanted. The default \code{shape}s used by \pckg{ggplot2} do not accept a \code{fill} aesthetic, while shape `21' gives circles that can be `filled'.
 
 <<plot-tag-vis-2>>=
 fig_sun.t02 <-
@@ -662,7 +662,7 @@ like. However, the longer spectrum should not be used for statistical calculatio
 splt.sun.spct <- tag(sun.spct, split_bands(VIS(), length.out=150))
 @
 
-In the code above, we made a copy of \code{sun.spct} because being part of the package, it is write protected, and \code{tag} works by modifying its argument.
+In the code above, we made a copy of \code{sun.spct} using a different name so as not hide the object in package \PB.
 
 <<plot-split-VIS-2>>=
 fig_sun.splt0 <-
@@ -737,9 +737,9 @@ Other possibilities are for example, using one of the symbols that can be filled
 
 \subsection{Plots using waveband definitions}\label{sec:plot:guide}
 
-In the previous section we showed how tagging spectral data can be used to add colour information that can be used when plotting. In contrast, in the present section we create new `fake' spectral data starting from waveband definitions that then we plot as `annotations'. We show different types of annotations based on plotting with different geoms. We show the use of \code{geom\_rect}, \code{geom\_text}, \code{geom\_vline}, and \code{geom\_segment}, that we consider the most useful geometries in this context.
+In the previous section we showed how tagging spectral data can be used to add colour information that can be used when plotting. In contrast, in the present section we create new `fake' spectral data starting from waveband definitions that then we plot as `annotations'. We show different types of annotations based on plotting with different \code{geom}s. We show the use of \code{geom\_rect}, \code{geom\_text}, \code{geom\_vline}, and \code{geom\_segment}, that we consider the most useful geometries in this context.
 
-We use three different functions from package \code{photobiology} to generate the data to be plotted from lists of waveband definitions. We use mainly pre-defined wavebands, but user defined wavebands can be used as well. We start by showing the output of these functions, starting with \code{wb2spct} the simplest one.
+We use three different functions from package \pckg{photobiology} to generate the data to be plotted from lists of waveband definitions. We use mainly pre-defined wavebands, but user defined wavebands can be used as well. We start by showing the output of these functions, starting with \code{wb2spct} the simplest one.
 
 <<plot-wb2spct>>=
 wb2spct(PAR())
@@ -768,7 +768,7 @@ As we saw earlier for tagged spectra, additional data is stored in an attribute.
 attr(wb2rect_spct(PAR()), "spct.tags")
 @
 
-The first plot examples show how to add a colour bar as key. We create new data for use in what is closer to the concept of annotation that to plotting. In most of the examples below we use waveband definitions to create tagged spectral data for use in plotting the guide using \code{geom\_rect}. We present three cases: an almost continuous colour reference guide, a reference guide for colours perceived by plants and one for ISO colour definitions. We also add labels to the bar with \code{geom\_text} and show some examples of how to change the color of the line enclosing the rectangles and of text labels. Finally we show how to use \code{fill} and \code{alpha} to adjust how the guides look. Later on we show some examples using other geoms and also examples combining the use of tagged spectra as described in the previous section with the `annotations' described here.
+The first plot examples show how to add a colour bar as key. We create new data for use in what is closer to the concept of annotation that to plotting. In most of the examples below we use waveband definitions to create tagged spectral data for use in plotting the guide using \code{geom\_rect}. We present three cases: an almost continuous colour reference guide, a reference guide for colours perceived by plants and one for ISO colour definitions. We also add labels to the bar with \code{geom\_text} and show some examples of how to change the color of the line enclosing the rectangles and of text labels. Finally we show how to use \code{fill} and \code{alpha} to adjust how the guides look. Later on we show some examples using other \code{geom}s and also examples combining the use of tagged spectra as described in the previous section with the `annotations' described here.
 
 First we create a simple line plot of the solar spectrum, that we will use as a basis for most of the examples below.
 
@@ -1025,7 +1025,7 @@ fig_sun.z12 <- fig_sun.z0 +
 fig_sun.z12 + theme_bw()
 @
 
-Of course it is possible to combine tagged data spectra and tagged spectra created from wavebands. The tagging is consistent, so, as demonstrated in the next figure, the same aesthetic `link' works for both spectra. In this case the fill scale and the setting of fill to \code{wb.f} work accross different `data' and yield a consistent look. This figure also shows that when assigning a constant to an aesthetic, it is possible to use a vector, which in the present example, saves us some work compared to adding a column to the data and using an identity scale. Contrary to earleir examples where we have added layers to a previously saved plot, here we show the whole code needed to build the figure.
+Of course it is possible to combine tagged data spectra and tagged spectra created from wavebands. The tagging is consistent, so, as demonstrated in the next figure, the same aesthetic `link' works for both spectra. In this case the fill scale and the setting of fill to \code{wb.f} work across different `data' and yield a consistent look. This figure also shows that when assigning a constant to an aesthetic, it is possible to use a vector, which in the present example, saves us some work compared to adding a column to the data and using an identity scale. Contrary to earlier examples where we have added layers to a previously saved plot, here we show the whole code needed to build the figure.
 
 <<>>=
 my.sun.spct <- tag(sun.daily.spct, list(UVB(), UVA()))
@@ -1052,7 +1052,7 @@ fig_sun.uv1 <- ggplot(my.sun.spct,
 fig_sun.uv1
 @
 
-Possible variations are almost endless, so we invite the reader to continue exploring how the functions from package \code{photobiology} can be used together with \code{ggplot}, to obtain beautiful plots of spectra. As an example here we show new versions of two plots from the previous section, one using a filled area to label the PAR region, and another one using symbols with colours according to their wavelength, to which we add a guide for PAR.
+Possible variations are almost endless, so we invite the reader to continue exploring how the functions from package \pckg{photobiology} can be used together with those from package \pckg{ggplot2}, to obtain beautiful plots of spectra. As an example here we show new versions of two plots from the previous section, one using a filled area to label the PAR region, and another one using symbols with colours according to their wavelength, to which we add a guide for PAR.
 
 <<plot-par-tag-annotate>>=
 par <- q_irrad(sun.spct, PAR()) * 1e6
@@ -1128,7 +1128,7 @@ fig_sun.cie0 <-
 fig_sun.cie0
 @
 
-There is one warning issued for each panel, as the use of \code{xlim} discards 400 observations for wavelengths longer than 400~\Unit(nm). One should be aware that these are estimated values and in practice stray light reduces the eficiency of the filters for blocking radiation, and the amount of stray light depends on many factors including the relative positions of plants, filter and sun.
+There is one warning issued for each panel, as the use of \code{xlim} discards 400 observations for wavelengths longer than 400~\Unit(nm). One should be aware that these are estimated values and in practice stray light reduces the efficiency of the filters for blocking radiation, and the amount of stray light depends on many factors including the relative positions of plants, filter and sun.
 
 A couple of details need to be remembered: the tagging has to be done before row-binding the spectra, as \code{tag} works only on spectra that have unique values for wavelengths and discards `repeated' rows if they are present. We use \code{theme(legend.position=c(0.90, 0.9))} to change where the legend or guide is positioned. In this case, we move the legend to a place within the plotting region. As we are using also \code{theme\_bw()} which resets the legend position to the default, the order in which they are added is significant.
 
@@ -1138,7 +1138,7 @@ A couple of details need to be remembered: the tagging has to be done before row
 opts_chunk$set(opts_fig_narrow)
 @
 
-In this task we aim at creating bar plots depicting the contributions of the UVB and UVA bands to the total erythemal effective irradiance in sunlight filtered with different plastic films. First we calculate the effective energy irradiance using the waveband definition for erythemal BSWF (CIE98) separately for the estimated solar spectral irradiance under each filter type.
+In this task we aim at creating bar plots depicting the contributions of the UVB and UVA bands to the total erythemal effective irradiance in sunlight filtered with different plastic films. First we calculate the effective energy irradiance using the waveband definition for \emph{erythemal} BSWF (CIE98) separately for the estimated solar spectral irradiance under each filter type.
 
 <<plot-bar-cie-0>>=
 cie.nf.irrad <- e_irrad(sun.spct * CIE(),
@@ -1159,7 +1159,7 @@ cie.dt <- data_frame(
                   levels=c('UVB', 'UVA')) )
 @
 
-Now we plot stacked bars using \code{geom\_bar}, however as the default \code{stat} of this geom is not suitable for our data, we specify \code{stat="identity"} to have the data plotted as is. We set a specific palette for fill, and add a black border to the bars by means of \code{color="black"}, we remove the grid lines corresponding to the $x$-axis, and also position the legend within the plotting region.
+Now we plot stacked bars using \code{geom\_bar}, however as the default \code{stat} of this \code{geom} is not suitable for our data, we specify \code{stat="identity"} to have the data plotted as is. We set a specific palette for fill, and add a black border to the bars by means of \code{color="black"}, we remove the grid lines corresponding to the $x$-axis, and also position the legend within the plotting region.
 
 <<print-bar-cie-data>>=
 cie.dt
@@ -1258,7 +1258,7 @@ In the case of the example spectrum with equal wavelength steps, one could have 
 \section{Task: plotting colours in Maxwell's triangle}\label{sec:max:tri}
 
 \subsection{Human vision: RGB}
-Given a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with function \code{w\_length2rgb} (see section \ref{}), from a waveband with function \code{color} (see section \ref{}), for a wavelength range with \code{w\_length\_range2rgb} (see section \ref{}), and from a spectrum with function \code{s\_e\_irrad2rgb}  (see section \ref{}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geoms, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
+Given a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with function \code{w\_length2rgb} (see section \ref{}), from a waveband with function \code{color} (see section \ref{}), for a wavelength range with \code{w\_length\_range2rgb} (see section \ref{}), and from a spectrum with function \code{s\_e\_irrad2rgb}  (see section \ref{}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geometries, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide_square)
@@ -1282,7 +1282,7 @@ maxwell.tern
 
 \section{Honey-bee vision: GBU}
 
-In this case we start with the spectral responsiveness of the photoreceptors present in the eyes of honey bees. Bees, as humans have three photoreceptors, but instead of red, green and blue (RGB), bees see green, blue and UV-A (GBU). To plot colours seen by bees one can still use a ternary plot, but the axes represent different photoreceptors than for humans, and the colour space is shifted towards shorter wavelengths.
+In this case we start with the spectral responsiveness of the photoreceptors present in the eyes of honey bees. Bees, as humans have three photoreceptors, but instead of red, green and blue (RGB), bees see green, blue and \UVA (GBU). To plot colours seen by bees one can still use a ternary plot, but the axes represent different photoreceptors than for humans, and the colour space is shifted towards shorter wavelengths.
 
 The calculations we will demonstrate here, in addition are geared to compare a background to a foreground object (foliage vs.\ flower). We have followed xxxxx \cite{chitka?} in this example, but be aware that calculations presented in this reference do not match the equations presented. In the original published example, the calculations have been simplified by leaving out $\delta \lambda$. Although not affecting the final result for their example, intermediate results are different (wrong?). We have further generalized the calculations and equations to make the calculations also valid for spectra measured using $\delta \lambda$ that itself varies along the wavelength axis. This is the usual situation with array spectrometers, nowadays frequently used when measuring reflectance.
 

@@ -12,7 +12,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
 library(photobiologyWavebands)
 library(photobiologyLamps)
@@ -26,7 +26,7 @@ Weighted irradiance is usually reported in weighted energy units, but it is also
 
 Most SWFs are defined using measured action spectra or spectra derived by combining different measured action spectra. As these spectra have been measured under different conditions, what is of interest is the shape of the curve as a function of wavelength, but not the absolute values. Because of this, SWFs are normalized to an action of one at an arbitrary wavelength. In many cases there is no consensus about the wavelength to use. Normalization is simple, it consists in dividing all action values along the curve by the action value at the selected normalization wavelengths.
 
-Another complication is that it is not always clear if a given SWF definition is based on energy or photon units for the fluence rate or irradiances. In photobiology using photon units for expressing action spectra is the norm, but SWFs based on them have rather frequently been used as weights for spectral energy irradiance. The current package makes this difference explicit, and uses the correct weights depending on the spectral data, as long as the \code{waveband} objects have been correctly defined. In the case of the definitions in package \PBWB, we have used, whenever possible the correct interpretation when described in the literature, or the common practice when information has been unavailable.
+Another complication is that it is not always clear if a given SWF definition is based on energy or photon units for the fluence rate or irradiances. In photobiology using photon units for expressing action spectra is the norm, but SWFs based on them have rather frequently been used as weights for spectral energy irradiance. Package \PB and the suite make this difference explicit, and uses the correct weights depending on the spectral data, as long as the \code{waveband} objects have been correctly defined. In the case of the definitions in package \PBWB, we have used, whenever possible the correct interpretation when described in the literature, or the common practice when information has been unavailable.
 
 %%%%
 \section{Task: specifying the normalization wavelength}\label{sec:wt:intro}

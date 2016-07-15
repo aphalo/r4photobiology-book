@@ -18,7 +18,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
 library(photobiologyWavebands)
 library(photobiologyLamps)
@@ -279,9 +279,9 @@ where \code{sun.spct} is a data frame. However, the data can also be stored in s
 
 \end{small}
 
-\section{Task: irradiances for more than one waveband}\label{sec:uw:mult:wb}
+\section{Task: irradiance for more than one waveband}\label{sec:uw:mult:wb}
 
-As discussed above, it is possible to calculate simultaneously the irradiances for several wavebands with a single function call by supplying a \code{list} of \code{wavebands} as argument:
+As discussed above, it is possible to calculate simultaneously the irradiance for several wavebands with a single function call by supplying a \code{list} of \code{wavebands} as argument:
 
 <<>>=
 q_irrad(sun.spct, list(Red(), Green(), Blue())) * 1e6

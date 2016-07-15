@@ -1,6 +1,6 @@
 \documentclass[paper=a4,headsepline,BCOR=12mm,DIV=11,twoside,open=right,%
 titlepage,headings=small,fontsize=10pt,index=totoc,bibliography=totoc,%
-captions=tableheading,captions=nooneline]{scrbook}
+captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 %%% We use OTF fonts through XeLaTeX
 
@@ -12,7 +12,8 @@ captions=tableheading,captions=nooneline]{scrbook}
 
 \usepackage{chapterthumb}
 \pagestyle{scrheadings}
-\AddLayersToPageStyle{@everystyle@}{chapterthumb}
+%\AddLayersToPageStyle{@everystyle@}{chapterthumb}
+\AddLayersToPageStyle{headings}{chapterthumb}
 \addtokomafont{chapterthumb}{\bfseries}
 \renewcommand*{\chapterthumbwidth}{.036\paperheight}
 \renewcommand*{\chapterthumbskip}{.034\paperheight}
@@ -23,7 +24,7 @@ captions=tableheading,captions=nooneline]{scrbook}
 \usepackage{fontspec}
 \setmainfont{Lucida Bright OT}
 \setsansfont{Lucida Sans OT}
-\setmonofont{Lucida Console DK}
+\setmonofont{Lucida Console DK}%[Scale=MatchLowercase]
 
 % We set up some other symbol fonts
 \newfontfamily\wingdingsfont{Wingdings}
@@ -35,14 +36,17 @@ captions=tableheading,captions=nooneline]{scrbook}
 \newfontfamily\wingdingsfonttres{Wingdings3}
 \newcommand\wingdingstres[1]{{\wingdingsfonttres\symbol{#1}}}
 
-\newfontfamily\meteoconsfont{Meteocons}
-\newcommand\meteocons[1]{{\meteoconsfont\symbol{#1}}}
-\newcommand\meteosun{\metecons{"0042}}
-\newcommand\meteosolidsun{\metecons{"0031}}
+%\newfontfamily\meteoconsfont{Meteocons}
+%\newcommand\meteocons[1]{{\meteoconsfont\symbol{#1}}}
+%\newcommand\meteosun{\metecons{"0042}}
+%\newcommand\meteosolidsun{\metecons{"0031}}
 
 \newfontfamily\typiconsfont{Typicons}
 \newcommand\typicons[1]{{\typiconsfont\symbol{#1}}}
 \newcommand\typiattn{\typicons{"E136}}
+\newcommand\Attention[1]{\marginpar{\centering\Huge\colorbox{yellow}{\typicons{"E136}}}\index{#1}}
+\newcommand\ilAttention{\colorbox{yellow}{\Huge\typicons{"E136}}\xspace}
+\newcommand\Advanced[1]{\marginpar{\centering\Huge\colorbox{black}{\textcolor{white}{\typicons{"E04E}}}}\index{#1}}
 
 % set language
 \usepackage{polyglossia}
@@ -88,7 +92,7 @@ captions=tableheading,captions=nooneline]{scrbook}
 \usepackage{r4photobiology}
 
 %\usepackage{glossaries}
-%\usepackage{imakeidx}
+\usepackage{imakeidx}
 
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,arrows,trees}
@@ -176,9 +180,9 @@ captions=tableheading,captions=nooneline]{scrbook}
 \renewcommand{\dblfloatpagefraction}{0.70}
 
 % Some font changes
-\setkomafont{title}{\sffamily\mdseries\LARGE}
+\setkomafont{title}{\sffamily\mdseries\Huge}
 \setkomafont{subtitle}{\sffamily\mdseries\LARGE}
-\setkomafont{chapter}{\sffamily\bfseries\Huge}
+\setkomafont{chapter}{\sffamily\bfseries\LARGE}
 
 \newcommand{\blankpage}{
 \newpage
@@ -211,7 +215,8 @@ captions=tableheading,captions=nooneline]{scrbook}
 
 % customize chapter format:
 \KOMAoption{headings}{twolinechapter}
-\renewcommand*\chapterformat{\thechapter\autodot\hspace{1em}}
+%\renewcommand*\chapterformat{{\fbox{\Huge\thechapter}\hspace{1em}}}
+\renewcommand*\chapterformat{{\colorbox{\chapterthumbboxcolor}{\color{\chapterthumbcolor}{\Huge\thechapter}}\hspace{1em}}}
 
 % customize dictum format:
 \setkomafont{dictumtext}{\itshape\small}
@@ -226,19 +231,19 @@ captions=tableheading,captions=nooneline]{scrbook}
 
 \title{R for Photobiology}
 
-\subtitle{Draft, 60\% done}
+\subtitle{Theory and recipes for common calculations}
 
-\author{Pedro J. Aphalo,\\ Andreas Albert\\ T. Matthew Robson\\ and\\ Titta Kotilainen}
+\author{Pedro J. Aphalo \and Andreas Albert \and T. Matthew Robson \and Titta Kotilainen}
 
 \date{Helsinki, \today}
 
-\publishers{Available through \href{https://leanpub.com/learnr}{Leanpub}}
+\publishers{Available through \href{https://leanpub.com/r4photobiology}{Leanpub}}
 
 \uppertitleback{\copyright\ 20012--2016 by the authors\\
 Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative Commons licenses} as indicated, or when not explicitly indicated, under the \href{http://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0 license}.}
 
 \lowertitleback{Typeset with \href{http://www.latex-project.org/}{\hologo{XeLaTeX}}\ in Lucida Bright and \textsf{Lucida Sans} using the KOMA-Script book class.\\
-The manuscript was written using \href{http://www.r-project.org/}{R} with package knitr. The manuscript was edited in \href{http://www.winedt.com/}{WinEdt} and \href{http://www.rstudio.com/}{RStudio}.
+The manuscript was written using \href{http://www.r-project.org/}{R} with package \pckg{knitr}. The manuscript was edited in \href{http://www.winedt.com/}{WinEdt} and \href{http://www.rstudio.com/}{RStudio}.
 The source files for the whole book are available at \url{https://bitbucket.org/aphalo/using-r}.}
 
 % knitr setup
@@ -426,7 +431,7 @@ rm(list = setdiff(current_ls, main_ls))
 
 \printglossary
 
-%\printindex
+\printindex
 
 \part{Appendix}
 

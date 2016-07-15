@@ -23,14 +23,15 @@ The aim of the suite is to both provide a framework for teaching VIS and UV radi
 Given the expected audience of both students and biologists, rather than data analysts, or experienced programmers, we have aimed at designing a consistent and easy to understand paradigm for the analysis of spectral data. The design is based on our own user experience, and on feedback from our students and `early adopters'.
 
 \begin{sidewaysfigure}
-\centering
+ \sffamily\mdseries
+ \centering
   \begin{tikzpicture}[auto]
-    \node [c] (ACQ) {\textbf{A:} acquire};
-    \node [b, dashed, below = of ACQ] (acquisition) {\textsl{Data acquisition}};
+    \node [c] (ACQ) {\textbf{A: acquire}};
+    \node [b, dashed, below = of ACQ] (acquisition) {Data acquisition};
     \node [a, dashed, below = of acquisition] (raw) {Raw spectral data};
     \path [lr, dashed] (acquisition) -- (raw) node[near start, right]{};
 
-    \node [c, right = of ACQ] (PROCESS) {\textbf{B:} process};
+    \node [c, right = of ACQ] (PROCESS) {\textbf{B: process}};
     \node [b, dashed, below = of PROCESS] (calibration) {Instrument-dependent corrections and calibration};
     \path [lr, dashed] (raw) -- (calibration) node[near start, above]{};
     \node [b, below = of calibration] (eda) {EDA (plotting)};
@@ -40,7 +41,7 @@ Given the expected audience of both students and biologists, rather than data an
     \node [a, below = of validation] (spectrum) {spectral data};
     \path [lr] (validation) -- (spectrum) node[near start, right]{};
 
-    \node [c, right = of PROCESS] (SUMMARIZE) {\textbf{C:} summarize};
+    \node [c, right = of PROCESS] (SUMMARIZE) {\textbf{C: summarize}};
     \node [b, below = of SUMMARIZE] (combine) {Operations on multiple spectra};
     \path [lr] (spectrum) -- (combine) node[near start, above]{};
     \node [b, below = of combine] (summaries) {Summaries\\ (weighting,\\ integration, colour)};
@@ -50,7 +51,7 @@ Given the expected audience of both students and biologists, rather than data an
     \node [a, below = of validation2] (summdata) {Summary data};
     \path [lr] (validation2) -- (summdata) node[near start, right]{};
 
-    \node [c, right = of SUMMARIZE] (USE) {\textbf{D:} analyse};
+    \node [c, right = of SUMMARIZE] (USE) {\textbf{D: analyse}};
     \node [d, dotted, below = of USE] (stats) {Analysis\\ (time series, model fitting)};
     \path [lr, dotted] (summdata) -- (stats) node[near start, below]{};
 
@@ -67,11 +68,14 @@ Given the expected audience of both students and biologists, rather than data an
   \begin{framed}
   \noindent
     \begin{description}
-      \item[\texttt{\textunderscore spct}] Spectral objects are containers for different types of spectral data, data which is referenced to wavelength. These data normally originate in measurements or simulation with models.
-      \item[\texttt{\textunderscore mspct}] Containers for spectral objects are used to store related spectral objects, such as time series of spectral objects or spectral images.
-      \item[\texttt{wavebands}] Waveband objects are containers of `instructions' for the quantification of spectral data. In addition to the everyday definition as a range of wavelengths, we include the spectral weighting functions used in the calculation of what are frequently called weighted or effective exposures and doses.
-      \item[summary functions] Different summary functions return different quantities through integration over wavelengths and take as arguments spectra and wavebands.
-      \item[maths operators and functions] Are used to combine and/or transform spectral data, and in some cases to apply weights defined by wavebands.
+      \item[\code{\textunderscore spct}] Spectral objects are containers for different types of spectral data, data which is referenced to wavelength. These data normally originate in measurements or simulation with models.
+      \item[\code{\textunderscore mspct}] Containers for spectral objects are used to store related spectral objects, such as time series of spectral objects or spectral images.
+      \item[\code{wavebands}] Waveband objects are containers of `instructions' for the quantification of spectral data. In addition to the everyday definition as a range of wavelengths, we include the spectral weighting functions used in the calculation of what are frequently called weighted or effective exposures and doses.
+      \item[maths operators and functions] Used to combine and/or transform spectral data, and in some cases to apply weights defined by wavebands.
+      \item[\code{apply} methods] Used to apply functions individual spectra stored in collections of spectra.
+      \item[summary methods and functions] Different summary functions return different quantities through integration over wavelengths and take as arguments spectra and wavebands.
+      \item[\code{plot} methods] Simplify the construction of specialized plots of spectral data.
+      \item[foreign data exchange functions] For importing data output by measuring instruments and exchanging data with other R packages.
     \end{description}
   \end{framed}
 \end{example}
@@ -80,9 +84,9 @@ The design of the `high level' interface is based on the idea of achieving simpl
 
 A consistent naming scheme for methods as well as consistency in the order of arguments across the suite should reduce the number of \emph{names} to remember. Data objects are \emph{tidy} as defined by in \autocite{Wickham2014a}, in other words data on a row always corresponds to a single observation event, although such an observation can consist in more than one measured or derived quantity. Data from different observations are stored in different objects, or if in the same object they are \emph{keyed} using and index variable.
 
-The same summary methods, are available for \texttt{\textunderscore spct} and \texttt{\textunderscore mspct}, in the first case returning a vector, and in the second case, a \texttt{data.frame} object.
+As an example, the same summary methods, are available for individual spectra (\code{\textunderscore spct} objects) and and collections of spectra (\code{\textunderscore mspct} objects), in the first case returning a numeric vector, and in the second case, a \texttt{data.frame} object.
 
-Package \texttt{photobiology} can be thought as a framework defining a way of storing spectral data plus `pieces' from which specific summaries can be constructed. Extensibility and reuse is at the core of the design. This is achieved by using the weakest possible assumptions or expectations about data properties and avoiding as much as possible the hard-coding of any constants or size limits. This, of course, has a cost in possibly slower execution speed. Within these constraints an effort has been made to remove performance bottleneck by means of C++ code and passing data objects by reference when possible.
+Package \pckg{photobiology} can be thought as a framework defining a way of storing spectral data plus `pieces' of code from which specific methods can be constructed, plus ready defined methods for frequently used operations. Extensibility and reuse is at the core of the design. This is achieved by using the weakest possible assumptions or expectations about data properties and avoiding as much as possible hard-coding of any constants or size limits. This, of course, has a cost in possibly slower execution speed. Within these constraints an effort has been made to remove performance bottlenecks by extensive testing and in isolated cases writing functions in C++.
 
 \begin{figure}
  \tikzstyle{every node}=[draw=black,thick,anchor=west,fill=blue!15]
@@ -143,17 +147,17 @@ Package \texttt{photobiology} can be thought as a framework defining a way of st
 e_irrad(sun.spct * polyester.spct, CIE())
 @
 
-Is all what is needed to obtain the CIE98-weigthed energy irradiance simulating the effect of a polyester filter on the example solar spectrum, which of course, can be substituted by other spectral irradiance and filter data.
+Is all what is needed to obtain the CIE98-weighted energy irradiance simulating the effect of a polyester filter on the example solar spectrum, which of course, can be substituted by other spectral irradiance and filter data.
 
 When we say that we hide the computational difficulties what we mean, is that in the example above, the data for the two spectra do not need to be available at the same wavelengths values, and the BSWF is defined as a function. Interpolation of the spectral data and calculation of spectral weighting factors takes place automatically and invisibly. All functions and operators function without error with spectra with varying (even arbitrarily and randomly varying) wavelength steps. Integration is always used rather than summation for summarizing the spectral data.
 
 There is a lower layer of functions, used internally, but also exported, which allow improved performance at the expense of more complex scripts and commands. This user interface is not meant for the casual user, but for the user who has to analyse thousands of spectra and uses scripts for this. For such users performance is the main concern rather than easy of use and easy to remember syntax. Also these functions handle any wavelength mismatch by interpolation before applying operations or functions.
 
-The suite also includes data for the users to try options and ideas, and helper functions for plotting spectra using other R packages available from CRAN, in particular \code{ggplot2}. There are some packages, not part of the suite itself, for data acquisition from Ocean Optics spectrometers, and application of special calibration and correction procedures to those data. A future package will provide an interface to the TUV model to allow easy simulation of the solar spectrum.
+The suite also includes data for the users to try options and ideas, and helper functions for plotting spectra using other R packages available from CRAN, in particular \pckg{ggplot2}. There are some packages, not part of the suite itself, for data acquisition from Ocean Optics spectrometers, and application of special calibration and correction procedures to those data. A future package will provide an interface to the TUV model to allow easy simulation of the solar spectrum.
 
 \section{The suite}
 
-The suite consists in several packages. The main package is \code{photobiology} which contains all the generally useful functions, including many used in the other, more specialized, packages (Table \ref{tab:suite}).
+The suite consists in several packages. The main package is \pckg{photobiology} which contains all the generally useful functions, including many used in the other, more specialized, packages (Table \ref{tab:suite}).
 
 \begin{table}
 \newcommand{\gblt}{\textcolor{green}{$\bullet$}}
@@ -166,6 +170,7 @@ The suite consists in several packages. The main package is \code{photobiology} 
 \caption[Packages in the suite]{Packages in the \textsf{r4photobiology} suite. Packages not yet released are
 marked with a red bullet \rblt, and those at `beta' stage with a yellow bullet \yblt, those relatively stable with a green bullet \gblt, and those in CRAN with the label \cran\ in the first column of the table.}\label{tab:suite}
 \centering
+\sffamily\mdseries
 \begin{small}
 \begin{tabular}{clll}
 \toprule
@@ -176,7 +181,7 @@ marked with a red bullet \rblt, and those at `beta' stage with a yellow bullet \
       &                   &                 & class methods and example data \\
 \cran & photobiologyInOut     &  functions  & data import/export functions \\
 \cran & photobiologyWavebands   &  definitions & quantification of radiation \\
-\cran & ggspectra  & functions       & extensions to package \code{ggplot2} \\
+\cran & ggspectra  & functions       & extensions to package \pckg{ggplot2} \\
 \midrule
 \midrule
 \gblt & photobiologySun   &  data        & spectral data for solar radiation \\
@@ -201,7 +206,7 @@ spectral transmittance vs.\ spectral absorbance for classes \code{filter\_spct},
 
 Although by default low-level functions expect spectral data on energy units, this is just a default that can be changed by setting the parameter \code{unit.in = "photon"}. Across all data sets and functions wavelength vectors have name \code{w.length}, spectral (energy) irradiance \code{s.e.irrad}, photon spectral irradiance \code{s.q.irrad}\footnote{\code{q} derives from `quantum'.}, absorbance ($\log_{10}$-based) \code{A}, transmittance (fraction of one) \code{Tfr}, transmittance (\%) \code{Tpc}, reflectance (fraction of one) \code{Rfr}, reflectance (\%) \code{Rpc}, and absorptance (fraction of one) \code{Afr}.
 
-Wavelengths should always be in naanometres (\Unit{nm}), and when conversion between energy and photon based units takes place no scaling factor is used (an input in \wattnm yields an output in \molnm rather than \umolnm).
+Wavelengths should always be in nanometres (\Unit{nm}), and when conversion between energy and photon based units takes place no scaling factor is used (an input in \wattnm yields an output in \molnm rather than \umolnm).
 
 The suite is still under active development. Even those packages marked as `stable' are likely to acquire new functionality. By stability, we mean that we hope to be able to make most changes backwards compatible, in other words, we hope they will not break existing user code.
 
@@ -240,7 +245,7 @@ utils::setRepositories(
   addURLs = c(r4photobiology = "http://www.r4photobiology.info/R"))
 @
 
-The \code{.Rprofile} file located in the current folder is sourced at R start up. It is also possible to have such a file affecting all of the user's R sessions, but its location is operating system dependent, it is in most cases what the OS considers the current user's \textit{HOME} directory or folder (e.g. `My Documents' in recent versions of MS-Windows). If you are using RStudio, after setting up this file, installation and updating of the packages in the suite can take place exactly as for any other package archived at CRAN.
+The \code{.Rprofile} file located in the current folder is \emph{sourced} (i.e.\ executed) at R start up. It is also possible to have such a file affecting all of the user's R sessions, but its location is operating system dependent, it is in most cases what the OS considers the current user's \textit{HOME} directory or folder (e.g. `My Documents' in recent versions of MS-Windows). If you are using RStudio, after setting up this file, installation and updating of the packages in the suite can take place exactly as for any other package archived at CRAN.
 
 The commands and examples below can be used at the R prompt and in scripts whether RStudio is used or not.
 

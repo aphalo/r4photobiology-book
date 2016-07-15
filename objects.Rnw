@@ -12,7 +12,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For accessing the example data listed in this chapter you need first to load the following packages from the library:
-<<eval=FALSE>>=
+<<eval=FALSE,message=FALSE>>=
 library(photobiology)
 library(photobiologyFilters)
 library(photobiologyReflectors)

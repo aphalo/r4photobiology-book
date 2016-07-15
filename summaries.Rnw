@@ -13,7 +13,7 @@ opts_chunk$set(opts_fig_wide)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
 library(photobiologyWavebands)
 library(ggplot2)
@@ -25,18 +25,17 @@ library(photobiologyReflectors)
 
 \section{Task: Printing spectra}
 
-Spectral objects are printed with the \texttt{print} method for \texttt{data.frame} objects, consequently, it is possible to use options from package \texttt{data.frame} to control printing. The first option set below, \texttt{datatable.print.nrows}, determines the number of rows above which only `head' and `tail' rows are printed. The second option, \texttt{datatable.print.topn}, determines how many rows are printed when not all rows are printed.
+Spectral objects are printed with a special \code{print} method that is an extension to the print method for \code{tibble} objects, consequently, it is possible to use options from package \pckg{tibble} to control printing. The first option set below, \code{tibble.print\_max}, sets the number of rows above which only `head' rows are printed and \code{tibble.print\_min} sets the number of rows printed when the head is printed. Another option, \code{tibble.width} sets width of the output printed for \code{tibble} objects with many columns.
 
 <<printing-spct>>=
-options(datatable.print.nrows = 10)
-options(datatable.print.topn = 2)
+options(tibble.print_max = 4, tibble.print_min = 4)
 @
 
-The number of rows printed can be also controlled through an explicit argument to the second parameter of \texttt{print}, \texttt{head}, and \texttt{tail}. Setting an option by means of \texttt{options} changes the default behaviour of \texttt{print}, but explicit arguments can still be used for changing this behaviour in an individual statement.
+The number of rows printed can be also controlled through an explicit argument to the second parameter of \code{print}, \code{head}, and \code{tail}. Setting an option by means of \code{options} changes the default behaviour of \code{print}, but explicit arguments can still be used for changing this behaviour in an individual statement.
 
 \section{Task: Summaries related to object properties}\label{sec:summaries:wavelength}
 
-In the case of the \texttt{summary} method, specializations for \texttt{source\_spct} and \ldots are provided. But for other spectral objects, the \texttt{summary} method for \texttt{data.table} is called. For the \texttt{summary} specializations defined, the corresponding \texttt{print} method specializations are also defined.
+In the case of the \code{summary} method, specializations for \code{source\_spct} and \ldots are provided. But for other spectral objects, the \code{summary} method for \code{data.table} is called. For the \code{summary} specializations defined, the corresponding \code{print} method specializations are also defined.
 
 <<>>=
 summary(sun.spct)
@@ -44,7 +43,7 @@ summary(sun.spct)
 
 \section{Task: Integrating spectral data}
 
-Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \texttt{integrate\_spct} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operates on all \texttt{numeric} variables contained in a spectral object except for \texttt{w.length}. The returned value is expressed as a total per spectrum.
+Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{integrate\_spct} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operates on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed as a total per spectrum.
 
 <<>>=
 integrate_spct(sun.spct)
@@ -52,7 +51,7 @@ integrate_spct(sun.spct)
 
 \section{Task: Averaging spectral data}
 
-Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \texttt{average\_spct} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operate on all \texttt{numeric} variables contained in a spectral object except for \texttt{w.length}. The returned value is expressed per nanometre.
+Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{average\_spct} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operate on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed per nanometre.
 
 <<>>=
 average_spct(sun.spct)
@@ -61,7 +60,7 @@ average_spct(sun.spct)
 %%%%
 \section{Task: Summaries related to wavelength}\label{sec:summaries:wavelength}
 
-Functions \texttt{max}, \texttt{min}, \texttt{range}, \texttt{midpoint} when used with an object of class \texttt{generic\_spct} (or a derived class) return the result of applying these functions to the \texttt{w.length} component of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
+Functions \code{max}, \code{min}, \code{range}, \code{midpoint} when used with an object of class \code{generic\_spct} (or a derived class) return the result of applying these functions to the \code{w.length} component of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
 
 <<>>=
 range(sun.spct)
@@ -70,7 +69,7 @@ max(sun.spct)
 min(sun.spct)
 @
 
-Functions \texttt{spread} are \texttt{stepsize} are generics defined in package \PB. \texttt{spread} returns maximum less minimum wavelengths values in nanometres, while \texttt{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
+Functions \code{spread} are \code{stepsize} are generics defined in package \PB. \code{spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
 
 <<>>=
 spread(sun.spct)
@@ -79,21 +78,21 @@ stepsize(sun.spct)
 
 \section{Task: Finding the class of an object}\label{sec:summaries:class}
 
-R method \texttt{class} can be used with any R object, including spectra.
+R method \code{class} can be used with any R object, including spectra.
 
 <<>>=
 class(sun.spct)
 class(polyester.spct)
 @
 
-The method \texttt{class\_spct} is a convenience wrapped on \texttt{class} which returns only class attributes corresponding to spectral classes defined in package \PB.
+The method \code{class\_spct} is a convenience wrapped on \code{class} which returns only class attributes corresponding to spectral classes defined in package \PB.
 
 <<>>=
 class_spct(sun.spct)
 class_spct(polyester.spct)
 @
 
-The method \texttt{is.any\_spct} is a synonym of \texttt{is.generic\_spct} as \texttt{generic\_spct} is the base class from which all spectral classes are derived.
+The method \code{is.any\_spct} is a synonym of \code{is.generic\_spct} as \code{generic\_spct} is the base class from which all spectral classes are derived.
 <<>>=
 is.any_spct(sun.spct)
 is.any_spct(polyester.spct)
@@ -113,7 +112,7 @@ is.filter_spct(polyester.spct)
 
 \section{Task: Querying other attributes}\label{sec:summaries:attributes}
 
-Both \texttt{response\_spct} and \texttt{source\_spct} objects have an attribute \texttt{time.unit} that can be queried.
+Both \code{response\_spct} and \code{source\_spct} objects have an attribute \code{time.unit} that can be queried.
 
 <<>>=
 getTimeUnit(sun.spct)
@@ -141,13 +140,13 @@ sun.scaled.spct <- fscale(sun.spct, f = "mean")
 is_scaled(sun.scaled.spct)
 @
 
-We now consider \texttt{filter\_spct} objects (see Chapter \ref{chap:trans:refl} for an explanation of the meaning of these attributes and how they affect calculations).
+We now consider \code{filter\_spct} objects (see Chapter \ref{chap:trans:refl} for an explanation of the meaning of these attributes and how they affect calculations).
 
 <<>>=
 getTfrType(polyester.spct)
 @
 
-and  \texttt{reflector\_spct} objects.
+and  \code{reflector\_spct} objects.
 
 <<>>=
 getRfrType(gold.spct)
@@ -155,7 +154,7 @@ getRfrType(gold.spct)
 
 \section{Task: Query how spectral data contained is expressed}
 
-We first consider the case of \texttt{source.spct} objects.
+We first consider the case of \code{source.spct} objects.
 If an object contains the same data expressed differently, it is possible, as in the example for both statement to return true.
 
 <<>>=
@@ -174,7 +173,7 @@ is_energy_based(my.spct)
 is_photon_based(my.spct)
 @
 
-We now consider \texttt{filter\_spct} objects.
+We now consider \code{filter\_spct} objects.
 
 <<>>=
 is_transmittance_based(polyester.spct)
@@ -183,14 +182,14 @@ is_absorbance_based(polyester.spct)
 
 \section{Task: Querying about `origin' of data}
 
-All spectral objects (\texttt{generic\_spct} and derived types) can be queried whether they are the result of the normalization or re-scaling of another spectrum. In the case of normalization, the normalization wavelength in nanometres is returned, otherwise a logical value.
+All spectral objects (\code{generic\_spct} and derived types) can be queried whether they are the result of the normalization or re-scaling of another spectrum. In the case of normalization, the normalization wavelength in nanometres is returned, otherwise a logical value.
 
 <<>>=
 is_normalized(sun.spct)
 is_scaled(sun.spct)
 @
 
-\texttt{source\_spct} objects can be queried to learn if they are the result of a calculation involving a weighting function.
+\code{source\_spct} objects can be queried to learn if they are the result of a calculation involving a weighting function.
 
 <<>>=
 is_effective(sun.spct)
@@ -198,7 +197,7 @@ is_effective(sun.spct)
 
 \section{Task: Plotting a spectrum}
 
-Method \texttt{plot} is defined for \texttt{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
+Method \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
 
 <<>>=
 plot(sun.spct)
@@ -210,7 +209,7 @@ plot(polyester.spct)
 
 \section{Task: Other R's methods}
 
-Methods \texttt{names} and \texttt{comment} should work as usual. In the case of the comment attribute, most operations on spectral objects preserve comments, sometimes with additions, or by merging of comments from operands. Comments are optional, so for some objects \texttt{comment} may return a \texttt{NULL}. As some comments contain new line characters, to get them printed nicely we need to use \texttt{cat}.
+Methods \code{names} and \code{comment} should work as usual. In the case of the comment attribute, most operations on spectral objects preserve comments, sometimes with additions, or by merging of comments from operands. Comments are optional, so for some objects \code{comment} may return a \code{NULL}. As some comments contain new line characters, to get them printed nicely we need to use \code{cat}.
 
 <<>>=
 names(sun.spct)
@@ -219,7 +218,7 @@ cat(comment(sun.spct))
 
 \section{Task: Find peaks and valleys}\label{sec:summaries:peaks}
 
-Methods \texttt{peaks} and \texttt{valleys} can be used on most spectral objects to find local maxima and local minima in spectral data. They return an object of the same class containing only the observations corresponding to these local extremes.
+Methods \code{peaks} and \code{valleys} can be used on most spectral objects to find local maxima and local minima in spectral data. They return an object of the same class containing only the observations corresponding to these local extremes.
 
 <<>>=
 peaks(philips.tl12.spct)
@@ -234,13 +233,13 @@ peaks(schott.mspct$KG5, filter.qty = "absorbance")
 
 \subsection{Obtaining the location of peaks as an index into the spectral data}
 
-Function \texttt{find\_peaks}, takes as argument a \texttt{numeric} vector, and returns a logical vector of the same length, with \texttt{TRUE} for local maxima and \texttt{FALSE} for all other observations. Infinite values are discarded.
+Function \code{find\_peaks}, takes as argument a \code{numeric} vector, and returns a logical vector of the same length, with \code{TRUE} for local maxima and \code{FALSE} for all other observations. Infinite values are discarded.
 
 <<>>=
 head(find_peaks(sun.spct$s.e.irrad))
 @
 
-To obtain the indexes, one can use R's function \texttt{which}
+To obtain the indexes, one can use R's function \code{which}
 
 <<>>=
 head(which(find_peaks(sun.spct$s.e.irrad)))
@@ -248,17 +247,17 @@ head(which(find_peaks(sun.spct$s.e.irrad)))
 
 \subsection{Obtaining the location of peaks as a wavelength in nanometres}
 
-Function \texttt{get\_peaks} takes two numeric vectors as as arguments, $x$ is, for spectra assumed to be a vector of wavelengths, and $y$ the spectral variable to search for local maxima.
+Function \code{get\_peaks} takes two numeric vectors as as arguments, $x$ is, for spectra assumed to be a vector of wavelengths, and $y$ the spectral variable to search for local maxima.
 <<>>=
 with(sun.spct, get_peaks(w.length, s.e.irrad, span = 51))[["x"]]
 @
-The returned value is a (shorter) data frame with two numeric vectors, $x$ and $y$, and an optional chracter variables \texttt{label}, for each local maximum found in $y$, but we extract \texttt{x}.
+The returned value is a (shorter) data frame with two numeric vectors, $x$ and $y$, and an optional character variables \code{label}, for each local maximum found in $y$, but we extract \code{x}.
 
 \section{Task: Refining the location of peaks and valleys}\label{sec:summaries:peak:refine}
 
 The functions described in the previous section locate the observation with the locally highest $y$-value. This is in most cases the true location of the peaks as they may fall in between two observations along the wavelength axis. By fitting a suitable model to describe the shape of the peak, which is the result of the true peak and the slit function of the spectrometer, the true location of a peak can be approximated more precisely. There is no universally useful model, so we show some examples of a possible method of peak-position refinement.
 
-In this example, in the second statement we refine the location of the shortest-wavelength peak found by \texttt{get\_peaks} in the first statement. For this approach to work, the peaks should be clearly visible, and not very close to each other. We use the spectral irradiance measured from a UV-B lamp as an example.
+In this example, in the second statement we refine the location of the shortest-wavelength peak found by \code{get\_peaks} in the first statement. For this approach to work, the peaks should be clearly visible, and not very close to each other. We use the spectral irradiance measured from a UV-B lamp as an example.
 
 <<>>=
 stepsize(germicidal.spct)

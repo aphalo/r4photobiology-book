@@ -12,7 +12,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
 library(photobiologyWavebands)
 library(photobiologyFilters)
@@ -69,7 +69,7 @@ which in S language is:
 my_A2T <- function(x) {10^-x}
 @
 
-Instead of these functions, the package defines generic functions and specialized functions, that can be used on vectors and on \code{filter\_spct} objects. Then functions defined above could be directly applied to vectors but doing this on a column in a \code{filter\_spct} is more cumbersome. As the spectra objects are data.tables, one can add a new column, say with transmittances to a copy of the filter data as is shown in the next section.
+Instead of these functions, the package \PB defines generic functions and specialized functions, that can be used on numeric vectors and on \code{filter\_spct} objects. The functions defined above could be directly applied to vectors but doing this on a column in a \code{filter\_spct} is more cumbersome. As the spectra objects are data.tables, one can add a new column, say with transmittances to a copy of the filter data as is shown in the next section.
 
 
 %%%%
@@ -99,7 +99,7 @@ T2A(0.001)
 %%%%
 \section{Task: spectral transmittance from spectral absorbance}
 
-Please, see section \ref{sec:trans:T2A} for more details in the description of the method \code{T2A} which does the opposite conversion than the method \code{A2T} needed for this taks, but which works similarly.
+Please, see section \ref{sec:trans:T2A} for more details in the description of the method \code{T2A} which does the opposite conversion than the method \code{A2T} needed for this task, but which works similarly.
 
 <<>>=
 A2T(a.gg400.spct)

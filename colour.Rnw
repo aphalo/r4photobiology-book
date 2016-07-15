@@ -12,7 +12,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
 @
 
@@ -28,11 +28,6 @@ By default CIE coordinates for \textit{typical} human vision are used, but the f
 have a parameter that can be used for supplying a different chromaticity definition. The range of wavelengths used in the calculations is that in the chromaticity data.
 
 One use of these functions is to generate realistic colour for `key' on plots of spectral data. Other uses are also possible, like simulating how different, different objects would look to a certain organism.
-
-\begin{framed}
-This package is very `young' so may be to some extent buggy, and/or have rough edges.
-We plan to add at least visual data for honey bees.
-\end{framed}
 
 %%%%
 \section{Task: calculating an RGB colour from a single wavelength}\label{sec:color:wl}

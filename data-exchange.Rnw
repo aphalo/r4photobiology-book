@@ -3,6 +3,11 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
+<<echo=FALSE, cache=FALSE>>=
+opts_chunk$set(opts_fig_wide_full)
+@
+
+
 \chapter{Importing and exporting `R' data}\label{chap:measurement}
 
 %\begin{abstract}
@@ -12,18 +17,240 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
+library(photobiologySun)
+library(photobiologyWavebands)
 library(photobiologyInOut)
+library(lubridate)
+library(ggplot2)
+library(ggspectra)
 library(hyperSpec)
 library(colorSpec)
 library(pavo)
+library(fda)
+library(fda.usc)
 @
 
-\section{Reading and writing common file formats}
+\section{Package \pckg{hyperSpec}}
 
-\subsection{Package \texttt{hyperSpec}}
+\subsection{To \pckg{hyperSpec}}
 
-\subsection{Package \texttt{colorSpec}}
+Can export to \code{hyperSpec} objects only collections of spectra where all members have identical \code{w.length} vectors, as objects of class \code{hypeSpec} store a single vector of wavelengths for the whole collection of spectra. We use as example data \code{gap.mspct} from package \pckg{photobiologySun}.
 
-\subsection{Package \texttt{pavo}}
+<<>>=
+gap.hspct <- mspct2hyperSpec(gap.mspct, "s.e.irrad")
+class(gap.hspct)
+plot(gap.hspct)
+@
+
+\subsection{From \pckg{hyperSpec}}
+
+Can import only data with wavelength in nanometres. Other quantities and units are not supported by the \pckg{photobiology} classes for spectral data. See package \pckg{hyperSpec} vignette "laser" for details on the data and the conversion of the original wavelength units into nanometres.
+
+<<>>=
+class(laser)
+laser
+plot(laser)
+@
+
+We assume here, that the quantity for the spectral emission of the laser is
+spectral \textit{energy} irradiance, expressed in \mwattnm. This is likely to be
+wrong but for the sake of showing how the conversion takes place is irrelevant.
+The parameter \code{multiplier} can be passed a numeric argument to rescale
+the original data. The default multiplier is 1.
+
+<<>>=
+wl(laser) <- list (
+  wl = 1e7 / (1/405e-7 - wl (laser)),
+  label = expression (lambda / nm)
+)
+laser
+plot(laser)
+laser.mspct <-
+  hyperSpec2mspct(laser, "source_spct", "s.e.irrad", multiplier = 1e-3)
+ggplot(laser.mspct[[1]]) +
+  geom_line() +
+  stat_peaks(geom = "text", vjust = -1, label.fmt = "%.6g nm", color = "red")
+@
+
+\section{Package \pckg{colorSpec}}
+
+\subsection{From \pckg{colorSpec}}
+
+<<>>=
+fluorescent.mspct <- colorSpec2mspct(Fs.5nm)
+print(fluorescent.mspct, n = 3, n.members = 3)
+@
+
+<<>>=
+colorSpec2mspct(Hoya)
+@
+
+<<>>=
+fluorescent.spct <- colorSpec2spct(Fs.5nm)
+plot(fluorescent.spct, annotations = c("peaks", "color.guide")) + aes(linetype = spct.idx)
+@
+
+<<>>=
+colorSpec2chroma_spct(xyz1931.5nm)
+@
+
+\subsection{To \pckg{colorSpec}}
+
+<<>>=
+sun.cspec <- spct2colorSpec(sun.spct)
+plot(sun.cspec, col = "blue")
+@
+
+<<>>=
+spct2colorSpec(yellow_gel.spct)
+@
+
+<<>>=
+chroma_spct2colorSpec(beesxyzCMF.spct)
+@
+
+\section{Package \pckg{pavo}}
+
+\subsection{From \pckg{pavo}}
+
+In this example we convert an \code{rspec} object from package \pckg{pavo} into a collection of spectra and then we plot it with \code{ggplot} methods from package \pckg{ggspectra} (an extension to \pckg{ggplot2}). The data are the spectral reflectance of the plumage from seven different individual birds of the same species, measured in three different body parts.
+
+<<>>=
+data(sicalis)
+class(sicalis)
+names(sicalis)
+@
+
+We convert the data into a collection of spectra, and calculate summaries for three spectra.
+
+<<>>=
+sicalis.mspct <- rspec2mspct(sicalis, "reflector_spct", "Rpc")
+summary(sicalis.mspct[[1]])
+summary(sicalis.mspct[[2]])
+summary(sicalis.mspct[[3]])
+@
+
+We convert the subset of the collection corresponding to the first individual into a single spectra object for plotting with \code{ggplot}.
+
+<<>>=
+ggplot(rbindspct(sicalis.mspct[1:3])) +
+  aes(linetype = spct.idx) +
+  ylim(0,0.3) +
+  geom_line()
+@
+
+Here we extract the ``crown'' data from all individuals and plot these spectra in a single plot.
+
+<<>>=
+print(sicalis.mspct[c(TRUE, FALSE, FALSE)])
+ggplot(rbindspct(sicalis.mspct[c(TRUE, FALSE, FALSE)])) +
+  aes(linetype = spct.idx) +
+  ylim(0,0.15) +
+  geom_line() +
+  ggtitle("'crown' reflectance spectra")
+@
+
+We calculate the mean reflectance in wavebands corresponding to ISO colors obtaining a data frame. We then add to this returned data frame a factor indicating the body parts.
+
+<<>>=
+refl.by.band <- reflectance(sicalis.mspct, w.band = list(Red(), Green(), Blue(), UVA()))
+refl.by.band$body.part <- c("crown", "throat", "breast")
+@
+
+<<>>=
+refl.red <- reflectance(sicalis.mspct, w.band = Red())
+names(refl.red)[2] <- "red.reflectance"
+refl.red$body.part <- c("crown", "throat", "breast")
+ggplot(refl.red, aes(x = body.part, y = red.reflectance)) +
+  stat_summary(fun.data = "mean_se", color = "red") +
+  geom_point(alpha = 0.5)
+@
+
+\section{Packages \pckg{fda} and \pckg{fda.usc}}
+
+Functional\Advanced{funtional data analysis} data analysis is a specialized method that can be used to compare and classify spectra. We here exemplify the selection of the `deepest spectrum' from a collection of spectra. The data interconversion can be done with a simple function. Package \pckg{fda} expects the spectra in a single matrix object, with each spectrum as a row. We will use once again \code{gap.mspct} for this example.
+
+<<>>=
+gap.mat <- mspct2mat(gap.mspct, "s.e.irrad", byrow = TRUE)
+dim(gap.mat)
+names(dimnames(gap.mat))
+# convert the matrix to fdata
+gap.fdata <- fdata(gap.mat)
+@
+
+We search for ``deepest curve'' using different methods.
+
+<<>>=
+# Returns the deepest curve following FM criteria
+func_med_FM <- func.med.FM(gap.fdata)
+# Returns the deepest curve following mode criteria
+func_med_mode <- func.med.mode(gap.fdata)
+# Returns the deepest curve following RP criteria
+func_med_RP <- func.med.RP(gap.fdata)
+@
+
+We plot using plot method from package \pckg{fda}.
+
+<<>>=
+plot(func_med_FM)
+@
+
+We convert the returned curves into a \code{source\_spct} objects.
+
+<<>>=
+func_med_FM.spct <-
+  source_spct(w.length = attr(gap.mat, "w.length"),
+              s.e.irrad = func_med_FM$data[1, ])
+func_med_mode.spct <-
+  source_spct(w.length = attr(gap.mat, "w.length"),
+              s.e.irrad = func_med_mode$data[1, ])
+func_med_RP.spct <-
+  source_spct(w.length = attr(gap.mat, "w.length"),
+              s.e.irrad = func_med_RP$data[1, ])
+@
+
+We plot one spectrum using plot method from package \pckg{ggspectra}.
+
+<<>>=
+plot(func_med_mode.spct)
+@
+
+We calculate one summary.
+
+<<>>=
+q_ratio(func_med_mode.spct, Red("Smith10"), Far_red("Smith10"))
+@
+
+We create a collection of spectra.
+
+<<>>=
+gap_fda.mspct <- source_mspct(list(med_FM = func_med_FM.spct,
+                 med_mode = func_med_mode.spct,
+                 med_RP = func_med_RP.spct))
+@
+
+Calculate spectral summaries.
+
+<<>>=
+ratios <- q_ratio(gap_fda.mspct, Red("Smith10"), Far_red("Smith10"))
+names(ratios) <- c("method", "R:FR")
+ratios
+@
+
+We bind the three spectra to be able to plot them together.
+
+<<>>=
+gap_fda.spct <-
+  rbindspct(gap_fda.mspct,
+            idfactor = "method")
+@
+
+We plot three spectra using plot method from package \pckg{ggspectra}.
+
+<<>>=
+plot(gap_fda.spct,
+     annotations = c("color.guide", "boxes", "labels")) +
+  aes(linetype = method)
+@

@@ -12,7 +12,7 @@ opts_knit$set(concordance=TRUE)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<>>=
+<<message=FALSE>>=
 library(photobiology)
 library(ggspectra)
 library(photobiologyPlants)
@@ -24,9 +24,9 @@ library(hsdar)
 
 \section{Task: Calculation of the value of a known index from spectral data}
 
-We will start with a very well-known index used in remote sensing, Normalized Difference Vegetation Index (NDVI). We must be aware that an NDVI value calculated from spectral data on ``first principles'' may deviate from that obtained by means of non-spectral wide- or narrow-band sensors as used in used in satellites. Package hsdar supplies spectral responses for satellites. So for remote sensing applications the use of this package is recommended.
+We will start with a very well-known index used in remote sensing, Normalized Difference Vegetation Index (NDVI). We must be aware that an NDVI value calculated from spectral data on ``first principles'' may deviate from that obtained by means of non-spectral wide- or narrow-band sensors as used in used in satellites. Package \pckg{hsdar} supplies spectral responses for satellites. So for remote sensing applications the use of this package is recommended.
 
-We here demonstrate how to transfer a spectrum to hsdar, and one example of index calculation with this package. The hsdar package can not only be used for individual spectra but also for hyperspectral images. Be aware, that this package seems to aim at data of rather low spectral resolution.
+We here demonstrate how to transfer a spectrum to \pckg{hsdar}, and one example of index calculation with this package. The \pckg{hsdar} package can not only be used for individual spectra but also for hyperspectral images. Be aware, that this package seems to aim at data of rather low spectral resolution.
 
 <<>>=
 Solidago_hs.spct <- with(Solidago_upper_adax.spct, speclib(Rfr, w.length))
