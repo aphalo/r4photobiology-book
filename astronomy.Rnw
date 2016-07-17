@@ -26,7 +26,7 @@ cache <- TRUE
 
 \subsection{Time coordinates}
 
-This chapter deals with calculations that require times and/or dates as arguments. One could use R's built-in functions for POSIXct but package \pckg{lubridate} makes working with dates and times, much easier. Package \pckg{lubridate} defines functions for decoding dates represented as character strings, and for manipulating dates and doing calculations on dates. Each one of the different functions shown in the code chunk below can decode dates in different formats as long as the year, month and date order in the string agrees with the name of the function.
+This\index{time!coordinates} chapter deals with calculations that require times and/or dates as arguments. One could use R's built-in functions for POSIXct but package \pckg{lubridate} makes working with dates and times, much easier. Package \pckg{lubridate} defines functions for decoding dates represented as character strings, and for manipulating dates and doing calculations on dates. Each one of the different functions shown in the code chunk below can decode dates in different formats as long as the year, month and date order in the string agrees with the name of the function.
 
 <<>>=
 ymd("20140320")
@@ -77,9 +77,9 @@ with_tz(ymd_hm("20140320 00:00", tz = "America/Buenos_Aires"), tz = "Asia/Tokyo"
 with_tz(ymd_hm("20140320 00:00", tz = "Asia/Tokyo"), tz = "America/Buenos_Aires")
 @
 
-\subsection{Geographical coordinates}
+\subsection{Geographic coordinates}
 
-For astronomical calculations we also need as argument geographical coordinates. One can supply latitude and longitude values, acquired with a GPS instrument or read from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates on-the-fly. A query can be run from within R using packages \pckg{RgoogleMaps}, or \pckg{ggmap}, as done here---of course this requires internet access. When inputting coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree). Latitudes N are given by positive numbers and and latitudes S by negative numbers. Longitudes W of Greenwich are given as positive numbers and longitudes E of Greenwich as negative numbers.
+For\index{geographic coordinates}\index{geocode}\index{latitude}\index{longitude} astronomical calculations we also need as argument geographical coordinates. One can supply latitude and longitude values, acquired with a GPS instrument or read from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates on-the-fly. A query can be run from within R using packages \pckg{RgoogleMaps}, or \pckg{ggmap}, as done here---of course this requires internet access. When inputting coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree). Latitudes N are given by positive numbers and and latitudes S by negative numbers. Longitudes W of Greenwich are given as positive numbers and longitudes E of Greenwich as negative numbers.
 
 <<astro-geocode-1, message=FALSE, cache=cache>>=
 geocode("Helsinki")
@@ -89,7 +89,7 @@ geocode("Viikinkaari 1, 00790 Helsinki, Finland")
 %%%%
 \section{Task: calculating the length of the photoperiod}\label{sec:astro:photoperiod}
 
-Functions \code{day\_length} and \code{night\_length} have same parameter signature. They are vectorised for the \code{date} parameter.
+Functions\index{day length}\index{night length}\index{photoperiod}\index{scotoperiod} \code{day\_length} and \code{night\_length} have same parameter signature. They are vectorised for the \code{date} parameter.
 
 Calculating the length of the current day is easy. We use the Greenwich meridian, and 60 degrees in the Northern and Southern hemispheres.
 \code{today}.
@@ -161,7 +161,7 @@ Using the functions as described above, `measures' the photoperiod according to 
 
 \section{Task: Calculating times of sunrise, solar noon and sunset}\label{sec:sun:times}
 
-Functions \code{sunrise\_time}, \code{sunset\_time}, and \code{noon\_time} have the same parameter signature---take the same arguments---but the values they return differ.
+Functions\index{sunset!time of}\index{sun rise!time of}\index{solar noon!time of}\index{noon|see {solar noon}} \code{sunrise\_time}, \code{sunset\_time}, and \code{noon\_time} have the same parameter signature---take the same arguments---but the values they return differ.
 
 Be also aware that for summer dates the times are expressed accordingly. In the examples below this can be recognized for example, by the time zone being reported as EEST instead of EET for Eastern Europe.
 
@@ -240,7 +240,7 @@ day_night(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
 
 \begin{example}
 \caption[Astronomical calculations]{Astronomical calculations of the sun position}
-Function \code{sun\_angles}, which is a modified version of function \code{sunAngle} from package \pckg{ode} is used to calculate the elevation of the sun at given time and geographical coordinates. To calculate the times corresponding to a given solar elevation, the algorithm first searches for the local solar noon by finding the maximal solar elevation, and then searches for sunrise in the first half of the day and for sunset in the second half local solar day. Sunset and sunrise are by default based on a solar elevation angle equal to zero. However, an argument can be passed to parameter \code{twilight} to set the angle according to different conventions---civil, nautical, astronomical---, by giving one or two values for the angles. Day and night durations are calculated as time durations between sunrise and sunset (the default) or dusk and dawn or some other angle. The algorithm currently used is valid for years 1950--2050.
+Function\index{sun!position in the sky} \code{sun\_angles}, which is a modified version of function \code{sunAngle} from package \pckg{ode} is used to calculate the elevation of the sun at given time and geographical coordinates. To calculate the times corresponding to a given solar elevation, the algorithm first searches for the local solar noon by finding the maximal solar elevation, and then searches for sunrise in the first half of the day and for sunset in the second half local solar day. Sunset and sunrise are by default based on a solar elevation angle equal to zero. However, an argument can be passed to parameter \code{twilight} to set the angle according to different conventions---civil, nautical, astronomical---, by giving one or two values for the angles. Day and night durations are calculated as time durations between sunrise and sunset (the default) or dusk and dawn or some other angle. The algorithm currently used is valid for years 1950--2050.
 \end{example}
 
 As in earlier examples, we use \code{geocode} to obtain the latitude and longitude of cities, although for precise calculations for large cities using a street address or at least a postal code in addition to the name of the city is preferable. The calculations below are for Buenos Aires on two different dates, by use of the optional argument \code{tz} we request the results to be expressed in local time for Buenos Aires.
@@ -289,7 +289,7 @@ day_length(ymd("2013-09-21"),
 
 \section{Task: calculating the position of the sun}\label{sec:astro:position}
 
-\code{sun\_angles} not only returns solar elevation, it returns all the angles defining the position of the sun. The time argument to \code{sun\_angles} is internally converted to UTC (universal time coordinates, which is equal to GMT) time zone, so time defined for any time zone is valid input. The time zone used by default for the output can vary as described in page \pageref{alert:time:zone}, so it is more reliable specify the time coordinates used for the output with parameter \code{tz}, using arguments valid for pacakge \code{lubridate}---which is used internally by package \pckg{photobiology}.
+Function \code{sun\_angles}\index{sun!position in the sky} not only returns solar elevation, it returns all the angles defining the position of the sun. The time argument to \code{sun\_angles} is internally converted to UTC (universal time coordinates, which is equal to GMT) time zone, so time defined for any time zone is valid input. The time zone used by default for the output can vary as described in page \pageref{alert:time:zone}, so it is more reliable specify the time coordinates used for the output with parameter \code{tz}, using arguments valid for pacakge \code{lubridate}---which is used internally by package \pckg{photobiology}.
 
 <<astro-geocode-5, message=FALSE, cache=cache>>=
 geocode_Jo <- geocode("80100 Joensuu, Finland")
@@ -307,7 +307,7 @@ sun_angles(geocode = geocode_Jo)
 
 \section{Task: plotting sun elevation through a day}
 
-Function \code{sun\_angles} described above is vectorised, so it is very easy to calculate the position of the sun throughout a day at a given location on Earth. The example here uses only solar elevation, plotted for Helsinki through the course of 23 June 2014. We first create a vector of times, using \code{seq} which can be used with dates in addition to numbers. In the case of dates the argument passed to parameter \code{by} is specified as a string.
+Function\index{sun!position in the sky!plot} \code{sun\_angles} described above is vectorised, so it is very easy to calculate the position of the sun throughout a day at a given location on Earth. The example here uses only solar elevation, plotted for Helsinki through the course of 23 June 2014. We first create a vector of times, using \code{seq} which can be used with dates in addition to numbers. In the case of dates the argument passed to parameter \code{by} is specified as a string.
 
 <<>>=
 opts_chunk$set(opts_fig_wide_full)
@@ -367,7 +367,7 @@ ggplot(sun_elev_hel,
 
 \section{Task: plotting day length through the year}
 
-For this we first need to generate a sequence of dates. We use \code{seq} as in the previous section, but instead of supplying a length as argument we supply an ending time. Instead of giving \code{by} in minutes as above, we now use days:
+For\index{day length!plot} this we first need to generate a sequence of dates. We use \code{seq} as in the previous section, but instead of supplying a length as argument we supply an ending time. Instead of giving \code{by} in minutes as above, we now use days:
 
 <<astro-9, cache=cache>>=
 days <- seq(from=ymd("2014-01-01"), to=ymd("2014-12-31"),
@@ -424,7 +424,7 @@ ggplot(daylengths,
 
 \section{Task: plotting local time at sunrise}
 
-For this we reuse \code{days} from the previous sections. We repeat the calculations for three locations at different latitudes, then row bind the data frames into a single data frame. Data frames contain information to identify the sites:
+For\index{sunrise!time of!plot} this we reuse \code{days} from the previous sections. We repeat the calculations for three locations at different latitudes, then row bind the data frames into a single data frame. Data frames contain information to identify the sites:
 
 <<astro-geocode-11a, message=FALSE, cache=cache>>=
 geo_code_He <- geocode("Helsinki")

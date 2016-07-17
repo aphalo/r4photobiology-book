@@ -6,7 +6,7 @@ opts_knit$set(concordance=TRUE)
 \chapter{Transmission and reflection}\label{chap:trans:refl}
 
 %\begin{abstract}
-%In this chapter we explain how to do calculations related to the description of absortion and reflection of UV and VIS radiation.
+%
 %\end{abstract}
 
 \section{Packages used in this chapter}
@@ -22,9 +22,12 @@ library(photobiologyLEDs)
 %%%%
 \section{Introduction}\label{sec:}
 
+
+In\index{transmittance} this chapter we explain how to do calculations related to the description of absorption and reflection of UV and VIS radiation.
+
 \section{Task: absorbance and transmittance}
 
-Transmittance is defined as:
+Transmittance\index{transmittance} is defined as:
 \begin{equation}
 \tau(\lambda) = \frac{I}{I_0} = \frac{\sirr}{\sirr[0]} = \frac{\spfd}{\spfd[0]}
 \end{equation}
@@ -35,7 +38,7 @@ Given this simple relation $\tau(\lambda)$ can be calculated as a division betwe
 tau <- spc_above / spc_below
 @
 
-Absorptance is just $1 - \tau(\lambda)$, but should be distinguished from absorbance ($A(\lambda)$) which is measured on a logarithmic scale:
+Absorptance\index{absorptance} is just $1 - \tau(\lambda)$, but should be distinguished from absorbance\index{absorbance} ($A(\lambda)$) which is measured on a logarithmic scale:
 
 \begin{equation}
 A(\lambda) = -{\log}_{10} \frac{I}{I_0}
@@ -160,6 +163,7 @@ q_irrad(my_luminaire,
 %%%%
 \section{Task: total spectral transmittance from internal spectral transmittance and spectral reflectance}\label{sec:}
 
+\index{transmittance}\index{reflectance}
 %%%%
 \section{Task: combined spectral transmittance of two or more filters}\label{sec:}
 

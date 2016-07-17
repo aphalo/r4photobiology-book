@@ -76,10 +76,10 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 % Hypertext
 
 \usepackage[unicode,hyperindex,bookmarks,pdfview=FitB,%backref,
-            pdftitle={Notes on using R},%
-            pdfkeywords={R, statistics, data analysis, plotting},%
-            pdfsubject={R},%
-            pdfauthor={Pedro J. Aphalo}%
+            pdftitle={R for Photobiology: Theory and recipes for common calculations},%
+            pdfkeywords={photobiology, R, spectrum, data analysis, plotting},%
+            pdfsubject={Photobiology},%
+            pdfauthor={Pedro J. Aphalo, Andreas Albert, T. Matthew Robson, Titta Kotilainen}%
             ]{hyperref}
 
 %\makeindex

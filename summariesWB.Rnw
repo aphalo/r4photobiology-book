@@ -21,7 +21,7 @@ library(ggspectra)
 
 \section{Task: Printing spectra}
 
-A \code{print} method for \code{waveband} objects is defines in package \PB, which in the example below is called implicitly.
+A\index{wavebands!print} \code{print} method for \code{waveband} objects is defines in package \PB, which in the example below is called implicitly.
 
 <<>>=
 VIS()
@@ -37,7 +37,7 @@ unclass(CIE())
 
 \section{Task: Summaries related to object properties}\label{sec:summarieswb:wavelength}
 
-In the case of the \code{summary} method and their corresponding print method, specializations for all classes of spectral objects are provided---i.e.\ all classes with names ending in \code{\_spct}.
+In\index{wavebands!summary} the case of the \code{summary} method and their corresponding print method, specializations for all classes of spectral objects are provided---i.e.\ all classes with names ending in \code{\_spct}.
 
 <<>>=
 my.wb <- waveband(c(400,500))
@@ -56,7 +56,7 @@ summary(cie.wb)
 %%%%
 \section{Task: Summaries related to wavelength}\label{sec:summarieswb:wavelength}
 
-Functions \code{max}, \code{min}, \code{range}, \code{midpoint} when used with an object of class \code{waveband} return the result of applying these functions to the wavelength component boundaries of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
+Functions \code{max}\index{wavebands!wavelength max}, \code{min}\index{wavebands!wavelength min}, \code{range}\index{wavebands!wavelength range}, \code{midpoint}\index{wavebands!wavelength midpoint} when used with an object of class \code{waveband} return the result of applying these functions to the wavelength component boundaries of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
 
 <<>>=
 range(vis.wb)
@@ -65,7 +65,7 @@ max(vis.wb)
 min(vis.wb)
 @
 
-Functions \code{spread} are \code{stepsize} are generics defined in package \PB. \code{spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
+Functions \code{spread}\index{wavebands!wavelength spread} are \code{stepsize}\index{wavebands!wavelength stepsize} are generics defined in package \PB. \code{spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
 
 <<>>=
 spread(vis.wb)
@@ -99,7 +99,7 @@ names(cie.wb)
 
 \section{Task: Plotting a waveband}
 
-Method \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
+Method\index{wavebands!plot} \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
 
 <<>>=
 plot(vis.wb)

@@ -41,7 +41,7 @@ opts_chunk$set(opts_fig_wide)
 %%%%
 \section{Introduction to plotting spectra}\label{sec:plot:intro}
 
-We show in this chapter examples of how spectral data can be plotted. All the examples
+We\index{plotting} show in this chapter examples of how spectral data can be plotted. All the examples
 are done with package \pckg{ggplot2}, sometimes using in addition other packages.
 \pckg{ggplot2} provides the most recent, but stable, type of plotting functionality in R, and is
 what we use here for most examples. Both \code{base} graphic functions, part of
@@ -82,7 +82,7 @@ present chapter.
 %%%%
 \section{Task: simple plotting of spectra}\label{sec:simple:plot:spc}
 
-Pakage \code{ggspectra} defines specializations of the generic \code{plot} function of R. These functions are available for spectral objects. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows. As the spectral objects have spectral irradiance expressed in known energy or photon units, and an attribute indicating the time unit, the axis labels are produced automatically. The two plots that follow show spectral irradiance, and spectral daily exposure, respectively.
+Pakage \code{ggspectra}\index{spectral data!automatic plot} defines specializations of the generic \code{plot} function of R. These functions are available for spectral objects. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows. As the spectral objects have spectral irradiance expressed in known energy or photon units, and an attribute indicating the time unit, the axis labels are produced automatically. The two plots that follow show spectral irradiance, and spectral daily exposure, respectively.
 
 <<plot-sun-default-0>>=
 plot(sun.spct)
@@ -139,7 +139,7 @@ As the current implementation uses annotations rather than a \code{ggplot} `stat
 %%%%
 \section[Task: plotting spectra with ggplot2]{Task: plotting spectra with \pckg{ggplot2}}\label{sec:plot:spc}
 
-We create a simple line plot, assign it to a variable called \code{fig\_sun.e0} and then on the next line \code{print} it\footnote{we could have used \code{print(fig\_sun.e0)} explicitly, but this is needed only in scripts because printing takes places automatically when working at the R console.}. We obtain a plot with the axis labeled with the names of the variables, which is enough to check the data, but not good enough for publication.
+We\index{spectral data!manual plot} create a simple line plot, assign it to a variable called \code{fig\_sun.e0} and then on the next line \code{print} it\footnote{we could have used \code{print(fig\_sun.e0)} explicitly, but this is needed only in scripts because printing takes places automatically when working at the R console.}. We obtain a plot with the axis labeled with the names of the variables, which is enough to check the data, but not good enough for publication.
 
 <<plot-sun-linear-0>>=
 fig_sun.e0 <-
@@ -240,7 +240,7 @@ opts_chunk$set(opts_fig_wide)
 
 \section{Task: finding peaks and valleys in spectra}\label{sec:get:pk:vly}
 
-We first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_threshold} the fraction of the total span along the irradiance that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.spct$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.spct$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.  It is good to mention that \code{head} returns the first six rows of its argument, and we use it here just to reduce the length of the output, if you run these examples yourself, you can remove \code{head} from the code. In the output, $x$ corresponds to wavelength, and $y$ to spectral irradiance, while \code{label} is a character string with the wavelength, possibly formatted.
+We\index{spectral data!mark peaks in plot}\index{spectral data!mark valleys in plot} first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_threshold} the fraction of the total span along the irradiance that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.spct$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.spct$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.  It is good to mention that \code{head} returns the first six rows of its argument, and we use it here just to reduce the length of the output, if you run these examples yourself, you can remove \code{head} from the code. In the output, $x$ corresponds to wavelength, and $y$ to spectral irradiance, while \code{label} is a character string with the wavelength, possibly formatted.
 
 <<plot-peaks-0>>=
 head(with(sun.spct,
@@ -279,7 +279,7 @@ parameters \code{span} and \code{ignore\_threshold} difficult to grasp from the 
 %%%%
 \section{Task: annotating peaks and valleys in spectra}\label{sec:stat:pk:vly}
 
-Here we show an example of the use the new \code{ggplot} `statistics' \code{stat\_peaks}
+Here\index{spectral data!annotate peaks in plot}\index{spectral data!annotate valleys in plot} we show an example of the use the new \code{ggplot} `statistics' \code{stat\_peaks}
 from our package \pckg{ggspectra}. It uses the same parameter names and take the
 same arguments as the \code{get\_peaks} function described in section \ref{sec:get:pk:vly}.
 We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc}.
@@ -1138,7 +1138,7 @@ A couple of details need to be remembered: the tagging has to be done before row
 opts_chunk$set(opts_fig_narrow)
 @
 
-In this task we aim at creating bar plots depicting the contributions of the UVB and UVA bands to the total erythemal effective irradiance in sunlight filtered with different plastic films. First we calculate the effective energy irradiance using the waveband definition for \emph{erythemal} BSWF (CIE98) separately for the estimated solar spectral irradiance under each filter type.
+In\index{effective irradiance!bar plot} this task we aim at creating bar plots depicting the contributions of the UVB and UVA bands to the total erythemal effective irradiance in sunlight filtered with different plastic films. First we calculate the effective energy irradiance using the waveband definition for \emph{erythemal} BSWF (CIE98) separately for the estimated solar spectral irradiance under each filter type.
 
 <<plot-bar-cie-0>>=
 cie.nf.irrad <- e_irrad(sun.spct * CIE(),
@@ -1213,7 +1213,7 @@ fig_cie_bars1
 opts_chunk$set(opts_fig_wide)
 @
 
-We show now the last example, related to the ones above, but creating a bar plot with more bars. First we calculate photon irradiance for different equally spaced bands within PAR using function \code{split\_bands}. The code is written so that by changing the first two lines you can adjust the output.
+We\index{spectral data!bar plot} show now the last example, related to the ones above, but creating a bar plot with more bars. First we calculate photon irradiance for different equally spaced bands within PAR using function \code{split\_bands}. The code is written so that by changing the first two lines you can adjust the output.
 
 <<plot-bar-qirrad-bands-0>>=
 wl.range <- range(PAR())
@@ -1258,7 +1258,7 @@ In the case of the example spectrum with equal wavelength steps, one could have 
 \section{Task: plotting colours in Maxwell's triangle}\label{sec:max:tri}
 
 \subsection{Human vision: RGB}
-Given a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with function \code{w\_length2rgb} (see section \ref{}), from a waveband with function \code{color} (see section \ref{}), for a wavelength range with \code{w\_length\_range2rgb} (see section \ref{}), and from a spectrum with function \code{s\_e\_irrad2rgb}  (see section \ref{}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geometries, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
+Given\index{color!Maxwell's triangle} a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with function \code{w\_length2rgb} (see section \ref{}), from a waveband with function \code{color} (see section \ref{}), for a wavelength range with \code{w\_length\_range2rgb} (see section \ref{}), and from a spectrum with function \code{s\_e\_irrad2rgb}  (see section \ref{}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geometries, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide_square)
@@ -1282,7 +1282,7 @@ maxwell.tern
 
 \section{Honey-bee vision: GBU}
 
-In this case we start with the spectral responsiveness of the photoreceptors present in the eyes of honey bees. Bees, as humans have three photoreceptors, but instead of red, green and blue (RGB), bees see green, blue and \UVA (GBU). To plot colours seen by bees one can still use a ternary plot, but the axes represent different photoreceptors than for humans, and the colour space is shifted towards shorter wavelengths.
+In\index{colour!honey-bee vision} this case we start with the spectral responsiveness of the photoreceptors present in the eyes of honey bees. Bees, as humans have three photoreceptors, but instead of red, green and blue (RGB), bees see green, blue and \UVA (GBU). To plot colours seen by bees one can still use a ternary plot, but the axes represent different photoreceptors than for humans, and the colour space is shifted towards shorter wavelengths.
 
 The calculations we will demonstrate here, in addition are geared to compare a background to a foreground object (foliage vs.\ flower). We have followed xxxxx \cite{chitka?} in this example, but be aware that calculations presented in this reference do not match the equations presented. In the original published example, the calculations have been simplified by leaving out $\delta \lambda$. Although not affecting the final result for their example, intermediate results are different (wrong?). We have further generalized the calculations and equations to make the calculations also valid for spectra measured using $\delta \lambda$ that itself varies along the wavelength axis. This is the usual situation with array spectrometers, nowadays frequently used when measuring reflectance.
 

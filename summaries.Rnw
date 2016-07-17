@@ -25,7 +25,7 @@ library(photobiologyReflectors)
 
 \section{Task: Printing spectra}
 
-Spectral objects are printed with a special \code{print} method that is an extension to the print method for \code{tibble} objects, consequently, it is possible to use options from package \pckg{tibble} to control printing. The first option set below, \code{tibble.print\_max}, sets the number of rows above which only `head' rows are printed and \code{tibble.print\_min} sets the number of rows printed when the head is printed. Another option, \code{tibble.width} sets width of the output printed for \code{tibble} objects with many columns.
+Spectral\index{spectral data!print} objects are printed with a special \code{print} method that is an extension to the print method for \code{tibble} objects, consequently, it is possible to use options from package \pckg{tibble} to control printing. The first option set below, \code{tibble.print\_max}, sets the number of rows above which only `head' rows are printed and \code{tibble.print\_min} sets the number of rows printed when the head is printed. Another option, \code{tibble.width} sets width of the output printed for \code{tibble} objects with many columns.
 
 <<printing-spct>>=
 options(tibble.print_max = 4, tibble.print_min = 4)
@@ -35,7 +35,7 @@ The number of rows printed can be also controlled through an explicit argument t
 
 \section{Task: Summaries related to object properties}\label{sec:summaries:wavelength}
 
-In the case of the \code{summary} method, specializations for \code{source\_spct} and \ldots are provided. But for other spectral objects, the \code{summary} method for \code{data.table} is called. For the \code{summary} specializations defined, the corresponding \code{print} method specializations are also defined.
+In the case of the \code{summary} method\index{spectral data!summary}, specializations for \code{source\_spct} and \ldots are provided. But for other spectral objects, the \code{summary} method for \code{data.table} is called. For the \code{summary} specializations defined, the corresponding \code{print} method specializations are also defined.
 
 <<>>=
 summary(sun.spct)
@@ -43,7 +43,7 @@ summary(sun.spct)
 
 \section{Task: Integrating spectral data}
 
-Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{integrate\_spct} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operates on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed as a total per spectrum.
+Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{integrate\_spct}\index{spectral data!integral} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operates on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed as a total per spectrum.
 
 <<>>=
 integrate_spct(sun.spct)
@@ -51,7 +51,7 @@ integrate_spct(sun.spct)
 
 \section{Task: Averaging spectral data}
 
-Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{average\_spct} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operate on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed per nanometre.
+Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{average\_spct}\index{spectral data!average} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operate on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed per nanometre.
 
 <<>>=
 average_spct(sun.spct)
@@ -60,7 +60,7 @@ average_spct(sun.spct)
 %%%%
 \section{Task: Summaries related to wavelength}\label{sec:summaries:wavelength}
 
-Functions \code{max}, \code{min}, \code{range}, \code{midpoint} when used with an object of class \code{generic\_spct} (or a derived class) return the result of applying these functions to the \code{w.length} component of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
+Functions \code{max}\index{spectral data!wavelength max}, \code{min}\index{spectral data!wavelength min}, \code{range}\index{spectral data!wavelength range}, \code{midpoint}\index{spectral data!wavelength midpoint} when used with an object of class \code{generic\_spct} (or a derived class) return the result of applying these functions to the \code{w.length} component of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
 
 <<>>=
 range(sun.spct)
@@ -69,7 +69,7 @@ max(sun.spct)
 min(sun.spct)
 @
 
-Functions \code{spread} are \code{stepsize} are generics defined in package \PB. \code{spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
+Functions \code{spread} are \code{stepsize}\index{spectral data!wavelength stepsize} are generics defined in package \PB. \code{spread}\index{spectral data!wavelength spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
 
 <<>>=
 spread(sun.spct)
@@ -112,7 +112,7 @@ is.filter_spct(polyester.spct)
 
 \section{Task: Querying other attributes}\label{sec:summaries:attributes}
 
-Both \code{response\_spct} and \code{source\_spct} objects have an attribute \code{time.unit} that can be queried.
+Both\index{spectral data!metadata attributes} \code{response\_spct} and \code{source\_spct} objects have an attribute \code{time.unit} that can be queried.
 
 <<>>=
 getTimeUnit(sun.spct)
@@ -182,7 +182,7 @@ is_absorbance_based(polyester.spct)
 
 \section{Task: Querying about `origin' of data}
 
-All spectral objects (\code{generic\_spct} and derived types) can be queried whether they are the result of the normalization or re-scaling of another spectrum. In the case of normalization, the normalization wavelength in nanometres is returned, otherwise a logical value.
+All\index{spectral data!normalization\index{spectral data!re-scaling}} spectral objects (\code{generic\_spct} and derived types) can be queried whether they are the result of the normalization or re-scaling of another spectrum. In the case of normalization, the normalization wavelength in nanometres is returned, otherwise a logical value.
 
 <<>>=
 is_normalized(sun.spct)
@@ -197,7 +197,7 @@ is_effective(sun.spct)
 
 \section{Task: Plotting a spectrum}
 
-Method \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
+Method\index{spectral data!plot} \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
 
 <<>>=
 plot(sun.spct)
@@ -218,7 +218,7 @@ cat(comment(sun.spct))
 
 \section{Task: Find peaks and valleys}\label{sec:summaries:peaks}
 
-Methods \code{peaks} and \code{valleys} can be used on most spectral objects to find local maxima and local minima in spectral data. They return an object of the same class containing only the observations corresponding to these local extremes.
+Methods\index{spectral data!find peaks}\index{spectral data!find valleys} \code{peaks} and \code{valleys} can be used on most spectral objects to find local maxima and local minima in spectral data. They return an object of the same class containing only the observations corresponding to these local extremes.
 
 <<>>=
 peaks(philips.tl12.spct)

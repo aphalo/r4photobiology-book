@@ -29,7 +29,7 @@ opts_chunk$set(opts_fig_medium)
 %%%%
 \section{Task: black body emission}\label{sec:physics:intro}
 
-The emitted spectral radiance (\radiance[s]) is described by Planck's law of black body radiation at temperature $T$, measured in degrees Kelvin (K):%\index{Planck's law of black body radiation}\index{black body spectral radiance}
+The\index{black body emission}\index{emission, black body}\index{Plank's law} emitted spectral radiance (\radiance[s]) is described by Planck's law of black body radiation at temperature $T$, measured in degrees Kelvin (K):%\index{Planck's law of black body radiation}\index{black body spectral radiance}
 %
 \begin{equation}
 %\radiance[s](\lambda,T) = \frac{2hc^2}{\lambda^5}\cdot\frac{1}{\exp\left\{hc/k_BT\lambda\right\}-1} \label{equ_planck}

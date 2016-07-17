@@ -36,7 +36,7 @@ library(fda.usc)
 
 \subsection{To \pckg{hyperSpec}}
 
-Can export to \code{hyperSpec} objects only collections of spectra where all members have identical \code{w.length} vectors, as objects of class \code{hypeSpec} store a single vector of wavelengths for the whole collection of spectra. We use as example data \code{gap.mspct} from package \pckg{photobiologySun}.
+Can\index{foreign data!package hyperspec@package \pckg{hyperSpec}} export to \code{hyperSpec} objects only collections of spectra where all members have identical \code{w.length} vectors, as objects of class \code{hypeSpec} store a single vector of wavelengths for the whole collection of spectra. We use as example data \code{gap.mspct} from package \pckg{photobiologySun}.
 
 <<>>=
 gap.hspct <- mspct2hyperSpec(gap.mspct, "s.e.irrad")
@@ -75,6 +75,7 @@ ggplot(laser.mspct[[1]]) +
 @
 
 \section{Package \pckg{colorSpec}}
+\index{foreign data!package colorspec@package \pckg{colorSpec}}
 
 \subsection{From \pckg{colorSpec}}
 
@@ -112,6 +113,8 @@ chroma_spct2colorSpec(beesxyzCMF.spct)
 @
 
 \section{Package \pckg{pavo}}
+
+\index{foreign data!package pavo@package \pckg{pavo}}
 
 \subsection{From \pckg{pavo}}
 
@@ -169,6 +172,8 @@ ggplot(refl.red, aes(x = body.part, y = red.reflectance)) +
 @
 
 \section{Packages \pckg{fda} and \pckg{fda.usc}}
+
+\index{foreign data!package fda@package \pckg{fda}}\index{foreign data!package fdausc@package \pckg{fda.usc}}
 
 Functional\Advanced{funtional data analysis} data analysis is a specialized method that can be used to compare and classify spectra. We here exemplify the selection of the `deepest spectrum' from a collection of spectra. The data interconversion can be done with a simple function. Package \pckg{fda} expects the spectra in a single matrix object, with each spectrum as a row. We will use once again \code{gap.mspct} for this example.
 

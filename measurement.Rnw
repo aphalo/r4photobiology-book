@@ -32,7 +32,7 @@ library(lubridate)
 %%%%
 \subsection{Task: Import data from Ocean Optics instruments and software}\label{sec:OO:import}
 
-Reading spectral (energy) irradiance from a file saved in Ocean Optics SpectraSuite software, now superseded
+Reading\index{foreign data!Ocean Optics spectrometers} spectral (energy) irradiance from a file saved in Ocean Optics SpectraSuite software, now superseded
 by OceanView.
 
 <<oo-io-01>>=
@@ -68,6 +68,7 @@ jaz1.spct
 
 \subsection{Task: Import data from Avantes instruments and software}\label{sec:Ava:import}
 
+\index{foreign data!Avantes spectrometers}
 <<avaspec>>=
 avantes.spct <- read_avaspec_csv("inout/spectrum-avaspec.csv",
                                date = now())
@@ -76,6 +77,7 @@ avantes.spct
 
 \subsection{Task: Import data from Macam instruments and software}\label{sec:Macam:import}
 
+\index{foreign data!Macam spectrometers}
 The Macam PC-1900 spectroradiometer and its companion software save data in a simple text
 file. Data is always stored as spectral (energy) irradiance, so spectral data can be easily
 decoded. All the files we have tested had the name tag ``.DTA''.
@@ -85,7 +87,7 @@ macam.spct <- read_macam_dta("inout/spectrum.DTA")
 macam.spct
 @
 
-Function \code{read\_licor\_file} accepts the same arguments as function \code{read\_ooss\_file}.
+Function \code{read\_macam\_dta} accepts the same arguments as function \code{read\_ooss\_file}.
 
 <<macam-io-02>>=
 macam1.spct <- read_macam_dta("inout/spectrum.DTA",
@@ -96,6 +98,7 @@ macam1.spct
 
 \subsection{Task: Import data from LI-COR instruments and software}\label{sec:LI:import}
 
+\index{foreign data!LI-COR spectrometers}
 The LI-COR LI-1800 spectroradiometer and its companion software can save data either as
 spectral photon irradiance or spectral (energy) irradiance. As files are labelled accordingly,
 our function, automatically detects the type of data being read. Be aware that the function
@@ -117,6 +120,8 @@ licor1.spct
 
 \subsection{Task: Import data from Bentham instruments and software}\label{sec:Ben:import}
 
+\index{foreign data!Bentham spectrometers}
+
 \section{Acquiring data directly from within R}
 
 In this section, the code is not run when compiling the text, as then producing a PDF would
@@ -124,7 +129,7 @@ require instruments to be available.
 
 \subsection{Task: Acquiring data from Ocean Optics instruments and software}\label{sec:OO:ctrl}
 
-For the examples in this section to work, you will need to have Java and the OmniDriver runtime installed.
+For\index{data acquisition!Ocean Optics spectrometers} the examples in this section to work, you will need to have Java and the OmniDriver runtime installed.
 In addition examples as shown assume that an Ocean Optics spectrometer is connected. The output
 will depend on the model(s) and configuration(s) of the instrument(s) connected. The plural is correct,
 you can acquire spectra from more than one instrument, and from instruments with more than
@@ -209,5 +214,8 @@ yet implemented, but will be added soon.
 
 \subsection{Task: Acquiring data from sglux instruments and software}\label{sec:}
 
+\index{foreign data!sglux spectrometers}
+
 \subsection{Task: Acquiring data from YoctoPuce modules and servers}\label{sec:}
 
+\index{foreign data!YoctoPuce modules}
