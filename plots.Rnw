@@ -1,4 +1,5 @@
 % !Rnw root = r4p.main.Rnw
+% SQ: UNICODE
 
 <<echo=FALSE>>=
 set_parent('r4p.main.Rnw')
@@ -31,6 +32,8 @@ library(dplyr)
 library(photobiology)
 library(photobiologyFilters)
 library(photobiologyWavebands)
+library(photobiologyPlants)
+library(photobiologyReflectors)
 library(ggspectra)
 @
 
@@ -80,9 +83,13 @@ If you are not familiar with \pckg{ggplot2} and \code{ggtern} plotting, please r
 present chapter.
 
 %%%%
-\section{Task: simple plotting of spectra}\label{sec:simple:plot:spc}
+\section{Using \texttt{plot()} methods with spectra}
 
-Pakage \code{ggspectra}\index{spectral data!automatic plot} defines specializations of the generic \code{plot} function of R. These functions are available for spectral objects. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows. As the spectral objects have spectral irradiance expressed in known energy or photon units, and an attribute indicating the time unit, the axis labels are produced automatically. The two plots that follow show spectral irradiance, and spectral daily exposure, respectively.
+Package \pckg{ggspectra}\index{spectral data!automatic plot} defines specializations of the generic \code{plot} function of R. These methods are available for all the different spectral object classes defined in package \pckg{photobiology} except for \code{generic\_spct}. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows in the next task. As all the spectral objects have spectral quantities expressed in known units, and an attribute indicating the time unit, the axis labels are produced automatically. If summaries are added, the units in their labels are also produced automatically. The plots produced can be to some extent tailored through options or by adding or replacing \code{ggplot} layers, the intention is for these methods to be a total that is simple, but that caters for the majority of the most frequent tasks.
+
+\subsection{Task: plotting of \code{source\_spct} objects}\label{sec:plot:source:spc}
+
+The defaults arguments cater the exploratory plotting of spectra, returning a plot that is heavily annotated, and using the most common units of expression. The two plots that follow show spectral irradiance, and spectral daily exposure, respectively. The objects plotted contain meta data that informs the time unit, so applying the same \code{plot} method, yields two plots with different units in the $y$-axis label.
 
 <<plot-sun-default-0>>=
 plot(sun.spct)
@@ -92,7 +99,7 @@ plot(sun.spct)
 plot(sun.daily.spct)
 @
 
-The parameter \code{unit} can be set to \code{"photon"} to obtain a plot depicting spectral photon irradiance. This works irrespective of whether the \code{source\_spct} object contains the spectral data in photon or energy units.
+The parameter \code{unit} can be set to \code{"photon"} to obtain a plot depicting spectral photon irradiance. This works irrespective of whether the \code{source\_spct} object contains spectral data expressed in photon or energy units---data are converted as needed.
 
 <<plot-sun-default-2>>=
 plot(sun.spct, unit.out = "photon")
@@ -112,14 +119,14 @@ plot(sun.spct, w.band = NULL)
 plot(sun.spct, w.band = waveband(sun.spct))
 @
 
-Of course the arguments to these parameters can be supplied in different combinations, and combined with other functions as need. This last example shows how to plot using photon-based units, selecting only a specific region of the spectrum, annotated with the red and far-red photon irradiances, using Prof.\ Harry Smith's definitions for these two wavebands.
+Of course the arguments to these parameters can be supplied in different combinations, and combined with other functions as needed. This last example shows how to plot using photon-based units, selecting only a specific region of the spectrum, annotated with the red and far-red photon irradiances, using Prof.\ Harry Smith's definitions for these two wavebands using 20-nm wide bands.
 
 <<plot-sun-default-6>>=
 plot(trim_wl(sun.spct, waveband(c(600,800))),
      w.band = list(Red("Smith20"), Far_red("Smith20")), unit.out = "photon")
 @
 
-Two final examples show how to annotate a spectrum plot by equal sized wavebands.
+The next two examples show how to annotate an irradiance spectrum plot by equal sized wavebands.
 
 <<plot-sun-default-7>>=
 plot(sun.spct,
@@ -131,25 +138,150 @@ plot(trim_wl(sun.spct, PAR()),
      w.band=split_bands(PAR(), length.out = 6), unit.out = "photon")
 @
 
+<<plot-sun-default-9>>=
+plot(sun.spct,
+     w.band = split_bands(c(300,800), length.out = 5), unit.out = "photon")
+@
+
+Which annotations are included, depends on the argument supplied, as exemplified below.
+
+<<plot-sun-default-10>>=
+plot(sun.spct,
+     annotations = c("color.guide","segments","labels"),
+     w.band = VIS_bands("ISO"))
+@
+
+There are additional meta-data values stored in \code{source\_spct} objects related to re-scaling, normalization and weighting of the spectral data. These all affect axis labels, and in the case of weighting, the name of the spectral weighting function is added to the plot as an annotation. The following examples exemplify some of these, plus the use of \code{range} to limit the range of wavelengths included in the plot.
+
+<<plot-sun-default-11>>=
+plot(sun.spct * CIE(), range = c(290,400))
+@
+
+<<plot-sun-default-12>>=
+plot(normalize(sun.spct))
+@
+
 \begin{framed}
 \noindent
-As the current implementation uses annotations rather than a \code{ggplot} `statistic', waveband irradiance annotations ignore global aesthetics and facets. If used for simultaneous plotting of several spectra (stored in a single R object), then parameter \code{w.band} should given \code{NULL} as argument.
+As the current implementation uses \code{ggplot} `statistic's, waveband irradiance annotations respect global aesthetics and facets. If used for simultaneous plotting in the same panel of several spectra (stored \emph{longitudinally} in a single R object), then a summary annotation should not be used as the values would be over-plotted and ambiguous.
 \end{framed}
 
-%%%%
-\section[Task: plotting spectra with ggplot2]{Task: plotting spectra with \pckg{ggplot2}}\label{sec:plot:spc}
+\subsection{Task: plotting of \code{response\_spct} objects}\label{sec:plot:response:spc}
 
-We\index{spectral data!manual plot} create a simple line plot, assign it to a variable called \code{fig\_sun.e0} and then on the next line \code{print} it\footnote{we could have used \code{print(fig\_sun.e0)} explicitly, but this is needed only in scripts because printing takes places automatically when working at the R console.}. We obtain a plot with the axis labeled with the names of the variables, which is enough to check the data, but not good enough for publication.
+The defaults arguments cater the exploratory plotting of spectra, returning a plot that is heavily annotated. The two plots that follow show spectral response, expressed on an energy or photon basis. We use as example the action spectrum of photosynthesis in leaves.
+
+<<plot-response-1>>=
+plot(McCree_Oat.spct)
+@
+
+<<plot-response-2>>=
+plot(McCree_Oat.spct, unit.out = "photon")
+@
+
+For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}. As for other \code{plot} methods described in this chapter normalization and scaling meta-data are reflected in the plot axis-labels.
+
+\subsection{Task: plotting of \code{filter\_spct} objects}\label{sec:plot:filter:spc}
+
+The defaults arguments cater the exploratory plotting of spectra, returning a plot that is heavily annotated, and using the most common units of expression. The three plots that follow show spectral transmittance, spectral absorptance and spectral absorbance, respectively. The objects plotted contain meta data that informs wether transmittance is expressed as \emph{internal} or \emph{total}, so applying the same \code{plot} method, will produce plots with different units in the $y$-axis label in these two cases. The difference between internal and total transmittance is explained in section \ref{sec:transmittance}.
+
+<<plot-filter-1>>=
+plot(yellow_gel.spct)
+@
+
+<<plot-filter-2>>=
+plot(yellow_gel.spct, plot.qty = "absorbance")
+@
+
+Beware that \emph{absorptance} being the complement to \emph{internal transmittance} can be calculated only from transmittance alone if it is expressed as internal. If total transmittance is available, then reflectance must be also known before absorptance can be calcaluated. For this reason we use different spectral data for this example. We also illustrate how we can force the range of wavelengths included in the plot to match the range of another spectral object.
+ 
+<<plot-filter-3>>=
+plot(schott.mspct$GG495, range = yellow_gel.spct)
+@
+
+<<plot-filter-4>>=
+plot(schott.mspct$GG495, plot.qty = "absorptance", 
+     range = yellow_gel.spct)
+@
+
+By default transmittance and absorptance are expressed as fractions of one. However, plotting of values expressed as percentages is also possible.
+
+<<plot-filter-5>>=
+plot(yellow_gel.spct, pc.out = TRUE)
+@
+
+<<plot-filter-6>>=
+plot(schott.mspct$GG495, plot.qty = "absorptance", 
+     pc.out = TRUE, range = yellow_gel.spct)
+@
+
+For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}.
+
+\subsection{Task: plotting of \code{reflector\_spct} objects}\label{sec:plot:filter:spc}
+
+At the moment, the only \code{plot.qty} supported is \emph{reflectance}.
+
+<<plot-reflector-1>>=
+plot(gold.spct)
+@
+
+<<plot-reflector-2>>=
+plot(gold.spct, pc.out = TRUE)
+@
+
+For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}.
+
+\subsection{Task: plotting of \code{object\_spct} objects}\label{sec:plot:object:spc}
+
+We will use as example the spectral properties of a plant leaf. This method is the most flexible with respect to the quantity plotted, as \code{object\_spct} objects contain more than one spectral quantity, and as $R + A + T = 1$, the three quantities are always available for plotting. By default, all three are plotted.
+
+<<plot-object-1>>=
+plot(Solidago_upper_adax.spct)
+@
+
+<<plot-object-2>>=
+plot(Solidago_upper_adax.spct, plot.qty = "all")
+@
+
+However, they can be plotted individually, as well as absorbance.
+
+<<plot-object-3>>=
+plot(Solidago_upper_adax.spct, plot.qty = "reflectance")
+@
+<<plot-object-4>>=
+plot(Solidago_upper_adax.spct, plot.qty = "absorptance")
+@
+<<plot-object-5>>=
+plot(Solidago_upper_adax.spct, plot.qty = "transmittance")
+@
+<<plot-object-6>>=
+plot(Solidago_upper_adax.spct, plot.qty = "absorbance")
+@
+
+As for \code{filter\_spct} and \code{reflector\_spct} quantities can be plotted as percentages. We give only one example here.
+
+<<plot-object-7>>=
+plot(Solidago_upper_adax.spct, pc.out = TRUE)
+@
+
+For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}.
+
+%%%%
+\section[Plotting spectra with ggplot2]{Plotting spectra with \pckg{ggplot2}}\label{sec:plot:spc}
+
+Package \pckg{ggspectra} not only provides simple to use \code{plot} methods, but also `building block' that simplify the construction of custom plots of spectral data with functions from package \pckg{ggplot2}. In this section we give examples of plotting tasks carried out using this more flexible approach. In this chapter's examples we will exploit the power of the grammar of graphics to build figures piece by piece, reusing some of the `pieces' or groups of `pieces' several times to highlight the flexibility of this approach. We also exemplify the `philosophy' of defining everything that needs to be consistent across figures only once. In this section we use a \code{source\_spct} object, \code{sun.spct} in most examples, but the same approaches work with objects of any of the spectral classes from package \pckg{photobiology}. 
+
+\subsection{Task: plotting \code{source\_spct} objects}
+
+We start with a very simple example, and later add layers to the plot little by little. We\index{spectral data!manual plot} create a line plot, assign it to a variable called \code{fig\_sun.e0} and then on the next line \code{print} it\footnote{we could have used \code{print(fig\_sun.e0)} explicitly, but this is needed only in scripts because printing takes places automatically when working at the R console.}. We obtain a plot with the axis labeled with the names of the variables, which is enough to check the data, but not good enough for publication.
 
 <<plot-sun-linear-0>>=
 fig_sun.e0 <-
   ggplot(data=sun.spct, aes(x=w.length, y=s.e.irrad)) +
   geom_line()
-
 fig_sun.e0
 @
 
-Next we add \code{labs} to obtain nicer axis labels, instead of assigning the result to a variable for reuse, we print it on-the-fly. As we need superscripts for the $y$-label we have to use \code{expression} instead of a character string as we use for the $x$-label. The syntax of expressions is complex, so please look at \code{help(plotmath)} and appendix \ref{chap:R:plotting} for more details.
+Next we add \code{labs} to obtain nicer axis labels, instead of assigning the result to a variable for reuse, we print it on-the-fly. As we need superscripts for the $y$-label we have to use \code{expression} instead of a character string as we use for the $x$-label. The syntax of expressions is complex, so please look at the documentation with \code{help(plotmath)} or read a book or watch tutorial for more details.
 
 <<plot-sun-linear-1>>=
 fig_sun.e0  +
@@ -158,7 +290,9 @@ fig_sun.e0  +
     x = "Wavelength (nm)")
 @
 
-As we are going to re-use the same axis-labels in later plots, it is handy to save their definitions to variables. These definitions will be used in  many of this chapter's plots. We also add \code{atop} to two of the expressions to making shorter versions by setting the spectral irradiance units on a second line in the axis labels.
+\subsection{Task: Saving axis-label definitions for re-use}
+
+As we are going to re-use the same axis-labels in later plots, it is handy to save their definitions to variables. These definitions will be used in many of this chapter's plots. We also add \code{atop} to two of the expressions to obtain shorter versions by setting the spectral irradiance units on a second line in the axis labels.
 
 
 <<plot-axis-labs>>=
@@ -177,7 +311,7 @@ xlab_nm <- "Wavelength (nm)"
 
 
 %%%%
-\section{Task: using a log scale}\label{sec:plot:log}
+\subsection{Task: using a log scale}\label{sec:plot:log}
 
 Here without need to recreate the figure, we add a logarithmic scale for the $y$-axis and print on the fly the result, and two of the just saved axis-labels. In this case we override the automatic limits of the scale. We do not give further examples of this, but could be also used with later examples, just by adjusting the values used as scale limits.
 
@@ -190,7 +324,7 @@ fig_sun.e0 +
 The code above generates some harmless warnings, which are due some $y$ values not being valid input for \code{log10}, the function used for the re-scaling, or because they fall outside the scale limits.
 %%%%
 
-\section{Task: compare energy and photon spectral units}\label{sec:plot:phot:energy}
+\subsection{Task: compare energy and photon spectral units}\label{sec:plot:phot:energy}
 
 We use once more the axis-labels saved above, but this time use the two-line label for the $y$-axis. To make sure that the width of the plotting area of both plots is the same, we need to have tick labels of the same width and format in both plots. For this we define a formatting function \code{num\_one\_dec} and then use it in the scale definition.
 
@@ -238,69 +372,83 @@ multiplot(fig_sun.q  + labs(y = ylab_umol),
 opts_chunk$set(opts_fig_wide)
 @
 
-\section{Task: finding peaks and valleys in spectra}\label{sec:get:pk:vly}
-
-We\index{spectral data!mark peaks in plot}\index{spectral data!mark valleys in plot} first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_threshold} the fraction of the total span along the irradiance that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.spct$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.spct$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.  It is good to mention that \code{head} returns the first six rows of its argument, and we use it here just to reduce the length of the output, if you run these examples yourself, you can remove \code{head} from the code. In the output, $x$ corresponds to wavelength, and $y$ to spectral irradiance, while \code{label} is a character string with the wavelength, possibly formatted.
-
-<<plot-peaks-0>>=
-head(with(sun.spct,
-          get_peaks(w.length, s.e.irrad, span=31)))
-
-head(with(sun.spct,
-          get_peaks(w.length, s.e.irrad, span=31,
-                    ignore_threshold=0.75)))
-@
-
-The parameter span, indicates the size in number of observations (e.g.\ number of discrete wavelength values) included in the window used to find local maxima (peaks) or minima (valleys). By providing different values for this argument
-we can `adjust' how \emph{fine} or \emph{coarse} is the structure described by the peaks returned by the function. The window is always defined using an odd number of observations, if an even number is provided as argument, it is increased by one, with a warning.
-
-<<plot-peaks-1>>=
-head(with(sun.spct,
-          get_peaks(w.length, s.e.irrad, span=21)))
-
-head(with(sun.spct,
-          get_peaks(w.length, s.e.irrad, span=51)))
-@
-
-The equivalent function for finding valleys is \code{get\_valleys} taking the same parameters as \code{get\_peaks} but returning the wavelengths at which the valleys are located.
-
-<<plot-valleys-1>>=
-head(with(sun.spct,
-          get_valleys(w.length, s.e.irrad, span=51)))
-
-head(with(sun.spct,
-          get_valleys(w.length, s.e.irrad, span=51,
-                      ignore_threshold=0.5)))
-@
-
-In the next section, we plot spectra and annotate them with peaks and valleys. If you find the meaning of the
-parameters \code{span} and \code{ignore\_threshold} difficult to grasp from the explanation given above, please, study the code and plots in section \ref{sec:stat:pk:vly}.
+%%% NEEDS TO BE MOVED ELSEWHERE AS THIS IS NOT PLOTTING!
+%%%
+%\subsection{Task: finding peaks and valleys in spectra}\label{sec:get:pk:vly}
+%
+%We\index{spectral data!mark peaks in plot}\index{spectral data!mark valleys in plot} first show the use of function \code{get\_peaks} that returns the wavelengths at which peaks are located. The parameter \code{span} determines the number of values used to find a local maximum (the higher the value used, the fewer maxima are detected), and the parameter \code{ignore\_threshold} the fraction of the total span along the irradiance that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.spct$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.spct$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.  It is good to mention that \code{head} returns the first six rows of its argument, and we use it here just to reduce the length of the output, if you run these examples yourself, you can remove \code{head} from the code. In the output, $x$ corresponds to wavelength, and $y$ to spectral irradiance, while \code{label} is a character string with the wavelength, possibly formatted.
+%
+%<<plot-peaks-0>>=
+%head(with(sun.spct,
+%          get_peaks(w.length, s.e.irrad, span=31)))
+%
+%head(with(sun.spct,
+%          get_peaks(w.length, s.e.irrad, span=31,
+%                    ignore_threshold=0.75)))
+%@
+%
+%The parameter span, indicates the size in number of observations (e.g.\ number of discrete wavelength values) included in the window used to find local maxima (peaks) or minima (valleys). By providing different values for this argument
+%we can `adjust' how \emph{fine} or \emph{coarse} is the structure described by the peaks returned by the function. The window is always defined using an odd number of observations, if an even number is provided as argument, it is increased by one, with a warning.
+%
+%<<plot-peaks-1>>=
+%head(with(sun.spct,
+%          get_peaks(w.length, s.e.irrad, span=21)))
+%
+%head(with(sun.spct,
+%          get_peaks(w.length, s.e.irrad, span=51)))
+%@
+%
+%The equivalent function for finding valleys is \code{get\_valleys} taking the same parameters as \code{get\_peaks} but returning the wavelengths at which the valleys are located.
+%
+%<<plot-valleys-1>>=
+%head(with(sun.spct,
+%          get_valleys(w.length, s.e.irrad, span=51)))
+%
+%head(with(sun.spct,
+%          get_valleys(w.length, s.e.irrad, span=51,
+%                      ignore_threshold=0.5)))
+%@
+%
+%
+%In the next section, we plot spectra and annotate them with peaks and valleys. If you find the meaning of the
+%parameters \code{span} and \code{ignore\_threshold} difficult to grasp from the explanation given above, please, study the code and plots in section \ref{sec:stat:pk:vly}.
 
 %%%%
-\section{Task: annotating peaks and valleys in spectra}\label{sec:stat:pk:vly}
+\subsection{Task: annotating peaks and valleys in spectra}\label{sec:stat:pk:vly}
 
-Here\index{spectral data!annotate peaks in plot}\index{spectral data!annotate valleys in plot} we show an example of the use the new \code{ggplot} `statistics' \code{stat\_peaks}
-from our package \pckg{ggspectra}. It uses the same parameter names and take the
-same arguments as the \code{get\_peaks} function described in section \ref{sec:get:pk:vly}.
-We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc}.
+Here\index{spectral data!annotate peaks in plot}\index{spectral data!annotate valleys in plot} we show an example of the use of \code{stat\_peaks} and \code{stat\_valleys} 
+from package \pckg{ggspectra}. It uses the same parameter names and take the
+same arguments as methods \code{peaks} and \code{valleys} described in section \ref{sec:get:pk:vly}---please, consult this section for details on how to adjust how many and which local maxima and local minima are highlighted.
+
+We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc} and we start with the simple example of highlighting the overall maximum in a spectrum. By default \code{geom\_point} is used.
+
+<<plot-peaks-1>>=
+fig_sun.e0 + stat_peaks(span=NULL)
+@
+
+We can change aesthetics, for example the colour.
 
 <<plot-peaks-2>>=
-fig_sun.e0 + stat_peaks(span=31)
+fig_sun.e0 + stat_peaks(span=NULL, color = "red")
 @
 
+The span, is the number of consecutive wavelength values in the data used to locate each individual maximum. The larger the value used, the 'coarser' the features detected. It is frequently needed to override the default so as to have only the ``meaningful'' features highlighted.
+
+<<plot-peaks-3>>=
+fig_sun.e0 + stat_peaks(span=31, color = "red")
+@
+ 
 \sloppy
-Now we play with package \pckg{ggplot2} to show different ways of plotting the peaks and valleys.
-It behaves as a \pckg{ggplot2} \code{stat\_xxxx} function accepting a \code{geom} argument
-and all the aesthetics valid for the chosen \code{geom}. By default \code{geom\_text} is used.
+Below we continue `playing' with package \pckg{ggplot2} to show different ways of plotting the peaks and valleys.
+Being a \pckg{ggplot2}-compatible \code{stat\_peaks} and \code{stat\_valleys} accept a \code{geom} argument
+and all the aesthetics valid for the chosen \code{geom}. By overriding the default geom argument \code{"point"} with  \code{"text"} we obtain labels for peaks and valleys. Be aware that consistently with package \pckg{ggplot2}, the \code{geom} parameter takes as argument a character string giving the name of the \code{geom}, rather than the name of the function---in this case \code{geom\_text}.
 
-We can change aesthetics, for example the colour:
 <<plot-peaks-valleys-3>>=
-fig_sun.e0 + stat_peaks(colour="red", span=31) +
-            stat_valleys(colour="blue", span=51)
+fig_sun.e0 + stat_peaks(geom = "text", colour="red", span=31) +
+            stat_valleys(geom = "text", colour="blue", span=51)
 @
 
-We can also use a different \code{geom}, in this case \code{geom\_point}, however, be aware that the \code{geom} parameter takes as argument a character string giving the name of the \code{geom}, in this case \code{"point"}.
-We change a few additional aesthetics of the points: we set \code{shape} to a character, and set its size to 6.
+We can use the default \code{geom}, \code{geom\_point}, change a few additional aesthetics: we set \code{shape} to a character, and set its size to 6.
 
 <<plot-peaks-4>>=
 fig_sun.e0 +
@@ -321,7 +469,7 @@ fig_sun.e0 +
 
 Finally an example with rotated labels, using different colours for peaks and valleys. Be aware that the `justification' direction, as discussed in the footnote, is referenced to the position of the text, and for this reason to move the rotated labels upwards we need to use \code{hjust} as the desired displacement is horizontal with respect to the orientation of the text of the label. As we put peak labels above the spectrum and valleys bellow it, we need to use \code{hjust} values of opposite sign, but the exact values used were simply adjusted by trial and error until the figure looked as desired.
 
-<<plot-peaks-valleys>>=
+<<plot-peaks-valleys-5>>=
 fig_sun.e0 +
   stat_peaks(geom = "text", angle=90, hjust=-0.5, colour="red", span=31) +
   stat_valleys(geom = "text", angle=90, hjust=1, color="blue", span=51) +
@@ -331,23 +479,27 @@ fig_sun.e0 +
 See section \ref{?} in chapter \ref{chap:sources} for an example these stats together with facets.
 
 %%%%
-\section{Task: annotating wavebands}\label{sec:plot:ann:wband}
+\subsection{Task: annotating wavebands}\label{sec:plot:ann:wband}
 
-The function \code{annotate\_waveband} can be used to highlight a waveband in a plot of spectral data. Its first argument should be a \code{waveband} object, and the second argument a \code{geom} as a character string. The positions on the x-axis are calculated automatically by default, but they can be overridden by explicit arguments. The vertical positions have no default, except for \code{ymin} which is equal to zero by default. The colour has a default value calculated from waveband definition, in addition x is by default set to the midpoint of the waveband along the wavelength limits. The default value of the labels is the `name' of the waveband as returned by \code{labels.waveband}.
+THIS SECTION NEEDS TO BE RE-WRITTEN USING CURRENT VERSION OF \pckg{ggspectra}.
 
-Here is an example for \PAR using defaults, and with arguments supplied only for parameters with no defaults. The example does the annotation using two different \code{geom}s, \code{"rect"} for marking the region, and \code{"text"} for the labels.
+%%% NEEDS TO BE REWRITTEN
+
+%The function \code{annotate\_waveband} can be used to highlight a waveband in a plot of spectral data. Its first argument should be a \code{waveband} object, and the second argument a \code{geom} as a character string. The positions on the x-axis are calculated automatically by default, but they can be overridden by explicit arguments. The vertical positions have no default, except for \code{ymin} which is equal to zero by default. The colour has a default value calculated from waveband definition, in addition x is by default set to the midpoint of the waveband along the wavelength limits. The default value of the labels is the `name' of the waveband as returned by \code{labels.waveband}.
+%
+%Here is an example for \PAR using defaults, and with arguments supplied only for parameters with no defaults. The example does the annotation using two different \code{geom}s, \code{"rect"} for marking the region, and \code{"text"} for the labels.
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide)
 @
 
-ADD EXAMPLES HERE
+% ADD EXAMPLES HERE
 
-Now an example that is more complex, and demonstrates the flexibility of plots produced with \pckg{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two \code{geom}s and some labels are rotated and justified. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}. A much simpler, but less flexible approach for adding annotations for several wavebands is described on page \pageref{chunk:plot:ann:tag}.
+%Now an example that is more complex, and demonstrates the flexibility of plots produced with \pckg{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two \code{geom}s and some labels are rotated and justified. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}. A much simpler, but less flexible approach for adding annotations for several wavebands is described on page \pageref{chunk:plot:ann:tag}.
+%
+%ADD EXAMPLES HERE 
 
-ADD EXAMPLES HERE
-
-A simple example using \code{geom\_vline}:
+A simple example using \code{geom\_vline} and method \code{range} with a \code{waveband} object as argument.
 
 <<plot-par-vline-3>>=
 figvl3 <- fig_sun.q +
@@ -356,7 +508,7 @@ figvl3 <- fig_sun.q +
 figvl3
 @
 
-And one where we change some of the aesthetics, and add a label:
+And one where we change some of the aesthetics in the previous figure, and add a label using \code{stat\_wb\_label} defined in package \pckg{ggspectra}.
 
 <<plot-par-vline-4>>=
 figvl4 <- fig_sun.q +
@@ -366,8 +518,8 @@ figvl4 <- fig_sun.q +
 figvl4
 @
 
-Now including calculated values in the label, first with a simple example with only PAR.
-Because of using expressions to obtain superscripts we need to add \code{parse=TRUE} to the call.
+Next we use calculated values in the label, first with a simple example with only PAR.
+Because we use expressions to obtain superscripts we need to add \code{parse=TRUE} to the call.
 In addition as we are expressing the integral in photon based units, we also change the
 type of units used for plotting the spectral irradiance (multiplying by $1 \cdot 10^6$ to
 because of the unit multiplier used).
@@ -466,13 +618,13 @@ fig_dsun2 + theme_bw()
 % fig_sun.z
 % @
 
-\section{Task: using colour as data in plots}
+\section{Using colour as data in plots}
 
 The examples in this section use a single spectrum, \code{sun.spct}, but all functions used are methods for \code{generiic.spct} objects, so are equally applicable to the plotting of other spectra like transmittance, reflectance or response ones.
 
 When we want to colour-label individual spectral values, for example, by plotting the individual data points with the colour corresponding to their wavelengths, or fill the area below a plotted spectral curve with colours, we need to first \code{tag} the spectral data set using a waveband definition or a list of waveband definitions. If we just want to add a guide or labels to the plot, we can create new data instead of tagging the spectral data to be plotted. In section \ref{sec:plot:tag} we show code based on tagging spectral data, and in section \ref{sec:plot:guide} the case of using different data for plotting the guide or key is described.
 
-\subsection{Plots using colour for the spectral data}\label{sec:plot:tag}
+\subsection{Task: Plots using colour for the spectral data}\label{sec:plot:tag}
 
 We start by describing how to tag a spectrum, and then show how to use tagged spectra for plotting data. Tagging consist in adding wavelength-derived colour data and waveband-related data to a spectral object. We start with a very simple example.
 
@@ -735,7 +887,7 @@ fig_sun.tg2  + theme_bw()
 
 Other possibilities are for example, using one of the symbols that can be filled, and then for example for symbols with a black border and a colour matching its wavelength as a fill aesthetic. It is also possible to use \code{alpha} with points.
 
-\subsection{Plots using waveband definitions}\label{sec:plot:guide}
+\subsection{Task: Plots using waveband definitions}\label{sec:plot:guide}
 
 In the previous section we showed how tagging spectral data can be used to add colour information that can be used when plotting. In contrast, in the present section we create new `fake' spectral data starting from waveband definitions that then we plot as `annotations'. We show different types of annotations based on plotting with different \code{geom}s. We show the use of \code{geom\_rect}, \code{geom\_text}, \code{geom\_vline}, and \code{geom\_segment}, that we consider the most useful geometries in this context.
 
@@ -1094,7 +1246,9 @@ fig_sun.tgrect2 <-
 fig_sun.tgrect2 + theme_bw()
 @
 
-\section{Task: plotting effective spectral irradiance}
+\section{Plotting the result of operations on spectral data}
+
+\subsection{Task: plotting effective spectral irradiance}
 
 This task is here simply to show that there is nothing special about plotting spectra based on calculations, and that one can combine different functions to get the job done. We also show how to `row bind' spectra for plotting, in this case to make it easy to use facets.
 
@@ -1132,7 +1286,7 @@ There is one warning issued for each panel, as the use of \code{xlim} discards 4
 
 A couple of details need to be remembered: the tagging has to be done before row-binding the spectra, as \code{tag} works only on spectra that have unique values for wavelengths and discards `repeated' rows if they are present. We use \code{theme(legend.position=c(0.90, 0.9))} to change where the legend or guide is positioned. In this case, we move the legend to a place within the plotting region. As we are using also \code{theme\_bw()} which resets the legend position to the default, the order in which they are added is significant.
 
-\section{Task: making a bar plot of effective irradiance}
+\subsection{Task: making a bar plot of effective irradiance}
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_narrow)
@@ -1207,7 +1361,7 @@ fig_cie_bars1 <- ggplot(data=cie.dt,
 fig_cie_bars1
 @
 
-\section{Task: plotting a spectrum using colour bars}
+\subsection{Task: plotting a spectrum using colour bars}
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide)

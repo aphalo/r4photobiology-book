@@ -246,9 +246,16 @@ Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative C
 The manuscript was written using \href{http://www.r-project.org/}{R} with package \pckg{knitr}. The manuscript was edited in \href{http://www.winedt.com/}{WinEdt} and \href{http://www.rstudio.com/}{RStudio}.
 The source files for the whole book are available at \url{https://bitbucket.org/aphalo/using-r}.}
 
+%%%%% FIX NEEDED FOR RManager of WinEdt and ????
+
+<<winedt-bug-fix, echo=FALSE, include=FALSE, cache=FALSE>>=
+library(methods)
+@
+
 % knitr setup
 
 <<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
 opts_knit$set(child.command = 'include')
 opts_knit$set(self.contained=FALSE)
 opts_knit$set(concordance=TRUE)
