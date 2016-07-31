@@ -169,7 +169,8 @@ and yields one spectrum to a power of a second one. Such additional functions ar
 
 \subsection{Task: conversion from energy to photon base}\label{sec:base:e2q}
 
-The\index{spectral data!energy to photon base conversion}\index{spectral data!photon to energy base conversion} energy of a quantum of radiation\index{radiation quantum}\index{photon} in a vacuum, \quantum, depends on the wavelength\index{wavelength}, $\lambda$, or frequency\index{frequency}\footnote{Wavelength and frequency are related to each other by the speed of light, according to $\nu = c / \lambda$ where $c$ is speed of light in vacuum. Consequently there are two equivalent formulations for equation \ref{equ:energy}.}, $\nu$,
+\begin{framed}
+\ilAttention{} The\index{spectral data!energy to photon base conversion}\index{spectral data!photon to energy base conversion} energy of a quantum of radiation\index{radiation quantum}\index{photon} in a vacuum, \quantum, depends on the wavelength\index{wavelength}, $\lambda$, or frequency\index{frequency}\footnote{Wavelength and frequency are related to each other by the speed of light, according to $\nu = c / \lambda$ where $c$ is speed of light in vacuum. Consequently there are two equivalent formulations for equation \ref{equ:energy}.}, $\nu$,
 %
 \begin{equation}
 \quantum = h \cdot \nu = h \cdot \frac{c}{\lambda} \label{equ:energy}
@@ -182,6 +183,7 @@ with the Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecon
 \end{equation}
 %
 with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}.
+\end{framed}
 
 \subsubsection{\code{numeric} vectors}
 
@@ -242,7 +244,7 @@ s.e.irrad <- with(sun.data, as_energy(w.length, s.q.irrad))
 
 \subsubsection{\code{source\_spct} objects}
 
-Function \code{q2e} is the reverse of \code{e2q}, converting spectral energy irradiance in \wattnm to spectral photon irradiance in \molnm. It can also be used as a roundabout way of removing a \code{s.e.irrad} column, which could be useful in some cases.
+Function \code{q2e} is the reverse of \code{e2q}, converting spectral photon irradiance in \molnm to spectral energy irradiance in \wattnm . It can also be used as a roundabout way of removing a \code{s.e.irrad} column, which could be useful in some cases.
 
 <<>>=
 q2e(sun.spct, "replace", byref = FALSE)
@@ -312,7 +314,9 @@ options(photobiology.radiation.unit = "energy")
 sun.spct * UVB()
 @
 
-For filters, an option controls whether transmittance, the default, or absorbance is use in the operations, and the controls the returned quantity. It is important to remember that absorbance, $A$, is always expressed on a logarithmic scale, while transmittance, $T$, is always expressed on a linear scale. So to simulate the effect of stacking two layers of polyester film, we need to sum, or in this case as there are two layers of the same material, multiply by two the spectral absorbance values, while we need to multiply the spectral transmittances of stacked filters, or use a power when the layers are identical.
+\begin{framed}
+\ilAttention{} For filters, an option controls whether transmittance, the default, or absorbance is use in the operations, and the controls the returned quantity. It is important to remember that absorbance, $A$, is always expressed on a logarithmic scale, while transmittance, $T$, is always expressed on a linear scale. So to simulate the effect of stacking two layers of polyester film, we need to sum, or in this case as there are two layers of the same material, multiply by two the spectral absorbance values, while we need to multiply the spectral transmittances of stacked filters, or use a power when the layers are identical.
+\end{framed}
 
 <<>>=
 options(photobiology.filter.qty = "absorbance")

@@ -19,9 +19,9 @@ library(photobiologyWavebands)
 library(ggspectra)
 @
 
-\section{Task: Printing spectra}
+\section{Task: Printing wavebands}
 
-A\index{wavebands!print} \code{print} method for \code{waveband} objects is defines in package \PB, which in the example below is called implicitly.
+A\index{wavebands!print} \code{print} method for \code{waveband} objects is defined in package \PB, which in the example below is called implicitly.
 
 <<>>=
 VIS()
@@ -37,7 +37,7 @@ unclass(CIE())
 
 \section{Task: Summaries related to object properties}\label{sec:summarieswb:wavelength}
 
-In\index{wavebands!summary} the case of the \code{summary} method and their corresponding print method, specializations for all classes of spectral objects are provided---i.e.\ all classes with names ending in \code{\_spct}.
+In\index{wavebands!summary} the case of the \code{summary} method and their corresponding print method, specializations for waveband objects are provided.
 
 <<>>=
 my.wb <- waveband(c(400,500))

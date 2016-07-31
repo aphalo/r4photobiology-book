@@ -45,7 +45,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 \newcommand\typicons[1]{{\typiconsfont\symbol{#1}}}
 \newcommand\typiattn{\typicons{"E136}}
 \newcommand\Attention[1]{\marginpar{\centering\Huge\colorbox{yellow}{\typicons{"E136}}}\index{#1}}
-\newcommand\ilAttention{\colorbox{yellow}{\Huge\typicons{"E136}}\xspace}
+\newcommand\ilAttention{\noindent\colorbox{yellow}{\Huge\typicons{"E136}}\xspace}
 \newcommand\Advanced[1]{\marginpar{\centering\Huge\colorbox{black}{\textcolor{white}{\typicons{"E04E}}}}\index{#1}}
 
 % set language

@@ -80,7 +80,7 @@ Given the expected audience of both students and biologists, rather than data an
   \end{framed}
 \end{example}
 
-The design\index{r4photobioloy@\pckg{r4photobioloy} suite}\index{r4photobiology!design} of the `high level' interface is based on the idea of achieving simplicity of use by hiding the computational difficulties and exposing objects, functions and operators that map directly to physical concepts. Computations and plotting of spectral data centers on two types of objects: \emph{spectra} and \emph{wavebands} (Figure \ref{fig:diagram:paradigm}). Al spectra have in common that observations are referenced to a wavelength value. However, there are different types spectral objects, e.g.\ for light sources and responses to light. Waveband objects include much more than information about a range of wavelengths, they can also include information about a transformation of the spectral data, like a biological spectral weighting function (BSWF). In addition to functions for calculating summary quantities like irradiance from spectral irradiance, the packages define operators for spectra and wavebands. The use of operators simplifies the syntax and makes the interface easier to use.
+The design\index{r4photobioloy@\pckg{r4photobioloy} suite}\index{r4photobiology!design} of the `high level' interface is based on the idea of achieving simplicity of use by hiding the computational difficulties and exposing objects, functions and operators that map directly to physical concepts. Computations and plotting of spectral data centers on two types of objects: \emph{spectra} and \emph{wavebands} (Figure \ref{fig:diagram:paradigm}). All spectra have in common that observations are referenced to a wavelength value. However, there are different types spectral objects, e.g.\ for light sources and responses to light. Waveband objects include much more than information about a range of wavelengths, they can also include information about a transformation of the spectral data, like a biological spectral weighting function (BSWF). In addition to functions for calculating summary quantities like irradiance from spectral irradiance, the packages define operators for spectra and wavebands. The use of operators simplifies the syntax and makes the interface easier to use.
 
 A consistent naming scheme for methods as well as consistency in the order of arguments across the suite should reduce the number of \emph{names} to remember. Data objects are \emph{tidy} as defined by in \autocite{Wickham2014a}, in other words data on a row always corresponds to a single observation event, although such an observation can consist in more than one measured or derived quantity. Data from different observations are stored in different objects, or if in the same object they are \emph{keyed} using and index variable.
 
@@ -208,7 +208,7 @@ Although by default low-level functions expect spectral data on energy units, th
 
 Wavelengths should always be in nanometres (\Unit{nm}), and when conversion between energy and photon based units takes place no scaling factor is used (an input in \wattnm yields an output in \molnm rather than \umolnm).
 
-The suite is still under active development. Even those packages marked as `stable' are likely to acquire new functionality. By stability, we mean that we hope to be able to make most changes backwards compatible, in other words, we hope they will not break existing user code.
+The suite is still under active development. Even those packages marked as `stable' are likely to acquire new functionality. By stability, we mean that we aim to be able to make most changes backwards compatible, in other words, we expect that they will not break existing user code.
 
 %%%%
 \section{The \lowercase{\textsf{r4photobiology}} repository}\label{sec:photoCRAN}
@@ -255,7 +255,7 @@ setRepositories()
 @
 and can be enabled and disabled.
 
-In RStudio, after adding the \textsf{r4photobiology} repository as shown above, the photobiology packages can be installed and uninstalled through the normal RStudio menus and dialogues, and will listed after typing the first few characters of their names. For example when you type ‘photob’ in the packages field, all the packages with names starting with ‘photob’ will be listed.
+In RStudio, after adding the \textsf{r4photobiology} repository as shown above, the photobiology packages can be installed and uninstalled through the normal RStudio menus and dialogues, and will be listed after typing the first few characters of their names. For example when you type ‘photob’ in the packages field, all the packages with names starting with ‘photob’ will be listed.
 
 They can be also installed at the R command prompt with the following command:
 <<eval=FALSE>>=

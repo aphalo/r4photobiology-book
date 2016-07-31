@@ -41,7 +41,9 @@ mdy("03202014")
 
 Similar functions including hours, minutes and seconds are defined by \code{lubridate} as well as functions for manipulating dates, and calculating durations with all the necessary and non-trivial corrections needed for leap years, summer time, and other idiosyncracies of the calendar system.
 
-Times\Attention{time zone}\label{alert:time:zone} and dates are stored in R objects in Universal Time Coordinates (UTC), but the time zone (\code{tz}) used for input and output can vary widely. The UTC `time zone' corresponds to the Greenwich meridian without any shifts due to daylight-saving time throughout the year. The time offset between local time and UTC can vary throughout the year due to day-light saving times---winter vs.\ summer time---, or accross years through changes in legislation---e.g.\ date when when daylight saving time starts and ends, or changes in the geographical borders between time zones, or a country adopting a different time zone. Different names and abbreviations are used, for the same time zones. Examples of time zones are EET or Eastern European Time, CET or Central European Time. Functions in package \pckg{lubridate} are of help for getting around these conversions but one should be always very careful as many functions use as default the `locale' and `TZ' settings queried from the operating system as defaults. This means that data saved at a different geographic location or using a computer with wrong settings, or saving data using a remote (e.g.\ cloud) server located in a different time zone, can all result in misinterpretation of time data. Furthermore, the same R script may yield different output when run in a different time zone, unless time zone is explicitly passed as an argument. This problem does not only affect times, but also dates.
+\begin{framed}
+\ilAttention{} Times\label{alert:time:zone} and dates are stored in R objects in Universal Time Coordinates (UTC), but the time zone (\code{tz}) used for input and output can vary widely. The UTC `time zone' corresponds to the Greenwich meridian without any shifts due to daylight-saving time throughout the year. The time offset between local time and UTC can vary throughout the year due to day-light saving times---winter vs.\ summer time---, or accross years through changes in legislation---e.g.\ date when when daylight saving time starts and ends, or changes in the geographical borders between time zones, or a country adopting a different time zone. Different names and abbreviations are used, for the same time zones. Examples of time zones are EET or Eastern European Time, CET or Central European Time. Functions in package \pckg{lubridate} are of help for getting around these conversions but one should be always very careful as many functions use as default the `locale' and `TZ' settings queried from the operating system as defaults. This means that data saved at a different geographic location or using a computer with wrong settings, or saving data using a remote (e.g.\ cloud) server located in a different time zone, can all result in misinterpretation of time data. Furthermore, the same R script may yield different output when run in a different time zone, unless time zone is explicitly passed as an argument. This problem does not only affect times, but also dates.
+\end{framed}
 
 <<>>=
 ymd("20140320") # no time zone set, Date object
@@ -68,7 +70,9 @@ with_tz(ymd_hm("20140320 00:00"), tz = "America/Buenos_Aires")
 Sys.timezone()
 @
 
-We\Attention{time zones} should make explicit the time zones used for both input and output to avoid any ambiguities.
+\begin{framed}
+\ilAttention{} We should make explicit the time zones used for both input and output to avoid any ambiguities.
+\end{framed}
 
 <<>>=
 with_tz(ymd("20140320", tz = "America/Buenos_Aires"), tz = "Europe/London")
@@ -165,7 +169,9 @@ Functions\index{sunset!time of}\index{sun rise!time of}\index{solar noon!time of
 
 Be also aware that for summer dates the times are expressed accordingly. In the examples below this can be recognized for example, by the time zone being reported as EEST instead of EET for Eastern Europe.
 
-Both\Attention{locale} latitude and longitude can be supplied, but be aware that if the returned value is desired in the local time coordinates, the time zone should match the longitude.
+\begin{framed}
+\ilAttention{} Both latitude and longitude can be supplied, but be aware that if the returned value is desired in the local time coordinates, the time zone should match the longitude.
+\end{framed}
 
 <<>>=
 sunrise_time(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
