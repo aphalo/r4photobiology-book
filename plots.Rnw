@@ -171,11 +171,11 @@ As the current implementation uses \code{ggplot} `statistic's, waveband irradian
 The defaults arguments cater the exploratory plotting of spectra, returning a plot that is heavily annotated. The two plots that follow show spectral response, expressed on an energy or photon basis. We use as example the action spectrum of photosynthesis in leaves.
 
 <<plot-response-1>>=
-plot(McCree_Oat.spct)
+plot(McCree_photosynthesis.mspct$oat)
 @
 
 <<plot-response-2>>=
-plot(McCree_Oat.spct, unit.out = "photon")
+plot(McCree_photosynthesis.mspct$oat, unit.out = "photon")
 @
 
 For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}. As for other \code{plot} methods described in this chapter normalization and scaling meta-data are reflected in the plot axis-labels.
@@ -235,32 +235,32 @@ For details on how to modify the wavebands used for labels and summaries, and cu
 We will use as example the spectral properties of a plant leaf. This method is the most flexible with respect to the quantity plotted, as \code{object\_spct} objects contain more than one spectral quantity, and as $R + A + T = 1$, the three quantities are always available for plotting. By default, all three are plotted.
 
 <<plot-object-1>>=
-plot(Solidago_upper_adax.spct)
+plot(Solidago_altissima.mspct$upper_adax)
 @
 
 <<plot-object-2>>=
-plot(Solidago_upper_adax.spct, plot.qty = "all")
+plot(Solidago_altissima.mspct$upper_adax, plot.qty = "all")
 @
 
 However, they can be plotted individually, as well as absorbance.
 
 <<plot-object-3>>=
-plot(Solidago_upper_adax.spct, plot.qty = "reflectance")
+plot(Solidago_altissima.mspct$upper_adax, plot.qty = "reflectance")
 @
 <<plot-object-4>>=
-plot(Solidago_upper_adax.spct, plot.qty = "absorptance")
+plot(Solidago_altissima.mspct$upper_adax, plot.qty = "absorptance")
 @
 <<plot-object-5>>=
-plot(Solidago_upper_adax.spct, plot.qty = "transmittance")
+plot(Solidago_altissima.mspct$upper_adax, plot.qty = "transmittance")
 @
 <<plot-object-6>>=
-plot(Solidago_upper_adax.spct, plot.qty = "absorbance")
+plot(Solidago_altissima.mspct$upper_adax, plot.qty = "absorbance")
 @
 
 As for \code{filter\_spct} and \code{reflector\_spct} quantities can be plotted as percentages. We give only one example here.
 
 <<plot-object-7>>=
-plot(Solidago_upper_adax.spct, pc.out = TRUE)
+plot(Solidago_altissima.mspct$upper_adax, pc.out = TRUE)
 @
 
 For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}.
