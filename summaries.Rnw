@@ -25,7 +25,7 @@ library(photobiologyReflectors)
 
 \section{Task: Printing spectra}
 
-Spectral\index{spectral data!print} objects are printed with a special \code{print} method that is an extension to the print method for \code{tibble} objects, consequently, it is possible to use options from package \pckg{tibble} to control printing. The first option set below, \code{tibble.print\_max}, sets the number of rows above which only `head' rows are printed and \code{tibble.print\_min} sets the number of rows printed when the head is printed. Another option, \code{tibble.width} sets width of the output printed for \code{tibble} objects with many columns.
+Spectral\index{spectral data!print} objects are printed with a special \code{print} method that is an extension to the print method for \code{tibble} objects, consequently, it is possible to use options from package \pkg{tibble} to control printing. The first option set below, \code{tibble.print\_max}, sets the number of rows above which only `head' rows are printed and \code{tibble.print\_min} sets the number of rows printed when the head is printed. Another option, \code{tibble.width} sets width of the output printed for \code{tibble} objects with many columns.
 
 <<printing-spct>>=
 options(tibble.print_max = 4, tibble.print_min = 4)

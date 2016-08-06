@@ -71,7 +71,7 @@ We aware that if two vectors are supplied, then the elements in each one are mat
 black_body_spectrum(c(500, 500, 600, 600), c(4500,5000)) # tricky!
 @
 
-We can use the function defined above for plotting black body emission spectra for different temperatures. We use \pckg{ggplot2} and directly plot a function using \code{stat\_function}, using \code{args} to pass the additional argument giving the absolute temperature to be used. We plot three lines using three different temperatures (5600~K, 4500~K, and 3700~K):
+We can use the function defined above for plotting black body emission spectra for different temperatures. We use \pkg{ggplot2} and directly plot a function using \code{stat\_function}, using \code{args} to pass the additional argument giving the absolute temperature to be used. We plot three lines using three different temperatures (5600~K, 4500~K, and 3700~K):
 
 <<tidy=FALSE>>=
 ggplot(data=data.frame(x=c(50,1500)), aes(x)) +

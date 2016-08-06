@@ -96,7 +96,7 @@ log10(sun.spct)
 
 \section{Task: Simulating spectral irradiance under a filter}
 
-Package \pckg{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \pckg{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
+Package \pkg{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \pkg{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
 
 <<>>=
 sun.spct * schott.mspct$GG400
@@ -279,7 +279,7 @@ Table \ref{tab:options} lists all the recognized options\index{R options}, and t
 \addlinespace
 digits & 7 & $d - 3$ used by \code{summary} \\
 \midrule
-\textbf{Package \pckg{tibble}} & & \\
+\textbf{Package \pkg{tibble}} & & \\
 \addlinespace
 tibble.print\_max & $n_\mathrm{max}$ = 20 & nrow(\emph{spct}) $> n_\mathrm{max}$ print $n_\mathrm{min}$ lines \\
 tibble.print\_min & $n_\mathrm{min}$ = 10 & nrow(\emph{spct}) $> n_\mathrm{max}$ print $n_\mathrm{min}$ lines \\
@@ -334,7 +334,7 @@ options(photobiology.filter.qty = NULL)
 \sloppy
 The proper use of trimming of wavebands is important, and option \code{photobiology.waveband.trim} makes changing the behaviour of the \code{trim\_spct} function and other functions accepting wavebands easier. The need to carefully assess the validity of trimming and how it can affect the interpretation of results is further discussed in Chapter \ref{chap:uw:irrad} and Chapter \ref{chap:wt:irrad}.
 
-Other options affect the optimization of performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \pckg{dplyr} affect printing of output (Table \ref{tab:options}).
+Other options affect the optimization of performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \pkg{dplyr} affect printing of output (Table \ref{tab:options}).
 
 \section{Wavebands}\label{sec:wb:objects}
 

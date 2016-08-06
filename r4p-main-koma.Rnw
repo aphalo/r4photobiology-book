@@ -243,7 +243,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative Commons licenses} as indicated, or when not explicitly indicated, under the \href{http://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0 license}.}
 
 \lowertitleback{Typeset with \href{http://www.latex-project.org/}{\hologo{XeLaTeX}}\ in Lucida Bright and \textsf{Lucida Sans} using the KOMA-Script book class.\\
-The manuscript was written using \href{http://www.r-project.org/}{R} with package \pckg{knitr}. The manuscript was edited in \href{http://www.winedt.com/}{WinEdt} and \href{http://www.rstudio.com/}{RStudio}.
+The manuscript was written using \href{http://www.r-project.org/}{R} with package \pkg{knitr}. The manuscript was edited in \href{http://www.winedt.com/}{WinEdt} and \href{http://www.rstudio.com/}{RStudio}.
 The source files for the whole book are available at \url{https://bitbucket.org/aphalo/using-r}.}
 
 %%%%% FIX NEEDED FOR RManager of WinEdt and ????
@@ -326,7 +326,7 @@ options(dplyr.print_min=5)
 
 %\setsecnumdepth{subsection}
 
-\part{Theory behind calculations}
+\part{Theory behind calculations}\label{part:theory}
 
 <<child-optics, child='optics.Rnw', eval=incl_chaps>>=
 @
@@ -337,7 +337,7 @@ options(dplyr.print_min=5)
 <<child-photochemistry, child='photochemistry.Rnw', eval=incl_chaps>>=
 @
 
-\part{Tools used for calculations}
+\part{Tools used for calculations}\label{part:tools}
 
 <<child-software, child='software.Rnw', eval=incl_chaps>>=
 @
@@ -350,7 +350,7 @@ current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
 
-\part{Cookbook of calculations}
+\part{Cookbook of calculations}\label{part:cookbook}
 
 <<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
 @
@@ -397,7 +397,7 @@ current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
 
-\part{Data acquisition and exchange}
+\part{Data acquisition and exchange}\label{part:foreign}
 
 <<child-exchange, child='data-exchange.Rnw', eval=incl_acq>>=
 @
@@ -416,7 +416,7 @@ current_ls <- ls()
 rm(list = setdiff(current_ls, main_ls))
 @
 
-\part{Catalogue of example data}
+\part{Catalogue of example data}\label{part:data}
 
 <<child-sources, child='sources.Rnw', eval=incl_data>>=
 @

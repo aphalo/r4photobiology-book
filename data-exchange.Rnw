@@ -32,11 +32,11 @@ library(fda)
 library(fda.usc)
 @
 
-\section{Package \pckg{hyperSpec}}
+\section{Package \pkg{hyperSpec}}
 
-\subsection{To \pckg{hyperSpec}}
+\subsection{To \pkg{hyperSpec}}
 
-Can\index{foreign data!package hyperspec@package \pckg{hyperSpec}} export to \code{hyperSpec} objects only collections of spectra where all members have identical \code{w.length} vectors, as objects of class \code{hypeSpec} store a single vector of wavelengths for the whole collection of spectra. We use as example data \code{gap.mspct} from package \pckg{photobiologySun}.
+Can\index{foreign data!package hyperspec@package \pkg{hyperSpec}} export to \code{hyperSpec} objects only collections of spectra where all members have identical \code{w.length} vectors, as objects of class \code{hypeSpec} store a single vector of wavelengths for the whole collection of spectra. We use as example data \code{gap.mspct} from package \pkg{photobiologySun}.
 
 <<>>=
 gap.hspct <- mspct2hyperSpec(gap.mspct, "s.e.irrad")
@@ -44,9 +44,9 @@ class(gap.hspct)
 plot(gap.hspct)
 @
 
-\subsection{From \pckg{hyperSpec}}
+\subsection{From \pkg{hyperSpec}}
 
-Can import only data with wavelength in nanometres. Other quantities and units are not supported by the \pckg{photobiology} classes for spectral data. See package \pckg{hyperSpec} vignette "laser" for details on the data and the conversion of the original wavelength units into nanometres.
+Can import only data with wavelength in nanometres. Other quantities and units are not supported by the \pkg{photobiology} classes for spectral data. See package \pkg{hyperSpec} vignette "laser" for details on the data and the conversion of the original wavelength units into nanometres.
 
 <<>>=
 class(laser)
@@ -74,10 +74,10 @@ ggplot(laser.mspct[[1]]) +
   stat_peaks(geom = "text", vjust = -1, label.fmt = "%.6g nm", color = "red")
 @
 
-\section{Package \pckg{colorSpec}}
-\index{foreign data!package colorspec@package \pckg{colorSpec}}
+\section{Package \pkg{colorSpec}}
+\index{foreign data!package colorspec@package \pkg{colorSpec}}
 
-\subsection{From \pckg{colorSpec}}
+\subsection{From \pkg{colorSpec}}
 
 <<>>=
 fluorescent.mspct <- colorSpec2mspct(Fs.5nm)
@@ -97,7 +97,7 @@ plot(fluorescent.spct, annotations = c("peaks", "color.guide")) + aes(linetype =
 colorSpec2chroma_spct(xyz1931.5nm)
 @
 
-\subsection{To \pckg{colorSpec}}
+\subsection{To \pkg{colorSpec}}
 
 <<>>=
 sun.cspec <- spct2colorSpec(sun.spct)
@@ -112,13 +112,13 @@ spct2colorSpec(yellow_gel.spct)
 chroma_spct2colorSpec(beesxyzCMF.spct)
 @
 
-\section{Package \pckg{pavo}}
+\section{Package \pkg{pavo}}
 
-\index{foreign data!package pavo@package \pckg{pavo}}
+\index{foreign data!package pavo@package \pkg{pavo}}
 
-\subsection{From \pckg{pavo}}
+\subsection{From \pkg{pavo}}
 
-In this example we convert an \code{rspec} object from package \pckg{pavo} into a collection of spectra and then we plot it with \code{ggplot} methods from package \pckg{ggspectra} (an extension to \pckg{ggplot2}). The data are the spectral reflectance of the plumage from seven different individual birds of the same species, measured in three different body parts.
+In this example we convert an \code{rspec} object from package \pkg{pavo} into a collection of spectra and then we plot it with \code{ggplot} methods from package \pkg{ggspectra} (an extension to \pkg{ggplot2}). The data are the spectral reflectance of the plumage from seven different individual birds of the same species, measured in three different body parts.
 
 <<>>=
 data(sicalis)
@@ -171,11 +171,11 @@ ggplot(refl.red, aes(x = body.part, y = red.reflectance)) +
   geom_point(alpha = 0.5)
 @
 
-\section{Packages \pckg{fda} and \pckg{fda.usc}}
+\section{Packages \pkg{fda} and \pkg{fda.usc}}
 
-\index{foreign data!package fda@package \pckg{fda}}\index{foreign data!package fdausc@package \pckg{fda.usc}}
+\index{foreign data!package fda@package \pkg{fda}}\index{foreign data!package fdausc@package \pkg{fda.usc}}
 
-Functional\Advanced{funtional data analysis} data analysis is a specialized method that can be used to compare and classify spectra. We here exemplify the selection of the `deepest spectrum' from a collection of spectra. The data interconversion can be done with a simple function. Package \pckg{fda} expects the spectra in a single matrix object, with each spectrum as a row. We will use once again \code{gap.mspct} for this example.
+Functional\Advanced{funtional data analysis} data analysis is a specialized method that can be used to compare and classify spectra. We here exemplify the selection of the `deepest spectrum' from a collection of spectra. The data interconversion can be done with a simple function. Package \pkg{fda} expects the spectra in a single matrix object, with each spectrum as a row. We will use once again \code{gap.mspct} for this example.
 
 <<>>=
 gap.mat <- mspct2mat(gap.mspct, "s.e.irrad", byrow = TRUE)
@@ -196,7 +196,7 @@ func_med_mode <- func.med.mode(gap.fdata)
 func_med_RP <- func.med.RP(gap.fdata)
 @
 
-We plot using plot method from package \pckg{fda}.
+We plot using plot method from package \pkg{fda}.
 
 <<>>=
 plot(func_med_FM)
@@ -216,7 +216,7 @@ func_med_RP.spct <-
               s.e.irrad = func_med_RP$data[1, ])
 @
 
-We plot one spectrum using plot method from package \pckg{ggspectra}.
+We plot one spectrum using plot method from package \pkg{ggspectra}.
 
 <<>>=
 plot(func_med_mode.spct)
@@ -252,7 +252,7 @@ gap_fda.spct <-
             idfactor = "method")
 @
 
-We plot three spectra using plot method from package \pckg{ggspectra}.
+We plot three spectra using plot method from package \pkg{ggspectra}.
 
 <<>>=
 plot(gap_fda.spct,

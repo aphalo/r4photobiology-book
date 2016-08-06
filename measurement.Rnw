@@ -135,13 +135,13 @@ will depend on the model(s) and configuration(s) of the instrument(s) connected.
 you can acquire spectra from more than one instrument, and from instruments with more than
 one channel.
 
-Package \pckg{rOmniDriver} is just a thin wrapper on the low-level access functions supplied
+Package \pkg{rOmniDriver} is just a thin wrapper on the low-level access functions supplied
 by the driver.
-The names for functions in package \pckg{rOminiDriver} are verbose, this is because we have respected the names used in the
+The names for functions in package \pkg{rOminiDriver} are verbose, this is because we have respected the names used in the
 driver itself, written in Java. Thus was done so that information in the driver documentation can be
 found easily.
 
-First step is to load the package \pckg{rOmniDriver} which is a low level wrapper on the driver
+First step is to load the package \pkg{rOmniDriver} which is a low level wrapper on the driver
 supplied by Ocean Optics for their instruments. The runtime is free, and is all what you need
 for simple tasks as documentation is available both from Ocean Optics web site and as R help.
 

@@ -26,7 +26,7 @@ cache <- TRUE
 
 \subsection{Time coordinates}
 
-This\index{time!coordinates} chapter deals with calculations that require times and/or dates as arguments. One could use R's built-in functions for POSIXct but package \pckg{lubridate} makes working with dates and times, much easier. Package \pckg{lubridate} defines functions for decoding dates represented as character strings, and for manipulating dates and doing calculations on dates. Each one of the different functions shown in the code chunk below can decode dates in different formats as long as the year, month and date order in the string agrees with the name of the function.
+This\index{time!coordinates} chapter deals with calculations that require times and/or dates as arguments. One could use R's built-in functions for POSIXct but package \pkg{lubridate} makes working with dates and times, much easier. Package \pkg{lubridate} defines functions for decoding dates represented as character strings, and for manipulating dates and doing calculations on dates. Each one of the different functions shown in the code chunk below can decode dates in different formats as long as the year, month and date order in the string agrees with the name of the function.
 
 <<>>=
 ymd("20140320")
@@ -42,7 +42,7 @@ mdy("03202014")
 Similar functions including hours, minutes and seconds are defined by \code{lubridate} as well as functions for manipulating dates, and calculating durations with all the necessary and non-trivial corrections needed for leap years, summer time, and other idiosyncracies of the calendar system.
 
 \begin{framed}
-\ilAttention{} Times\label{alert:time:zone} and dates are stored in R objects in Universal Time Coordinates (UTC), but the time zone (\code{tz}) used for input and output can vary widely. The UTC `time zone' corresponds to the Greenwich meridian without any shifts due to daylight-saving time throughout the year. The time offset between local time and UTC can vary throughout the year due to day-light saving times---winter vs.\ summer time---, or accross years through changes in legislation---e.g.\ date when when daylight saving time starts and ends, or changes in the geographical borders between time zones, or a country adopting a different time zone. Different names and abbreviations are used, for the same time zones. Examples of time zones are EET or Eastern European Time, CET or Central European Time. Functions in package \pckg{lubridate} are of help for getting around these conversions but one should be always very careful as many functions use as default the `locale' and `TZ' settings queried from the operating system as defaults. This means that data saved at a different geographic location or using a computer with wrong settings, or saving data using a remote (e.g.\ cloud) server located in a different time zone, can all result in misinterpretation of time data. Furthermore, the same R script may yield different output when run in a different time zone, unless time zone is explicitly passed as an argument. This problem does not only affect times, but also dates.
+\ilAttention{} Times\label{alert:time:zone} and dates are stored in R objects in Universal Time Coordinates (UTC), but the time zone (\code{tz}) used for input and output can vary widely. The UTC `time zone' corresponds to the Greenwich meridian without any shifts due to daylight-saving time throughout the year. The time offset between local time and UTC can vary throughout the year due to day-light saving times---winter vs.\ summer time---, or accross years through changes in legislation---e.g.\ date when when daylight saving time starts and ends, or changes in the geographical borders between time zones, or a country adopting a different time zone. Different names and abbreviations are used, for the same time zones. Examples of time zones are EET or Eastern European Time, CET or Central European Time. Functions in package \pkg{lubridate} are of help for getting around these conversions but one should be always very careful as many functions use as default the `locale' and `TZ' settings queried from the operating system as defaults. This means that data saved at a different geographic location or using a computer with wrong settings, or saving data using a remote (e.g.\ cloud) server located in a different time zone, can all result in misinterpretation of time data. Furthermore, the same R script may yield different output when run in a different time zone, unless time zone is explicitly passed as an argument. This problem does not only affect times, but also dates.
 \end{framed}
 
 <<>>=
@@ -83,7 +83,7 @@ with_tz(ymd_hm("20140320 00:00", tz = "Asia/Tokyo"), tz = "America/Buenos_Aires"
 
 \subsection{Geographic coordinates}
 
-For\index{geographic coordinates}\index{geocode}\index{latitude}\index{longitude} astronomical calculations we also need as argument geographical coordinates. One can supply latitude and longitude values, acquired with a GPS instrument or read from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates on-the-fly. A query can be run from within R using packages \pckg{RgoogleMaps}, or \pckg{ggmap}, as done here---of course this requires internet access. When inputting coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree). Latitudes N are given by positive numbers and and latitudes S by negative numbers. Longitudes W of Greenwich are given as positive numbers and longitudes E of Greenwich as negative numbers.
+For\index{geographic coordinates}\index{geocode}\index{latitude}\index{longitude} astronomical calculations we also need as argument geographical coordinates. One can supply latitude and longitude values, acquired with a GPS instrument or read from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates on-the-fly. A query can be run from within R using packages \pkg{RgoogleMaps}, or \pkg{ggmap}, as done here---of course this requires internet access. When inputting coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree). Latitudes N are given by positive numbers and and latitudes S by negative numbers. Longitudes W of Greenwich are given as positive numbers and longitudes E of Greenwich as negative numbers.
 
 <<astro-geocode-1, message=FALSE, cache=cache>>=
 geocode("Helsinki")
@@ -109,7 +109,7 @@ day_length(lat =  60)
 day_length(lat = -60)
 @
 
-Function \code{geocode} from package \pckg{ggmap} returns suitable values in a \code{data.frame} based on search term(s). The returned value is a data frame, which can be passed as argument for parameter \code{geocode}.  The use of Google search has some restrictions that you will need to check before any intense or commercial use of their service.
+Function \code{geocode} from package \pkg{ggmap} returns suitable values in a \code{data.frame} based on search term(s). The returned value is a data frame, which can be passed as argument for parameter \code{geocode}.  The use of Google search has some restrictions that you will need to check before any intense or commercial use of their service.
 
 <<message=FALSE>>=
 my.city <- geocode('helsinki')
@@ -122,7 +122,7 @@ We can calculate the photoperiod for the current day as
 day_length(geocode = my.city)
 @
 
-Or if we give a date explicitly using functions from package \pckg{lubridate}.
+Or if we give a date explicitly using functions from package \pkg{lubridate}.
 
 <<>>=
 day_length(ymd("2015-06-09"),
@@ -193,7 +193,7 @@ sunrise_time(today(tzone = "Europe/Helsinki"),
              twilight = +12)
 @
 
-Default latitude is zero (the Equator), the default longitude is zero (Greenwich), and default time zone for the functions in the \pckg{photobiology} package is \code{"UTC"}. The default for \code{date} is the current day in time zone UTC. Using defaults the code is simpler, but this is not a good approach for scripts.
+Default latitude is zero (the Equator), the default longitude is zero (Greenwich), and default time zone for the functions in the \pkg{photobiology} package is \code{"UTC"}. The default for \code{date} is the current day in time zone UTC. Using defaults the code is simpler, but this is not a good approach for scripts.
 
 <<>>=
 sunrise_time(lat = 60)
@@ -246,7 +246,7 @@ day_night(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
 
 \begin{example}
 \caption[Astronomical calculations]{Astronomical calculations of the sun position}
-Function\index{sun!position in the sky} \code{sun\_angles}, which is a modified version of function \code{sunAngle} from package \pckg{ode} is used to calculate the elevation of the sun at given time and geographical coordinates. To calculate the times corresponding to a given solar elevation, the algorithm first searches for the local solar noon by finding the maximal solar elevation, and then searches for sunrise in the first half of the day and for sunset in the second half local solar day. Sunset and sunrise are by default based on a solar elevation angle equal to zero. However, an argument can be passed to parameter \code{twilight} to set the angle according to different conventions---civil, nautical, astronomical---, by giving one or two values for the angles. Day and night durations are calculated as time durations between sunrise and sunset (the default) or dusk and dawn or some other angle. The algorithm currently used is valid for years 1950--2050.
+Function\index{sun!position in the sky} \code{sun\_angles}, which is a modified version of function \code{sunAngle} from package \pkg{ode} is used to calculate the elevation of the sun at given time and geographical coordinates. To calculate the times corresponding to a given solar elevation, the algorithm first searches for the local solar noon by finding the maximal solar elevation, and then searches for sunrise in the first half of the day and for sunset in the second half local solar day. Sunset and sunrise are by default based on a solar elevation angle equal to zero. However, an argument can be passed to parameter \code{twilight} to set the angle according to different conventions---civil, nautical, astronomical---, by giving one or two values for the angles. Day and night durations are calculated as time durations between sunrise and sunset (the default) or dusk and dawn or some other angle. The algorithm currently used is valid for years 1950--2050.
 \end{example}
 
 As in earlier examples, we use \code{geocode} to obtain the latitude and longitude of cities, although for precise calculations for large cities using a street address or at least a postal code in addition to the name of the city is preferable. The calculations below are for Buenos Aires on two different dates, by use of the optional argument \code{tz} we request the results to be expressed in local time for Buenos Aires.
@@ -295,7 +295,7 @@ day_length(ymd("2013-09-21"),
 
 \section{Task: calculating the position of the sun}\label{sec:astro:position}
 
-Function \code{sun\_angles}\index{sun!position in the sky} not only returns solar elevation, it returns all the angles defining the position of the sun. The time argument to \code{sun\_angles} is internally converted to UTC (universal time coordinates, which is equal to GMT) time zone, so time defined for any time zone is valid input. The time zone used by default for the output can vary as described in page \pageref{alert:time:zone}, so it is more reliable specify the time coordinates used for the output with parameter \code{tz}, using arguments valid for pacakge \code{lubridate}---which is used internally by package \pckg{photobiology}.
+Function \code{sun\_angles}\index{sun!position in the sky} not only returns solar elevation, it returns all the angles defining the position of the sun. The time argument to \code{sun\_angles} is internally converted to UTC (universal time coordinates, which is equal to GMT) time zone, so time defined for any time zone is valid input. The time zone used by default for the output can vary as described in page \pageref{alert:time:zone}, so it is more reliable specify the time coordinates used for the output with parameter \code{tz}, using arguments valid for pacakge \code{lubridate}---which is used internally by package \pkg{photobiology}.
 
 <<astro-geocode-5, message=FALSE, cache=cache>>=
 geocode_Jo <- geocode("80100 Joensuu, Finland")

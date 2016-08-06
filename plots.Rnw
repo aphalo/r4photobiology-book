@@ -16,7 +16,7 @@ getwd()
 @
 
 %\begin{abstract}
-%  In this chapter we explain how to plot spectra and colours, using packages \pckg{ggplot2}, \code{ggtern}, and the functions in our package \pckg{ggspectra}. Both \pckg{ggtern} for ternary plots and \pckg{ggspectra} for annotating spectra build new functionality on top of the \pckg{ggplot2} package. We also use several functions and data from package \pckg{photobiology} in the examples.
+%  In this chapter we explain how to plot spectra and colours, using packages \pkg{ggplot2}, \code{ggtern}, and the functions in our package \pkg{ggspectra}. Both \pkg{ggtern} for ternary plots and \pkg{ggspectra} for annotating spectra build new functionality on top of the \pkg{ggplot2} package. We also use several functions and data from package \pkg{photobiology} in the examples.
 %\end{abstract}
 
 
@@ -45,17 +45,17 @@ opts_chunk$set(opts_fig_wide)
 \section{Introduction to plotting spectra}\label{sec:plot:intro}
 
 We\index{plotting} show in this chapter examples of how spectral data can be plotted. All the examples
-are done with package \pckg{ggplot2}, sometimes using in addition other packages.
-\pckg{ggplot2} provides the most recent, but stable, type of plotting functionality in R, and is
+are done with package \pkg{ggplot2}, sometimes using in addition other packages.
+\pkg{ggplot2} provides the most recent, but stable, type of plotting functionality in R, and is
 what we use here for most examples. Both \code{base} graphic functions, part of
-R itself and `trellis' graphics provided by package \pckg{lattice} are other popular
-alternatives. The new package \pckg{ggvis} uses similar grammar as \pckg{ggplot2} but
+R itself and `trellis' graphics provided by package \pkg{lattice} are other popular
+alternatives. The new package \pkg{ggvis} uses similar grammar as \pkg{ggplot2} but
 drastically improves on functionality for interactive plots.
 Several of the functions used in this chapter are extensions to
-package \pckg{ggplot2}\footnote{\pckg{ggplot2} is feature-frozen, in other words the user interface
+package \pkg{ggplot2}\footnote{\pkg{ggplot2} is feature-frozen, in other words the user interface
 defined by the functions and their arguments will not change in future versions. Consequently
 it is a good basis for adding application-specific functionality through separate
-packages. \pckg{ggplot2} uses the \emph{grammar
+packages. \pkg{ggplot2} uses the \emph{grammar
 of graphics} for describing the plots. This grammar, because it is consistent,
 tends to be easier to understand, and makes it easier to design new functionality
 that uses extensions based on the same `language grammar' as used by the original package.}
@@ -68,7 +68,7 @@ of the spectrum. Adding a bar with the colours corresponding to the different
 wavelengths, facilitates the reading of the plot for people not familiar with the
 interpretation on wavelengths expressed in nanometres. Labeling regions of the spectrum
 with waveband names also facilitates the understanding of plotted spectral data.
-A basic line plot of spectral data can be easily done with \pckg{ggplot2} or any of the
+A basic line plot of spectral data can be easily done with \pkg{ggplot2} or any of the
 other plotting functions in R. In this chapter we focus on how to add to basic line and
 dot plots all the `fancy decorations' that can so much facilitate their reading and
 interpretation.
@@ -78,14 +78,14 @@ for human vision on a ternary plot, and show how to do a ternary plot for GBU
 (green-blue-ultraviolet) flower colours for honeybee vision using as reference the reflectance
 of a background.
 
-If you are not familiar with \pckg{ggplot2} and \code{ggtern} plotting, please read Appendix
+If you are not familiar with \pkg{ggplot2} and \code{ggtern} plotting, please read Appendix
 \ref{chap:R:plotting} on page \pageref{chap:R:plotting} before continuing reading the
 present chapter.
 
 %%%%
 \section{Using \texttt{plot()} methods with spectra}
 
-Package \pckg{ggspectra}\index{spectral data!automatic plot} defines specializations of the generic \code{plot} function of R. These methods are available for all the different spectral object classes defined in package \pckg{photobiology} except for \code{generic\_spct}. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows in the next task. As all the spectral objects have spectral quantities expressed in known units, and an attribute indicating the time unit, the axis labels are produced automatically. If summaries are added, the units in their labels are also produced automatically. The plots produced can be to some extent tailored through options or by adding or replacing \code{ggplot} layers, the intention is for these methods to be a total that is simple, but that caters for the majority of the most frequent tasks.
+Package \pkg{ggspectra}\index{spectral data!automatic plot} defines specializations of the generic \code{plot} function of R. These methods are available for all the different spectral object classes defined in package \pkg{photobiology} except for \code{generic\_spct}. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows in the next task. As all the spectral objects have spectral quantities expressed in known units, and an attribute indicating the time unit, the axis labels are produced automatically. If summaries are added, the units in their labels are also produced automatically. The plots produced can be to some extent tailored through options or by adding or replacing \code{ggplot} layers, the intention is for these methods to be a total that is simple, but that caters for the majority of the most frequent tasks.
 
 \subsection{Task: plotting of \code{source\_spct} objects}\label{sec:plot:source:spc}
 
@@ -266,9 +266,9 @@ plot(Solidago_altissima.mspct$upper_adax, pc.out = TRUE)
 For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}.
 
 %%%%
-\section[Plotting spectra with ggplot2]{Plotting spectra with \pckg{ggplot2}}\label{sec:plot:spc}
+\section[Plotting spectra with ggplot2]{Plotting spectra with \pkg{ggplot2}}\label{sec:plot:spc}
 
-Package \pckg{ggspectra} not only provides simple to use \code{plot} methods, but also `building block' that simplify the construction of custom plots of spectral data with functions from package \pckg{ggplot2}. In this section we give examples of plotting tasks carried out using this more flexible approach. In this chapter's examples we will exploit the power of the grammar of graphics to build figures piece by piece, reusing some of the `pieces' or groups of `pieces' several times to highlight the flexibility of this approach. We also exemplify the `philosophy' of defining everything that needs to be consistent across figures only once. In this section we use a \code{source\_spct} object, \code{sun.spct} in most examples, but the same approaches work with objects of any of the spectral classes from package \pckg{photobiology}. 
+Package \pkg{ggspectra} not only provides simple to use \code{plot} methods, but also `building block' that simplify the construction of custom plots of spectral data with functions from package \pkg{ggplot2}. In this section we give examples of plotting tasks carried out using this more flexible approach. In this chapter's examples we will exploit the power of the grammar of graphics to build figures piece by piece, reusing some of the `pieces' or groups of `pieces' several times to highlight the flexibility of this approach. We also exemplify the `philosophy' of defining everything that needs to be consistent across figures only once. In this section we use a \code{source\_spct} object, \code{sun.spct} in most examples, but the same approaches work with objects of any of the spectral classes from package \pkg{photobiology}. 
 
 \subsection{Task: plotting \code{source\_spct} objects}
 
@@ -417,7 +417,7 @@ opts_chunk$set(opts_fig_wide)
 \subsection{Task: annotating peaks and valleys in spectra}\label{sec:stat:pk:vly}
 
 Here\index{spectral data!annotate peaks in plot}\index{spectral data!annotate valleys in plot} we show an example of the use of \code{stat\_peaks} and \code{stat\_valleys} 
-from package \pckg{ggspectra}. It uses the same parameter names and take the
+from package \pkg{ggspectra}. It uses the same parameter names and take the
 same arguments as methods \code{peaks} and \code{valleys} described in section \ref{sec:get:pk:vly}---please, consult this section for details on how to adjust how many and which local maxima and local minima are highlighted.
 
 We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc} and we start with the simple example of highlighting the overall maximum in a spectrum. By default \code{geom\_point} is used.
@@ -439,9 +439,9 @@ fig_sun.e0 + stat_peaks(span=31, color = "red")
 @
  
 \sloppy
-Below we continue `playing' with package \pckg{ggplot2} to show different ways of plotting the peaks and valleys.
-Being a \pckg{ggplot2}-compatible \code{stat\_peaks} and \code{stat\_valleys} accept a \code{geom} argument
-and all the aesthetics valid for the chosen \code{geom}. By overriding the default geom argument \code{"point"} with  \code{"text"} we obtain labels for peaks and valleys. Be aware that consistently with package \pckg{ggplot2}, the \code{geom} parameter takes as argument a character string giving the name of the \code{geom}, rather than the name of the function---in this case \code{geom\_text}.
+Below we continue `playing' with package \pkg{ggplot2} to show different ways of plotting the peaks and valleys.
+Being a \pkg{ggplot2}-compatible \code{stat\_peaks} and \code{stat\_valleys} accept a \code{geom} argument
+and all the aesthetics valid for the chosen \code{geom}. By overriding the default geom argument \code{"point"} with  \code{"text"} we obtain labels for peaks and valleys. Be aware that consistently with package \pkg{ggplot2}, the \code{geom} parameter takes as argument a character string giving the name of the \code{geom}, rather than the name of the function---in this case \code{geom\_text}.
 
 <<plot-peaks-valleys-3>>=
 fig_sun.e0 + stat_peaks(geom = "text", colour="red", span=31) +
@@ -481,7 +481,7 @@ See section \ref{?} in chapter \ref{chap:sources} for an example these stats tog
 %%%%
 \subsection{Task: annotating wavebands}\label{sec:plot:ann:wband}
 
-THIS SECTION NEEDS TO BE RE-WRITTEN USING CURRENT VERSION OF \pckg{ggspectra}.
+THIS SECTION NEEDS TO BE RE-WRITTEN USING CURRENT VERSION OF \pkg{ggspectra}.
 
 %%% NEEDS TO BE REWRITTEN
 
@@ -495,7 +495,7 @@ opts_chunk$set(opts_fig_wide)
 
 % ADD EXAMPLES HERE
 
-%Now an example that is more complex, and demonstrates the flexibility of plots produced with \pckg{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two \code{geom}s and some labels are rotated and justified. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}. A much simpler, but less flexible approach for adding annotations for several wavebands is described on page \pageref{chunk:plot:ann:tag}.
+%Now an example that is more complex, and demonstrates the flexibility of plots produced with \pkg{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two \code{geom}s and some labels are rotated and justified. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}. A much simpler, but less flexible approach for adding annotations for several wavebands is described on page \pageref{chunk:plot:ann:tag}.
 %
 %ADD EXAMPLES HERE 
 
@@ -508,7 +508,7 @@ figvl3 <- fig_sun.q +
 figvl3
 @
 
-And one where we change some of the aesthetics in the previous figure, and add a label using \code{stat\_wb\_label} defined in package \pckg{ggspectra}.
+And one where we change some of the aesthetics in the previous figure, and add a label using \code{stat\_wb\_label} defined in package \pkg{ggspectra}.
 
 <<plot-par-vline-4>>=
 figvl4 <- fig_sun.q +
@@ -672,7 +672,7 @@ We now tag a spectrum for use in our first plot example.
 par.sun.spct <- tag(sun.spct, PAR())
 @
 
-Here we simply use the \code{wb.f} factor that was added as part of the tagging, with the default colour scale of \pckg{ggplot2}, which results in a palette unrelated to the real colour of the different wavelengths.
+Here we simply use the \code{wb.f} factor that was added as part of the tagging, with the default colour scale of \pkg{ggplot2}, which results in a palette unrelated to the real colour of the different wavelengths.
 
 <<plot-tag-par-2>>=
 fig_sun.t00 <-
@@ -687,7 +687,7 @@ fig_sun.t00 <-
 fig_sun.t00
 @
 
-We can also use other \code{geom}s like \code{geom\_area} in the next chunk, together with, as an example, a grey fill scale from \pckg{ggplot2}.
+We can also use other \code{geom}s like \code{geom\_area} in the next chunk, together with, as an example, a grey fill scale from \pkg{ggplot2}.
 
 <<plot-tag-par-3>>=
 fig_sun.t01 <-
@@ -727,7 +727,7 @@ tg.sun.spct <- tag(sun.spct, VIS_bands())
 
 See section \ref{sec:plot:scales} on page \pageref{sec:plot:scales} for the definition of the colour and fill scales used for tagged spectra. These definitions are needed for most of the plots in the remaining of the present and next sections. These scales retrieve information about the wavebands both from the data itself and from the attribute described above.
 
-Here we plot using colours by waveband---using the colour definitions by ISO---, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.  One can play with the \code{size} of points until ones get the result wanted. The default \code{shape}s used by \pckg{ggplot2} do not accept a \code{fill} aesthetic, while shape `21' gives circles that can be `filled'.
+Here we plot using colours by waveband---using the colour definitions by ISO---, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.  One can play with the \code{size} of points until ones get the result wanted. The default \code{shape}s used by \pkg{ggplot2} do not accept a \code{fill} aesthetic, while shape `21' gives circles that can be `filled'.
 
 <<plot-tag-vis-2>>=
 fig_sun.t02 <-
@@ -891,7 +891,7 @@ Other possibilities are for example, using one of the symbols that can be filled
 
 In the previous section we showed how tagging spectral data can be used to add colour information that can be used when plotting. In contrast, in the present section we create new `fake' spectral data starting from waveband definitions that then we plot as `annotations'. We show different types of annotations based on plotting with different \code{geom}s. We show the use of \code{geom\_rect}, \code{geom\_text}, \code{geom\_vline}, and \code{geom\_segment}, that we consider the most useful geometries in this context.
 
-We use three different functions from package \pckg{photobiology} to generate the data to be plotted from lists of waveband definitions. We use mainly pre-defined wavebands, but user defined wavebands can be used as well. We start by showing the output of these functions, starting with \code{wb2spct} the simplest one.
+We use three different functions from package \pkg{photobiology} to generate the data to be plotted from lists of waveband definitions. We use mainly pre-defined wavebands, but user defined wavebands can be used as well. We start by showing the output of these functions, starting with \code{wb2spct} the simplest one.
 
 <<plot-wb2spct>>=
 wb2spct(PAR())
@@ -1204,7 +1204,7 @@ fig_sun.uv1 <- ggplot(my.sun.spct,
 fig_sun.uv1
 @
 
-Possible variations are almost endless, so we invite the reader to continue exploring how the functions from package \pckg{photobiology} can be used together with those from package \pckg{ggplot2}, to obtain beautiful plots of spectra. As an example here we show new versions of two plots from the previous section, one using a filled area to label the PAR region, and another one using symbols with colours according to their wavelength, to which we add a guide for PAR.
+Possible variations are almost endless, so we invite the reader to continue exploring how the functions from package \pkg{photobiology} can be used together with those from package \pkg{ggplot2}, to obtain beautiful plots of spectra. As an example here we show new versions of two plots from the previous section, one using a filled area to label the PAR region, and another one using symbols with colours according to their wavelength, to which we add a guide for PAR.
 
 <<plot-par-tag-annotate>>=
 par <- q_irrad(sun.spct, PAR()) * 1e6
