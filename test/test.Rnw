@@ -1,0 +1,41 @@
+\documentclass{article}
+
+\begin{document}
+
+<<>>=
+library(methods)
+library(knitr)
+@
+<<>>=
+Sys.info()
+@
+
+<<eval=FALSE, echo=FALSE>>=
+R.Version()
+@
+
+<<>>=
+sessionInfo()
+@
+
+<<test-01>>=
+library(tibble)
+@
+
+<<test-02>>=
+tibble(a = 1:20, b = 20:1)
+@
+
+<<test-11>>=
+library(photobiology)
+@
+
+<<test-12>>=
+source_spct(w.length = 300:500, s.e.irrad = 1)
+@
+
+<<>>=
+sessionInfo()
+@
+
+\end{document}

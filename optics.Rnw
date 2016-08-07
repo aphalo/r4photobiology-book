@@ -13,7 +13,7 @@ opts_chunk$set(opts_fig_wide)
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<rad-properties-setup,message=FALSE>>=
+<<rad-properties-setup,message=my.debug>>=
 library(photobiology)
 library(ggplot2)
 library(ggspectra)
@@ -177,7 +177,7 @@ Putting all this together, the radiative transfer equation is
 \cos\theta\,\frac{\mathrm{d}L}{\mathrm{d}z} = -(a+b)\cdot L + L^E + L^I + L^S \label{equ_rte}
 \end{equation}
 %
-The dependencies of $L$ on $\lambda$, $\theta$, and $\phi$ are omitted here for brevity. No exact analytical solution to the radiative transfer equation exists, hence it is necessary either to use numerical models or to make approximations and find an analytical parametrisation. A numerical model is for example the Monte Carlo method. The parameters of the light field can be simulated by modelling the paths of photons. For an infinite number of photons the light field parameters reach their exact values asymptotically. The advantage of the Monte Carlo method is a relatively simple structure of the program, and that it simulates nature in a straightforward way, but its disadvantage is the time-consuming computation involved. Details of the Monte Carlo method are explained for example by \autocite{prahl89}, \autocite{Wang1995}\footnote{Their program is available from the website of \href{http://omlc.ogi.edu/software/mc/}{Oregon Medical Laser Center} at \href{http://omlc.ogi.edu/software/mc/}{http://omlc.ogi.edu/software/mc/}}, or \autocite{moble94}.
+The dependencies of $L$ on $\lambda$, $\theta$, and $\phi$ are omitted here for brevity. No exact analytical solution to the radiative transfer equation exists, hence it is necessary either to use numerical models or to make approximations and find an analytical parametrisation. A numerical model is for example the Monte Carlo method. The parameters of the light field can be simulated by modelling the paths of photons. For an infinite number of photons the light field parameters reach their exact values asymptotically. The advantage of the Monte Carlo method is a relatively simple structure of the program, and that it simulates nature in a straightforward way, but its disadvantage is the time-consuming computation involved. Details of the Monte Carlo method are explained for example by \citeauthor{prahl89} \autocite*{prahl89}, \citeauthor{Wang1995} \autocite*{Wang1995}\footnote{Their program is available from the website of \href{http://omlc.ogi.edu/software/mc/}{Oregon Medical Laser Center} at \href{http://omlc.ogi.edu/software/mc/}{http://omlc.ogi.edu/software/mc/}}, or \citeauthor{moble94} \autocite*{moble94}.
 
 Alternatively the radiative transfer equation be solved through analytical parameterisations making use of approximations for all the quantities needed. In this case, the result is not exact, but it has the advantage of fast computing and the analytical equations can be inverted just as fast. This leads to the idealised case of a source-free ($L^S=0$) and non-scattering media, i.e.\ $b=0$ and therefore $L^E=L^I=0$. Then, equation \ref{equ_rte} can be integrated easily and yields
 %
@@ -224,7 +224,7 @@ In\Attention{} contrast to (spectro-)radiometry, where the energy of any electro
 
 \begin{figure}[tbh]
 %\centerline{\includegraphics[width=0.45\textwidth]{figures/eyesens}}
-<<echo=FALSE, warning=FALSE, message=FALSE>>=
+<<echo=FALSE, warning=my.debug, message=my.debug>>=
 plot(CIE1924_lef.spct, annotations = c("colour.guide", "segments", "labels"), w.band = VIS_bands()) + xlim(350, 850)
 plot(CIE1951_scotopic_lef.spct, annotations = c("colour.guide", "segments", "labels"), w.band = VIS_bands()) + xlim(350, 850)
 @

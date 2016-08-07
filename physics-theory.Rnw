@@ -39,7 +39,7 @@ opts_knit$set(concordance=TRUE)
 \index{radiation within plant canopies|(}
 \index{plant canopies|(}
 %% Pedro
-The attenuation of visible and \UV radiation by canopies is difficult to describe mathematically because it is a complex phenomenon. The spatial distribution of leaves is in most cases not uniform, the display angle of the leaves is not random, and may change with depth in the canopy, and even in some cases with time-of-day. Here we give only a description of the simplest approach, the use of an approximation based on Beer's law as modified by \autocite{Monsi1953}, reviewed by \autocite{Hirose2005}. Beer's law (Equation \ref{eq:Beer-Lambert}) assumes a homogeneous light absorbing medium such as a solution. However, a canopy is heterogenous, with discrete light absorbing objects (the leaves and stems) distributed in a transparent medium (air).
+The attenuation of visible and \UV radiation by canopies is difficult to describe mathematically because it is a complex phenomenon. The spatial distribution of leaves is in most cases not uniform, the display angle of the leaves is not random, and may change with depth in the canopy, and even in some cases with time-of-day. Here we give only a description of the simplest approach, the use of an approximation based on Beer's law as modified by \citeauthor{Monsi1953} \autocite*{Monsi1953}, reviewed by \citeauthor{Hirose2005} \autocite*{Hirose2005}. Beer's law (Equation \ref{eq:Beer-Lambert}) assumes a homogeneous light absorbing medium such as a solution. However, a canopy is heterogenous, with discrete light absorbing objects (the leaves and stems) distributed in a transparent medium (air).
 \begin{equation}
 I_z = I_0\cdot\mathrm{e}^{-K\,L_z} \label{eq:Monsi:Saeki}
 \end{equation}
@@ -68,9 +68,9 @@ but part of the sky is occluded by the surrounding forest.
 Attenuation
 with canopy depth is on average usually more gradual for \UV than for \PAR. The
 \UV irradiance decreases with depth in tree canopies, but the \UVPAR ratio\index{UV PAR@\UVPAR ratio in canopies}
-tends to increase \autocite[see][]{Brown1994}. In contrast, \autocite{Deckmyn2001} observed a decrease in \UVPAR ratio in white clover canopies with planophyle leaves. \autocite{Allen1975} modelled the
+tends to increase \autocite[see][]{Brown1994}. In contrast, \citeauthor{Deckmyn2001} \autocite*{Deckmyn2001} observed a decrease in \UVPAR ratio in white clover canopies with planophyle leaves. \citeauthor{Allen1975} \autocite*{Allen1975} modelled the
 \UVB penetration in plant canopies, under normal and depleted ozone conditions.
-\autocite{Parisi1996} measured
+\citeauthor{Parisi1996} \autocite*{Parisi1996} measured
 \UVB doses within model plant canopies using dosimeters. The position of
 leaves affects \UVB exposure, and it has been observed that heliotropism
 can moderate exposure and could be a factor contributing to differences in tolerance
@@ -78,7 +78,7 @@ among crop cultivars \autocite{Grant1998,Grant1999,Grant1999a,Grant2004}.
 
 Detailed accounts of different models describing the interaction of radiation and
 plant canopies, taking into account the properties of
-foliage, are given by \autocite{Campbell1998} and \autocite{Monteith2008}.
+foliage, are given by \citeauthor{Campbell1998} \autocite*{Campbell1998} and \citeauthor{Monteith2008} \autocite*{Monteith2008}.
 
 \authorNote{We could add Chelle's modeling of spectral irradiance on plant surfaces}
 

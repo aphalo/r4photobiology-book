@@ -8,16 +8,19 @@ opts_chunk$set(opts_fig_wide_full)
 @
 
 
-\chapter{Importing and exporting `R' data}\label{chap:measurement}
+\chapter{Importing and exporting `R' data}\label{chap:data:exchange}
 
 %\begin{abstract}
 %  In this chapter we explain how to import into R data acquired with other software and also how to directly acquire data from instruments directly from within R code. In addition we discuss how to convert the acquired and or imported data into a format suitable for use in calculations with our R packages.
 %\end{abstract}
 
+
+
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<message=FALSE>>=
+<<message=my.debug>>=
+library(tibble)
 library(photobiology)
 library(photobiologySun)
 library(photobiologyWavebands)
@@ -32,13 +35,127 @@ library(fda)
 library(fda.usc)
 @
 
+\section{Base R}
+
+\subsection{Task: Import one spectrum from a \code{data.frame}}
+
+If the variables in the \code{data.frame} or \code{tibble} object are already named and expressed in the units expected by the \rpsuite (see Table \ref{tab:spct:units}) then it is possible to convert the object into a spectral object directly as shown in task \ref{task:convert:df} on page \pageref{task:convert:df} or to create a spectral object without modifying the original data frame object as shown in \ref{task:create:df} on page \pageref{task:create:df}.
+
+If the names of the variables or units of expression are not those expected, the data frame, or a copy can be suitably converted as needed with R commands.
+
+<<r-import-df-1>>=
+my.df <- data.frame(a = 201:250, b = c("A", "B"), c = 120)
+names(my.df) <- c("w.length", "TREA", "s.e.irrad")
+my.spct <- as.source_spct(my.df)
+my.spct
+@
+
+An alternative, more convenient when scaling is needed is to \emph{extract} the vectors and use them in the \emph{constructor}.
+
+<<r-import-df-2>>=
+my.df <- data.frame(a = 201:250, b = c("A", "B"), c = 12000)
+source_spct(w.length = my.df$a, s.e.irrad = my.df$c / 100)
+@
+
+\subsection{Task: Export one spectrum to a \code{data.frame}}
+
+The spectral classes are \code{data.frame} objects, so in many cases they will behave as such and can be passed as argument to functions expecting a data frame as input. In cases when one does not want any of the special methods to be called, it is possible to strip the additional class attributes.
+
+<<r-export-df-1>>=
+my.spct <- sun.spct
+rmDerivedSpct(my.spct)
+class(my.spct)
+class(sun.spct)
+@
+
+\subsection{Task: Import one spectrum from a \code{matrix}}
+
+To convert a matrix containing data for a single spectrum, with wavelengths and for example spectral irradiance in two columns, we can convert the matrix to a data frame, and then use the approach already described for converting data frames.
+
+<<r-import-mat-1>>=
+my.mat <- matrix(c(201:250, rep(120, 50)), ncol = 2)
+dim(my.mat)
+colnames(my.mat) <- c("w.length", "s.e.irrad")
+my.spct <- as.source_spct(as_tibble(my.mat))
+my.spct
+@
+
+If the matrix contains one row for each variable, we can transpose it with function \code{t}.
+
+<<r-import-mat-2>>=
+my.mat <- matrix(c(201:250, rep(120, 50)), nrow = 2, byrow = TRUE)
+dim(my.mat)
+rownames(my.mat) <- c("w.length", "s.e.irrad")
+my.spct <- as.source_spct(as_tibble(t(my.mat)))
+my.spct
+@
+
+\begin{framed}
+\ilAttention Above in \code{as.source\_spct(as\_tibble(t(my.mat)))} we have three nested function calls. \code{t} takes as argument \code{my.mat}, then the result of this computation becomes the input argument to \code{as\_tibble} and then the result returned by it, becomes the input argument to \code{as.source\_spct} and the value returned is then `printed' or displayed.
+\end{framed}
+
+Of course the approach using a \emph{constructor} can be also used for matrices.
+
+<<r-import-mat-3>>=
+my.mat <- matrix(c(201:250, rep(120, 50)), nrow = 2, byrow = TRUE)
+dim(my.mat)
+source_spct(w.length = my.mat[1, ], s.e.irrad = my.mat[2, ])
+@
+
+\begin{framed}
+  \ilAttention In the code statement \code{my.mat[1, ]} and \code{my.mat[2, ]} we use indexes to extract the first and second rows from the matrix, because the matrix we created in the first line of the code chunk with argument \code{byrow = TRUE} contains the wavelengths in the first or top row, and the spectral irradiance data in the second row. 
+\end{framed}
+
+\subsection{Task: Export one spectrum to \code{matrix}}
+
+For an individual spectrum, this trivial, as one can use base R's \code{as.matrix}
+
+<<r-export-mat-1>>=
+my.mat <- as.matrix(sun.spct)
+dim(my.mat)
+nrow(my.mat)
+@
+
+And if the intention is to have the variables as rows in the matrix, we use \code{t} to transpose it.
+
+<<r-export-mat-2>>=
+my.mat <- t(as.matrix(sun.spct))
+dim(my.mat)
+nrow(my.mat)
+@
+
+\subsection{Task: Import a collection of spectra from a \code{matrix}}
+
+In many cases, when matrices are used, the wavelength values are stored in a separate vector as we assume for this example.
+
+<<r-import-mmat-1>>=
+my.mat <- matrix(c(rep(120, 50), rep(240, 50)), ncol = 2)
+wl <- 201:250
+dim(my.mat)
+mat2mspct(my.mat, wl, "source_spct", "s.e.irrad")
+@
+
+Next we assume that the first column of the matrix contains the wavelength values and another two columns spectral irradiance data.
+
+<<r-import-mmat-2>>=
+my.mat <- matrix(c(201:250, rep(120, 50), rep(240, 50)), ncol = 3)
+dim(my.mat)
+mat2mspct(my.mat[ , 2:3], my.mat[ , 1], "source_spct", "s.e.irrad")
+@
+
+If the wavelengths are stored in the last, or some other column in the matrix, we just need to need to modify the indexes used above to extract the different columns from the matrix.
+
+\subsection{Task: Export a collection of spectra to \code{matrix}}
+
+For this operation one can directly use function \code{mspct2mat}, as shown in the first code chunk of section \ref{task:exchange:fda} on page \pageref{task:exchange:fda}.
+
 \section{Package \pkg{hyperSpec}}
 
 \subsection{To \pkg{hyperSpec}}
 
 Can\index{foreign data!package hyperspec@package \pkg{hyperSpec}} export to \code{hyperSpec} objects only collections of spectra where all members have identical \code{w.length} vectors, as objects of class \code{hypeSpec} store a single vector of wavelengths for the whole collection of spectra. We use as example data \code{gap.mspct} from package \pkg{photobiologySun}.
 
-<<>>=
+<<r-export-hspct-1>>=
 gap.hspct <- mspct2hyperSpec(gap.mspct, "s.e.irrad")
 class(gap.hspct)
 plot(gap.hspct)
@@ -48,7 +165,7 @@ plot(gap.hspct)
 
 Can import only data with wavelength in nanometres. Other quantities and units are not supported by the \pkg{photobiology} classes for spectral data. See package \pkg{hyperSpec} vignette "laser" for details on the data and the conversion of the original wavelength units into nanometres.
 
-<<>>=
+<<r-import-hspct-1>>=
 class(laser)
 laser
 plot(laser)
@@ -60,7 +177,7 @@ wrong but for the sake of showing how the conversion takes place is irrelevant.
 The parameter \code{multiplier} can be passed a numeric argument to rescale
 the original data. The default multiplier is 1.
 
-<<>>=
+<<r-import-hspct-2>>=
 wl(laser) <- list (
   wl = 1e7 / (1/405e-7 - wl (laser)),
   label = expression (lambda / nm)
@@ -79,36 +196,36 @@ ggplot(laser.mspct[[1]]) +
 
 \subsection{From \pkg{colorSpec}}
 
-<<>>=
+<<r-import-cspct-1>>=
 fluorescent.mspct <- colorSpec2mspct(Fs.5nm)
 print(fluorescent.mspct, n = 3, n.members = 3)
 @
 
-<<>>=
+<<r-import-cspct-2>>=
 colorSpec2mspct(Hoya)
 @
 
-<<>>=
+<<r-import-cspct-3>>=
 fluorescent.spct <- colorSpec2spct(Fs.5nm)
 plot(fluorescent.spct, annotations = c("peaks", "color.guide")) + aes(linetype = spct.idx)
 @
 
-<<>>=
+<<r-import-cspct-4>>=
 colorSpec2chroma_spct(xyz1931.5nm)
 @
 
 \subsection{To \pkg{colorSpec}}
 
-<<>>=
+<<r-export-cspct-1>>=
 sun.cspec <- spct2colorSpec(sun.spct)
 plot(sun.cspec, col = "blue")
 @
 
-<<>>=
+<<r-export-cspct-2>>=
 spct2colorSpec(yellow_gel.spct)
 @
 
-<<>>=
+<<r-export-cspct-3>>=
 chroma_spct2colorSpec(beesxyzCMF.spct)
 @
 
@@ -120,7 +237,7 @@ chroma_spct2colorSpec(beesxyzCMF.spct)
 
 In this example we convert an \code{rspec} object from package \pkg{pavo} into a collection of spectra and then we plot it with \code{ggplot} methods from package \pkg{ggspectra} (an extension to \pkg{ggplot2}). The data are the spectral reflectance of the plumage from seven different individual birds of the same species, measured in three different body parts.
 
-<<>>=
+<<r-import-pavo-1>>=
 data(sicalis)
 class(sicalis)
 names(sicalis)
@@ -128,7 +245,7 @@ names(sicalis)
 
 We convert the data into a collection of spectra, and calculate summaries for three spectra.
 
-<<>>=
+<<r-import-pavo-2>>=
 sicalis.mspct <- rspec2mspct(sicalis, "reflector_spct", "Rpc")
 summary(sicalis.mspct[[1]])
 summary(sicalis.mspct[[2]])
@@ -137,7 +254,7 @@ summary(sicalis.mspct[[3]])
 
 We convert the subset of the collection corresponding to the first individual into a single spectra object for plotting with \code{ggplot}.
 
-<<>>=
+<<r-import-pavo-3>>=
 ggplot(rbindspct(sicalis.mspct[1:3])) +
   aes(linetype = spct.idx) +
   ylim(0,0.3) +
@@ -146,7 +263,7 @@ ggplot(rbindspct(sicalis.mspct[1:3])) +
 
 Here we extract the ``crown'' data from all individuals and plot these spectra in a single plot.
 
-<<>>=
+<<r-import-pavo-4>>=
 print(sicalis.mspct[c(TRUE, FALSE, FALSE)])
 ggplot(rbindspct(sicalis.mspct[c(TRUE, FALSE, FALSE)])) +
   aes(linetype = spct.idx) +
@@ -157,12 +274,12 @@ ggplot(rbindspct(sicalis.mspct[c(TRUE, FALSE, FALSE)])) +
 
 We calculate the mean reflectance in wavebands corresponding to ISO colors obtaining a data frame. We then add to this returned data frame a factor indicating the body parts.
 
-<<>>=
+<<r-import-pavo-5>>=
 refl.by.band <- reflectance(sicalis.mspct, w.band = list(Red(), Green(), Blue(), UVA()))
 refl.by.band$body.part <- c("crown", "throat", "breast")
 @
 
-<<>>=
+<<r-import-pavo-6>>=
 refl.red <- reflectance(sicalis.mspct, w.band = Red())
 names(refl.red)[2] <- "red.reflectance"
 refl.red$body.part <- c("crown", "throat", "breast")
@@ -171,13 +288,13 @@ ggplot(refl.red, aes(x = body.part, y = red.reflectance)) +
   geom_point(alpha = 0.5)
 @
 
-\section{Packages \pkg{fda} and \pkg{fda.usc}}
+\section{Packages \pkg{fda} and \pkg{fda.usc}}\label{task:exchange:fda}
 
 \index{foreign data!package fda@package \pkg{fda}}\index{foreign data!package fdausc@package \pkg{fda.usc}}
 
 Functional\Advanced{funtional data analysis} data analysis is a specialized method that can be used to compare and classify spectra. We here exemplify the selection of the `deepest spectrum' from a collection of spectra. The data interconversion can be done with a simple function. Package \pkg{fda} expects the spectra in a single matrix object, with each spectrum as a row. We will use once again \code{gap.mspct} for this example.
 
-<<>>=
+<<r-export-fda-1>>=
 gap.mat <- mspct2mat(gap.mspct, "s.e.irrad", byrow = TRUE)
 dim(gap.mat)
 names(dimnames(gap.mat))
@@ -187,7 +304,7 @@ gap.fdata <- fdata(gap.mat)
 
 We search for ``deepest curve'' using different methods.
 
-<<>>=
+<<r-export-fda-2>>=
 # Returns the deepest curve following FM criteria
 func_med_FM <- func.med.FM(gap.fdata)
 # Returns the deepest curve following mode criteria
@@ -204,7 +321,7 @@ plot(func_med_FM)
 
 We convert the returned curves into a \code{source\_spct} objects.
 
-<<>>=
+<<r-export-fda-3>>=
 func_med_FM.spct <-
   source_spct(w.length = attr(gap.mat, "w.length"),
               s.e.irrad = func_med_FM$data[1, ])
@@ -218,19 +335,19 @@ func_med_RP.spct <-
 
 We plot one spectrum using plot method from package \pkg{ggspectra}.
 
-<<>>=
+<<r-export-fda-4>>=
 plot(func_med_mode.spct)
 @
 
 We calculate one summary.
 
-<<>>=
+<<r-export-fda-5>>=
 q_ratio(func_med_mode.spct, Red("Smith10"), Far_red("Smith10"))
 @
 
 We create a collection of spectra.
 
-<<>>=
+<<r-export-fda-6>>=
 gap_fda.mspct <- source_mspct(list(med_FM = func_med_FM.spct,
                  med_mode = func_med_mode.spct,
                  med_RP = func_med_RP.spct))
@@ -238,7 +355,7 @@ gap_fda.mspct <- source_mspct(list(med_FM = func_med_FM.spct,
 
 Calculate spectral summaries.
 
-<<>>=
+<<r-export-fda-7>>=
 ratios <- q_ratio(gap_fda.mspct, Red("Smith10"), Far_red("Smith10"))
 names(ratios) <- c("method", "R:FR")
 ratios
@@ -246,7 +363,7 @@ ratios
 
 We bind the three spectra to be able to plot them together.
 
-<<>>=
+<<r-export-fda-8>>=
 gap_fda.spct <-
   rbindspct(gap_fda.mspct,
             idfactor = "method")
@@ -254,7 +371,7 @@ gap_fda.spct <-
 
 We plot three spectra using plot method from package \pkg{ggspectra}.
 
-<<>>=
+<<r-export-fda-9>>=
 plot(gap_fda.spct,
      annotations = c("color.guide", "boxes", "labels")) +
   aes(linetype = method)

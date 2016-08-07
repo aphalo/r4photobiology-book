@@ -155,14 +155,15 @@ In the example above, we take advantage of the behaviour of the S language: an o
 Consequently, in the code above, each value from the vector of wavelengths is divided
 by 10, and each value in the vector of spectral irradiance is divided by 1000.
 
-\subsection{Task: Create a spectral object from a data frame}
+\subsection{Task: Create a spectral object from a data frame}\label{task:create:df}
 
 `Traditional' conversion functions with names given by names of classes preceded by \code{as.} (e.g.\ \code{as.source\_spct}. These functions accept data frames, data tables, and lists with components of equal length as arguments. These functions are less flexible, as the component variables in the argument should be named using one of the names recognized. Table \ref{tab:obj:units} lists the different `names' understood by these constructor functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \code{NA}. We use \code{source\_spct} in the examples but similar functions are defined for all the classes spectral objects.
 
 We first use a \code{data.frame} containing suitable spectral data. Object \code{sun.data} is included as part of package \PB. Using \code{head} we can check that the names of the variables are the expected ones, and that the wavelength values are expressed in nanometres:
+
 <<>>=
-#is.data.frame(sun.data)
-#head(sun.data, 3)
+is.data.frame(sun.data)
+head(sun.data, 3)
 @
 
 Subsequently we create a new \code{source\_spct} object by copy:
@@ -176,7 +177,7 @@ The \code{as.} functions, first make a copy of the data frame or data table, and
 
 Using a technical term, \code{as.} functions are \emph{copy constructors}, which follow the \emph{normal} behaviour of the R language.
 
-\subsection{Task: Convert a data frame into a spectral object}
+\subsection{Task: Convert a data frame into a spectral object}\label{task:convert:df}
 
 The last possibility, is to use a syntax that is unusual for the R language, but which in some settings will lead to faster execution: convert an existing data frame, \emph{in situ} or by reference, into a \code{source\_spct} object. The \code{set} functions defined in package \PB have the same semantics as \code{setDT} and \code{setDF} from package \code{data.table}. Table \ref{tab:obj:units} lists the different `names' understood by these conversion functions and the required and optional components of the different spectral object classes. The object is checked for consistency and within-range data, and missing required components are set to \code{NA}. We use \code{source\_spct} in the examples but similar functions are defined for all the classes spectral objects. In the same way as constructors, the \code{set} functions accept attributes such as \code{time.unit} as arguments.
 

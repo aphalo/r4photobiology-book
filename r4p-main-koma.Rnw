@@ -75,12 +75,19 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 % Hypertext
 
-\usepackage[unicode,hyperindex,bookmarks,pdfview=FitB,%backref,
+\usepackage[unicode,hyperindex,bookmarks,pdfview=FitB,colorlinks,%backref,
             pdftitle={R for Photobiology: Theory and recipes for common calculations},%
-            pdfkeywords={photobiology, R, spectrum, data analysis, plotting},%
+            pdfkeywords={photobiology, R, spectrum, data analysis, plotting, sunset, sunrise, day length, vision},%
             pdfsubject={Photobiology},%
-            pdfauthor={Pedro J. Aphalo, Andreas Albert, T. Matthew Robson, Titta Kotilainen}%
+            pdfauthor={Pedro J. Aphalo, Andreas Albert, T. Matthew Robson, Titta K. Kotilainen}%
             ]{hyperref}
+
+\hypersetup{colorlinks,breaklinks,
+             urlcolor=blue,
+             linkcolor=blue,
+             citecolor=blue,
+             filecolor=blue,
+             menucolor=blue}
 
 %\makeindex
 
@@ -233,7 +240,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 \subtitle{Theory and recipes for common calculations}
 
-\author{Pedro J. Aphalo \and Andreas Albert \and T. Matthew Robson \and Titta Kotilainen}
+\author{Pedro J. Aphalo \and Andreas Albert \and T. Matthew Robson \and Titta K. Kotilainen}
 
 \date{Helsinki, \today}
 
@@ -275,12 +282,14 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- FALSE
-incl_chaps <- TRUE || incl_all
-incl_ckbk <- TRUE || incl_all
+incl_all <- TRUE
+incl_chaps <- FALSE || incl_all
+incl_ckbk <- FALSE || incl_all
 incl_acq <- TRUE || incl_all
-incl_data <- TRUE || incl_all
+incl_data <- FALSE || incl_all
 eval_diag <- FALSE
+
+my.debug <- FALSE
 @
 
 <<eval=eval_diag, include=eval_diag, echo=eval_diag, cache=FALSE>>=
@@ -336,6 +345,7 @@ options(dplyr.print_min=5)
 
 <<child-photochemistry, child='photochemistry.Rnw', eval=incl_chaps>>=
 @
+\pageref{part:theory:end}
 
 \part{Tools used for calculations}\label{part:tools}
 

@@ -5,18 +5,20 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Importing and exporting `foreign' data}\label{chap:measurement}
 
-%\begin{abstract}
-%  In this chapter we explain how to import into R data acquired with other software and also how to directly acquire data from instruments directly from within R code. In addition we discuss how to convert the acquired and or imported data into a format suitable for use in calculations with our R packages.
-%\end{abstract}
+\section{Introduction}
+
+The tasks described in this chapter concern the exchange of spectral information with other pieces of software. Most of the reading and writing operations described here are lossy or may require some help from the user to maintain data validity. For saving and restoring R objects of any class one should use R's built-in functions which ensure that the objects read-in (or restored) will be fully equivalent to the saved ones.
 
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<message=FALSE>>=
+<<message=my.debug>>=
 library(readr)
 library(readxl)
 library(photobiology)
+library(photobiologyWavebands)
 library(photobiologyInOut)
+library(ggspectra)
 #library(ooacquire}
 #library(Yoctopuce}
 library(lubridate)
@@ -24,16 +26,89 @@ library(lubridate)
 
 \section{Reading and writing common file formats}
 
-\subsection{Task: Read and write text files}
+\subsection{Task: Read and write spectra from text files}
 
-\subsection{Task: Read and write worksheets}
+To\index{text files} read text files containing spectral data we use either base R's functions (\code{read.table}, \code{read.csv}, \code{read.csv2}) or preferably the corresponding functions from \pkg{readr} (\code{read\_table}, \code{read\_csv}, \code{read\_csv2}, \code{read\_tsv}, \code{read\_delim}, \code{read\_fwf}). These functions return data frame and tibble objects, respectively, that can be converted into spectral objects as described in chapter \ref{chap:data:exchange}.
+
+To write a spectrum to a text file we can use base R's functions or from package \pkg{readr} for \emph{writing} data frames to text files. Once more, the functions in package \pkg{readr} (\code{write\_csv}, \code{write\_excel\_csv}, \code{write\_tsv}, \code{write\_delim}) are to be preferred.
+
+\begin{framed}
+  \ilAttention Writing spectral objects to text files does not preserve the metadata stored in attributes. It is lossy operation! To save to disk R objects in a way that they can be restored unchanged into the same or another \emph{workspace} use R's function \code{save}. Such objects can be read without loss of information across different versions of R, and across different operating systems.
+\end{framed}
+
+\subsection{Task: Read a spectrum from an Excel workbook}\label{sec:excel:import}
+
+Over\index{Excel workbook}\index{Excel worksheet} the years different packages have become available for importing data from worksheets and workbooks. It has also been popular to export the worksheets as CSV (comma separated values) text files and then read these text files into R. The problem with the use of .CSV files is that the column separators and decimal markers depend on the locale in use when saved. Currently the best package for importing data from Excel workbooks (saved from recent versions of Excel), providing two functions with the easiest to use interface is \pkg{readxl}. Although we provide some functions for importing data from specific instruments and programs, there are many instruments and software that produce worksheets or workbooks. There also many users who do the initial data processing in Excel. We give here an example using data acquired with our own Ocean Optics spectrometer and stored in an \pkg{Excel} workbook (Fig.\ \ref{fig:lasse:excel}).
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/lasse-excel}
+  \caption[Excel worksheet with spectral data]{Screen capture showing the top of the \pkg{Excel} worksheet containing data for the solar spectrum used in the example in section \ref{sec:excel:import}.}\label{fig:lasse:excel}
+\end{figure}
+
+We skip 17 rows containing other data, and we select the worksheet named `front'.
+
+<<lasse-1>>=
+my.wbk.file <- "inout/spectrum-ylianttila.xlsx"
+excel_sheets(my.wbk.file)
+my.df <- read_excel(my.wbk.file, sheet = "front", skip = 17)
+head(my.df)
+@
+
+Or selecting columns on the fly and then creating a \code{source\_spct} object from this solar spectrum measured at ground level. As we do not really need the raw data, select all rows from columns 7 and 8. As Excel worksheets are read past the end of the data, we need to remove, the missing or NA (not available) values. We construct a \code{source\_spct} object, but we multiply the spectral irradiance data by $10^4$ to convert the units from \wattcmnm to \wattnm. Next we `clip' the wavelengths outside the calibration range keeping data for the range 290--800~nm.
+
+<<lasse-2>>=
+my.df <- read_excel(my.wbk.file, sheet = "front", skip = 17)[ , 7:8]
+my.spct <- na.omit(my.spct)
+my.spct <- source_spct(w.length = my.df[[1]], s.e.irrad = my.df[[2]] * 1e4)
+my.spct <- clip_wl(my.spct, range = c(290,800))
+@
+
+Finally we plot the spectrum.
+
+<<lasse-3, warning=my.debug>>=
+plot(my.spct)
+@
 
 \section{Reading instrument-output files}
 %%%%
 \subsection{Task: Import data from Ocean Optics instruments and software}\label{sec:OO:import}
 
-Reading\index{foreign data!Ocean Optics spectrometers} spectral (energy) irradiance from a file saved in Ocean Optics SpectraSuite software, now superseded
-by OceanView.
+Reading\index{foreign data!Ocean Optics spectrometers} spectral (energy) irradiance from a file saved in Ocean Optics SpectraSuite software , now superseded by OceanView.
+
+\begin{figure}
+  \begin{framed}
+  \begin{footnotesize}
+    \begin{verbatim}
+    SpectraSuite Data File
+++++++++++++++++++++++++++++++++++++
+Date: Mon May 06 15:13:40 CEST 2013
+User: User
+Dark Spectrum Present: Yes
+Reference Spectrum Present: No
+Number of Sampled Component Spectra: 1
+Spectrometers: QEB1523
+Integration Time (usec): 100000 (QEB1523)
+Spectra Averaged: 1 (QEB1523)
+Boxcar Smoothing: 0 (QEB1523)
+Correct for Electrical Dark: No (QEB1523)
+Strobe/Lamp Enabled: No (QEB1523)
+Correct for Detector Non-linearity: No (QEB1523)
+Correct for Stray Light: Yes (QEB1523)
+Number of Pixels in Processed Spectrum: 1044
+>>>>>Begin Processed Spectral Data<<<<<
+199.08	0.0000E00
+199.89	0.0000E00
+200.70	0.0000E00
+201.50	1.3742E02
+202.31	1.2488E02
+.........
+    \end{verbatim}
+    \end{footnotesize}
+  \end{framed}
+  \caption[Top of text file \code{spectrum.SSirrad}]{Top of text file \code{spectrum.SSirrad} written by Ocean Optics' \pkg{SpectraView} software, and used in the example in section \ref{sec:OO:import}}\label{fig:listing:oo}
+\end{figure}
+
 
 <<oo-io-01>>=
 ooss.spct <- read_oo_ssirrad("inout/spectrum.SSIrrad")
@@ -129,7 +204,7 @@ require instruments to be available.
 
 \subsection{Task: Acquiring data from Ocean Optics instruments and software}\label{sec:OO:ctrl}
 
-For\index{data acquisition!Ocean Optics spectrometers} the examples in this section to work, you will need to have Java and the OmniDriver runtime installed.
+For\index{data acquisition!Ocean Optics spectrometers} the examples in this section to work, you will need to have Java and the \pkg{OmniDriver} runtime installed.
 In addition examples as shown assume that an Ocean Optics spectrometer is connected. The output
 will depend on the model(s) and configuration(s) of the instrument(s) connected. The plural is correct,
 you can acquire spectra from more than one instrument, and from instruments with more than
@@ -137,7 +212,7 @@ one channel.
 
 Package \pkg{rOmniDriver} is just a thin wrapper on the low-level access functions supplied
 by the driver.
-The names for functions in package \pkg{rOminiDriver} are verbose, this is because we have respected the names used in the
+The names for functions in package \pkg{rOmniDriver} are verbose, this is because we have respected the names used in the
 driver itself, written in Java. Thus was done so that information in the driver documentation can be
 found easily.
 

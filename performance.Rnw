@@ -364,7 +364,7 @@ detach(sun.spct)
 %%%%
 \section{Preliminary tests of spectral objects}
 
-<<warning=FALSE>>=
+<<warning=my.debug>>=
 res211 <- microbenchmark(
   q_irrad(sun.spct, PAR(), use.cached.mult=TRUE),
   times=100L, control=list(warmup = 10L))
@@ -374,14 +374,14 @@ res212 <- microbenchmark(
 @
 When using \code{q\_irrad\_spct} with one waveband the time is \Sexpr{med1 <- median(res211$time) * 1e-6; signif(med1, 3)} ms and it increases to \Sexpr{med2 <- median(res212$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif(med2 / med1, 3)} times when with four wavebands.
 
-<<warning=FALSE>>=
+<<warning=my.debug>>=
 res221 <- microbenchmark(
   q_irrad(sun.spct),
   times=100L, control=list(warmup = 10L))
 @
 When using \code{q\_irrad\_spct} time  is \Sexpr{med1 <- median(res221$time) * 1e-6; signif(med1, 3)} ms.
 
-<<warning=FALSE>>=
+<<warning=my.debug>>=
 res231 <- microbenchmark(
   q_irrad(sun.spct, PAR(), use.cached.mult=TRUE),
   times=100L, control=list(warmup = 10L))
@@ -391,7 +391,7 @@ res232 <- microbenchmark(
 @
 When using \code{q\_irrad} with cache enabled is \Sexpr{med1 <- median(res231$time) * 1e-6; signif(med1, 3)} ms and it increases to \Sexpr{med2 <- median(res232$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif(med2 / med1, 3)} times when with cacheing disabled.
 
-<<warning=FALSE>>=
+<<warning=my.debug>>=
 res241 <- microbenchmark(
   q_irrad(sun.spct, CIE(), use.cached.mult=TRUE),
   times=100L, control=list(warmup = 10L))
@@ -401,7 +401,7 @@ res242 <- microbenchmark(
 @
 When using \code{q\_irrad} with cache enabled is \Sexpr{med1 <- median(res241$time) * 1e-6; signif(med1, 3)} ms and it increases to \Sexpr{med2 <- median(res242$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif(med2 / med1, 3)} times when with cacheing disabled.
 
-<<warning=FALSE>>=
+<<warning=my.debug>>=
 res251 <- microbenchmark(
   q_irrad(sun.spct, CIE(), use.cached.mult=TRUE),
   times=100L, control=list(warmup = 10L))
@@ -411,7 +411,7 @@ res252 <- microbenchmark(
 @
 \code{q\_irrad} without hinges enabled (the default when the wavelength step $\Delta \lambda < 1.1 \Unit{nm}$) takes \Sexpr{med1 <- median(res251$time) * 1e-6; signif(med1, 3)} ms but the execution time increases to \Sexpr{med2 <- median(res252$time) * 1e-6; signif(med2, 3)} ms, by \Sexpr{signif((med2 - med1)  / med1, 3)} times with use of hinges enabled.
 
-<<warning=FALSE>>=
+<<warning=my.debug>>=
 q_irrad(sun.spct, CIE(), use.cached.mult=TRUE)
 q_irrad(sun.spct, CIE(), use.cached.mult=FALSE)
 q_irrad(sun.spct, CIE(), use.cached.mult=TRUE, use.hinges=TRUE)
@@ -419,7 +419,7 @@ q_irrad(sun.spct, CIE(), use.cached.mult=TRUE, use.hinges=TRUE)
 
 The differnce in the returned value is rather small.
 
-<<warning=FALSE>>=
+<<warning=my.debug>>=
 cp_sun.spct <- sun.spct
 res261 <- microbenchmark(
   sun_out.spct <- cp_sun.spct * 2 + cp_sun.spct,

@@ -23,7 +23,7 @@ getwd()
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<cache=FALSE,message=FALSE>>=
+<<cache=FALSE,message=my.debug>>=
 library(ggplot2)
 library(scales)
 library(ggtern)
@@ -567,7 +567,7 @@ fig_sun2 + theme_bw()
 
 This type of annotations can be also easily done for effective exposures or doses, but in this example as we position the annotations manually, we can use ggplot2's `normal' \code{annotate} function. We use \code{xlim} to restrict the plotted region of the spectrum to the range of wavelengths of interest.
 
-<<plot-cie-filter-sun, warning=FALSE, eval=FALSE>>=
+<<plot-cie-filter-sun, warning=my.debug, eval=FALSE>>=
 fig_dsun <-
   ggplot(data=sun.daily.spct * yellow_gel.spct,
          aes(x=w.length, y=s.e.irrad * 1e-3)) + geom_line() +
