@@ -22,11 +22,11 @@ library(photobiologySun)
 library(photobiologyLamps)
 library(photobiologyLEDs)
 @
-\section{Ultraviolet and visible radiation}
+\section{Ultraviolet and visible radiation}\label{sec:radiation:properties}
 %%%%
 \authorNote{A much simpler, general and informal introduction to what is electromagnetic radiation is needed here before the formal description that follows.}
 
-From the viewpoint of Physics, ultraviolet (\UV) and visible (VIS) radiation are both considered electromagnetic waves and are described by Maxwell's equations.\footnote{These equations are a system of four partial differential equations describing classical electromagnetism.} The wavelength ranges of \UV and visible radiation and their usual names are listed in Table \ref{tab:Waverange}. The long wavelengths of solar radiation, called infrared (IR) radiation, are also listed. The colour ranges indicated in Table \ref{tab:Waverange} are an approximation as different individual human observers will not perceive colours exactly in the same way. We follow the ISO definitions for wavelength boundaries for colours \autocite{??}. Other finer-grained colour name series are also in use \autocite[e.g.][Table xx]{Aphalo2012}). The electromagnetic spectrum is continuous with no clear boundaries between one colour and the next, the colours could be thought as artifacts produced by our sensory system, and are meaningful only from the perspective of an \emph{average} human observer. Especially in the IR region the subdivision is somewhat arbitrary and the boundaries used in the literature vary.
+From the viewpoint of Physics, ultraviolet (\UV) and visible (VIS) radiation are both considered electromagnetic waves and are described by Maxwell's equations.\footnote{These equations are a system of four partial differential equations describing classical electromagnetism.} The wavelength ranges of \UV and visible radiation and their usual names are listed in Table \ref{tab:Waverange}. The long wavelengths of solar radiation, called infrared (IR) radiation, are also listed. The colour ranges indicated in Table \ref{tab:Waverange} are an approximation as different individual human observers will not perceive colours exactly in the same way. We follow the ISO definitions for wavelength boundaries for colours \autocite{ISO2007}. Other finer-grained colour name series are also in use \autocite[e.g.][Table xx]{Aphalo2012}). The electromagnetic spectrum is continuous with no clear boundaries between one colour and the next, the colours could be thought as artifacts produced by our sensory system, and are meaningful only from the perspective of an \emph{average} human observer. Especially in the IR region the subdivision is somewhat arbitrary and the boundaries used in the literature vary.
 
 Radiation can also be thought of as composed of quantum particles or photons. The energy of a quantum of radiation\index{radiation quantum}\index{photon} in a vacuum, \quantum, depends on the wavelength\index{wavelength}, $\lambda$, or frequency\index{frequency}\footnote{Wavelength and frequency are related to each other by the speed of light, according to $\nu = c / \lambda$ where $c$ is speed of light in vacuum. Consequently there are two equivalent formulations for equation \ref{equ_energy}.}, $\nu$,
 %
@@ -40,7 +40,7 @@ with the Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecon
 \molequanta = h' \cdot \nu = h' \cdot \frac{c}{\lambda} \label{equ_molenergy}
 \end{equation}
 %
-with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}. Example 1: red light at 600~nm has about 200 \kjmole, therefore, 1~$\mymu$mol photons has 0.2~J. Example 2: \UVB radiation at 300~nm has about 400 \kjmole, therefore, 1~$\mymu$mol photons has 0.4~J. Equations \ref{equ_energy} and \ref{equ_molenergy} are valid for all kinds of electromagnetic waves (see Section \ref{??} for a worked-out calculation example).
+with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}. Example 1: red light at 600~nm has about 200 \kjmole, therefore, 1~$\mymu$mol photons has 0.2~J. Example 2: \UVB radiation at 300~nm has about 400 \kjmole, therefore, 1~$\mymu$mol photons has 0.4~J. Equations \ref{equ_energy} and \ref{equ_molenergy} are valid for all kinds of electromagnetic waves (see Sections \ref{sec:base:e2q} and \ref{sec:base:q2e} for worked-out calculation examples).
 
 %\authorNote{Andreas, I added the value for $c$ so that the reader can follow the calculations. This was needed because some time ago I changed the order of some of the text. Also having another example for a wavelength in the \UVB, 300~nm exemplifies how \molequanta varies as a function of wavelength. Changed your example from 500~nm to 600~nm to make the comparison of the two wavelengths easier.}
 
@@ -102,7 +102,7 @@ When a beam or the radiation passing into a space or sphere is analysed, two imp
 %\centerline{\includegraphics[width=0.8\myfigwidth]{figures/sphere_detailed}}
 \centering
 \includegraphics[width=0.6\textwidth]{figures/sphere_highres}
-\caption[Definition of the solid angles and areas in space]{Definition of the solid angle d$\Omega$ and the geometry of areas in the space (redrawn after \cite{bergm33}), where the given solid angle d$\Omega$ remains the same, regardless of distance $r$, while the exposed area exemplified by d$A$ will change with distance $r$ from the origin (light source) and the angle $\alpha$, if the exposed area (or detector) is tilted.  The angle denoted by $\phi$ is the azimuth angle and $\theta$ is the zenith angle. }\label{fig_space}
+\caption[Definition of the solid angles and areas in space]{Definition of the solid angle d$\Omega$ and the geometry of areas in the space \autocite[redrawn after][]{bergm33}, where the given solid angle d$\Omega$ remains the same, regardless of distance $r$, while the exposed area exemplified by d$A$ will change with distance $r$ from the origin (light source) and the angle $\alpha$, if the exposed area (or detector) is tilted.  The angle denoted by $\phi$ is the azimuth angle and $\theta$ is the zenith angle. }\label{fig_space}
 \end{figure*}
 
 The solid angle is calculated from the zenith angle $\theta$ and azimuth angle $\phi$, which denote the direction of the radiation beam
@@ -167,7 +167,7 @@ The processes responsible for the variation of the radiance $L(\lambda,\theta,\p
 \put(4.2,0.1){$L(\theta,\phi)$}
 %\put(5.7,0.1){$L(\theta,\phi)$}
 \end{picture}
-\caption[Path of the radiance in a thin layer.]{
+\caption[Path of the radiance in a thin layer]{
 Path of the radiance and influences of absorbing and scattering particles in a thin homogeneous horizontal layer of air or water. The layer is separated from other layers of different characteristics by boundary lines at height $z_0$ and $z_1$.}\label{fig_radtrans}
 \end{figure*}
 
@@ -212,7 +212,7 @@ E = \frac{\intensity \cdot \cos\alpha}{r^2} \label{equ_r2law}
 The irradiance decreases by the square of the distance to the source and depends on the tilt of the detecting surface area. This is valid only for point sources. For outdoor measurements the sun can be assumed to be a point source. For artificial light sources simple LEDs (light-emitting diodes) without optics on top are also effectively point sources. However, LEDs with optics---and other artificial light sources with optics or reflectors designed to give a more focused dispersal of the light---deviate to various extents from the rule of a decrease of irradiance proportional to the square of the distance from the light source.
 %%%%%%%Matt - I can not follow the preceding sentence, it need to be rewriten from "deviate"
 
-Besides the physical quantities used for all electromagnetic radiation, there are also equivalent quantities to describe visible radiation, so called photometric quantities. The human eye as a detector led to these photometric units, and they are commonly used by lamp manufacturers to describe their artificial light sources. See Box \ref{box:photometric:quantities} on page \pageref{box:photometric:quantities} for a short description of these quantities and units.
+Besides the physical quantities used for all electromagnetic radiation, there are also equivalent quantities to describe visible radiation, so called photometric quantities. The human eye as a detector led to these photometric units, and they are commonly used by lamp manufacturers to describe their artificial light sources. See the next section for a short description of these quantities and units.
 
 %\begin{example*}[htbp]
 %\begin{shaded}
@@ -230,13 +230,13 @@ plot(CIE1951_scotopic_lef.spct, annotations = c("colour.guide", "segments", "lab
 @
 \vspace{2pt}
 \label{fig_eye}
-\caption{Relative spectral intensity of human colour sensation during day (solid line) and night (dashed line), $V(\lambda)$ and $V'(\lambda)$ respectively.}\label{fig:optics:cie}
+\caption[Relative spectral intensity of human colour sensation]{Relative spectral intensity of human colour sensation during day (solid line) and night (dashed line), $V(\lambda)$ and $V'(\lambda)$ respectively.}\label{fig:optics:cie}
 %\centerline{\parbox{0.75\textwidth}{\textbf{Figure.} Relative spectral intensity of human colour sensation during day (solid line) and night (dashed line), $V(\lambda)$ and $V'(\lambda)$ respectively.}}
 \end{figure}
 %\vspace{5pt}
 
 Corresponding to the physical quantities of radiation summarized in the table \ref{tab:Phys:Quants},
-the equivalent photometric quantities are listed in the table below and have the subscript $\mathrm{v}$. The ratio between the (physiological) luminous flux $\Phi_\mathrm{v}$ and the (physical) radiant flux $\Phi$ is the (photopic) photometric equivalent $K(\lambda)=V(\lambda)\cdot K_m$ with $K_m=683$ lm W$^{-1}$ (lumen per watt) at 555 nm. The dark-adapted sensitivity of the eye (scotopic vision) has its maximum at 507 nm with 1700 lm W$^{-1}$. The base unit of luminous intensity is candela (cd). One candela is defined as the monochromatic intensity at 555 nm (540 THz) with $\intensity=\frac{1}{683}$ W sr$^{-1}$. The luminous flux of a normal candle is around 12 lm. Assuming a homogeneous emission into all directions, the luminous intensity is about $\intensity[v]=\frac{12\;\mathrm{lm}}{4\pi\;\mathrm{sr}}\approx 1$ cd.
+the equivalent photometric quantities are listed in Table \ref{tab:Photo:Quants} and have the subscript $\mathrm{v}$. The ratio between the (physiological) luminous flux $\Phi_\mathrm{v}$ and the (physical) radiant flux $\Phi$ is the (photopic) photometric equivalent $K(\lambda)=V(\lambda)\cdot K_m$ with $K_m=683$ lm W$^{-1}$ (lumen per watt) at 555 nm. The dark-adapted sensitivity of the eye (scotopic vision) has its maximum at 507 nm with 1700 lm W$^{-1}$. The base unit of luminous intensity is candela (cd). One candela is defined as the monochromatic intensity at 555 nm (540 THz) with $\intensity=\frac{1}{683}$ W sr$^{-1}$. The luminous flux of a normal candle is around 12 lm. Assuming a homogeneous emission into all directions, the luminous intensity is about $\intensity[v]=\frac{12\;\mathrm{lm}}{4\pi\;\mathrm{sr}}\approx 1$ cd.
 \vspace{5pt}
 
 \begin{table}[htb]
@@ -263,7 +263,7 @@ $\radiance[v]=\frac{\partial^2 \Phi_\mathrm{v}}{\partial \Omega (\partial A\cdot
 %\caption{Photon or quantum quantities of radiation I.}
 \label{sec:quantum:quantities1}
 
-When\Attention{} we are interested in photochemical reactions, the most relevant radiation quantities are those expressed in photons. The reason for this is that, as discussed in section \ref{sec:photobio:principles} on page \pageref{sec:photobio:principles}, molecules are excited by the absorption of certain fixed amounts of energy or quanta. The surplus energy ``decays'' by non-photochemical processes. When studying photosynthesis, where many photons of different wavelengths are simultaneously important, we normally use photon irradiance to describe amount of \PAR. The name photosynthetic photon flux density, or \PPFD, is also frequently used when referring to \PAR photon irradiance. When dealing with energy balance of an object instead of photochemistry, we use (energy) irradiance. In meteorology both \UV and visible radiation, are quantified using energy-based quantities. When dealing with \UV photochemistry as in responses mediated by UVR8, an \UVB photoreceptor, the use of quantum quantities is preferred. According to the physical energetic quantities in the table \ref{tab:Phys:Quants}, the equivalent photon related quantities are listed in the table below and have the subscript $\mathrm{p}$.\vspace{-1mm}
+When\Attention{} we are interested in photochemical reactions, the most relevant radiation quantities are those expressed in photons. The reason for this is that, as discussed in Chapter \ref{chap:photochemistry} on page \pageref{chap:photochemistry}, molecules are excited by the absorption of certain fixed amounts of energy or quanta. The surplus energy ``decays'' by non-photochemical processes. When studying photosynthesis, where many photons of different wavelengths are simultaneously important, we normally use photon irradiance to describe amount of \PAR. The name photosynthetic photon flux density, or \PPFD, is also frequently used when referring to \PAR photon irradiance. When dealing with energy balance of an object instead of photochemistry, we use (energy) irradiance. In meteorology both \UV and visible radiation, are quantified using energy-based quantities. When dealing with \UV photochemistry as in responses mediated by UVR8, an \UVB photoreceptor, the use of quantum quantities is preferred. According to the physical energetic quantities in the table \ref{tab:Phys:Quants}, the equivalent photon related quantities are listed in the table below and have the subscript $\mathrm{p}$.\vspace{-1mm}
 
 \begin{table*}[htb]
 \centering
@@ -302,13 +302,11 @@ When\Attention{} dealing with bands of wavelengths, for example an integrated va
 %
 For integrated values of \UVB or \UVA radiation the calculation is done analogously by integrating from 280 to 315~nm or 315 to 400~nm, respectively.
 
-If we have measured (energy) irradiance, and want to convert this value to photon irradiance, the exact conversion will be possible only if we have information about the spectral composition of the measured radiation. Conversion factors at different wavelengths are given in the table below. For \PAR, 1~\watt of ``average daylight'' is approximately 4.6~\umol. This is exact only if the radiation is equal from 400 to 700~nm, because the factor is the value at the central wavelength at 550~nm. Further details are discussed in section \ref{sec:basic:concepts} on page \pageref{sec:basic:concepts}.\vspace{1.5mm}
+If we have measured (energy) irradiance, and want to convert this value to photon irradiance, the exact conversion will be possible only if we have information about the spectral composition of the measured radiation. Conversion factors at different wavelengths are given in the table below. For \PAR, 1~\watt of ``average daylight'' is approximately 4.6~\umol. This is exact only if the radiation is equal from 400 to 700~nm, because the factor is the value at the central wavelength at 550~nm. Further details are discussed in section \ref{sec:base:e2q} on page \pageref{sec:base:e2q}. Examples of conversion constants between energy-based and photo-based irradiance at different wavelengths are given in Table \ref{tab:Conversion:Photon:Energy}.
 
 \begin{table*}[htb]
 \centering
-\caption{Conversion factors of photon and energy quantities at different wavelengths.}\label{tab:Conversion:Photon:Energy}
-%\centerline{\parbox{0.85\textwidth}{\textbf{Table.} Conversion factors of photon and energy quantities at different wavelengths.
-%\centerline{\textbf{Table.} Conversion factors of photon and energy quantities at different wavelengths.}
+\caption[Conversion factors of photon and energy quantities]{Conversion factors of photon and energy quantities at different wavelengths.}\label{tab:Conversion:Photon:Energy}
 \begin{tabular}{ccc} \toprule
  & \watt to \umol & $\lambda$ (nm) \\ \midrule
  & 2.34 & 280 \\ %\addlinespace
@@ -359,9 +357,9 @@ There are, in principle, two possible approaches to measuring radiation. The fir
 \end{eqnarray}
 %\end{align}
 %
-Depending on the shape of a detector (which may be either planar or spherical) the irradiance is called (plane) irradiance $\irr$ or fluence rate (also called scalar irradiance) $\flrat$. A planar sensor detects incoming photons depending on the incident angle and a spherical sensor detects all photons equally weighted for all directions. See section \ref{sec:basic:concepts} on page \pageref{sec:basic:concepts} for a more detailed discussion.
+Depending on the shape of a detector (which may be either planar or spherical) the irradiance is called (plane) irradiance $\irr$ or fluence rate (also called scalar irradiance) $\flrat$. A planar sensor detects incoming photons depending on the incident angle and a spherical sensor detects all photons equally weighted for all directions. See section \citeauthor{Aphalo2012c} \autocite*{Aphalo2012c} for a more detailed discussion.
 
-Here we have discussed the properties of light based on energy quantities. In photobiology there are good reasons to quantify radiation based on photons. See Box \ref{box:quantum:quantities} on page \pageref{box:quantum:quantities}, and section \ref{sec:basic:concepts} on page \pageref{sec:basic:concepts}.
+Here we have discussed the properties of light based on energy quantities. In photobiology and photobiology there are good reasons to quantify radiation based on photons. See Chapter \ref{chap:photochemistry} on page \pageref{chap:photochemistry}.
 
 \index{UV radiation, physical properties|)}
 \index{visible radiation, physical properties|)}
@@ -426,7 +424,7 @@ The total solar irradiance covers a wide range of wavelengths. Using some of the
 
 \begin{table*}[htbp]
 \centering
-\caption[Distribution of the solar constant in different wavelength intervals]{Distribution of the extraterrestrial solar irradiance $\irr[s]$ constant in different wavelength intervals calculated using the data of \autocite{wehrl85} shown in Figure \ref{fig_sun}.}\label{tab_sun}
+\caption[Partition of the solar constant in different wavelength intervals]{Partition of the extraterrestrial solar irradiance $\irr[s]$ constant in different wavelength intervals calculated using the data of \autocite{wehrl85} shown in Figure \ref{fig_sun}.}\label{tab_sun}
 \begin{tabular}{cccc} \toprule
 Colour & Wavelength (nm) & Irradiance (\watt) & Fraction of $\irr[s]$ (\%) \\ \midrule
 \UVC & 100 -- 280 & 7 & 0.5 \\ %\hline
@@ -441,7 +439,7 @@ total & & 1\,367 & 100.0 \\ \bottomrule%\hline
 % Pedro
 The extraterrestrial solar spectrum differs from that at ground level due to the absorption of radiation by the atmosphere, because the absorption peaks of water, \COtwo and other components of the atmosphere, cause corresponding valleys to appear in the solar spectrum at ground level. For example, estimates from measurements of the total global irradiance at Helmholtz Zentrum M{\"u}nchen (11.60$\degree$ E, 48.22$\degree$ N, 490 m above sea level) on two sunny days (17$^\mathrm{th}$ April 1996, sun zenith angle of 38$^\circ$ and 27$^\mathrm{th}$ May 2005, 27$^\circ$) result in about 5\% for wavelengths below 400 nm, about 45\% from 400 to 700~nm, and about 50\% above 700~nm. In relation to plant research, only the coarse structure of peaks and valleys is relevant, because absorption spectra of pigments \emph{in vivo} have broad peaks and valleys. However, the solar spectrum has a much finer structure, due to emission and absorption lines of elements, which is not observable with the spectroradiometers normally used in plant research.
 
-At the Earth's surface, the incident radiation or \emph{\gls{global:rad}} has two components, \gls{direct:rad} and \gls{diffuse:rad}\index{global radiation}\index{direct radiation}\index{diffuse radiation}\index{scattered radiation}. Direct radiation is radiation travelling directly from the sun, while diffuse radiation is that scattered by the atmosphere. Diffuse radiation is what gives the blue colour to the sky and white colour to clouds. The relative contribution of direct and diffuse radiation to global radiation varies with wavelength and weather conditions. The contribution of diffuse radiation is larger in the UV region, and in the presence of clouds (Figures \ref{fig:sky:photos} and \ref{fig:diffuse:UV}).
+At the Earth's surface, the incident radiation or \emph{\gls{global:rad}} has two components, \gls{direct:rad} and \gls{diffuse:rad}\index{global radiation}\index{direct radiation}\index{diffuse radiation}\index{scattered radiation}. Direct radiation is radiation travelling directly from the sun, while diffuse radiation is that scattered by the atmosphere. Diffuse radiation is what gives the blue colour to the sky and white colour to clouds. The relative contribution of direct and diffuse radiation to global radiation varies with wavelength and weather conditions (Fig. \ref{fig:diffuse:UV}). The contribution of diffuse radiation is larger in the UV region, and in the presence of clouds as can be visualized in photographs obtained at different wavebands \autocite{Lindfors2015}.
 
 \begin{figure*}[htbp]
 \centering
@@ -450,7 +448,7 @@ At the Earth's surface, the incident radiation or \emph{\gls{global:rad}} has tw
 plot(ASTM_G173_global.spct, range = c(119, 2500), annotations = "colour.guide")
 plot(ASTM_G173_global.spct, range = c(290, 800), annotations = "colour.guide")
 @
-\caption[Ground level solar spectrum]{Ground level solar spectrum AM1.5 (1.5 air mass, solar zenith angle 48$^\circ\,19\prime$) according to ASTM G173-03 \autocite{ASTM2003?}. Contrast with Fig.\ \ref{fig_sun}.}\label{fig_sun_ground}
+\caption[Ground level solar spectrum]{Ground level solar spectrum AM1.5 (1.5 air mass, solar zenith angle 48$^\circ\,19\prime$) according to ASTM G173-03 \autocite{ASTM2012}. Contrast with Fig.\ \ref{fig_sun}.}\label{fig_sun_ground}
 \end{figure*}
 
 % \begin{figure*}
@@ -488,10 +486,7 @@ Not only total irradiance, but also the wavelength distribution of the solar spe
 \end{figure*}
 
 Seasonal variation in \UVB irradiance has a larger relative amplitude
-than variation in \PAR (Figure \ref{fig:diffuse.light})\index{seasonal variation in UV-B irradiance}. This causes a seasonal variation in the \UVB : \PAR ratio (Figure \ref{fig:UVB:Erlangen}). In addition to the regular seasonal variation, there is random variation as a result of changes in clouds (Figure \ref{fig:UVB:Erlangen}). Normal seasonal
-and spatial variation in \UV can be sensed by plants, and could play a
-role in their adaptation to seasons and/or their position in the
-canopy.
+than variation in \PAR\index{seasonal variation in UV-B irradiance}. This causes a seasonal variation in the \UVB : \PAR ratio. In addition to the regular seasonal variation, there is random variation as a result of changes in clouds. Normal seasonal and spatial variation in \UV can be sensed by plants, and could play a role in their adaptation and acclimation to seasons and/or their position in the canopy.
 
 % \begin{figure*}
 % \centering
@@ -517,12 +512,9 @@ canopy.
 % \end{figure*}
 
 \UVB irradiance increases with elevation in mountains and with decreasing
-latitude\index{UV-B and elevation in mountains}\index{UV-B and latitude} (Figure  \ref{fig:UVB:latitude}) and
+latitude\index{UV-B and elevation in mountains}\index{UV-B and latitude} (Figure \ref{fig:UVB:latitude}) and
 is particularly high on high mountains
-in equatorial regions. This has been hypothesized to be a factor
-in the determination of the tree line\footnote{\emph{Tree line} is the
-highest elevation on a mountain slope at which tree species are naturally
-able to grow.} in these mountains \autocite{Flenley1992}.
+in equatorial regions.
 
 \begin{figure*}
 \centering
@@ -571,7 +563,7 @@ Incandescent light sources are ``near-black bodies'' heated at a very high tempe
 <<fig-incandescent, echo=FALSE>>=
 plot(incandescent.60w.spct)
 @
-  \caption{Spectral irradiance for a 60~W incandescent lamp}\label{fig:incandescent}
+  \caption[Spectrum of incandescent lamp]{Spectral irradiance for a 60~W incandescent lamp}\label{fig:incandescent}
 \end{figure}
 
 Carbon arc lamps emit light by means of an electric "arc" between two carbon electrodes, the arc heats the electrodes and carbon evaporates and because of its high temperature in-between the electrodes inducing light emission. The spectrum is broad but rather different to sunlight. Carbon arc lamps can be very bright and used in cinema projectors. They were invented before the incandescent tungsten lamp. Xenon arc lamps use Xenon gas enclosed in a special glass bulb. Xenon arc lamps have an emission spectrum rather similar to that of solar radiation, and together with UV-absorbing filters are frequently used in solar simulators. Some Xenon lamps do not emit continuously, such as modern ``electronic'' flashes used in photographic cameras. In such lamps the flash is produced by slowly charging a capacitor at a high voltage, and subsequently using this electrical charge to generate a short-lived arc in the lamp. Flash duration varies, but can be as short 0.1 ms in flashes used by photographers.
@@ -581,7 +573,7 @@ Carbon arc lamps emit light by means of an electric "arc" between two carbon ele
 <<fig-germicidal, echo=FALSE>>=
 plot(germicidal.spct)
 @
-  \caption{Spectral irradiance for a `germicidal' low pressure mercury lamp.}\label{fig:germicidal}
+  \caption[Spectrum of germicidal lamp]{Spectral irradiance for a `germicidal' low pressure mercury lamp.}\label{fig:germicidal}
 \end{figure}
 
 Other gas-discharge lamps use different gases or "vapours" or mixes of them. In these lamps, the elemental emission lines (corresponding to transitions between allowed energy states) are very well defined as long as the glass ampoule is not coated with special fluorescent compounds, and in many cases can be used as wavelength standards for calibration of spectrometers. The low pressure sodium lamps, easily recognizable by the orange light they emit, emit the same orange colour as that emitted by the flame of a gas ring in a cooker when water containing salt boils over from a pot. Low pressure mercury ``vapour'' lamps, such as germicidal ones made with an un-coated quartz-glass tube (technically called envelope) emit clearly at the know emission lines of mercury (Fig.\ \ref{fig:germicidal}). Being the container UV and VIS transmitting the strong line at 253.xx nm is very active as a germicidal agent. The ``normal'' fluorescent tubes used for illumination are enclosed in a tube coated with a so-called ``phosphor'' which absorbs UV radiation and re-emits it as visible radiation (Fig.\ \ref{fig:white:fluorescent}). The spectrum of the emitted radiation is a combination of radiation emitted by the gaseous mercury, in particular those lines in the VIS region (e.g.\ 435.xx~nm) and to some extent in the UVA region, together with visible radiation re-emitted by the coating.
@@ -591,17 +583,17 @@ Other gas-discharge lamps use different gases or "vapours" or mixes of them. In 
 <<fig-fluorescent, echo=FALSE>>=
 plot(philips.tll36w.950.spct)
 @
-  \caption{Spectral irradiance for a `daylight', approx. 5200~K, fluorescent tube (Philips~36W~950).}\label{fig:white:fluorescent}
+  \caption[Spectrum of a `daylight' fluorescent tube]{Spectral irradiance for a `daylight', approx. 5200~K, fluorescent tube (Philips~36W~950).}\label{fig:white:fluorescent}
 \end{figure}
 
-A more recent development is light generated by solid-state semiconductor devices or light-emitting diodes, once again light emission is the result of a transition between energy states of matter, but although emission takes place as a single peak, the peak is not as narrow or well defined as for elemental emission lines in discharge lamps (Fig.\ \ref{fig:blue:led}). Emission peaks have usually HFW of between 10 and 30~nm and their central wavelength may slightly shift depending on temperature and electrical current flowing through them. True LEDs always have a single peak of emission. White LEDs are based on a similar principle to that of fluorescent lamps: blue (or in some cases UVA) emitting LEDs are combined with a ``phosphor'' which absorbs in part the emitted radiation and re-emits the energy as radiation at longer wavelengths (Fig.\ \ref{fig:white:led}). In some designs the phosphor is coated close to the semiconductor die, but in other cases, especially some arrays, the phosphor is in or on the encapsulating polymer. This coating in white LEDs looks yellow or orange when they are switched off.
+A more recent development is light generated by solid-state semiconductor devices or light-emitting diodes, once again light emission is the result of a transition between energy states of matter, but although emission takes place as a single peak, the peak is not as narrow or well defined as for elemental emission lines in discharge lamps (Fig.\ \ref{fig:blue:led}). Emission peaks have usually HFW of between 10 and 30~nm and their central wavelength may slightly shift depending on temperature and electrical current flowing through them. True LEDs always have a single peak of emission. White LEDs are based on a similar principle to that of fluorescent lamps: blue (or in some cases UVA) emitting LEDs are combined with a ``phosphor'' which absorbs in part the emitted radiation and re-emits the energy as radiation at longer wavelengths (Figs.\ \ref{fig:white:led} and \ref{photo:white:led}). In some designs the phosphor is coated close to the semiconductor die, but in other cases, especially some arrays, the phosphor is in or on the encapsulating polymer. This coating in white LEDs looks yellow or orange when they are switched off.
 
 \begin{figure}
   \centering
 <<fig-blue-led, echo=FALSE>>=
 plot(HJ_Blue.spct)
 @
-  \caption{Spectral irradiance for a blue LED array (Huey Jann, 50~W).}\label{fig:blue:led}
+  \caption[Spectrum of blue LED array]{Spectral irradiance for a blue LED array (Huey Jann, 50~W).}\label{fig:blue:led}
 \end{figure}
 
 \begin{figure}
@@ -609,13 +601,13 @@ plot(HJ_Blue.spct)
 <<fig-white-led, echo=FALSE>>=
 plot(LUMITRONIX_white.spct)
 @
-  \caption{Spectral irradiance for `neutral white LED', 4000~K, array (Lumitronix SmartArray Q36 LED-Module, 39W, using Nichia 757 LEDs).}\label{fig:white:led}
+  \caption[Spectrum of `neutral white' LED]{Spectral irradiance for `neutral white' LED, 4000~K, array (Lumitronix SmartArray Q36 LED-Module, 39W, using Nichia 757 LEDs).}\label{fig:white:led}
 \end{figure}
 
 \begin{figure}
   \centering
 \includegraphics[width=0.5\textwidth]{photos/lumitronix.jpg}
-  \caption{Photgraph of `neutral white LED' array showing the yellow ``phosphor'' in the coating of the LEDs (Lumitronix SmartArray Q36 LED-Module, 39W, using Nichia 757 LEDs).}\label{photo:white:led}
+  \caption[Photograph of a LED array]{Photgraph of `neutral white LED' array showing the yellow ``phosphor'' in the coating of the LEDs (Lumitronix SmartArray Q36 LED-Module, 39W, using Nichia 757 LEDs).}\label{photo:white:led}
 \end{figure}
 
 Finally lasers, are different in that a laser is not another type of primary source of radiation. Lasing is a phenomenon which allows the generation of coherent radiation from a beam of incoherent radiation by means of a ``cavity''. Different primary sources of radiation can be used in lasers. In the case of laser diodes, an LED is the primary source of radiation. There are different possible types of cavities, for example gas-filled or solid state. Lasers are pulsed light sources, they do not emit continuously, although in many cases the frequency at which pulses are produced can be high. Even though laser pointers and other readily available lasers seem to us as being a continuous source of radiation, they are not. In fact, they are pulsed, and the duty cycle is low (pulses are brief compared to `gaps') but each pulse has high energy. As radiation is in addition in a very narrow beam and almost of a single wavelength, a laser delivers spatially and temporarily concentrated energy pulses, that can make the beam from a 1~mW laser pointer easily visible at a distance of tens of meters in a lecture hall illuminated with lamps emitting in total hundreds of watts of visible radiation. For the same reason, even lasers emitting as little 1~mW if pointed directly into the eyes can cause permanent eye-sight damage.

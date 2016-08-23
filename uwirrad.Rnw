@@ -80,7 +80,7 @@ e_irrad(sun.spct, UVB("ISO")) / e_irrad(sun.spct, UVB("none"))
 %%%%
 \section{Task: define simple wavebands}\label{sec:uwavebands}
 
-Here\index{wavebands!define new} we briefly introduce \code{waveband} and \code{new\_waveband}, and only in chapter \ref{chap:wtirrad} we describe their use in full detail, including the use of spectral weighting functions (SWFs). The examples in the present section only describe \code{waveband}s that define a wavelength range.
+Here\index{wavebands!define new} we briefly introduce \code{waveband} and \code{new\_waveband}, and only in chapter \ref{chap:wt:irrad} we describe their use in full detail, including the use of spectral weighting functions (SWFs). The examples in the present section only describe \code{waveband}s that define a wavelength range.
 
 A \code{waveband} can be created based on any R object for which function \code{range} is defined, and returns numbers interpretable as wavelengths expressed in nanometres:
 
@@ -236,7 +236,7 @@ The other examples above can be re-written with similar syntax.
 
 The task to be completed is to calculate the photon irradiance ($\pfd$) in \mol from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
-Combining equations \ref{eq:energy:irrad} and \ref{eq:energy:mol:photons} we obtain:
+Combining equations \ref{eq:energy:irrad} and \ref{equ:molenergy} we obtain:
 
 \begin{equation}
 \pfd[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \frac{h' \cdot c}{\lambda}\ \mathrm{d}\lambda
@@ -326,12 +326,12 @@ The task to be completed is to calculate the (energy) fluence ($\fluence$) in \j
 
 \begin{equation}
 \fluence[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr \times t\ \mathrm{d}\lambda
-\label{eq:energy:irrad}
+\label{eq:energy:fluence}
 \end{equation}
 
 \authorNote{Needs to be edited for fluence!}
-Let's assume that we want to calculate photosynthetically active radiation (PAR) energy irradiance, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
-$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_irrad} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
+Let's assume that we want to calculate photosynthetically active radiation (PAR) energy fluence, for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
+$\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\fluence[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_fluence} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
 The use of function \code{fluence} facilitates the calculation as it accepts the length of time of the exposure as a \code{lubridate::duration}, making it easy to enter the duration using different units, or even calculate the duration as the difference between two times. Of course, the spectral irradiance should be measured at the position where the material being exposed was located during irradiation. The following example is for a red fluorescent tube as sometimes used in seed germination experiments to study phytochrome-mediated responses.
 
 <<>>=
@@ -345,7 +345,7 @@ Please see the sections \ref{sec:wt:exposure} for additional details.
 
 In\index{ratios!photon base} photobiology sometimes we are interested in calculation the photon ratio between two wavebands. It makes more sense to calculate such ratios if both numerator and denominator wavebands have the same `width' or if the numerator waveband is fully nested in the denominator waveband. However, frequently used ratios like the \UVB to \PAR photon ratio do not comply with this. For this reason, our functions do not enforce any such restrictions.
 
-For example a ratio frequently used in plant photobiology is the red to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \cite{Morgan1981a}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
+For example a ratio frequently used in plant photobiology is the red to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \citeauthor{Morgan1981a} \autocite*{Morgan1981a}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
 
 \begin{equation}
 \zeta = \frac{\pfd[655 \mathrm{nm} < \lambda < 665  \mathrm{nm}]}{\pfd[725 \mathrm{nm} < \lambda < 735 \mathrm{nm}]}

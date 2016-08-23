@@ -285,7 +285,7 @@ opts_chunk$set(opts_fig_narrow)
 incl_all <- TRUE
 incl_chaps <- FALSE || incl_all
 incl_ckbk <- FALSE || incl_all
-incl_acq <- TRUE || incl_all
+incl_acq <- FALSE || incl_all
 incl_data <- FALSE || incl_all
 eval_diag <- FALSE
 

@@ -99,7 +99,7 @@ names(cie.wb)
 
 \section{Task: Plotting a waveband}
 
-Method\index{wavebands!plot} \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plot}.
+Method\index{wavebands!plot} \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plotting}.
 
 <<>>=
 plot(vis.wb)

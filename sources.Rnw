@@ -23,11 +23,11 @@ library(photobiologyLEDs)
 \section{Introduction}\label{sec:sources:intro}
 
 %%%%
-\section{Data: extraterrestrial solar radiation spectra}\label{sec:}
+\section{Data: extraterrestrial solar radiation spectra}\label{sec:et:solar}
 
 
 %%%%
-\section{Data: terrestrial  solar radiation spectra}\label{sec:}
+\section{Data: terrestrial  solar radiation spectra}\label{sec:ground:solar}
 
 % from Titta
 
@@ -54,10 +54,10 @@ library(photobiologyLEDs)
 
 \section{Data: radiation in water bodies}
 
-\section{Data: incandescent lamps}\label{sec:}
+\section{Data: incandescent lamps}\label{sec:lamps:incand}
 
 %%%%
-\section{Data: discharge lamps}\label{sec:}
+\section{Data: discharge lamps}\label{sec:lamps:discharge}
 
 %%%%
-\section{Data: LEDs}\label{sec:}
+\section{Data: LEDs}\label{sec:lamps:led}

@@ -20,11 +20,11 @@ library(photobiologyLEDs)
 @
 
 %%%%
-\section{Introduction}\label{sec:}
+\section{Introduction}
 
 In\index{transmittance} this chapter we explain how to do calculations related to the description of absorption and reflection of UV and VIS radiation.
 
-\section{Task: absorbance and transmittance}
+\section{Task: absorbance and transmittance}\label{sec:transmittance}
 
 \textbf{Transmittance}\index{transmittance}\Attention{} is defined as:
 \begin{equation}

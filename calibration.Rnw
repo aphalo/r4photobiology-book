@@ -10,7 +10,7 @@ opts_knit$set(concordance=TRUE)
 %\end{abstract}
 
 %%%%
-\section{Task: Calibration of broadband sensors}\label{sec:}
+\section{Task: Calibration of broadband sensors}\label{sec:calib:broad:band}
 
 \authorNote{Here we will describe how to estimate errors due to spectral mismatch between the calibration reference and the light source being measured.}
 

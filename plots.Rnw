@@ -16,7 +16,7 @@ getwd()
 @
 
 %\begin{abstract}
-%  In this chapter we explain how to plot spectra and colours, using packages \pkg{ggplot2}, \code{ggtern}, and the functions in our package \pkg{ggspectra}. Both \pkg{ggtern} for ternary plots and \pkg{ggspectra} for annotating spectra build new functionality on top of the \pkg{ggplot2} package. We also use several functions and data from package \pkg{photobiology} in the examples.
+%  In this chapter we explain how to plot spectra and colours, using packages \pkg{ggplot2}, \pkg{ggtern}, and the functions in our package \pkg{ggspectra}. Both \pkg{ggtern} for ternary plots and \pkg{ggspectra} for annotating spectra build new functionality on top of the \pkg{ggplot2} package. We also use several functions and data from package \pkg{photobiology} in the examples.
 %\end{abstract}
 
 
@@ -78,9 +78,7 @@ for human vision on a ternary plot, and show how to do a ternary plot for GBU
 (green-blue-ultraviolet) flower colours for honeybee vision using as reference the reflectance
 of a background.
 
-If you are not familiar with \pkg{ggplot2} and \code{ggtern} plotting, please read Appendix
-\ref{chap:R:plotting} on page \pageref{chap:R:plotting} before continuing reading the
-present chapter.
+If you are not familiar with \pkg{ggplot2} and \pkg{ggtern} plotting, please read the chapter on plotting in the book \emph{Learning R \ldots{}as your learnt your mother tongue} \autocite{Aphalo2016}.
 
 %%%%
 \section{Using \texttt{plot()} methods with spectra}
@@ -193,13 +191,13 @@ plot(yellow_gel.spct, plot.qty = "absorbance")
 @
 
 Beware that \emph{absorptance} being the complement to \emph{internal transmittance} can be calculated only from transmittance alone if it is expressed as internal. If total transmittance is available, then reflectance must be also known before absorptance can be calcaluated. For this reason we use different spectral data for this example. We also illustrate how we can force the range of wavelengths included in the plot to match the range of another spectral object.
- 
+
 <<plot-filter-3>>=
 plot(schott.mspct$GG495, range = yellow_gel.spct)
 @
 
 <<plot-filter-4>>=
-plot(schott.mspct$GG495, plot.qty = "absorptance", 
+plot(schott.mspct$GG495, plot.qty = "absorptance",
      range = yellow_gel.spct)
 @
 
@@ -210,7 +208,7 @@ plot(yellow_gel.spct, pc.out = TRUE)
 @
 
 <<plot-filter-6>>=
-plot(schott.mspct$GG495, plot.qty = "absorptance", 
+plot(schott.mspct$GG495, plot.qty = "absorptance",
      pc.out = TRUE, range = yellow_gel.spct)
 @
 
@@ -268,7 +266,7 @@ For details on how to modify the wavebands used for labels and summaries, and cu
 %%%%
 \section[Plotting spectra with ggplot2]{Plotting spectra with \pkg{ggplot2}}\label{sec:plot:spc}
 
-Package \pkg{ggspectra} not only provides simple to use \code{plot} methods, but also `building block' that simplify the construction of custom plots of spectral data with functions from package \pkg{ggplot2}. In this section we give examples of plotting tasks carried out using this more flexible approach. In this chapter's examples we will exploit the power of the grammar of graphics to build figures piece by piece, reusing some of the `pieces' or groups of `pieces' several times to highlight the flexibility of this approach. We also exemplify the `philosophy' of defining everything that needs to be consistent across figures only once. In this section we use a \code{source\_spct} object, \code{sun.spct} in most examples, but the same approaches work with objects of any of the spectral classes from package \pkg{photobiology}. 
+Package \pkg{ggspectra} not only provides simple to use \code{plot} methods, but also `building block' that simplify the construction of custom plots of spectral data with functions from package \pkg{ggplot2}. In this section we give examples of plotting tasks carried out using this more flexible approach. In this chapter's examples we will exploit the power of the grammar of graphics to build figures piece by piece, reusing some of the `pieces' or groups of `pieces' several times to highlight the flexibility of this approach. We also exemplify the `philosophy' of defining everything that needs to be consistent across figures only once. In this section we use a \code{source\_spct} object, \code{sun.spct} in most examples, but the same approaches work with objects of any of the spectral classes from package \pkg{photobiology}.
 
 \subsection{Task: plotting \code{source\_spct} objects}
 
@@ -416,9 +414,9 @@ opts_chunk$set(opts_fig_wide)
 %%%%
 \subsection{Task: annotating peaks and valleys in spectra}\label{sec:stat:pk:vly}
 
-Here\index{spectral data!annotate peaks in plot}\index{spectral data!annotate valleys in plot} we show an example of the use of \code{stat\_peaks} and \code{stat\_valleys} 
+Here\index{spectral data!annotate peaks in plot}\index{spectral data!annotate valleys in plot} we show an example of the use of \code{stat\_peaks} and \code{stat\_valleys}
 from package \pkg{ggspectra}. It uses the same parameter names and take the
-same arguments as methods \code{peaks} and \code{valleys} described in section \ref{sec:get:pk:vly}---please, consult this section for details on how to adjust how many and which local maxima and local minima are highlighted.
+same arguments as methods \code{peaks} and \code{valleys} described in section \ref{sec:summaries:peaks} on page \pageref{sec:summaries:peaks}---please, consult this section for details on how to adjust how many and which local maxima and local minima are highlighted.
 
 We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc} and we start with the simple example of highlighting the overall maximum in a spectrum. By default \code{geom\_point} is used.
 
@@ -437,7 +435,7 @@ The span, is the number of consecutive wavelength values in the data used to loc
 <<plot-peaks-3>>=
 fig_sun.e0 + stat_peaks(span=31, color = "red")
 @
- 
+
 \sloppy
 Below we continue `playing' with package \pkg{ggplot2} to show different ways of plotting the peaks and valleys.
 Being a \pkg{ggplot2}-compatible \code{stat\_peaks} and \code{stat\_valleys} accept a \code{geom} argument
@@ -476,7 +474,7 @@ fig_sun.e0 +
   expand_limits(y=1.0)
 @
 
-See section \ref{?} in chapter \ref{chap:sources} for an example these stats together with facets.
+See section \ref{sec:plot:effective} on page {sec:plot:effective} for an example these stats together with facets.
 
 %%%%
 \subsection{Task: annotating wavebands}\label{sec:plot:ann:wband}
@@ -497,7 +495,7 @@ opts_chunk$set(opts_fig_wide)
 
 %Now an example that is more complex, and demonstrates the flexibility of plots produced with \pkg{ggplot2}. We add annotations for eight different wavebands, some of them overlapping. For each one we use two \code{geom}s and some labels are rotated and justified. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}. A much simpler, but less flexible approach for adding annotations for several wavebands is described on page \pageref{chunk:plot:ann:tag}.
 %
-%ADD EXAMPLES HERE 
+%ADD EXAMPLES HERE
 
 A simple example using \code{geom\_vline} and method \code{range} with a \code{waveband} object as argument.
 
@@ -725,7 +723,7 @@ As part of the tagging colour information was also added to the spectral data ob
 tg.sun.spct <- tag(sun.spct, VIS_bands())
 @
 
-See section \ref{sec:plot:scales} on page \pageref{sec:plot:scales} for the definition of the colour and fill scales used for tagged spectra. These definitions are needed for most of the plots in the remaining of the present and next sections. These scales retrieve information about the wavebands both from the data itself and from the attribute described above.
+The colours when displayed on screens (additive devices, as they emit light) are most frequently defined by three \emph{channels}: red, green and blue (RGB). These three numbers can be represented in different ways. In R it is common to use character strings of hexadecimal digits. The choice of these three colours is not arbitrary, they are those perceived by the three photoreceptors in our eyes\footnote{In other words almost all screen devices and printed material based on dithering of three colours just trick our eyes into seeing certain colours, even if they do not actually exist on the screen or paper. Consequently, we cannot expect other animals, like our pets to make any sense out of TV screens or colour photographs!}.
 
 Here we plot using colours by waveband---using the colour definitions by ISO---, with symbols filled with colours. The colour data outside the wavebands is set to \code{NA} so those points are not filled.  One can play with the \code{size} of points until ones get the result wanted. The default \code{shape}s used by \pkg{ggplot2} do not accept a \code{fill} aesthetic, while shape `21' gives circles that can be `filled'.
 
@@ -1062,7 +1060,7 @@ fig_sun.z7 <- fig_sun.z0 +
 fig_sun.z7 + theme_bw()
 @
 
-We can obtain annotations similar to those in \ref{sec:plot:ann:wban} in page \pageref{sec:plot:ann:wban} created with \code{annotate\_waveband} using geoms.\label{chunk:plot:ann:tag}
+We can obtain annotations similar to those in \ref{sec:plot:ann:wband} in page \pageref{sec:plot:ann:wband} created with \code{annotate\_waveband} using geoms.\label{chunk:plot:ann:tag}
 
 <<plot-plant-guide-5>>=
 plant.guide.spct <- wb2rect_spct(Plant_bands())
@@ -1248,7 +1246,7 @@ fig_sun.tgrect2 + theme_bw()
 
 \section{Plotting the result of operations on spectral data}
 
-\subsection{Task: plotting effective spectral irradiance}
+\subsection{Task: plotting effective spectral irradiance}\label{sec:plot:effective}
 
 This task is here simply to show that there is nothing special about plotting spectra based on calculations, and that one can combine different functions to get the job done. We also show how to `row bind' spectra for plotting, in this case to make it easy to use facets.
 
@@ -1412,35 +1410,71 @@ In the case of the example spectrum with equal wavelength steps, one could have 
 \section{Task: plotting colours in Maxwell's triangle}\label{sec:max:tri}
 
 \subsection{Human vision: RGB}
-Given\index{color!Maxwell's triangle} a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with function \code{w\_length2rgb} (see section \ref{}), from a waveband with function \code{color} (see section \ref{}), for a wavelength range with \code{w\_length\_range2rgb} (see section \ref{}), and from a spectrum with function \code{s\_e\_irrad2rgb}  (see section \ref{}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geometries, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
+Given\index{color!Maxwell's triangle} a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with method \code{color} (see section \ref{sec:color:wl}), from a waveband (see section \ref{sec:color:range}), for a wavelength range by first constructing a \code{wavband} object (see section \ref{sec:color:range}), and from a spectrum (see section \ref{sec:color:spc}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geometries, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide_square)
 @
 
-<<plot-tern-1, eval=TRUE>>=
+In the first example we use colors pre-defined in R.
+
+<<plot-tern-1>>=
 colours <- c("red", "green", "yellow", "white",
              "orange", "purple", "seagreen", "pink")
 rgb.values <- col2rgb(colours)
-test.data <- data.frame(colour=colours,
+color.data <- data.frame(colour=colours,
                         R=rgb.values[1, ],
                         G=rgb.values[2, ],
                         B=rgb.values[3, ])
-maxwell.tern <- ggtern(data=test.data,
-                       aes(x=R, y=G, z=B, label=colour, fill=colour)) +
-                       geom_point(shape=23, size=3) +
+ggtern(data=color.data,
+       aes(x=R, y=G, z=B, label=colour, fill=colour)) +
+       geom_point(shape=23, size=3) +
   geom_text(hjust=-0.2) +
   labs(x = "R", y="G", z="B") + scale_fill_identity()
-maxwell.tern
 @
 
-\section{Honey-bee vision: GBU}
+In the second example, we calculate the colours for leaves as seen in sunlight.
 
-In\index{colour!honey-bee vision} this case we start with the spectral responsiveness of the photoreceptors present in the eyes of honey bees. Bees, as humans have three photoreceptors, but instead of red, green and blue (RGB), bees see green, blue and \UVA (GBU). To plot colours seen by bees one can still use a ternary plot, but the axes represent different photoreceptors than for humans, and the colour space is shifted towards shorter wavelengths.
+<<plot-tern-2>>=
+betula_reflected.mspct <-
+  convolve_each(as.reflector_mspct(Betula_ermanii.mspct),
+                sun.spct)
+color.values <- color(betula_reflected.mspct, type = "CC")
+rgb.values <- col2rgb(color.values[[2]])
+leaf.data <- data.frame(leaf = color.values[[1]],
+                        color = color.values[[2]],
+                        R=rgb.values[1, ],
+                        G=rgb.values[2, ],
+                        B=rgb.values[3, ])
+ggtern(data=leaf.data,
+       aes(x=R, y=G, z=B, fill=color)) +
+       geom_point(shape=21, size=3) +
+  labs(x = "R", y="G", z="B") + scale_fill_identity()
+@
 
-The calculations we will demonstrate here, in addition are geared to compare a background to a foreground object (foliage vs.\ flower). We have followed xxxxx \cite{chitka?} in this example, but be aware that calculations presented in this reference do not match the equations presented. In the original published example, the calculations have been simplified by leaving out $\delta \lambda$. Although not affecting the final result for their example, intermediate results are different (wrong?). We have further generalized the calculations and equations to make the calculations also valid for spectra measured using $\delta \lambda$ that itself varies along the wavelength axis. This is the usual situation with array spectrometers, nowadays frequently used when measuring reflectance.
+%In the third example, we use wavelengths in nanometres.
+%
+%<<plot-tern-3>>=
+%w.lengths <- c(420, 500, 530, 600, 630, 670)
+%rgb.values <- col2rgb(color(w.lengths))
+%wl.data <- data.frame(colour=w.lengths,
+%                        R=rgb.values[1, ],
+%                        G=rgb.values[2, ],
+%                        B=rgb.values[3, ])
+%ggtern(data=wl.data,
+%       aes(x=R, y=G, z=B, label=colour, fill=colour)) +
+%       geom_point(shape=23, size=3) +
+%  geom_text(hjust=-0.2) +
+%  labs(x = "R", y="G", z="B") + scale_fill_identity()
+%@
 
-The assessment of the perceived `colour difference' between background and foreground objects requires taking into consideration several spectra: the incident `light' spectrum, the reflectance spectra of the two objects, and the sensitivity spectra of three photoreceptors in the case of trichromic vision. In addition to these data, we need to take into consideration the shape of the dose response of the photoreceptors.
+%\section{Honey-bee vision: GBU}
+%
+%In\index{colour!honey-bee vision} this case we start with the spectral responsiveness of the photoreceptors present in the eyes of honey bees. Bees, as humans have three photoreceptors, but instead of red, green and blue (RGB), bees see green, blue and \UVA (GBU). To plot colours seen by bees one can still use a ternary plot, but the axes represent different photoreceptors than for humans, and the colour space is shifted towards shorter wavelengths.
+%
+%The calculations we will demonstrate here, in addition are geared to compare a background to a foreground object (foliage vs.\ flower). We have followed xxxxx \cite{chitka?} in this example, but be aware that calculations presented in this reference do not match the equations presented. In the original published example, the calculations have been simplified by leaving out $\delta \lambda$. Although not affecting the final result for their example, intermediate results are different (wrong?). We have further generalized the calculations and equations to make the calculations also valid for spectra measured using $\delta \lambda$ that itself varies along the wavelength axis. This is the usual situation with array spectrometers, nowadays frequently used when measuring reflectance.
+%
+%The assessment of the perceived `colour difference' between background and foreground objects requires taking into consideration several spectra: the incident `light' spectrum, the reflectance spectra of the two objects, and the sensitivity spectra of three photoreceptors in the case of trichromic vision. In addition to these data, we need to take into consideration the shape of the dose response of the photoreceptors.
 
 <<plot-clean>>=
 try(detach(package:ggspectra))

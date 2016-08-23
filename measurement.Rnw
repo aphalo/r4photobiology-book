@@ -74,7 +74,9 @@ plot(my.spct)
 %%%%
 \subsection{Task: Import data from Ocean Optics instruments and software}\label{sec:OO:import}
 
-Reading\index{foreign data!Ocean Optics spectrometers} spectral (energy) irradiance from a file saved in Ocean Optics SpectraSuite software , now superseded by OceanView.
+\subsubsection{SpectraSuite}
+
+Reading\index{foreign data!Ocean Optics spectrometers} spectral (energy) irradiance from a file saved in Ocean Optics SpectraSuite software (Fig.\ \ref{fig:oo:ssirrad}, now superseded by OceanView.
 
 \begin{figure}
   \begin{framed}
@@ -106,7 +108,7 @@ Number of Pixels in Processed Spectrum: 1044
     \end{verbatim}
     \end{footnotesize}
   \end{framed}
-  \caption[Top of text file \code{spectrum.SSirrad}]{Top of text file \code{spectrum.SSirrad} written by Ocean Optics' \pkg{SpectraView} software, and used in the example in section \ref{sec:OO:import}}\label{fig:listing:oo}
+  \caption[Top of text file \code{spectrum.SSirrad}]{Top of text file \code{spectrum.SSirrad} written by Ocean Optics' \pkg{SpectraView} software, and used in the example in section \ref{sec:OO:import}}\label{fig:oo:ssirrad}
 \end{figure}
 
 
@@ -125,8 +127,44 @@ ooss1.spct <- read_oo_ssirrad("inout/spectrum.SSIrrad",
 ooss1.spct
 @
 
-Files saved by Ocean Optics \emph{Jaz} spectrometers have a slightly different format, and a
-function different function is to be used.
+\subsubsection{Jazz}
+
+Files saved by Ocean Optics \emph{Jaz} spectrometers have a slightly different format (Fig.\ \ref{fig:oo:jazirrad}, and a function different function is to be used.
+
+\begin{figure}
+  \begin{framed}
+  \begin{footnotesize}
+    \begin{verbatim}
+Jaz Absolute Irradiance File
+++++++++++++++++++++++++++++++++++++
+Date: Tue Feb 03 09:44:41 2015
+User: jaz
+Dark Spectrum Present: Yes
+Processed Spectrum Present: Yes
+Spectrometers: JAZA1065
+Integration Time (usec): 193000 (JAZA1065)
+Spectra Averaged: 3 (JAZA1065)
+Boxcar Smoothing: 5 (JAZA1065)
+Correct for Electrical Dark: Yes (JAZA1065)
+Strobe/Lamp Enabled: No (JAZA1065)
+Correct for Detector Non-linearity: Yes (JAZA1065)
+Correct for Stray Light: No (JAZA1065)
+Number of Pixels in Processed Spectrum: 2048
+Fiber (micron): 3900
+Collection Area: 0.119459
+Int. Sphere: No
+>>>>>Begin Processed Spectral Data<<<<<
+W	D	S	P
+188.825226	0.000000	    0.000000	    0.000000
+189.284851	0.000000	    0.000000	    0.000000
+189.744415	-89.659378	-90.917900	-0.000000
+190.203964	-106.165916	-96.419785	0.000000
+.........
+    \end{verbatim}
+    \end{footnotesize}
+  \end{framed}
+  \caption[Top of text file \code{spectrum.JazIrrad}]{Top of text file \code{spectrum.JazIrrad} written by Ocean Optics' Jaz spectrometer, and used in the example in section \ref{sec:OO:import}}\label{fig:oo:jazirrad}
+\end{figure}
 
 <<oojz-io-01>>=
 jaz.spct <- read_oo_jazirrad("inout/spectrum.JazIrrad")
@@ -154,8 +192,30 @@ avantes.spct
 
 \index{foreign data!Macam spectrometers}
 The Macam PC-1900 spectroradiometer and its companion software save data in a simple text
-file. Data is always stored as spectral (energy) irradiance, so spectral data can be easily
-decoded. All the files we have tested had the name tag ``.DTA''.
+file. Data is always stored as spectral (energy) irradiance, so spectral data can be easily decoded. All the files we have tested had the name tag ``.DTA''. In Figure \ref{fig:macam:dta} the top of a file output by the Macam software is shown.
+
+\begin{figure}
+  \begin{framed}
+  \begin{footnotesize}
+    \begin{verbatim}
+@19/5/1997
+@17:44:58
+#No Title
+ 2.5000000000E+02
+ 0.0000000000E+00
+ 2.5100000000E+02
+ 0.0000000000E+00
+ 2.5200000000E+02
+ 0.0000000000E+00
+ 2.5300000000E+02
+ 0.0000000000E+00
+.........
+    \end{verbatim}
+    \end{footnotesize}
+  \end{framed}
+  \caption[Top of text file \code{spectrum.DTA}]{Top of text file \code{spectrum.DTA} written by the software of a Macam scanning spectrometer, and used in the example in section \ref{sec:Macam:import}. In this case wavelengths and spectral irradiance are `interlaced' in a single column of numbers and metadata is minimal.}\label{fig:macam:dta}
+\end{figure}
+
 
 <<macam-io-01>>=
 macam.spct <- read_macam_dta("inout/spectrum.DTA")
@@ -178,7 +238,29 @@ The LI-COR LI-1800 spectroradiometer and its companion software can save data ei
 spectral photon irradiance or spectral (energy) irradiance. As files are labelled accordingly,
 our function, automatically detects the type of data being read. Be aware that the function
 is not able to decode the binary files ``.DAT''. Only ``.PRN'' as converted by LI-COR's
-PC1800 software can be decoded.
+PC1800 software can be decoded by our function. In Figure \ref{fig:licor:prn} the top of a file output by the Macam software is shown.
+
+\begin{figure}
+  \begin{framed}
+  \begin{footnotesize}
+    \begin{verbatim}
+"FILE:FL2"
+"REM: TLD 36W/865       (QNTM)"
+"LIMS: 300- 900NM"
+"INT:  1NM"
+"DATE:08/23 16:32"
+"MIN:  300NM  1.518E-04"
+"MAX:  546NM  7.491E-01"
+ 300  1.518E-04
+ 301  3.355E-04
+ 302  2.197E-04
+ 303  3.240E-04
+.........
+    \end{verbatim}
+    \end{footnotesize}
+  \end{framed}
+  \caption[Top of text file \code{spectrum.PRN}]{Top of text file \code{spectrum.PRN} written by the software of a LI-COR LI-1800 scanning spectrometer, and used in the example in section \ref{sec:LI:import}. One limitation is that the year is missing from the date.}\label{fig:licor:prn}
+\end{figure}
 
 <<li-io-01>>=
 licor.spct <- read_licor_prn("inout/spectrum.PRN")
@@ -291,6 +373,10 @@ yet implemented, but will be added soon.
 
 \index{foreign data!sglux spectrometers}
 
+
+
 \subsection{Task: Acquiring data from YoctoPuce modules and servers}\label{sec:}
 
 \index{foreign data!YoctoPuce modules}
+
+

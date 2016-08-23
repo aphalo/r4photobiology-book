@@ -14,6 +14,7 @@ opts_knit$set(concordance=TRUE)
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<message=my.debug>>=
 library(photobiology)
+library(photobiologyWavebands)
 @
 
 \section{Introduction}
@@ -32,59 +33,54 @@ One use of these functions is to generate realistic colour for `key' on plots of
 %%%%
 \section{Task: calculating an RGB colour from a single wavelength}\label{sec:color:wl}
 
-Function\index{colour!calculation from wavelength} \code{w\_length2rgb} must be used in this case. If a vector of wavelengths is supplied as argument, then a vector of \code{color}s, of the same length, is returned. Here are some examples of calculation of R color definitions for monochromatic light:
+Method\index{colour!calculation from wavelength} \code{color} can be used in this case. If a vector of wavelengths is supplied as argument, then a vector of \code{color}s, of the same length, is returned. Here are some examples of calculation of R color definitions for monochromatic light:
 
 <<>>=
-w_length2rgb(550) # green
-w_length2rgb(630) # red
-w_length2rgb(380) # UVA
-w_length2rgb(750) # far red
-w_length2rgb(c(550, 630, 380, 750)) # vectorized
+color(550) # green
+color(630) # red
+color(380) # UVA
+color(750) # far red
+color(c(550, 630, 380, 750)) # vectorized
 @
 
 %%%%
 \section{Task: calculating an RGB colour for a range of wavelengths}\label{sec:color:range}
 
-Function\index{colour!calculation from wavelength range} \code{w\_length\_range2rgb} must be used in this case. This function expects as input a vector of two number, as returned by the function \code{range}. If a longer vector is supplied as argument, its range is used, with a warning. If a vector of lengths one is given as argument, then the same output as from function \code{w\_length2rgb} is returned. This function assumes a flat energy spectral irradiance curve within the range. Some examples:
+Method\index{colour!calculation from wavelength range} \code{color} can be used also in this case, but we need to supply the range of wavelengths as a \code{waveband} object. The details of how to construct a \code{waveband} object are described in This function assumes a flat energy spectral irradiance curve within the range. Some examples:
 Examples for wavelength ranges:
 
 <<>>=
-w_length_range2rgb(c(400,700))
-w_length_range2rgb(400:700)
-w_length_range2rgb(sun.spct$w.length)
-w_length_range2rgb(550)
+color(waveband(c(400,700)))
+color(PAR())
+color(Yellow())
 @
 
 %%%%
 \section{Task: calculating an RGB colour for spectrum}\label{sec:color:spc}
 
-Function\index{colour!calculation from spectrum} \code{s\_e\_irrad2rgb} in contrast to those described above, when calculating the color takes into account the spectral irradiance.
+Method\index{colour!calculation from spectrum} \code{color} is also defined for spectral objects.
 
 Examples for spectra, in this case the solar spectrum:
 
 <<>>=
-with(sun.spct,
-     s_e_irrad2rgb(w.length, s.e.irrad))
-with(sun.spct,
-     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF2.spct))
-with(sun.spct,
-     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCMF10.spct))
-with(sun.spct,
-     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC2.spct))
-with(sun.spct,
-     s_e_irrad2rgb(w.length, s.e.irrad, sens=ciexyzCC10.spct))
+color(sun.spct)
+color(sun.spct, type = "CMF") # colour matching function
+color(sun.spct, type = "CC")  # colour coordinates
+color(sun.spct * yellow_gel.spct)
 @
-
-Except for the first example, we specificity the visual sensitivity data to use.
 
 \section{A sample of colours}
 
 Here we plot the RGB colours for the range covered by the CIE 2006 proposed standard calculated at each 1 nm step:
 
+<<echo=FALSE, include=FALSE, cache=FALSE>>=
+opts_chunk$set(opts_fig_wide)
+@
+
 <<>>=
 wl <- c(390, 829)
 
-my.colors <- w_length2rgb(wl[1]:wl[2])
+my.colors <- color(wl[1]:wl[2])
 
 colCount <- 40 # number per row
 rowCount <- trunc(length(my.colors) / colCount)

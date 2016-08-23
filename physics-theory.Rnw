@@ -60,8 +60,8 @@ measurement of \UV radiation compared to \PAR, a spectral region which has been 
 
 Ultraviolet radiation is strongly absorbed by plant
 surfaces, although cuticular waxes and pubescence on leaves can
-sometimes increase \UV reflectance. The diffuse component of \UV radiation is larger than that
-of visible light (Figure \ref{fig:diffuse.light}).
+sometimes increase \UV reflectance. The diffuse component of \UV radiation is proportionally larger than that
+of visible light (Figure \ref{fig:diffuse:UV}).
 In sunlit patches in forest gaps the diffuse radiation percentage is
 lower than in open areas, because \gls{direct:rad} is not attenuated
 but part of the sky is occluded by the surrounding forest.

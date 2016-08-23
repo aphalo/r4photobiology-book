@@ -22,7 +22,7 @@ library(lubridate)
 %%%%
 \section{Introduction}\label{sec:wt:intro}
 
-Weighted irradiance\index{irradiance!weighted}\index{irradiance!effective}\index{wavebands!spectral weighting functions} is usually reported in weighted energy units, but it is also possible to use weighted photon based units. In practice the R code to use is exactly the same as for unweighted irradiances, as all the information needed for applying weights is stored in the \code{waveband} object. An additional factor comes into play and it is the \emph{normalization wavelength}, which is accepted as an argument by the predefined waveband creation functions that describe biological spectral weighting functions (BSWFs). The focus of this chapter is on the differences between calculations for weighted irradiances compared to those for un-weighted irradiances described in chapter \ref{chap:uw:irrad}. In particular it is important that you read sections \ref{sec:uw:ueirrad}, \ref{sec:uw:qirrad}, on the calculation of irradiances from spectral irradiances and sections \ref{sec:uwavebands:use}, and \ref{sec:uwavebands} before reading the present chapter.
+Weighted irradiance\index{irradiance!weighted}\index{irradiance!effective}\index{wavebands!spectral weighting functions} is usually reported in weighted energy units, but it is also possible to use weighted photon based units. In practice the R code to use is exactly the same as for unweighted irradiances, as all the information needed for applying weights is stored in the \code{waveband} object. An additional factor comes into play and it is the \emph{normalization wavelength}, which is accepted as an argument by the predefined waveband creation functions that describe biological spectral weighting functions (BSWFs). The focus of this chapter is on the differences between calculations for weighted irradiances compared to those for un-weighted irradiances described in chapter \ref{chap:uw:irrad}. In particular it is important that you read sections \ref{sec:uw:eirrad}, \ref{sec:uw:qirrad}, on the calculation of irradiances from spectral irradiances and sections \ref{sec:uwavebands:use}, and \ref{sec:uwavebands} before reading the present chapter.
 
 Most SWFs are defined using measured action spectra or spectra derived by combining different measured action spectra. As these spectra have been measured under different conditions, what is of interest is the shape of the curve as a function of wavelength, but not the absolute values. Because of this, SWFs are normalized to an action of one at an arbitrary wavelength. In many cases there is no consensus about the wavelength to use. Normalization is simple, it consists in dividing all action values along the curve by the action value at the selected normalization wavelengths.
 
@@ -31,13 +31,13 @@ Another complication is that it is not always clear if a given SWF definition is
 %%%%
 \section{Task: specifying the normalization wavelength}\label{sec:wt:intro}
 
-Several constructors for SWF-based \code{waveband} objects are supplied. Most of them have parameters, in most cases with default arguments, so that different common uses and misuses in the literature can be reproduced. For example, function \code{GEN.G()} is predefined in package \PBWB as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \cite{Green198x}:
+Several constructors for SWF-based \code{waveband} objects are supplied. Most of them have parameters, in most cases with default arguments, so that different common uses and misuses in the literature can be reproduced. For example, function \code{GEN.G()} is predefined in package \PBWB as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \autocite{Green1974}:
 
 <<>>=
 e_irrad(sun.spct, GEN.G())
 @
 
-The code above uses the default normalization wavelength of 300~nm, which is almost universally used nowadays, but not the value used in the original publication \autocite{Caldwell1973}. Any arbitrary wavelength (nm), within the range of the waveband is accepted as \code{norm} argument:
+The code above uses the default normalization wavelength of 300~nm, which is almost universally used nowadays, but not the value used in the original publication \autocite{Caldwell1971}. Any arbitrary wavelength (nm), within the range of the waveband is accepted as \code{norm} argument:
 
 <<>>=
 range(GEN.G())
@@ -67,7 +67,7 @@ As described in section \ref{sec:uwavebands:use}, there are several methods for 
 %%%
 \section{Task: define wavebands that use weighting functions}\label{sec:wt:wavebands}
 
-In sections \ref{sec:uw:wavebands} and \ref{sec:wb:objects} we briefly introduced functions \code{waveband} and \code{new\_waveband}, and here we describe their use in full detail. Most users are unlikely to frequently need to define new \code{waveband} objects as common SWFs are already defined in package \PBWB.
+In sections \ref{sec:uwavebands} and \ref{sec:wb:objects} we briefly introduced functions \code{waveband} and \code{new\_waveband}, and here we describe their use in full detail. Most users are unlikely to frequently need to define new \code{waveband} objects as common SWFs are already defined in package \PBWB.
 
 Although the constructors are flexible, and can automatically handle both definitions based on action or response spectra in photon or energy units, some care is needed when performance is important.
 
