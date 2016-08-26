@@ -177,8 +177,8 @@ q_irrad(my_luminaire,
 \section{Task: light scattering media (natural waters, plant and animal tissues)}\label{sec:}
 
 <<>>=
-try(detach(package:photobiologyFilters))
 try(detach(package:photobiologyLEDs))
+try(detach(package:photobiologyFilters))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @

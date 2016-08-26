@@ -62,10 +62,10 @@ In the example above, the data are read using the supplied time zone, and printe
 <<>>=
 # this is just a date object, which ignores the time zone
 ymd("20140320") # assumes local tz, POSIXct object
-with_tz(ymd("20140320"), tz = "America/Buenos_Aires")
+with_tz(ymd("20140320"), tzone = "America/Buenos_Aires")
 # this is a POSIXct date + time object
 ymd_hm("20140320 00:00") # assumes local tz, POSIXct object
-with_tz(ymd_hm("20140320 00:00"), tz = "America/Buenos_Aires")
+with_tz(ymd_hm("20140320 00:00"), tzone = "America/Buenos_Aires")
 # current system time zone
 Sys.timezone()
 @
@@ -75,10 +75,10 @@ Sys.timezone()
 \end{framed}
 
 <<>>=
-with_tz(ymd("20140320", tz = "America/Buenos_Aires"), tz = "Europe/London")
-with_tz(ymd("20140320", tz = "Asia/Tokyo"), tz = "America/Buenos_Aires")
-with_tz(ymd_hm("20140320 00:00", tz = "America/Buenos_Aires"), tz = "Asia/Tokyo")
-with_tz(ymd_hm("20140320 00:00", tz = "Asia/Tokyo"), tz = "America/Buenos_Aires")
+with_tz(ymd("20140320", tz = "America/Buenos_Aires"), tzone = "Europe/London")
+with_tz(ymd("20140320", tz = "Asia/Tokyo"), tzone = "America/Buenos_Aires")
+with_tz(ymd_hm("20140320 00:00", tz = "America/Buenos_Aires"), tzone = "Asia/Tokyo")
+with_tz(ymd_hm("20140320 00:00", tz = "Asia/Tokyo"), tzone = "America/Buenos_Aires")
 @
 
 \subsection{Geographic coordinates}
@@ -174,9 +174,9 @@ Be also aware that for summer dates the times are expressed accordingly. In the 
 \end{framed}
 
 <<>>=
-sunrise_time(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
-sunrise_time(today(tz = "Europe/Helsinki"), lat = 60, lon = 25, tz = "Europe/Helsinki")
-sunrise_time(today(tz = "Europe/Helsinki"), lat = 60, lon = 25, tz = "UTC")
+sunrise_time(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
+sunrise_time(today(tzone = "Europe/Helsinki"), lat = 60, lon = 25, tz = "Europe/Helsinki")
+sunrise_time(today(tzone = "Europe/Helsinki"), lat = 60, lon = 25, tz = "UTC")
 @
 
 The angle used in the twilight calculation can be supplied, either as the name of a standard definition, or as an angle in degrees (negative for sun positions below the horizon). Positive angles can be used when the time of sun occlusion behind a building, mountain, or other obstacle needs to be calculated.
@@ -233,15 +233,15 @@ head(time_at_sunrise.df, 6)
 The complementary functions \code{sunset\_time} and \code{noon\_time} take exactly the same arguments as \code{sunrise\_time}, but \code{noon\_time} ignores any argument supplied for \code{twilight}.
 
 <<>>=
-sunrise_time(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
-sunset_time(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
-noon_time(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
+sunrise_time(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
+sunset_time(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
+noon_time(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
 @
 
 Function\Advanced{day events} \code{day\_night} returns a list with the different times with a single call. As other functions described in this chapter, \code{day\_night} is vectorised for the \code{date} parameter.
 
 <<>>=
-day_night(today(tz = "UTC"), lat = 60, lon = 0, tz = "UTC")
+day_night(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
 @
 
 \begin{example}
@@ -490,8 +490,8 @@ By replacing \code{sunrise\_time} by \code{sunset\_time} in the code above and e
 
 
 <<>>=
-try(detach(package:photobiology))
-try(detach(package:lubridate))
 try(detach(package:ggmap))
 try(detach(package:ggplot2))
+try(detach(package:lubridate))
+try(detach(package:photobiology))
 @

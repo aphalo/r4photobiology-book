@@ -611,3 +611,13 @@ plot(LUMITRONIX_white.spct)
 \end{figure}
 
 Finally lasers, are different in that a laser is not another type of primary source of radiation. Lasing is a phenomenon which allows the generation of coherent radiation from a beam of incoherent radiation by means of a ``cavity''. Different primary sources of radiation can be used in lasers. In the case of laser diodes, an LED is the primary source of radiation. There are different possible types of cavities, for example gas-filled or solid state. Lasers are pulsed light sources, they do not emit continuously, although in many cases the frequency at which pulses are produced can be high. Even though laser pointers and other readily available lasers seem to us as being a continuous source of radiation, they are not. In fact, they are pulsed, and the duty cycle is low (pulses are brief compared to `gaps') but each pulse has high energy. As radiation is in addition in a very narrow beam and almost of a single wavelength, a laser delivers spatially and temporarily concentrated energy pulses, that can make the beam from a 1~mW laser pointer easily visible at a distance of tens of meters in a lecture hall illuminated with lamps emitting in total hundreds of watts of visible radiation. For the same reason, even lasers emitting as little 1~mW if pointed directly into the eyes can cause permanent eye-sight damage.
+
+<<optics-unload>>=
+try(detach(package:photobiologyLEDs))
+try(detach(package:photobiologyLamps))
+try(detach(package:photobiologySun))
+try(detach(package:photobiologyWavebands))
+try(detach(package:ggspectra))
+try(detach(package:ggplot2))
+try(detach(package:photobiology))
+@

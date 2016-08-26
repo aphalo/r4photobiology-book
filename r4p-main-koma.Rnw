@@ -387,7 +387,7 @@ incl_ckbk <- FALSE
 <<child-wtirrad, child='transmittance.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-astronomy, child='astronomy.Rnw', eval=incl_ckbk>>=
+<<child-astronomy, child='astronomy.Rnw', eval=TRUE>>=
 @
 
 <<child-colour, child='colour.Rnw', eval=incl_ckbk>>=

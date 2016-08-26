@@ -103,7 +103,7 @@ source_spct(w.length = my.mat[1, ], s.e.irrad = my.mat[2, ])
 @
 
 \begin{framed}
-  \ilAttention In the code statement \code{my.mat[1, ]} and \code{my.mat[2, ]} we use indexes to extract the first and second rows from the matrix, because the matrix we created in the first line of the code chunk with argument \code{byrow = TRUE} contains the wavelengths in the first or top row, and the spectral irradiance data in the second row. 
+  \ilAttention In the code statement \code{my.mat[1, ]} and \code{my.mat[2, ]} we use indexes to extract the first and second rows from the matrix, because the matrix we created in the first line of the code chunk with argument \code{byrow = TRUE} contains the wavelengths in the first or top row, and the spectral irradiance data in the second row.
 \end{framed}
 
 \subsection{Task: Export one spectrum to \code{matrix}}
@@ -218,7 +218,7 @@ colorSpec2chroma_spct(xyz1931.5nm)
 
 <<r-export-cspct-1>>=
 sun.cspec <- spct2colorSpec(sun.spct)
-plot(sun.cspec, col = "blue")
+plot(sun.cspec, color = "blue")
 @
 
 <<r-export-cspct-2>>=
@@ -375,4 +375,20 @@ We plot three spectra using plot method from package \pkg{ggspectra}.
 plot(gap_fda.spct,
      annotations = c("color.guide", "boxes", "labels")) +
   aes(linetype = method)
+@
+
+<<>>=
+try(detach(package:fda.usc))
+try(detach(package:fda))
+try(detach(package:pavo))
+try(detach(package:colorSpec))
+try(detach(package:hyperSpec))
+try(detach(package:ggspectra))
+try(detach(package:ggplot2))
+try(detach(package:lubridate))
+try(detach(package:photobiologyInOut))
+try(detach(package:photobiologyWavebands))
+try(detach(package:photobiologySun))
+try(detach(package:photobiology))
+try(detach(package:tibble))
 @

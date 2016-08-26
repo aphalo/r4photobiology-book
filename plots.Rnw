@@ -169,11 +169,11 @@ As the current implementation uses \code{ggplot} `statistic's, waveband irradian
 The defaults arguments cater the exploratory plotting of spectra, returning a plot that is heavily annotated. The two plots that follow show spectral response, expressed on an energy or photon basis. We use as example the action spectrum of photosynthesis in leaves.
 
 <<plot-response-1>>=
-plot(McCree_photosynthesis.mspct$oat)
+plot(McCree_photosynthesis.mspct$oats)
 @
 
 <<plot-response-2>>=
-plot(McCree_photosynthesis.mspct$oat, unit.out = "photon")
+plot(McCree_photosynthesis.mspct$oats, unit.out = "photon")
 @
 
 For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}. As for other \code{plot} methods described in this chapter normalization and scaling meta-data are reflected in the plot axis-labels.
@@ -660,8 +660,8 @@ levels(plant.sun.spct[["wb.f"]])
 Tagging also adds some additional data as an attribute to the spectrum. This data can be retrieved with the base R function \code{attr}.
 
 <<plot-tag-5>>=
-attr(cp.sun.spct, "spct.tag")
-attr(uvb.sun.spct, "spct.tag")
+attr(cp.sun.spct, "spct.tags")
+attr(uvb.sun.spct, "spct.tags")
 @
 
 We now tag a spectrum for use in our first plot example.
@@ -1478,12 +1478,14 @@ ggtern(data=leaf.data,
 
 <<plot-clean>>=
 try(detach(package:ggspectra))
-try(detach(package:ggtern))
-try(detach(package:ggplot2))
-try(detach(package:gridExtra))
+try(detach(package:photobiologyReflectors))
+try(detach(package:photobiologyPlants))
 try(detach(package:photobiologyFilters))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
+try(detach(package:dplyr))
+try(detach(package:gridExtra))
+try(detach(package:ggtern))
+try(detach(package:scales))
+try(detach(package:ggplot2))
 @
-
-

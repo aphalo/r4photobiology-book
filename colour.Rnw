@@ -13,11 +13,16 @@ opts_knit$set(concordance=TRUE)
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<message=my.debug>>=
+library(colorSpec)
 library(photobiology)
 library(photobiologyWavebands)
+library(photobiologyInOut)
+library(ggspectra)
 @
 
 \section{Introduction}
+
+Although package \pkg{photobiology} defines some functions for color related calculations, special R packages exist for color calculations. Package \pkg{colorSpec} is very comprehensive for human vision, illumination, and also covers cameras and display screens. We will use this package in some of the examples in this chapter.
 
 The\index{color|see {colour}}\index{colour} calculation of equivalent colours and colour spaces is based on the number of photoreceptors and their spectral sensitivities. For humans it is normally accepted that there are three photoreceptors in the eyes, with maximum sensitivities in the red, green, and blue regions of the spectrum.
 
@@ -69,6 +74,44 @@ color(sun.spct, type = "CC")  # colour coordinates
 color(sun.spct * yellow_gel.spct)
 @
 
+\section{Standard CIE illuminants}
+
+Package \pkg{colorSpec} defines all the standard CIE illuminants, so if needed for calculations with methods and operators from package \pkg{photobiology} they need to be converted. The conversion can easily be done with functions \code{colorSpec2spct()} or \code{colorSpec2mspct()}, the first returning a single spectral object, possibly containing several spectra in long form, and the second returns a collection of spectra containing one or more member spectra. Some examples of single spectra.
+
+<<CIE-A>>=
+A.1nm.spct <- colorSpec2spct(A.1nm)
+A.1nm.spct
+plot(A.1nm.spct)
+@
+
+<<CIE-B>>=
+B.5nm.spct <- colorSpec2spct(B.5nm)
+@
+
+<<CIE-D>>=
+D50.5nm.spct <- colorSpec2spct(D50.5nm)
+@
+
+Two examples of multiple spectra. Note bellow the use of double square brackets, to obtain a single spectrum---using single square brackets would instead subset the collection of spectra, possibly returning a collection with a single member spectrum.
+
+<<CIE-daylight-1>>=
+daylight1964.mspct <- colorSpec2mspct(daylight1964)
+names(daylight1964.mspct)
+plot(daylight1964.mspct[[1]])
+@
+
+<<CIE-daylight-2>>=
+daylight2013.mspct <- colorSpec2mspct(daylight2013)
+names(daylight2013.mspct)
+@
+
+<<CIE-fluorescents>>=
+Fs.5nm.mspct <- colorSpec2mspct(Fs.5nm)
+names(Fs.5nm.mspct)
+plot(Fs.5nm.mspct[["F1"]])
+plot(Fs.5nm.mspct[["F11"]])
+@
+
 \section{A sample of colours}
 
 Here we plot the RGB colours for the range covered by the CIE 2006 proposed standard calculated at each 1 nm step:
@@ -106,5 +149,9 @@ for (j in 0:(rowCount-1))
 @
 
 <<>>=
+try(detach(package:ggspectra))
+try(detach(package:photobiologyInOut))
+try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
+try(detach(package:colorSpec))
 @

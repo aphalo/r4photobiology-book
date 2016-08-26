@@ -32,6 +32,7 @@ We here demonstrate how to transfer a spectrum to \pkg{hsdar}, and one example o
 Solidago_hs.spct <- with(Solidago_altissima.mspct$upper_adax, speclib(Rfr, w.length))
 plot(Solidago_hs.spct)
 ndvi <- vegindex(Solidago_hs.spct, "NDVI")
+ndvi
 @
 
 We now calculate a similar index by integrating reflectance for two wavebands,

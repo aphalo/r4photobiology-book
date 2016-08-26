@@ -592,5 +592,6 @@ try(detach(package:lubridate))
 try(detach(package:photobiologyLamps))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
+try(detach(package:lubridate))
 @
 

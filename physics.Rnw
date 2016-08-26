@@ -14,8 +14,8 @@ opts_knit$set(concordance=TRUE)
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<message=my.debug>>=
 library(ggplot2)
-library(ggspectra)
 library(photobiology)
+library(ggspectra)
 library(photobiologyFilters)
 @
 
