@@ -4,6 +4,10 @@
 
 This repository contains the draft of a handbook on **Photobiological calculations with R**. The handbook supports a suite of R packages developed by Pedro J. Aphalo at the University of Helsinki, Finland.
 
+### Is the book available as a PDF file for dwonload? ###
+
+Yes, the book draft is available for download through Leanpub (http://leanpub.com/r4photobiology).
+
 ### Just clone the repository ###
 
 To build the pdf you will need LaTeX and Memoire, and R and knitr. At the moment the files are in Rnw format but will at some point possibly be reformatted using Bookdown.
