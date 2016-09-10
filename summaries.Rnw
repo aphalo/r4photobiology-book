@@ -221,9 +221,9 @@ cat(comment(sun.spct))
 Methods\index{spectral data!find peaks}\index{spectral data!find valleys} \code{peaks} and \code{valleys} can be used on most spectral objects to find local maxima and local minima in spectral data. They return an object of the same class containing only the observations corresponding to these local extremes.
 
 <<>>=
-peaks(philips.tl12.spct)
-peaks(philips.tl12.spct, unit.out = "photon")
-peaks(philips.tl12.spct, span = 50)
+peaks(macam.mspct$philips.tl12)
+peaks(macam.mspct$philips.tl12, unit.out = "photon")
+peaks(macam.mspct$philips.tl12, span = 50)
 @
 
 <<>>=
@@ -260,13 +260,13 @@ The functions described in the previous section locate the observation with the 
 In this example, in the second statement we refine the location of the shortest-wavelength peak found by \code{get\_peaks} in the first statement. For this approach to work, the peaks should be clearly visible, and not very close to each other. We use the spectral irradiance measured from a UV-B lamp as an example.
 
 <<>>=
-stepsize(germicidal.spct)
+stepsize(oo_maya.mspct$germicidal)
 peaks <-
-   with(germicidal.spct,
+   with(oo_maya.mspct$germicidal,
         get_peaks(w.length, s.e.irrad, span = 5))
 fit <- nls(s.e.irrad ~ d + a1*exp(-0.5*((w.length-c1)/b1)^2),
            start=list(a1=3.1, b1=1, c1=peaks[1, 1], d=0),
-           data=germicidal.spct)
+           data=oo_maya.mspct$germicidal)
 fit
 fit$m$getPars()[["c1"]]
 peaks[1, 1]
@@ -290,7 +290,7 @@ fitted_peak.spct <-
 <<>>=
 ggplot(data = fitted_peak.spct, aes(w.length, s.e.irrad)) +
   geom_line(data = fitted_peak.spct, colour = "blue") +
-  geom_point(data = germicidal.spct, colour = "red", size = 3) +
+  geom_point(data = oo_maya.mspct$germicidal, colour = "red", size = 3) +
   xlim(250, 260)
 
 @

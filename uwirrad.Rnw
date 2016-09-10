@@ -335,7 +335,7 @@ $\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunl
 The use of function \code{fluence} facilitates the calculation as it accepts the length of time of the exposure as a \code{lubridate::duration}, making it easy to enter the duration using different units, or even calculate the duration as the difference between two times. Of course, the spectral irradiance should be measured at the position where the material being exposed was located during irradiation. The following example is for a red fluorescent tube as sometimes used in seed germination experiments to study phytochrome-mediated responses.
 
 <<>>=
-fluence(philips.tld36w.15.spct,
+fluence(licor.mspct$philips.tld36w.15,
         exposure.time = duration(5, "minutes"))
 @
 

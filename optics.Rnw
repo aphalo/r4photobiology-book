@@ -561,7 +561,7 @@ Incandescent light sources are ``near-black bodies'' heated at a very high tempe
 \begin{figure}
   \centering
 <<fig-incandescent, echo=FALSE>>=
-plot(incandescent.60w.spct)
+plot(licor.mspct$incandescent.60w)
 @
   \caption[Spectrum of incandescent lamp]{Spectral irradiance for a 60~W incandescent lamp}\label{fig:incandescent}
 \end{figure}
@@ -571,7 +571,7 @@ Carbon arc lamps emit light by means of an electric "arc" between two carbon ele
 \begin{figure}
   \centering
 <<fig-germicidal, echo=FALSE>>=
-plot(germicidal.spct)
+plot(oo_maya.mspct$germicidal)
 @
   \caption[Spectrum of germicidal lamp]{Spectral irradiance for a `germicidal' low pressure mercury lamp.}\label{fig:germicidal}
 \end{figure}
@@ -581,7 +581,7 @@ Other gas-discharge lamps use different gases or "vapours" or mixes of them. In 
 \begin{figure}
   \centering
 <<fig-fluorescent, echo=FALSE>>=
-plot(philips.tll36w.950.spct)
+plot(licor.mspct$philips.tll36w.950)
 @
   \caption[Spectrum of a `daylight' fluorescent tube]{Spectral irradiance for a `daylight', approx. 5200~K, fluorescent tube (Philips~36W~950).}\label{fig:white:fluorescent}
 \end{figure}
@@ -620,4 +620,4 @@ try(detach(package:photobiologyWavebands))
 try(detach(package:ggspectra))
 try(detach(package:ggplot2))
 try(detach(package:photobiology))
-@
+@ 
