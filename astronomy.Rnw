@@ -18,7 +18,7 @@ library(lubridate)
 library(ggplot2)
 library(ggmap)
 
-cache <- TRUE
+cache <- FALSE
 @
 
 %%%%
@@ -98,21 +98,19 @@ Functions\index{day length}\index{night length}\index{photoperiod}\index{scotope
 Calculating the length of the current day is easy. We use the Greenwich meridian, and 60 degrees in the Northern and Southern hemispheres.
 \code{today}.
 <<>>=
-day_length(today(), lat =  60, lon = 0)
-day_length(today(), lat = -60, lon = 0)
+day_length(today(), geocode = data.frame(lat = -60, lon = 0))
 @
 
 In the case of daylength calculations the longitude is almost irrelevant, and defaults to zero degrees. As the date defaults to `today' the code above can be simplified.
 
 <<>>=
-day_length(lat =  60)
-day_length(lat = -60)
+day_length(geocode = data.frame(lat = -60, lon = 0))
 @
 
 Function \code{geocode} from package \pkg{ggmap} returns suitable values in a \code{data.frame} based on search term(s). The returned value is a data frame, which can be passed as argument for parameter \code{geocode}.  The use of Google search has some restrictions that you will need to check before any intense or commercial use of their service.
 
 <<message=my.debug>>=
-my.city <- geocode('helsinki')
+my.city <- geocode('Helsinki', output = "latlona")
 my.city
 @
 
@@ -174,54 +172,67 @@ Be also aware that for summer dates the times are expressed accordingly. In the 
 \end{framed}
 
 <<>>=
-sunrise_time(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
-sunrise_time(today(tzone = "Europe/Helsinki"), lat = 60, lon = 25, tz = "Europe/Helsinki")
-sunrise_time(today(tzone = "Europe/Helsinki"), lat = 60, lon = 25, tz = "UTC")
+sunrise_time(today(tzone = "UTC"),
+             geocode = data.frame(lat = 60, lon = 0),
+             tz = "UTC")
+sunrise_time(today(tzone = "Europe/Helsinki"),
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "Europe/Helsinki")
+sunrise_time(today(tzone = "Europe/Helsinki"),
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "UTC")
 @
 
 The angle used in the twilight calculation can be supplied, either as the name of a standard definition, or as an angle in degrees (negative for sun positions below the horizon). Positive angles can be used when the time of sun occlusion behind a building, mountain, or other obstacle needs to be calculated.
 
 <<>>=
 sunrise_time(today(tzone = "Europe/Helsinki"),
-             lat = 60, lon = 25, tz = "Europe/Helsinki",
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "Europe/Helsinki",
              twilight = "civil")
 sunrise_time(today(tzone = "Europe/Helsinki"),
-             lat = 60, lon = 25, tz = "Europe/Helsinki",
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "Europe/Helsinki",
              twilight = -10)
 sunrise_time(today(tzone = "Europe/Helsinki"),
-             lat = 60, lon = 25, tz = "Europe/Helsinki",
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "Europe/Helsinki",
              twilight = +12)
 @
 
 Default latitude is zero (the Equator), the default longitude is zero (Greenwich), and default time zone for the functions in the \pkg{photobiology} package is \code{"UTC"}. The default for \code{date} is the current day in time zone UTC. Using defaults the code is simpler, but this is not a good approach for scripts.
 
 <<>>=
-sunrise_time(lat = 60)
+sunrise_time(geocode = data.frame(lat = 60, lon = 0))
 @
 
 By default a POSIXct object is returned. This object described a date and time in UTC. It is portable and safe. However, if one needs the time of the day as numeric value, one can supply additional arguments.
 
 <<>>=
 sunrise_time(today(tzone = "Europe/Helsinki"),
-             lat = 60, lon = 25, tz = "Europe/Helsinki",
-             unit.out = "hour")
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "Europe/Helsinki",
+             unit.out = "days")
 sunrise_time(today(tzone = "Europe/Helsinki"),
-             lat = 60, lon = 25, tz = "Europe/Helsinki",
-             unit.out =  "minute")
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "Europe/Helsinki",
+             unit.out = "hours")
 sunrise_time(today(tzone = "Europe/Helsinki"),
-             lat = 60, lon = 25, tz = "Europe/Helsinki",
-             unit.out = "second")
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "Europe/Helsinki",
+             unit.out =  "minutes")
+sunrise_time(today(tzone = "Europe/Helsinki"),
+             geocode = data.frame(lat = 60, lon = 25),
+             tz = "Europe/Helsinki",
+             unit.out = "seconds")
 @
 
 We can reuse the array of dates from section \ref{sec:astro:photoperiod}, and the coordinates of Joensuu, to calculate the time at sunrise through the year.
 
 <<>>=
-time_at_sunrise.df <-
-  data.frame(date = my.dates,
-             sunrise_at =
-               sunrise_time(my.dates,
-                            geocode = my.city,
-                            tz = "Europe/Helsinki"))
+time_at_sunrise.df <- sunrise_time(my.dates,
+                                   geocode = my.city,
+                                   tz = "Europe/Helsinki")
 @
 
 The six lines at the top of the output are
@@ -233,15 +244,23 @@ head(time_at_sunrise.df, 6)
 The complementary functions \code{sunset\_time} and \code{noon\_time} take exactly the same arguments as \code{sunrise\_time}, but \code{noon\_time} ignores any argument supplied for \code{twilight}.
 
 <<>>=
-sunrise_time(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
-sunset_time(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
-noon_time(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
+sunrise_time(today(tzone = "UTC"),
+                   geocode = data.frame(lat = 60, lon = 0),
+                   tz = "UTC")
+sunset_time(today(tzone = "UTC"),
+                  geocode = data.frame(lat = 60, lon = 0),
+                  tz = "UTC")
+noon_time(today(tzone = "UTC"),
+          geocode = data.frame(lat = 60, lon = 0),
+          tz = "UTC")
 @
 
 Function\Advanced{day events} \code{day\_night} returns a list with the different times with a single call. As other functions described in this chapter, \code{day\_night} is vectorised for the \code{date} parameter.
 
 <<>>=
-day_night(today(tzone = "UTC"), lat = 60, lon = 0, tz = "UTC")
+day_night(today(tzone = "UTC"),
+                geocode = data.frame(lat = 60, lon = 0),
+                tz = "UTC")
 @
 
 \begin{example}
@@ -320,15 +339,12 @@ opts_chunk$set(opts_fig_wide_full)
 @
 
 <<astro-6, cache=cache>>=
-hours <- seq(from=ymd("2014-06-23", tz="EET"),
-             by="10 min",
-             length=24 * 6)
+hours <- seq(from = ymd("2014-06-23", tz = "EET"),
+             by = "3 min",
+             length.out = 24 * 20)
 angles_He <- sun_angles(hours,
-                     geocode = geocode_He)
-sun_elev_hel <- data.frame(time_eet = hours,
-                           elevation = angles_He$elevation,
-                           azimuth = angles_He$azimuth)
-head(sun_elev_hel)
+                        geocode = geocode_He)
+head(angles_He)
 @
 
 We also create an auxiliary data frame with data for plotting and labeling the different conventional definitions of \emph{twilight}.
@@ -347,8 +363,8 @@ twilight <-
 We draw a plot of solar elevations through a day, using the data frames created above.
 
 <<astro-8-elevation>>=
-ggplot(sun_elev_hel,
-       aes(x = time_eet, y = elevation)) +
+ggplot(angles_He,
+       aes(x = time, y = elevation)) +
   geom_line() +
   geom_hline(data=twilight,
              aes(yintercept = angle, linetype=factor(label))) +
@@ -362,129 +378,65 @@ ggplot(sun_elev_hel,
 We\Advanced{azimuth} draw a plot of solar azimuths through a day, using the data frames created above.
 
 <<astro-8-azimuth>>=
-ggplot(sun_elev_hel,
-       aes(x = time_eet, y = azimuth)) +
+ggplot(angles_He,
+       aes(x = time, y = azimuth)) +
   geom_line() +
   scale_y_continuous(breaks = c(0,90,180,270,360),
-                     limits = c(0,360)) +
+                     limits = c(-20,380)) +
   labs(y = "Solar azimuth at Helsinki (degrees)",
        x = "Time EEST")
 @
 
-\section{Task: plotting day length through the year}
+\section{Task: plotting day or night length through the year}
 
-For\index{day length!plot} this we first need to generate a sequence of dates. We use \code{seq} as in the previous section, but instead of supplying a length as argument we supply an ending time. Instead of giving \code{by} in minutes as above, we now use days:
+We use function \code{day\_night()} to calculate simulataneously several values, although this function is slower it returns a data frame that makes coding easier. We create a \code{days} vector, and create a vector of geocodes by searching city names. We take advantage of vectorization to obtain a dataframe. We add a factor with the names of the locations.
 
-<<astro-9, cache=cache>>=
-days <- seq(from=ymd("2014-01-01"), to=ymd("2014-12-31"),
-            by="7 day")
+<<astro-12a>>=
+days <- seq(from = ymd("2016-01-01"), to = ymd("2016-12-31"), by = 7)
+cities <- c("Ivalo, Finland", "Helsinki, Finland", "Athens, Greece")
+geocodes <- geocode(cities, output = "latlona")
+times <-
+   day_night(date = days,
+             geocode = geocodes,
+             tz = "EET",
+             unit.out = "hour")
 @
 
-We repeat the calculations for three locations at different latitudes, then row bind the data frames into a single data frame. Each individual data frame contains information to identify the sites:
+We can list the variables in the data frame.
 
-<<astro-geocode-10a, message=my.debug, cache=cache>>=
-geo_code_He <- geocode("Helsinki")
-daylengths_hel <-
-  data.frame(day = days,
-             daylength = day_length(days,
-                                    geocode = geo_code_He,
-                                    tz = "EET"),
-             location = "Helsinki")
+<<astro-12aa>>=
+names(times)
 @
 
-<<astro-geocode-10b, message=my.debug, cache=cache>>=
-geo_code_Iv <- geocode("Ivalo")
-daylengths_ivalo <-
-  data.frame(day = days,
-             daylength = day_length(days,
-                                    geocode = geo_code_Iv,
-                                    tz = "EET"),
-             location = "Ivalo")
-@
+We plot day length using \pkg{ggplot2}. The last two lines of code are optional. We use \code{geom\_point} to highlight that the calcualtions have not been done for each day. Ivalo is above the northern polar circle, so in winter nights last for 24~h and in summer days last for 24~h.
 
-<<astro-geocode-10c, message=my.debug, cache=cache>>=
-geo_code_At <- geocode("Athens, Greece")
-daylengths_athens <-
-  data.frame(day = days,
-             daylength = day_length(days,
-                                    geocode = geo_code_At,
-                                    tz = "EET"),
-             location = "Athens")
-@
-
-<<astro-geocode-10d>>=
-daylengths <- rbind(daylengths_hel,
-                    daylengths_ivalo,
-                    daylengths_athens)
-@
-
-Once we have the data available, plotting is simple:
-
-<<astro-10e>>=
-ggplot(daylengths,
-       aes(x = day, y = daylength, colour=factor(location))) +
+<<astro-12b>>=
+ggplot(times,
+       aes(x = day, y = daylength, colour=address)) +
   geom_line() +
-  scale_y_continuous(breaks=c(0,6,12,18,24), limits=c(0,24)) +
-  labs(x = "Date", y = "Daylength (h)", colour="Location")
+  scale_y_continuous(breaks=c(0,12,24), limits=c(0,24)) +
+  labs(x = "Date", y = "Day length (h)", colour="Location")
 @
+
+For plotting \code{nightlength} we just need to map it to the $y$ aesthetic
+instead pf \code{daylength} and its corresponding axis label.
 
 \section{Task: plotting local time at sunrise}
 
-For\index{sunrise!time of!plot} this we reuse \code{days} from the previous sections. We repeat the calculations for three locations at different latitudes, then row bind the data frames into a single data frame. Data frames contain information to identify the sites:
+We reuse the data frame from the previous section.
+The breaks in the lines are the result of the changes between winter and summer time coordinates in the EET zone. The points indicate the calculated values, once per week.
 
-<<astro-geocode-11a, message=my.debug, cache=cache>>=
-geo_code_He <- geocode("Helsinki")
-sunrise_hel <-
-  data.frame(day = days,
-             sunrise = sunrise_time(days,
-                                    geocode = geo_code_He,
-                                    tz = "EET",
-                                    unit.out = "hour"),
-             location = "Helsinki")
-@
-
-<<astro-geocode-11b, message=my.debug, cache=cache>>=
-geo_code_Iv <- geocode("Ivalo")
-sunrise_ivalo <-
-  data.frame(day = days,
-             sunrise = sunrise_time(days,
-                                    geocode = geo_code_Iv,
-                                    tz = "EET",
-                                    unit.out = "hour"),
-             location = "Ivalo")
-@
-
-<<astro-geocode-11c, message=my.debug, cache=cache>>=
-geo_code_At <- geocode("Athens, Greece")
-sunrise_athens <-
-  data.frame(day = days,
-             sunrise = sunrise_time(days,
-                                    geocode = geo_code_At,
-                                    tz = "EET",
-                                    unit.out = "hour"),
-             location = "Athens")
-@
-
-The code below is quite complicated as we need to extract the times of day
-<<astro-geocode-11d, message=my.debug, cache=cache>>=
-sunrises <- rbind(sunrise_hel,
-                  sunrise_ivalo,
-                  sunrise_athens)
-@
-
-Once we have the data available, plotting is simple:
-
-<<astro-11e>>=
-ggplot(sunrises,
-       aes(x = day, y = sunrise, colour=factor(location))) +
+<<astro-12c>>=
+ggplot(times,
+       aes(x = day, y = sunrise, colour=address)) +
   geom_line() + geom_point() +
-  scale_y_continuous(breaks=c(0,6,12), limits=c(0,12)) +
-  labs(x = "Date", y = "Time-of-day at sunrise (h)", colour="Location")
+  scale_y_continuous(breaks=c(0,6,12), limits=c(0,14)) +
+  labs(x = "Date", y = "Local time at sunrise (h)", colour="Location")
 @
 
-The breaks in the lines are the result of the changes between winter and summer time coordinates in the EET zone. The dots indicate the calculated values, once per week. Ivalo is above the northern polar circle, so in winter nights last for 24~h and in summer days last for 24~h.
+By replacing the mapping of \code{sunrise\_time} by \code{sunset\_time} to $y$ in the code above and editing the axis label of the plot one can produce a similar plot of sunset times.
 
-By replacing \code{sunrise\_time} by \code{sunset\_time} in the code above and editing the axis label of the plot one can produce a similar plot of sunset times.
+In general scale limts must be selected with care when dealing with civil time coordinates as it can be shifted by a few hours from solar time at some geographic locations.
 
 \section{Task: plotting solar time at sunrise}
 

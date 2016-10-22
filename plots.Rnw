@@ -193,11 +193,11 @@ plot(yellow_gel.spct, plot.qty = "absorbance")
 Beware that \emph{absorptance} being the complement to \emph{internal transmittance} can be calculated only from transmittance alone if it is expressed as internal. If total transmittance is available, then reflectance must be also known before absorptance can be calcaluated. For this reason we use different spectral data for this example. We also illustrate how we can force the range of wavelengths included in the plot to match the range of another spectral object.
 
 <<plot-filter-3>>=
-plot(schott.mspct$GG495, range = yellow_gel.spct)
+plot(filters.mspct$GG495, range = yellow_gel.spct)
 @
 
 <<plot-filter-4>>=
-plot(schott.mspct$GG495, plot.qty = "absorptance",
+plot(filters.mspct$GG495, plot.qty = "absorptance",
      range = yellow_gel.spct)
 @
 
@@ -208,7 +208,7 @@ plot(yellow_gel.spct, pc.out = TRUE)
 @
 
 <<plot-filter-6>>=
-plot(schott.mspct$GG495, plot.qty = "absorptance",
+plot(filters.mspct$GG495, plot.qty = "absorptance",
      pc.out = TRUE, range = yellow_gel.spct)
 @
 
@@ -623,6 +623,9 @@ The examples in this section use a single spectrum, \code{sun.spct}, but all fun
 When we want to colour-label individual spectral values, for example, by plotting the individual data points with the colour corresponding to their wavelengths, or fill the area below a plotted spectral curve with colours, we need to first \code{tag} the spectral data set using a waveband definition or a list of waveband definitions. If we just want to add a guide or labels to the plot, we can create new data instead of tagging the spectral data to be plotted. In section \ref{sec:plot:tag} we show code based on tagging spectral data, and in section \ref{sec:plot:guide} the case of using different data for plotting the guide or key is described.
 
 \subsection{Task: Plots using colour for the spectral data}\label{sec:plot:tag}
+
+\textbf{\textcolor[rgb]{1.00,0.00,0.00}{This section needs to be updated to new version of \pkg{ggspectra} and to use geom\_bar instead of geom\_area as some of the examples produce suboptimal plots. We need also to replace direct use of tag by stat\_color.
+}}
 
 We start by describing how to tag a spectrum, and then show how to use tagged spectra for plotting data. Tagging consist in adding wavelength-derived colour data and waveband-related data to a spectral object. We start with a very simple example.
 

@@ -99,13 +99,13 @@ log10(sun.spct)
 Package \pkg{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \pkg{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
 
 <<>>=
-sun.spct * schott.mspct$GG400
+sun.spct * filters.mspct$GG400
 @
 
 The GG440 data is for internal transmittance, consequently the results above would be close to the truth only for filters treated with an anti-reflection multicoating. Let's assume a filter with 9\% reflectance across all wavelengths (a coarse approximation for uncoated glass):
 
 <<>>=
-sun.spct * schott.mspct$GG400 * (100 - 9) / 100
+sun.spct * filters.mspct$GG400 * (100 - 9) / 100
 @
 
 Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work, even when, as in this example, the wavelength values do not coincide between the two spectra.

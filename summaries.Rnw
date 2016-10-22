@@ -221,14 +221,14 @@ cat(comment(sun.spct))
 Methods\index{spectral data!find peaks}\index{spectral data!find valleys} \code{peaks} and \code{valleys} can be used on most spectral objects to find local maxima and local minima in spectral data. They return an object of the same class containing only the observations corresponding to these local extremes.
 
 <<>>=
-peaks(macam.mspct$philips.tl12)
-peaks(macam.mspct$philips.tl12, unit.out = "photon")
-peaks(macam.mspct$philips.tl12, span = 50)
+peaks(lamps.mspct$philips.tl12)
+peaks(lamps.mspct$philips.tl12, unit.out = "photon")
+peaks(lamps.mspct$philips.tl12, span = 50)
 @
 
 <<>>=
-valleys(schott.mspct$KG5)
-peaks(schott.mspct$KG5, filter.qty = "absorbance")
+valleys(filters.mspct$KG5)
+peaks(filters.mspct$KG5, filter.qty = "absorbance")
 @
 
 \subsection{Obtaining the location of peaks as an index into the spectral data}
@@ -260,13 +260,13 @@ The functions described in the previous section locate the observation with the 
 In this example, in the second statement we refine the location of the shortest-wavelength peak found by \code{get\_peaks} in the first statement. For this approach to work, the peaks should be clearly visible, and not very close to each other. We use the spectral irradiance measured from a UV-B lamp as an example.
 
 <<>>=
-stepsize(oo_maya.mspct$germicidal)
+stepsize(lamps.mspct$germicidal)
 peaks <-
-   with(oo_maya.mspct$germicidal,
+   with(lamps.mspct$germicidal,
         get_peaks(w.length, s.e.irrad, span = 5))
 fit <- nls(s.e.irrad ~ d + a1*exp(-0.5*((w.length-c1)/b1)^2),
            start=list(a1=3.1, b1=1, c1=peaks[1, 1], d=0),
-           data=oo_maya.mspct$germicidal)
+           data=lamps.mspct$germicidal)
 fit
 fit$m$getPars()[["c1"]]
 peaks[1, 1]
@@ -290,7 +290,7 @@ fitted_peak.spct <-
 <<>>=
 ggplot(data = fitted_peak.spct, aes(w.length, s.e.irrad)) +
   geom_line(data = fitted_peak.spct, colour = "blue") +
-  geom_point(data = oo_maya.mspct$germicidal, colour = "red", size = 3) +
+  geom_point(data = lamps.mspct$germicidal, colour = "red", size = 3) +
   xlim(250, 260)
 
 @

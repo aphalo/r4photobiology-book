@@ -18,7 +18,7 @@ opts_knit$set(concordance=TRUE)
 %%%%
 \section{Expected use and users}
 
-The aim of the suite is to both provide a framework for teaching VIS and UV radiation physics and photobiology through a set of functions and data examples. Furthermore, we expect these functions and data to be useful for active researchers during design of experiments, data analysis and data validation. In particular we hope the large set of example data will make it easy to carry out sanity checks of newly acquired and/or published data.
+One aim of the suite is to provide a tools for teaching VIS and UV radiation physics and photobiology. Another aim is to make it easier for researchers in the field of photobiology to do calculations required for the description of irradiation conditions and for simulations useful for data validation and/or when designing experiments. The suite is a collection of classes, methods and functions, accompanied by data sets. In particular we hope the large set of example data will make it easy to carry out sanity checks of newly acquired and/or published data.
 
 Given the expected audience of both students and biologists, rather than data analysts, or experienced programmers, we have aimed at designing a consistent and easy to understand paradigm for the analysis of spectral data. The design is based on our own user experience, and on feedback from our students and `early adopters'.
 
