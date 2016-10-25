@@ -9,7 +9,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Unweighted irradiance}\label{chap:uw:irrad}
+\chapter{Irradiance (not weighted)}\label{chap:uw:irrad}
 %
 %\begin{abstract}
 %  In this chapter we explain how to calculate unweighted energy and photon irradiances from spectral irradiance.
@@ -334,10 +334,33 @@ Let's assume that we want to calculate photosynthetically active radiation (PAR)
 $\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\fluence[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_fluence} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
 The use of function \code{fluence} facilitates the calculation as it accepts the length of time of the exposure as a \code{lubridate::duration}, making it easy to enter the duration using different units, or even calculate the duration as the difference between two times. Of course, the spectral irradiance should be measured at the position where the material being exposed was located during irradiation. The following example is for a red fluorescent tube as sometimes used in seed germination experiments to study phytochrome-mediated responses.
 
+Here we calculate the red light fluence corresponding to 5 min exposure to sunlight at the time the example spectral data was measured. 
+ 
 <<>>=
-fluence(lamps.mspct$philips.tld36w.15,
+fluence(sun.spct,
         exposure.time = duration(5, "minutes"))
 @
+
+\Attention{example spectral irradiance data}\index{scaling normalized data} While the example spectral data for sunlight are expressed in absolute units, example spectral data for lamps in packages \pkg{photobiologyLamps} and \pkg{photobiologyLEDs} are normalized. To be able to calculate irradiance or fluence from these spectra they need first to the scaled. Scaling can be based on a different waveband. An example follows.
+
+We assume that PAR photon irradiance is known for the experimental conditions, and is equal to 20 \umol. From this value and the normalized spectrum we can reconstruct actual spectral irradiance for the experiment.
+
+<<>>=
+red_lamp.spct <- fscale(lamps.mspct$philips.tld36w.15,
+                        f = q_irrad,
+                        w.band = PAR(),
+                        target = 20e-6)
+setScaled(red_lamp.spct, FALSE) # to avoid warnings
+@
+
+In the example above we used a waveband object defining a range of wavelengths, however, a waveband object describing a BSWF could also have been used in its place.
+
+<<>>=
+fluence(red_lamp.spct, w.band = list(Red("Smith10"), Red("Smith20"), Red("ISO")),
+        exposure.time = duration(5, "minutes"))
+@
+
+Above we calculate fluences for three different definitions of ``red light'' for the same experimental condition. Clearly, they are different.
 
 Please see the sections \ref{sec:wt:exposure} for additional details.
 %%%%
@@ -355,6 +378,13 @@ To calculate this for our example sunlight spectrum we can use the following cod
 
 <<>>=
 q_ratio(sun.spct, Red("Smith10"), Far_red("Smith10"))
+@
+
+In the case of ratios whether spectral irradiance has been normalized or linearly scaled, or not, does not affect the result.
+
+<<>>=
+q_ratio(lamps.mspct$philips.tld36w.15, Red("Smith10"), Far_red("Smith10"))
+q_ratio(red_lamp.spct, Red("Smith10"), Far_red("Smith10"))
 @
 
 Function \code{q\_ratio} also accepts lists of wavebands, for both denominator and numerator arguments, and recycling takes place when needed.

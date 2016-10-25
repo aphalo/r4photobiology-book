@@ -22,7 +22,13 @@ library(photobiologyLEDs)
 %%%%
 \section{Introduction}
 
-In\index{transmittance} this chapter we explain how to do calculations related to the description of absorption and reflection of UV and VIS radiation.
+\Attention{scattering by filters and reflectors} In\index{transmittance} this chapter we explain how to do calculations related to the description of absorption and reflection of UV and VIS radiation. Is important to be aware that in the same way as solar radiation has direct and diffuse components because of interactions in the atmosphere, the same phenomena affect light traversing a glass or plastic filter, or the tissues of an organism.
+
+Depending on how transmittance is measured, it includes or not the effect of the reflections at the filter surfaces (called total and internal transmittance, respectively). If transmittance is measured with an integrating sphere, all scattered transmitted radiation is measured. However, if no integrating sphere is used, depending on the distance to the detector and how much scattering is present, the transmittance may be drastically underestimated.
+
+An equivalent problem due to scattering occurs when measuring reflectance. Depending on the type of surface and material reflectance and total transmitatnce can strongly depend on the angle of incidence of the light beam. A special case are \emph{interference} filters, as not only the transmittance itself but also the wavelengths transmitted depend on the angle of incidence of radiation.
+
+If you are not familiar with the phenomena described above, and the different ways in which optical properties of filters and reflectors can be characterized, please, read the introductory chapter in Part A, before attempting the calculation described below.
 
 \section{Task: absorbance and transmittance}\label{sec:transmittance}
 
@@ -111,9 +117,9 @@ A2T(a.gg400.spct, action="replace")
 @
 
 %%%%
-\section{Task: reflected or transmitted spectrum from spectral reflectance and spectral irradiance}
+\section{Task: transmitted spectrum from spectral transmittance and spectral irradiance}
 
-When we multiply a \code{source\_spct} by a \code{filter\_spct} or by a \code{reflector\_spct} we obtain as a result a new \code{source\_spct}.
+When we multiply a \code{source\_spct} by a \code{filter\_spct} we obtain as a result a new \code{source\_spct}.
 
 <<>>=
 class(sun.spct)
@@ -121,8 +127,6 @@ class(filters.mspct$GG400)
 @
 
 <<>>=
-my_sun.spct <- sun.spct
-my_gg400.spct <- filters.mspct$GG400
 filtered_sun.spct <- sun.spct * filters.mspct$GG400
 class(filtered_sun.spct)
 head(filtered_sun.spct)
@@ -132,36 +136,20 @@ The result of the calculation can be directly used as an argument, for example, 
 
 <<>>=
 q_irrad(sun.spct, UV()) * 1e6
-q_irrad(my_sun.spct, UV()) * 1e6
 q_irrad(filtered_sun.spct, UV()) * 1e6
 q_irrad(sun.spct * filters.mspct$GG400, UV()) * 1e6
-q_irrad(my_sun.spct * my_gg400.spct, UV()) * 1e6
 @
 
 <<>>=
-q_irrad(my_sun.spct * my_gg400.spct) * 1e6
-q_irrad(my_sun.spct * my_gg400.spct,
-             new_waveband(min(sun.spct), max(sun.spct))) * 1e6
+q_irrad(sun.spct * my_gg400.spct) * 1e6
 @
 
-Remember, that if we want to predict the output of a light source composed of different lamps or LEDs we can add the individual spectral irradiance, but using data measured from the target positions of each individual light source. If we want then to add the effect of a filter we must multiply by the filter transmittance.
+%%%%
+\section{Task: reflected spectrum from spectral reflectance and spectral irradiance}
 
-<<>>=
-my_luminaire <-
-  (0.5 * leds.mspct$NHXRGB090_B + leds.mspct$NHXRGB090_R) *
-      filters.mspct$Clear_0A000_XT
-my_luminaire
-# equivalent
-my_luminaire <-
-  (leds.mspct$NHXRGB090_B * 0.5 + leds.mspct$NHXRGB090_R) *
-      filters.mspct$Clear_0A000_XT
-my_luminaire
+When we multiply a \code{source\_spct} by a by a \code{reflector\_spct} we obtain as a result a new \code{source\_spct}.
 
-q_ratio(my_luminaire,
-             list(Red(), Blue(), Green()), PAR())
-q_irrad(my_luminaire,
-             list(PAR(), Red(), Blue(), Green())) *  1e6
-@
+If in the examples from the previous section one replaces the transmittance spectrum by a reflection spectrum, one obtains the spectrum of the reflected radiation given a certain spectrum of incident light.
 
 %%%%
 \section{Task: total spectral transmittance from internal spectral transmittance and spectral reflectance}\label{sec:}
@@ -177,6 +165,49 @@ q_irrad(my_luminaire,
 
 %%%%
 \section{Task: light scattering media (natural waters, plant and animal tissues)}\label{sec:}
+
+
+\section{Task: simulating the spectral irradiance under a LED luminaire}
+
+To conclude the chapter, we show how combining different operations described in this and earlier chapters one can do interesting simulations of estimations.
+
+If we want to predict the output of a light source composed of different lamps or LEDs we can add the individual spectral irradiance, but using data measured from the target positions of each individual light source. If we want then to add the effect of a filter we must multiply by the filter transmittance. Bellow we simulate a (bad?) light source for plant cultivation.
+
+We first would need to scale the normalized spectral irradiance for each LED based on their relative relative absolute output. For simplicity, we assume they will powered so that they will output equal amounts of energy as visible radiation. Even under this assumption, as the width of emission peaks depend on the type of LED, we need to scale these data. We will scale them using defaults.
+
+<<>>=
+red_led.spct <- fscale(leds.mspct$NHXRGB090_R)
+blue_led.spct <- fscale(leds.mspct$NHXRGB090_B)
+@
+
+We next assume that we use five red LEDs for each blue LED, and protect them with a sheet of clear Plexiglas.
+
+<<>>=
+my_luminaire.spct <-
+  (red_led.spct * 5 + blue_led.spct) *
+      filters.mspct$Clear_0A000_XT
+class(my_luminaire.spct)
+@
+
+We now assume that the PAR photon irradiance on a horizontal plane below the luminaire is 250 \umol.
+
+<<>>=
+my_luminaire.spct <- fscale(my_luminaire.spct,
+                        f = q_irrad,
+                        w.band = PAR(),
+                        target = 250e-6)
+setScaled(red_lamp.spct, FALSE) # to avoid warnings
+class(my_luminaire.spct)
+@
+
+Finally we calculate photon irradiances and photon ratios for some bands of interest for plant responses.
+
+<<>>=
+q_ratio(my_luminaire.spct,
+             list(Red(), Blue(), Green()), PAR())
+q_irrad(my_luminaire.spct,
+             list(PAR(), Red(), Blue(), Green())) *  1e6
+@
 
 <<>>=
 try(detach(package:photobiologyLEDs))

@@ -244,7 +244,7 @@ s.e.irrad <- with(sun.data, as_energy(w.length, s.q.irrad))
 
 \subsubsection{\code{source\_spct} objects}
 
-Function \code{q2e} is the reverse of \code{e2q}, converting spectral photon irradiance in \molnm to spectral energy irradiance in \wattnm . It can also be used as a roundabout way of removing a \code{s.e.irrad} column, which could be useful in some cases.
+Function \code{q2e} is the reverse of \code{e2q}, converting spectral photon irradiance in \molnm to spectral energy irradiance in \wattnm . It can also be used as a roundabout way of removing a \code{s.q.irrad} column, which could be useful in some cases.
 
 <<>>=
 q2e(sun.spct, "replace", byref = FALSE)
@@ -290,14 +290,14 @@ photobiology.radiation.unit & \code{"energy"} & output (\wattnm) \\
                             & \code{"photon"} & output (\molnm) \\
 photobiology.filter.qty & \code{"transmittance"} & output ($/1$) \\
                         & \code{"absorptance"} & output ($/1$) \\
-                        & \code{"absorbance"} & output (a.u. $\log_10$ base) \\
+                        & \code{"absorbance"} & output (a.u. $\log_{10}$ base) \\
 photobiology.use.hinges & \code{NULL} & guess automatically \\
-                        & \code{TRUE} & do not insert hinges \\
-                        & \code{FALSE} & do insert hinges \\
-photobiology.auto.hinges.limit & 0.5 & wavelength step (nm) \\
-photobiology.waveband.trim & \code{TRUE} & trim or exclude \\
-photobiology.use.cached.mult & \code{FALSE} & cache intermediate results or not \\
-photobiology.verbose & \code{FALSE} & give verbose output or not \\
+                        & \code{TRUE} & do insert hinges \\
+                        & \code{FALSE} & do not insert hinges \\
+% photobiology.auto.hinges.limit & 0.5 & wavelength step (nm) \\
+% photobiology.waveband.trim & \code{TRUE} & trim or exclude \\
+% photobiology.use.cached.mult & \code{FALSE} & cache intermediate results or not % \\
+% photobiology.verbose & \code{FALSE} & give verbose output or not \\
 \bottomrule
 \end{tabular}
 \end{footnotesize}

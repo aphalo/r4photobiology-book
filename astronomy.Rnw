@@ -83,20 +83,29 @@ with_tz(ymd_hm("20140320 00:00", tz = "Asia/Tokyo"), tzone = "America/Buenos_Air
 
 \subsection{Geographic coordinates}
 
-For\index{geographic coordinates}\index{geocode}\index{latitude}\index{longitude} astronomical calculations we also need as argument geographical coordinates. One can supply latitude and longitude values, acquired with a GPS instrument or read from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates on-the-fly. A query can be run from within R using packages \pkg{RgoogleMaps}, or \pkg{ggmap}, as done here---of course this requires internet access. When inputting coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree). Latitudes N are given by positive numbers and and latitudes S by negative numbers. Longitudes W of Greenwich are given as positive numbers and longitudes E of Greenwich as negative numbers.
+For\index{geographic coordinates}\index{geocode}\index{latitude}\index{longitude} astronomical calculations we also need as argument geographical coordinates. One can supply latitude and longitude values, acquired with a GPS instrument or read from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates on-the-fly. A query can be run from within R using packages \pkg{RgoogleMaps}, or \pkg{ggmap}, as done here---of course this requires internet access. When inputting coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree). Latitudes N are given by positive numbers and and latitudes S by negative numbers. Longitudes W of Greenwich are given as positive numbers and longitudes E of Greenwich as negative numbers. The latitude and longitude must be in variables named \code{lat} and \code{lon} in a data frame. A third variable, \code{address}, is recognized and copied unchanged to the output. The address is optionally included in the search result from Google maps. The address returned is not necessarily the searched term, and is useful when using partial addresses as search terms, as the hit, may not be the intended location.
 
 <<astro-geocode-1, message=my.debug, cache=cache>>=
 geocode("Helsinki")
 geocode("Viikinkaari 1, 00790 Helsinki, Finland")
+geocode("Viikinkaari 1, 00790 Helsinki, Finland", output = "latlona")
 @
 
+\subsection{Algorithms and peculiarities}
+
+\Advanced{algorithms for astronomical calculations}The code uses the well known algorithms by Meeus \autocite{MeeusXXXX} implemented in the R language as a translation of code used in NOAA's calculation worksheets. We have compared the results from our functions against the NOAA on-line calculator. Julian day calculations do not use the same algorithms as NOAA, but instead, use the \code{julian} function from base R and time zone and daylight saving times based on package \pkg{lubridate}. Handling of time zones and daylight saving times is very tricky for past dates, as country boundaries have changed as well as legislation over the years and centuries. The further back in history one goes, the less reliable calculations expressed in local time become. Of course UTC times, and local solar time values can be trusted for any epoch for which the algorithm is valid. The algorithm is precise enough to ensure valid results into the far past, but the calculation of julian dates may be less or more precise in R than other implementations. Agreement with the NOAA calculator is good as far back as we have tested, dates about 1000 years before now.
+ 
 %%%%
 \section{Task: calculating the length of the photoperiod}\label{sec:astro:photoperiod}
 
-Functions\index{day length}\index{night length}\index{photoperiod}\index{scotoperiod} \code{day\_length} and \code{night\_length} have same parameter signature. They are vectorised for the \code{date} parameter.
+Functions\index{day length}\index{night length}\index{photoperiod}\index{scotoperiod} \code{day\_length} and \code{night\_length} have the same parameter signature. They are vectorized for the \code{date} parameter and for \code{geocode} with multiple rows, and in the this last case also \code{tz} is vectorized.
 
-Calculating the length of the current day is easy. We use the Greenwich meridian, and 60 degrees in the Northern and Southern hemispheres.
-\code{today}.
+Calculating the length of the current day is easy. We use the Greenwich meridian, and 60 degrees in the Northern and Southern hemispheres. We use function \code{today} from package \pkg{lubridate}.
+
+<<>>=
+day_length(today(), geocode = data.frame(lat = 60, lon = 0))
+@
+
 <<>>=
 day_length(today(), geocode = data.frame(lat = -60, lon = 0))
 @
@@ -168,7 +177,7 @@ Functions\index{sunset!time of}\index{sun rise!time of}\index{solar noon!time of
 Be also aware that for summer dates the times are expressed accordingly. In the examples below this can be recognized for example, by the time zone being reported as EEST instead of EET for Eastern Europe.
 
 \begin{framed}
-\ilAttention{} Both latitude and longitude can be supplied, but be aware that if the returned value is desired in the local time coordinates, the time zone should match the longitude.
+\ilAttention{} Both latitude and longitude can be supplied, but be aware that if the returned value is desired in the local time coordinates, the time zone should match that in use at the location and date of interest. Longitude is not enough, as time zones depend on country boundaries, and in some cases administrative or other boundaries within countries. The period of the year when daylight saving time has been in effect depends on legislation in effect at the date of interest, as well as on the administrative boundaries at the time. It is best to use UTC whenever considering times in the past or future.
 \end{framed}
 
 <<>>=

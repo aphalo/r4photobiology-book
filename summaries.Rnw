@@ -255,9 +255,9 @@ The returned value is a (shorter) data frame with two numeric vectors, $x$ and $
 
 \section{Task: Refining the location of peaks and valleys}\label{sec:summaries:peak:refine}
 
-The functions described in the previous section locate the observation with the locally highest $y$-value. This is in most cases the true location of the peaks as they may fall in between two observations along the wavelength axis. By fitting a suitable model to describe the shape of the peak, which is the result of the true peak and the slit function of the spectrometer, the true location of a peak can be approximated more precisely. There is no universally useful model, so we show some examples of a possible method of peak-position refinement.
+The functions described in the previous section locate the observation with the locally highest $y$-value. This is in most cases \emph{not} the true location of the peaks as they may fall in between two observations along the wavelength axis. By fitting a suitable model to describe the shape of the observed peak, which is the result of the true peak and the slit function of the spectrometer, the true location of a peak can be approximated more precisely. There is no universally useful model, so we show some examples of a possible method of peak-position refinement.
 
-In this example, in the second statement we refine the location of the shortest-wavelength peak found by \code{get\_peaks} in the first statement. For this approach to work, the peaks should be clearly visible, and not very close to each other. We use the spectral irradiance measured from a UV-B lamp as an example.
+In this example, in the second statement we refine the location of the shortest-wavelength peak found by \code{get\_peaks} in the first statement. For this approach to work, the peaks should be well above the baseline, relatively narrow, and not very close to each other. We use the spectral irradiance emitted by an UV-C (\emph{germicidal}) lamp as an example.
 
 <<>>=
 stepsize(lamps.mspct$germicidal)
@@ -272,7 +272,7 @@ fit$m$getPars()[["c1"]]
 peaks[1, 1]
 @
 
-In this case the change was rather small, and shows a small wavelength calibration error for the spectrometer that can be calculated as:
+In this case the fitted position of the peak was close to the pixel with maximum reading as the wavelength resolution of the instrument is good. I suggests a small wavelength calibration error for the spectrometer that can be calculated as:
 
 <<>>=
 signif(fit$m$getPars()[["c1"]], 6) - 253.652
@@ -294,6 +294,10 @@ ggplot(data = fitted_peak.spct, aes(w.length, s.e.irrad)) +
   xlim(250, 260)
 
 @
+
+\begin{shaded}
+The fit above is not as good as one would like, both at the peak and at the short-wavelength shoulder. Of course other functions can be used, and additional examples of functions and peak shapes will be added here in later drafts.
+\end{shaded}
 
 <<>>=
 try(detach(package:photobiologyReflectors))
