@@ -108,7 +108,7 @@ Number of Pixels in Processed Spectrum: 1044
     \end{verbatim}
     \end{footnotesize}
   \end{framed}
-  \caption[Top of text file \code{spectrum.SSirrad}]{Top of text file \code{spectrum.SSirrad} written by Ocean Optics' \pkg{SpectraView} software, and used in the example in section \ref{sec:OO:import}}\label{fig:oo:ssirrad}
+  \caption[Top of text file \code{spectrum.SSirrad}]{Top of text file \code{spectrum.SSirrad} written by Ocean Optics' \pkg{SpectraSuite} software, and used in the example in section \ref{sec:OO:import}}\label{fig:oo:ssirrad}
 \end{figure}
 
 

@@ -21,6 +21,7 @@ library(ggspectra)
 library(photobiologyLamps)
 library(photobiologyFilters)
 library(photobiologyReflectors)
+library(polynom)
 @
 
 \section{Task: Printing spectra}
@@ -216,22 +217,64 @@ names(sun.spct)
 cat(comment(sun.spct))
 @
 
-\section{Task: Find peaks and valleys}\label{sec:summaries:peaks}
+\section{Task: Extract peaks and valleys}\label{sec:summaries:peaks}
 
 Methods\index{spectral data!find peaks}\index{spectral data!find valleys} \code{peaks} and \code{valleys} can be used on most spectral objects to find local maxima and local minima in spectral data. They return an object of the same class containing only the observations corresponding to these local extremes.
 
+We first show the use of function \code{peaks} that returns a subset of the spectral containing peaks (local maxima). The parameter \code{span} determines the number of discrete \code{w.length} values used to find a local maximum (the higher the value used, the fewer maxima are detected), with a \code{NULL} span returning the overall maximum. The \code{span} is always defined using an odd number of observations, if an even number is provided as argument, it is increased by one, with a warning. The parameter \code{ignore\_threshold} indicates the fraction of the total span along the spectral variable, such as spectral irradiance for \code{source\_spct} objects, that is taken into account (a value of 0.75, requests only peaks in the upper 25\% of the $y$-range to be returned; a value of -0.75 works similarly but for the lower half of the $y$-range)\footnote{In the current example setting \code{ignore\_threshold} equal to 0.75 given that the range of the spectral irradiance data goes from 0.00~\umolnm to \Sexpr{round(max(sun.spct$s.e.irrad), 2)}~\umolnm, causes any peaks having a spectral irradiance of less than \Sexpr{round(max(sun.spct$s.e.irrad) * 0.75, 2)} \umolnm to be ignored.}.
+
+Using default \code{span} and then a relatively large value of 51.
+
 <<>>=
 peaks(lamps.mspct$philips.tl12)
-peaks(lamps.mspct$philips.tl12, unit.out = "photon")
-peaks(lamps.mspct$philips.tl12, span = 50)
+peaks(lamps.mspct$philips.tl12, span = 51)
 @
+
+Using \code{NULL} as argument for span is interpreted as meaning the whole wavelength range of the spectral data, and always returns only the highest values in the spectrum.
+
+<<>>=
+peaks(lamps.mspct$philips.tl12, span = NULL)
+@
+
+Using threshold we can limit the search for peaks to only part of the $y$-range of the data. This is useful when peaks in ``low ares'' of the curve are of no interest.
+
+<<>>=
+peaks(sun.spct,
+      span=31,
+      ignore_threshold=0.2)
+peaks(sun.spct,
+      span=31,
+      ignore_threshold=0.8)
+@
+
+It is also possible to convert how the returned spectral irradiance is expressed.
+
+<<>>=
+peaks(lamps.mspct$philips.tl12, unit.out = "photon")
+@
+
+All the examples earlier in this section also apply to other types of spectra, and to \code{valleys} in addition to \code{peaks}.
 
 <<>>=
 valleys(filters.mspct$KG5)
 peaks(filters.mspct$KG5, filter.qty = "absorbance")
 @
 
-\subsection{Obtaining the location of peaks as an index into the spectral data}
+A \code{peaks} method is also defined in this package for numeric vectors, returning the values at the peaks.
+
+<<>>=
+peaks(sun.spct$s.e.irrad)
+@
+
+The parameters of the numeric specializations behave in the same way as in the case of spectra. As an example we use \code{span}.
+
+<<>>=
+peaks(sun.spct$s.e.irrad, span = NULL)
+@
+
+\subsection{Task: finding the location of peaks as an index into vectors with spectral data}
+
+Low level functions for finding peaks and valleys in numeric vectors are also defined in \pkg{photobiology}. We recommend using the functions in the previous section whenever possible, as the use of the functions \code{find\_peaks} and \code{get\_peaks}, requires the user to validate the data.
 
 Function \code{find\_peaks}, takes as argument a \code{numeric} vector, and returns a logical vector of the same length, with \code{TRUE} for local maxima and \code{FALSE} for all other observations. Infinite values are discarded.
 
@@ -239,65 +282,91 @@ Function \code{find\_peaks}, takes as argument a \code{numeric} vector, and retu
 head(find_peaks(sun.spct$s.e.irrad))
 @
 
-To obtain the indexes, one can use R's function \code{which}
+To obtain the indexes, one can use R's function \code{which}.
 
 <<>>=
 head(which(find_peaks(sun.spct$s.e.irrad)))
 @
 
-\subsection{Obtaining the location of peaks as a wavelength in nanometres}
+%%
+\subsection{Task: Extracting peaks and valleys using vectors}\label{sec:get:pk:vly}
 
-Function \code{get\_peaks} takes two numeric vectors as as arguments, $x$ is, for spectra assumed to be a vector of wavelengths, and $y$ the spectral variable to search for local maxima.
-<<>>=
-with(sun.spct, get_peaks(w.length, s.e.irrad, span = 51))[["x"]]
+Extracting peaks and valleys, is more conveniently done with functions \code{peaks} and \code{valleys}. Function \code{get\_peaks} described in this section, is used internally in package \pkg{photobiology}. It returns a \code{data.frame} object with columns \code{x}, \code{y} and \code{labels}, with \code{labels}. The other arguments are as described above.
+
+<<plot-peaks-0>>=
+head(with(sun.spct,
+          get_peaks(w.length, s.e.irrad, span = 31)))
 @
-The returned value is a (shorter) data frame with two numeric vectors, $x$ and $y$, and an optional character variables \code{label}, for each local maximum found in $y$, but we extract \code{x}.
+
+With \code{span = NULL} only the tallest peak is returned.
+
+<<plot-peaks-1>>=
+head(with(sun.spct,
+          get_peaks(w.length, s.e.irrad, span = NULL)))
+@
+
+The equivalent function for finding valleys is \code{get\_valleys} taking the same parameters as \code{get\_peaks} but returning the wavelengths at which the valleys are located.
+
+<<plot-valleys-2>>=
+head(with(sun.spct,
+          get_valleys(w.length, s.e.irrad, span = 51)))
+@
 
 \section{Task: Refining the location of peaks and valleys}\label{sec:summaries:peak:refine}
 
-The functions described in the previous section locate the observation with the locally highest $y$-value. This is in most cases \emph{not} the true location of the peaks as they may fall in between two observations along the wavelength axis. By fitting a suitable model to describe the shape of the observed peak, which is the result of the true peak and the slit function of the spectrometer, the true location of a peak can be approximated more precisely. There is no universally useful model, so we show some examples of a possible method of peak-position refinement.
+The functions described in the previous sections locate the observation with the locally highest, or locally smallest $y$-value. This is in most cases \emph{not} the true location of the peaks as they may fall in between two observations along the wavelength axis. By fitting a suitable model to describe the shape of the observed peak, which is the result of the true peak and the slit function of the spectrometer, the true location of a peak can be approximated more precisely. There is no universally useful model, so we show some examples of possible methods of peak-position refinement.
 
-In this example, in the second statement we refine the location of the shortest-wavelength peak found by \code{get\_peaks} in the first statement. For this approach to work, the peaks should be well above the baseline, relatively narrow, and not very close to each other. We use the spectral irradiance emitted by an UV-C (\emph{germicidal}) lamp as an example.
+Some of the functions that could be fitted are suitable for both symmetrically shaped and asymmetrically shaped peaks, while others are suitable only for cases when one peak shoulder is the mirror image of the other. Frequently it is not necessary, or even advantageous, to fit the spectral data all the way down to the baseline, when the aim is to obtain the location of a peak rather than its area.
+
+\subsection{Bell-shaped function}
+
+In the example below, we will fit a non-linear function to the peak. In the first statement we locate the tallest peak as described above. In the second statement we refine its location. For this approach to work, the peaks should be well above the baseline, relatively narrow, and not very close to each other. We use the spectral irradiance emitted by an UV-C (\emph{germicidal}) lamp as an example. We fit a function of the form:
+
+\begin{equation}
+  I = d + a \cdot \mathrm{e}^{-0.5 \cdot ((\lambda - c) / b)^2}
+\end{equation}
 
 <<>>=
-stepsize(lamps.mspct$germicidal)
-peaks <-
-   with(lamps.mspct$germicidal,
-        get_peaks(w.length, s.e.irrad, span = 5))
+peak <- peaks(lamps.mspct$germicidal, span = NULL)[1, "w.length"]
+wl.tmp <- seq(round(peak - 5), round(peak + 5), length.out = 101)
+neighbourhood.spct <- clip_wl(lamps.mspct$germicidal, range = wl.tmp)
 fit <- nls(s.e.irrad ~ d + a1*exp(-0.5*((w.length-c1)/b1)^2),
-           start=list(a1=3.1, b1=1, c1=peaks[1, 1], d=0),
-           data=lamps.mspct$germicidal)
+           start=list(a1=3.1, b1=1, c1=peak, d=0),
+           data=neighbourhood.spct)
 fit
 fit$m$getPars()[["c1"]]
-peaks[1, 1]
+peak
 @
 
-In this case the fitted position of the peak was close to the pixel with maximum reading as the wavelength resolution of the instrument is good. I suggests a small wavelength calibration error for the spectrometer that can be calculated as:
+In this case the fitted position of the peak was close to the pixel with maximum reading as the wavelength resolution of the instrument is good. The result suggests a small wavelength calibration error for the spectrometer that can be calculated as:
 
 <<>>=
-signif(fit$m$getPars()[["c1"]], 6) - 253.652
-@
-
-<<>>=
-predicted <-
-  predict(fit,
-          data.frame(w.length = seq(250, 260, length.out = 101)))
-fitted_peak.spct <-
-  source_spct(w.length  = seq(250, 260, length.out = 101),
-              s.e.irrad = predicted)
+signif(fit$m$getPars()[["c1"]], 7) - 253.6517 # nm
 @
 
 <<>>=
-ggplot(data = fitted_peak.spct, aes(w.length, s.e.irrad)) +
+predicted <- predict(fit, data.frame(w.length = wl.tmp))
+fitted_peak.spct <- source_spct(w.length  = wl.tmp,
+                                s.e.irrad = predicted)
+@
+
+<<>>=
+ggplot(data = fitted_peak.spct) +
   geom_line(data = fitted_peak.spct, colour = "blue") +
-  geom_point(data = lamps.mspct$germicidal, colour = "red", size = 3) +
-  xlim(250, 260)
-
+  geom_point(data = neighbourhood.spct, colour = "red", size = 3) +
+  xlim(range(wl.tmp))
 @
 
 \begin{shaded}
 The fit above is not as good as one would like, both at the peak and at the short-wavelength shoulder. Of course other functions can be used, and additional examples of functions and peak shapes will be added here in later drafts.
 \end{shaded}
+
+\subsection{Spline with a single node}
+
+I will try here the use of Prunty's equations.
+
+\subsection{Spline with three nodes}
+
 
 <<>>=
 try(detach(package:photobiologyReflectors))

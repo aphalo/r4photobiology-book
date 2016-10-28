@@ -282,7 +282,7 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- FALSE
+incl_all <- TRUE
 incl_chaps <- FALSE || incl_all
 incl_ckbk <- FALSE || incl_all
 incl_acq <- FALSE || incl_all
@@ -396,7 +396,7 @@ incl_ckbk <- FALSE
 <<child-indexes, child='indexes.Rnw', eval=incl_ckbk>>=
 @
 
-<<child-plots, child='plots.Rnw', eval=TRUE>>=
+<<child-plots, child='plots.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-physics, child='physics.Rnw', eval=incl_ckbk>>=
