@@ -1,0 +1,245 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Algorithms}\label{chap:algorithms}
+
+%\begin{abstract}
+%  In this chapter we explain how UV and VIS radiation can drive chemical reactions, both in inorganic and organic molecules, both \emph{in vitro} and within living organisms. We also describe how action- and response spectra are measured.
+%\end{abstract}
+
+%%%%
+\section{Integration}
+
+\subsection{Area under a spectral curve}
+
+Summary quantities over a range of wavelengths, are geometrically represented by the area under the spectral curve for the region delimited by the two extreme wavelengths in the range of interest ($\lambda_1$ and $\lambda_n$ in Figure \ref{fig:integral}. Mathematically the operation is the computation of an integral over wavelengths.
+
+\begin{figure}
+\pgfplotsset{
+    integral axis/.style={
+        axis lines=middle,
+        enlarge y limits=upper,
+        axis equal image, width=12cm,
+        xlabel=$\lambda$, ylabel=$E(\lambda)$,
+        ytick=\empty,
+        xticklabel style={font=\small, text height=1.5ex, anchor=north},
+        samples=100
+    },
+    integral/.style={
+            domain=2:10,
+            samples=100
+    },
+    integral fill/.style={
+            integral,
+            draw=none, fill=#1,
+            on layer=axis background
+        },
+        integral fill/.default=blue!10,
+        integral line/.style={
+            integral,
+%            very thick,
+            draw=#1
+        },
+        integral line/.default=black
+}
+
+\centering
+
+\begin{tikzpicture}[
+    % The function that is used for all the plots
+    declare function={f=x/5-cos(deg(x*1.85))/2+2;}
+]
+\begin{axis}[
+    integral axis,
+    ymin=0,
+    xmin=0.75, xmax=11.25,
+    domain=1.5:10.5,
+    xtick={2,...,10},
+    xticklabels={$a=\lambda_1$, $\lambda_2$,,,$\lambda_{j-1}$,$\lambda_j$,,$\lambda_{n-1}$,$b=\lambda_n$},
+]
+% The filled area under the approximate integral
+\addplot [integral fill=blue!10] {f} \closedcycle;
+
+% The approximate integral
+\addplot [integral line=black] {f};
+
+% The vertical lines between the segments
+%\addplot [integral, ycomb=blue] {f};
+
+% The function
+\addplot [thick, black] {f} node [anchor=south] {$E(\lambda)$};
+
+% The highlighted segment
+%\addplot [integral fill=cyan!35, domain=6:7, samples=2] {f} \closedcycle;
+\end{axis}
+\end{tikzpicture}
+  \caption[The integral]{The actual integral without approximation.}\label{fig:integral}
+\end{figure}
+
+<<echo=FALSE,cache=FALSE,message=my.debug,eval=FALSE>>=
+library(ggplot2)
+library(photobiology)
+library(photobiologyWavebands)
+library(ggspectra)
+@
+
+<<echo=FALSE, include=FALSE, cache=FALSE, eval=FALSE>>=
+opts_chunk$set(opts_fig_wide)
+@
+
+<<echo = FALSE, eval=FALSE>>=
+flat.spct <- source_spct(w.length = 250:900, s.e.irrad = 1)
+plot(flat.spct, annotations = NULL) +
+    geom_line() +
+    stat_wl_summary(range = PAR(), geom = "rect", alpha = 0.15, color="blue", fill="blue") +
+    # stat_wb_e_irrad(w.band = PAR(), geom = "text", ypos.fixed = 0.5,
+    #                 color = "white", label.fmt = "PAR: %3.0f") +
+    annotate(geom = "text", x = 550, y = 0.5, color = "black", size = 6,
+             label = "integral(E(lambda)~d*lambda, 400, 700)",
+             parse = TRUE) +
+    xlab(expression(Wavelength~~lambda~~(nm))) +
+    theme_bw()
+@
+
+Only if the wavelength step, $\Delta \lambda = 1$~nm, and uniform across the whole spectrum,
+\begin{equation} \label{eq:plain:sum}
+  \int_{400}^{700} E(\lambda) \mathrm{d}\lambda \approxeq \sum_{i = 400}^{699} E_i
+\end{equation}
+if $\Delta \lambda \neq 1$~nm, but uniform, then this needs to be taken into account,
+\begin{equation}\label{eq:delta:sum}
+  \int_{400}^{700} E(\lambda) \mathrm{d}\lambda \approxeq \sum_{i=1}^{n-1} E_i \cdot \Delta \lambda .
+\end{equation}
+In equation \ref{eq:delta:sum} we multiply by the width of the wavelength step after summing the spectral irradiance values as this value is the same for all the observations included.
+
+In equation \ref{eq:plain:sum} we sum 300 spectral irradiance values, if we would add both ends, then area would cover 301~nm instead of 300~nm.In both equations above we avoided this overestimation by excluding the observation at 700~nm. This approach can lead to bias. To avoid this bias we would need to take the average of the two extremes, in the case the wavelengths are measured (or interpolated) at the exact wavelengths without decimals. Only in the case when measurements are at wavelength values $\lambda_1 = 400.5; \lambda_2 = 401.5 \ldots \lambda_{300} = 699.5$~nm, adding up these numbers would give an approximation of the correct irradiance. Figure \ref{fig:delta:sum} shows this case graphically, but with only eight and broad wavelength steps drawn.
+
+If $\Delta \lambda < 1$~nm, using equation \ref{eq:plain:sum} instead of equation \ref{eq:delta:sum} would be represented in Figure \ref{fig:delta:sum} by overlapping rectangles, leading to overestimation by a factor equal to $1 / \Delta \lambda$. In contrast, if $\Delta \lambda > 1$~nm, there would be gaps in between the columns, leading to underestimation.
+
+\begin{figure}
+    \pgfplotsset{
+        axis equal image, width=12cm,
+        integral segments/.code={\pgfmathsetmacro\integralsegments{#1}},
+        integral segments=8,
+        integral/.style args={#1:#2}{
+            ybar interval,
+            domain=#1+((#2-#1)/\integralsegments)/2:#2+((#2-#1)/\integralsegments)/2,
+            samples=\integralsegments+1,
+            x filter/.code=\pgfmathparse{\pgfmathresult-((#2-#1)/\integralsegments)/2}
+        }
+    }
+
+  \centering
+    \begin{tikzpicture}[declare function={f=x/5-cos(deg(x*1.85))/2+2;}]
+    \begin{axis}[
+        enlarge y limits=upper,
+        xlabel=$\lambda$, ylabel=$E(\lambda)$,
+        ymin=0,
+        xmin=0.75, xmax=11.25,
+        domain=1.5:10.5,
+        samples=100,
+        axis lines=middle,
+        ytick=\empty,
+        xtick={2,...,10},
+        xticklabels={$a=\lambda_1$, $\lambda_2$,,,$\lambda_{j-1}$,$\lambda_j$,,$\lambda_{n-1}$,$b=\lambda_n$},
+    ]
+    \addplot [
+        fill=blue!10,
+        integral=2:10
+    ] {f};
+    \addplot [thick] {f} node [anchor=south] {$E(\lambda)$};
+    \end{axis}
+    \end{tikzpicture}
+  \caption[Integration as a sum]{The sum of discrete observed values, is an approximation
+   based on rectangles if their width is taken into account.}\label{fig:delta:sum}
+\end{figure}
+
+
+In array spectrometers the actual measurements are not done at a constant pixel resolution. Instead, due to optical constraints, the wavelength step changes smoothly from pixel to pixel. Adding up observations will in such cases result in erroneous estimates of irradiance. Probably, the simplest method of numerical integration is the rule of the parallelogram. This method is an approximation, but not biased, and can be used with non-uniform $\Delta \lambda$. It is reliable when the number of observations in the range of wavelengths to be integrated is large enough to ``track'' the shape of the spectrum. Figure \ref{fig:trapezium:rule} shows the trapezium rule applied to a spectrum.
+
+\begin{equation}\label{eq:trapezium:integral}
+  \int_{400}^{700} E(\lambda) \mathrm{d}\lambda \approxeq \sum_{i = 1}^{n-1} \frac{E_i + E_{i+1}}{2} \cdot (\lambda_{i+1} - \lambda_i)
+\end{equation}
+
+Equation \ref{eq:trapezium:integral} is directly applicable only if the data contains observations exactly at the boundaries of the range of wavelengths to be integrated. Otherwise the ends must be handled as special cases, calculating $\Delta \lambda$ using the extremes of the integration range instead of the wavelength corresponding to the observations immediately outside of the range.
+
+\begin{figure}
+\pgfplotsset{
+    integral axis/.style={
+        axis lines=middle,
+        enlarge y limits=upper,
+        axis equal image, width=12cm,
+        xlabel=$\lambda$, ylabel=$E(\lambda)$,
+        ytick=\empty,
+        xticklabel style={font=\small, text height=1.5ex, anchor=north},
+        samples=100
+    },
+    integral/.style={
+            domain=2:10,
+            samples=9
+    },
+    integral fill/.style={
+            integral,
+            draw=none, fill=#1,
+            on layer=axis background
+        },
+        integral fill/.default=blue!10,
+        integral line/.style={
+            integral,
+%            very thick,
+            draw=#1
+        },
+        integral line/.default=black
+}
+
+\centering
+
+\begin{tikzpicture}[
+    % The function that is used for all the plots
+    declare function={f=x/5-cos(deg(x*1.85))/2+2;}
+]
+\begin{axis}[
+    integral axis,
+    ymin=0,
+    xmin=0.75, xmax=11.25,
+    domain=1.5:10.5,
+    xtick={2,...,10},
+    xticklabels={$a=\lambda_1$, $\lambda_2$,,,$\lambda_{j-1}$,$\lambda_j$,,$\lambda_{n-1}$,$b=\lambda_n$},
+]
+% The filled area under the approximate integral
+\addplot [integral fill=blue!10] {f} \closedcycle;
+
+% The approximate integral
+\addplot [integral line=black] {f};
+
+% The vertical lines between the segments
+\addplot [integral, ycomb=blue] {f};
+
+% The function
+\addplot [thick, black] {f} node [anchor=south] {$E(\lambda)$};
+
+% The highlighted segment
+%\addplot [integral fill=cyan!35, domain=6:7, samples=2] {f} \closedcycle;
+\end{axis}
+\end{tikzpicture}
+  \caption[Trapezium rule]{Trapezium rule as used by functions in package \pkg{photobiology} except when the wavelength step is wide.}\label{fig:trapezium:rule}
+\end{figure}
+
+\section{Discontinuous functions}
+
+The integration algorithm described above is reliable only for continuous functions with a continuous derivative (slope). Spectra can be usually considered as continuous in relation to the resolution of spectrometers, as long as an instrument suitable for the measured light source has been used. Most commonly used biological spectral weighting functions (BSWFs) have discontinuities at their extremes wavelengths. They are not infinitely asymptotic but instead at a certain wavelength they abruptly end taking a value of zero past the boundary. A few BSWFs, of which the best known is CIE's erythemal action spectrum are defined as a series of linear segments with different slopes. At the knots connecting a pair of segments, the derivative is discontinuous (the slope changes abruptly).
+
+At their wavelength limits, the same problem affects the integration of wavelength ranges such color definitions/bands. This can introduce large errors when wavelength ranges are narrow, as is the case for the definitions of red and far-red used in plant biology, which are only 10~nm wide.
+
+The way around this problem is to obtain estimates of spectral irradiance very near each side of the discontinuity \emph{before} convolution of the spectral irradiance with the BSWF and/or numerical integration. This is still an approximation that requires additional computer processing, and is not always needed. In the functions in our packages, the user can override the default. The default is conservative, favouring accurate estimates rather than fast performance.
+
+\section{Interpolation}
+
+\section{Astronomy}
+
+Starting from version 0.9.12 of package \pkg{photobiology} astronomical calculations are done according to the algorithms in the book \citetitle{Meeus1998} \autocite{Meeus1998}.
+
+\subsection{Times to events}
+
+\subsection{Position of the sun}
