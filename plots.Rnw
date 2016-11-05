@@ -86,7 +86,7 @@ for human vision on a ternary plot, and show how to do a ternary plot for GBU
 (green-blue-ultraviolet) flower colours for honeybee vision using as reference the reflectance
 of a background.
 
-If you are not familiar with \pkg{ggplot2} and \pkg{ggtern} plotting, please read the chapter on plotting in the book \emph{Learning R \ldots{}as your learnt your mother tongue} \autocite{Aphalo2016}.
+If you are not familiar with package \pkg{ggplot2} and plotting using the \emph{grammar of graphics}, please read the chapter on plotting in the book \emph{Learning R \ldots{}as your learnt your mother tongue} \autocite{Aphalo2016}.
 
 %%%%
 \section{Using \texttt{plot()} methods with spectra}
@@ -309,12 +309,11 @@ ggplot(data = sun.spct) +
 @
 
 \begin{framed}
-\ilAttention\index{conflict with \pkg{ggtern}}\noindent The code above conflicts with \pkg{ggtern}, but explicitly using \code{aes} as shown below, solves this conflict.
+\ilAttention\index{conflict with \pkg{ggtern}}\noindent If package \pkg{ggtern} is loaded simultaneously with package \pkg{ggmisc} the examples in this chapter will give an error. The conflict originates in that \pkg{ggtern} redirects calls to method \code{ggplot} to itself, and does not dispatch the specialized methods defined in \pkg{ggpmisc}. The solution is to give the name of the namespace explicitly as shown below.
 
 <<plot-sun-linear-0a, eval=FALSE>>=
-ggplot(data = sun.spct,
-       aes(x = w.length, y = s.e.irrad)) +
-       geom_line()
+ggplot2::ggplot(data = sun.spct) +
+                geom_line()
 @
 \end{framed}
 
@@ -834,7 +833,7 @@ When we want to colour-label individual spectral values, for example, by plottin
 
 \subsection{Task: Plots using colour for the spectral data}\label{sec:plot:tag}
 
-We will first show how to generate the colour information from wavelengths by means of \emph{statistics} defined in \pkg{ggspectra} and later give some examples of using colors by combining functions from packages \pkg{photobiology} and \pkg{ggplot2}. 
+We will first show how to generate the colour information from wavelengths by means of \emph{statistics} defined in \pkg{ggspectra} and later give some examples of using colors by combining functions from packages \pkg{photobiology} and \pkg{ggplot2}.
 \code{stat\_wl\_summary()} and \code{stat\_wb\_mean()} return a \emph{reduced} data set with fewer rows than the original data. \code{stat\_wl\_strip()} depending on the input, can also return a data set with more rows than the input data. This is the default behaviour, with \code{w.band} with argument \code{NULL}. This \emph{stat} operates only on the variable mapped to the $x$ \emph{aesthetic}, a $y$-mapping is not required as input. The \emph{stats} with \code{wb} in their name have a parameter \code{w.band} to which \code{waveband} objects or lists of \code{waveband} objects can be passed as arguments, while \emph{stats} with \code{wl} in their name have also a parameter \code{range} to which a \code{numeric} vector of length two can be passed, or any R object on which function \code{range()} returns such a vector, interpretable as a range of wavelengths expressed in nanometres.
 
 <<>>=

@@ -253,7 +253,7 @@ Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative C
 
 \lowertitleback{Typeset with \href{http://www.latex-project.org/}{\hologo{XeLaTeX}}\ in Lucida Bright and \textsf{Lucida Sans} using the KOMA-Script book class.\\
 The manuscript was written using \href{http://www.r-project.org/}{R} with package \pkg{knitr}. The manuscript was edited in \href{http://www.winedt.com/}{WinEdt} and \href{http://www.rstudio.com/}{RStudio}.
-The source files for the whole book are available at \url{https://bitbucket.org/aphalo/using-r}.}
+The source files for the whole book are available at \url{https://bitbucket.org/aphalo/r4photobiology}.}
 
 %%%%% FIX NEEDED FOR RManager of WinEdt and ????
 
