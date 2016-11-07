@@ -44,7 +44,7 @@ summary(sun.spct)
 
 \section{Task: Integrating spectral data}
 
-Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{integrate\_spct}\index{spectral data!integral} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operates on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed as a total per spectrum.
+Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{integrate\_spct}\index{spectral data!integral} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operates on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed as a total per spectrum. See section \ref{sec:algo:integration} for details on the integration algorithm used and an explanation of why in most cases adding up the spectral values leads to wrong estimates.
 
 <<>>=
 integrate_spct(sun.spct)
@@ -128,7 +128,7 @@ is_effective(sun.spct * UV())
 getBSWFUsed(sun.spct * CIE())
 @
 
-Normalization and scaling can be applied to different types of spectral objects.
+Normalization and scaling can be applied to different types of spectral objects. See sections \ref{sec:algo:normalization} on page \pageref{sec:algo:normalization} and \ref{sec:algo:scaling} on page \pageref{sec:algo:scaling} for an explanation of these operations.
 
 <<>>=
 sun.norm.spct <- normalize(sun.spct, norm = 600)

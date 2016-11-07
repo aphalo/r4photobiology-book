@@ -9,8 +9,13 @@ opts_knit$set(concordance=TRUE)
 %  In this chapter we explain how UV and VIS radiation can drive chemical reactions, both in inorganic and organic molecules, both \emph{in vitro} and within living organisms. We also describe how action- and response spectra are measured.
 %\end{abstract}
 
-%%%%
-\section{Integration}
+\section{Integration}\label{sec:algo:integration}
+
+\begin{framed}
+\ilAttention\textbf{What is wrong with adding-up spectral quantities to obtain a total?} With most spectrometers one can optionally export the spectral data re-expressed with wavelengths at 1 nm intervals. With any other step-size for wavelength, simplistically summing the spectral values will produce erroneous results. When re-expressed to 1~nm-step, the differences would frequently be only minor. However, interpolation and/or moving averages can distort narrow peaks and result in lost information. Although in many cases it leads to small differences between the values obtained by integration of the original data and the integration data re-expressed at different wavelengths, if the data were measured at a much finer wavelength resolution than the one it is re-expressed at, the loss of information can be important.
+
+Functions in the photobiology package take the mean between each pair of spectral irradiance values at contiguous discrete wavelength values, and multiplies them by the distance in nm between these two wavelengths. This needs to be done individually for each of the pixels. It can be programmed in e.g.\ Excel, but summing up the values and multiplying by the mean interval will not give the correct integral for instruments with array detectors. The values obtained will be biased. This is because the intervals do not vary randomly, they increase in width as a function of the wavelength. This results in giving more weight to readings at one end of the spectrum than at the other. So, the error will depend on the shape of the emission spectrum of the light source.
+\end{framed}
 
 \subsection{Area under a spectral curve}
 
@@ -78,14 +83,15 @@ Summary quantities over a range of wavelengths, are geometrically represented by
   \caption[The integral]{The actual integral without approximation.}\label{fig:integral}
 \end{figure}
 
-<<echo=FALSE,cache=FALSE,message=my.debug,eval=FALSE>>=
+<<echo=FALSE,cache=FALSE,message=my.debug,eval=TRUE>>=
 library(ggplot2)
 library(photobiology)
+library(photobiologyLEDs)
 library(photobiologyWavebands)
 library(ggspectra)
 @
 
-<<echo=FALSE, include=FALSE, cache=FALSE, eval=FALSE>>=
+<<echo=FALSE, include=FALSE, cache=FALSE, eval=TRUE>>=
 opts_chunk$set(opts_fig_wide)
 @
 
@@ -234,11 +240,64 @@ At their wavelength limits, the same problem affects the integration of waveleng
 
 The way around this problem is to obtain estimates of spectral irradiance very near each side of the discontinuity \emph{before} convolution of the spectral irradiance with the BSWF and/or numerical integration. This is still an approximation that requires additional computer processing, and is not always needed. In the functions in our packages, the user can override the default. The default is conservative, favouring accurate estimates rather than fast performance.
 
+\section{Scaling}\label{sec:algo:scaling}
+
+Scaling consists in multiplying all individual values of the spectral variable by the same numeric constant. For example, if we have spectral irradiance, we could express scaling as:
+\begin{equation} \label{eq:scaling}
+   E(\lambda) * k = E\prime(\lambda)
+\end{equation}
+
+In many cases scaling is used when comparing spectra. For example, we may want to compare two spectra scaled so that they both share the same value for a summary quantity such as total irradiance. A simple case is re-scaling so that the area under two curves for the wavelength interval $400 \mathrm{nm} < \lambda < 700 \mathrm{nm}$ is the same, for example equal to one. We can then scale each spectrum as:
+
+\begin{equation} \label{eq:scaling:par}
+   \frac{E(\lambda)}{ \int_{400}^{700} E(\lambda) \mathrm{d}\lambda} = E_s(\lambda)
+\end{equation}
+
+In Fig.\ \ref{fig:leds:scaled} we demonstrate scaling according to equation \ref{eq:scaling:par} of the emission spectra of two LEDs, one with a narrow peak of emission, and one with a wide one. Other summary quantities can be used in addition to the integral. 
+
+\begin{figure}
+  \centering
+<<echo=FALSE>>=
+my_leds.mspct <- leds.mspct[c("Q36_4000K", "LZ1_10DB00")]
+my_leds_par.mspct <- fscale(my_leds.mspct, f = e_irrad, w.band = PAR())
+my_leds_par.spct <- rbindspct(my_leds_par.mspct, idfactor = "LED")
+ggplot(my_leds_par.spct) + aes(linetype = LED) + stat_wb_mean(w.band = PAR(), alpha = 0.1) + geom_line() + theme_bw() + theme(legend.position="top") + scale_fill_identity()
+@
+  \caption[Scaling to equal PAR irradiance]{Scaling to equal PAR irradiance of the emission spectra of a blue and a white LED. The areas of the two exactly coincident faint rectangles represent the PAR irradiance integral under each of the two curves.}\label{fig:leds:scaled}
+\end{figure}
+
+\section{Normalization}\label{sec:algo:normalization}
+
+Normalization consists in scaling a spectrum so that the spectral quantity is equal to one at a certain wavelength. The most common normalization is to scale so that the maximum value of a spectral quantity is equal to one, in other words, we scale the spectrum by dividing it by the value at the highest peak. This case, more formally stated in equation \ref{eq:norm:max}, is exemplified in Fig.\ \ref{fig:leds:normalized}.
+
+\begin{equation} \label{eq:norm:max}
+   \frac{E(\lambda)}{\max E(\lambda)} = E_{n}(\lambda)
+\end{equation}
+
+In some cases, normalization is done at a specific wavelength. A well known example is the normalization at $\lambda = 300 \mathrm{nm}$ of BSWFs used in the quantification of ultraviolet radiation in biological studies.
+
+\begin{equation} \label{eq:norm:wl}
+   \frac{\mathcal{E}(\lambda)}{\mathcal{E}(\lambda = 300)} = \mathcal{E}_{n}(\lambda)
+\end{equation}
+
+Where $\mathcal{E}(\lambda)$ is the spectral effectiveness.
+
+\begin{figure}
+  \centering
+<<echo=FALSE>>=
+my_leds.mspct <- leds.mspct[c("Q36_4000K", "LZ1_10DB00")]
+my_leds_450.mspct <- normalize(my_leds.mspct)
+my_leds_450.spct <- rbindspct(my_leds_450.mspct, idfactor = "LED")
+ggplot(my_leds_450.spct) + aes(linetype = LED) + stat_wb_mean(w.band = PAR(), alpha = 0.1) + geom_line() + theme_bw() + theme(legend.position="top") + scale_fill_identity()
+@
+  \caption[Normalization at peak]{Normalization of the emission spectra of a blue and a white LED to one at peak of maximum emission. The areas of the faint rectangles represent the PAR irradiance integral under each of the two curves.}\label{fig:leds:normalized}
+\end{figure}
+
 \section{Interpolation}
 
 \section{Astronomy}
 
-Starting from version 0.9.12 of package \pkg{photobiology} astronomical calculations are done according to the algorithms in the book \citetitle{Meeus1998} \autocite{Meeus1998}.
+Starting from version 0.9.12 of package \pkg{photobiology} astronomical calculations are done according to the algorithms in the book \citetitle{Meeus1998} \autocite{Meeus1998}. See \url{http://www.esrl.noaa.gov/gmd/grad/solcalc/calcdetails.html} for additional details and an on-line calculator.
 
 \subsection{Times to events}
 
