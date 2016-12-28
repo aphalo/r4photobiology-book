@@ -7,7 +7,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{unicode-math}
 
-\usepackage{color}
+%\usepackage{color}
 \usepackage{scrlayer-scrpage}
 
 \usepackage{chapterthumb}
@@ -25,6 +25,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 \setmainfont{Lucida Bright OT}
 \setsansfont{Lucida Sans OT}
 \setmonofont{Lucida Console DK}%[Scale=MatchLowercase]
+\linespread{1.25} % increase line spacing as we use in-line math and code
 
 % We set up some other symbol fonts
 \newfontfamily\wingdingsfont{Wingdings}
@@ -268,9 +269,15 @@ library(knitr)
 opts_knit$set(child.command = 'include')
 opts_knit$set(self.contained=FALSE)
 opts_knit$set(concordance=TRUE)
-opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', cache=FALSE)
+opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='pdf', cache=FALSE) #, dev='cairo_pdf'
 opts_chunk$set(tidy=FALSE)
-options(replace.assign=TRUE,width=50)
+options(replace.assign=TRUE,width=50,encoding="UTF-8")
+@
+
+<<match-setup, include=FALSE>>=
+options(warnPartialMatchAttr = FALSE,
+        warnPartialMatchDollar = FALSE,
+        warnPartialMatchArgs = FALSE)
 @
 
 <<fig-setup, include=FALSE, cache=FALSE>>=
@@ -417,6 +424,9 @@ rm(list = setdiff(current_ls, main_ls))
 @
 
 <<child-measurement, child='measurement.Rnw', eval=incl_acq>>=
+@
+
+<<child-acquisition, child='data-acquisition.Rnw', eval=incl_acq>>=
 @
 
 <<child-calibration, child='calibration.Rnw', eval=incl_acq>>=

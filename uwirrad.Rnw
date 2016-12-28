@@ -164,7 +164,7 @@ UV_bands()
 The task to be completed is to calculate the (energy) irradiance ($\irr$) in \watt from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
 \begin{equation}
-\irr[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \mathrm{d}\lambda
+\irrM[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \mathrm{d}\lambda
 \label{eq:energy:irrad}
 \end{equation}
 
@@ -239,7 +239,7 @@ The task to be completed is to calculate the photon irradiance ($\pfd$) in \mol 
 Combining equations \ref{eq:energy:irrad} and \ref{equ:molenergy} we obtain:
 
 \begin{equation}
-\pfd[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \frac{h' \cdot c}{\lambda}\ \mathrm{d}\lambda
+\pfdM[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr\ \frac{h' \cdot c}{\lambda}\ \mathrm{d}\lambda
 \end{equation}
 
 Let's assume that we want to calculate photosynthetically active radiation (PAR) photon irradiance (frequently called PPFD or photosynthetic photon flux density), for which the most accepted limits are $\lambda_1 = 400 \mathrm{nm}$ and
@@ -325,7 +325,7 @@ with(sun.spct,
 The task to be completed is to calculate the (energy) fluence ($\fluence$) in \joule from spectral (energy) irradiance ($\sirr$) in \wattnm and the corresponding wavelengths ($\lambda$) in nm.
 
 \begin{equation}
-\fluence[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr \times t\ \mathrm{d}\lambda
+\fluenceM[\lambda_1 < \lambda < \lambda_2] = \int_{\lambda_1}^{\lambda_2} \sirr \times t\ \mathrm{d}\lambda
 \label{eq:energy:fluence}
 \end{equation}
 
@@ -334,8 +334,8 @@ Let's assume that we want to calculate photosynthetically active radiation (PAR)
 $\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\fluence[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_fluence} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
 The use of function \code{fluence} facilitates the calculation as it accepts the length of time of the exposure as a \code{lubridate::duration}, making it easy to enter the duration using different units, or even calculate the duration as the difference between two times. Of course, the spectral irradiance should be measured at the position where the material being exposed was located during irradiation. The following example is for a red fluorescent tube as sometimes used in seed germination experiments to study phytochrome-mediated responses.
 
-Here we calculate the red light fluence corresponding to 5 min exposure to sunlight at the time the example spectral data was measured. 
- 
+Here we calculate the red light fluence corresponding to 5 min exposure to sunlight at the time the example spectral data was measured.
+
 <<>>=
 fluence(sun.spct,
         exposure.time = duration(5, "minutes"))
@@ -371,7 +371,7 @@ In\index{ratios!photon base} photobiology sometimes we are interested in calcula
 For example a ratio frequently used in plant photobiology is the red to far-red photon ratio (R:FR photon ratio or $\zeta$). If we follow the wavelength ranges in the definition given by \citeauthor{Morgan1981a} \autocite*{Morgan1981a}, using photon irradiance\footnote{In the original text photon fluence rate is used but it not clear whether photon irradiance was meant instead.}:
 
 \begin{equation}
-\zeta = \frac{\pfd[655 \mathrm{nm} < \lambda < 665  \mathrm{nm}]}{\pfd[725 \mathrm{nm} < \lambda < 735 \mathrm{nm}]}
+\zeta = \frac{\pfdM[655 \mathrm{nm} < \lambda < 665  \mathrm{nm}]}{\pfdM[725 \mathrm{nm} < \lambda < 735 \mathrm{nm}]}
 \end{equation}
 
 To calculate this for our example sunlight spectrum we can use the following code:
@@ -446,7 +446,7 @@ For this infrequently used ratio, no pre-defined function is provided.
 When\index{ratios!photon:energy}\index{ratios!energy:photon} comparing photo-chemical and photo-biological responses under different light sources it is of interest to calculate the photons per energy in \moljoule. In this case only one waveband definition is used to calculate the quotient:
 
 \begin{equation}
-\bar{q'} = \frac{\pfd[\lambda_1 < \lambda < \lambda_2]}{\irr[\lambda_1 < \lambda < \lambda_2]}
+\bar{q'} = \frac{\pfdM[\lambda_1 < \lambda < \lambda_2]}{\irrM[\lambda_1 < \lambda < \lambda_2]}
 \end{equation}
 
 From this equation it follows that the value of the ratio will depend on the shape of the emission spectrum of the radiation source.

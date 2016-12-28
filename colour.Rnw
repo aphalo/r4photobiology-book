@@ -116,36 +116,19 @@ plot(Fs.5nm.mspct[["F11"]])
 
 Here we plot the RGB colours for the range covered by the CIE 2006 proposed standard calculated at each 1 nm step:
 
+
 <<echo=FALSE, include=FALSE, cache=FALSE>>=
 opts_chunk$set(opts_fig_wide)
 @
 
 <<>>=
-wl <- c(390, 829)
+color_chart(color(390:829), ncol = 20, text.color = NA)
+@
 
-my.colors <- color(wl[1]:wl[2])
-
-colCount <- 40 # number per row
-rowCount <- trunc(length(my.colors) / colCount)
-
-plot( c(1,colCount), c(0,rowCount), type="n",
-      ylab="", xlab="",
-      axes=FALSE, ylim=c(rowCount,0))
-title(paste("RGB colours for",
-            as.character(wl[1]), "to",
-            as.character(wl[2]), "nm"))
-
-for (j in 0:(rowCount-1))
-{
-  base <- j*colCount
-  remaining <- length(my.colors) - base
-  RowSize <-
-    ifelse(remaining < colCount, remaining, colCount)
-  rect((1:RowSize)-0.5, j-0.5, (1:RowSize)+0.5, j+0.5,
-       border="black",
-       col=my.colors[base + (1:RowSize)])
-}
-
+<<>>=
+wls <- 400:699
+color_chart(w_length2rgb(wls, color.name = as.character(wls)), 
+            ncol = 10, use.names = TRUE, text.size = 3)
 @
 
 <<>>=

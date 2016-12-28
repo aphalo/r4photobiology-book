@@ -153,23 +153,31 @@ Which annotations are included, depends on the argument supplied, as exemplified
 
 <<plot-sun-default-10>>=
 plot(sun.spct,
-     annotations = c("color.guide","segments","labels"),
+     annotations = c("=", "color.guide", "segments", "labels"),
+     w.band = VIS_bands("ISO"))
+@
+
+<<plot-sun-default-11>>=
+plot(sun.spct,
+     annotations = c("-", "summaries"),
+     w.band = VIS_bands("ISO"))
+@
+
+<<plot-sun-default-12>>=
+plot(sun.spct,
+     annotations = c("+", "peak.labels", "segments"),
      w.band = VIS_bands("ISO"))
 @
 
 There are additional meta-data values stored in \code{source\_spct} objects related to re-scaling, normalization and weighting of the spectral data. These all affect axis labels, and in the case of weighting, the name of the spectral weighting function is added to the plot as an annotation. The following examples exemplify some of these, plus the use of \code{range} to limit the range of wavelengths included in the plot.
 
-<<plot-sun-default-11>>=
+<<plot-sun-default-13>>=
 plot(sun.spct * CIE(), range = c(290,400))
-@
-
-<<plot-sun-default-12>>=
-plot(normalize(sun.spct))
 @
 
 \begin{framed}
 \noindent
-As the current implementation uses \code{ggplot} `statistic's, waveband irradiance annotations respect global aesthetics and facets. If used for simultaneous plotting in the same panel of several spectra (stored \emph{longitudinally} in a single R object), then a summary annotation should not be used as the values would be over-plotted and ambiguous.
+As the current implementation uses \code{ggplot} `statistic's, waveband irradiance annotations respect global aesthetics and facets. If used for simultaneous plotting in the same panel of several spectra (stored \emph{longitudinally} in a single R object), then the \emph{summaries} annotation should not be used as the values would be over-plotted and ambiguous.
 \end{framed}
 
 \subsection{Task: plotting of normalized \code{source\_spct} objects}\label{sec:plot:source:spc}
@@ -269,11 +277,17 @@ We will use as example the spectral properties of a plant leaf. This method is t
 plot(Solidago_altissima.mspct$upper_adax)
 @
 
+The default for \code{plot.qty} is \code{"all"} (meaning Rrf, Tfr, and Afr).
 <<plot-object-2>>=
 plot(Solidago_altissima.mspct$upper_adax, plot.qty = "all")
 @
 
-However, they can be plotted individually, as well as absorbance.
+When the three quantities are plotted, the default is to stack them, but this can be changed.
+<<plot-object-2a>>=
+plot(Solidago_altissima.mspct$upper_adax, plot.qty = "all", stacked = FALSE)
+@
+
+The three quantities can also be plotted individually, as well as absorbance.
 
 <<plot-object-3>>=
 plot(Solidago_altissima.mspct$upper_adax, plot.qty = "reflectance")
@@ -297,7 +311,7 @@ plot(Solidago_altissima.mspct$upper_adax, pc.out = TRUE)
 For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}.
 
 %%%%
-\section[Plotting spectra with ggplot2]{Plotting spectra with \pkg{ggplot2}}\label{sec:plot:spc}
+\section[Plotting spectra with ggplot]{Plotting spectra with \code{ggplot}}\label{sec:plot:spc}
 
 Package \pkg{ggspectra} not only provides simple to use \code{plot} methods, but also `building block' that simplify the construction of custom plots of spectral data with functions from package \pkg{ggplot2}. In this section we give examples of plotting tasks carried out using this more flexible approach. In this chapter's examples we will exploit the power of the grammar of graphics to build figures piece by piece, reusing some of the `pieces' or groups of `pieces' several times to highlight the flexibility of this approach. We also exemplify the `philosophy' of defining everything that needs to be consistent across figures only once. In this section we use a \code{source\_spct} object, \code{sun.spct} in most examples, but the same approaches work with objects of any of the spectral classes from package \pkg{photobiology}. When plotting spectral objects the use of \code{aes} is optional, as \pkg{ggspectra} defines specializations of method \code{ggplot} with suitable defaults aesthetics.
 
@@ -360,6 +374,44 @@ ggplot(data = sun.spct, unit.out = "photon") +
     labs(x = xlab_nm, y = ylab_umol)
 @
 
+\subsection{Task: plotting a spectrum as discrete columns}
+
+It is also possible to split a range of wavelengths into a list of wavebands and use these in a column plot. In this example we split the solar spectrum into a series of wavebands each 25~nm-wide.
+
+<<>>=
+wl.range <- c(250, 800)
+num.bands <- spread(wl.range) / 25
+many.bands <- split_bands(wl.range, length.out = num.bands)
+@
+
+<<plot-sun-columns-1>>=
+ggplot(sun.spct) +
+  stat_wb_column(color = "white", w.band = many.bands) +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)") +
+    scale_fill_identity() +
+    scale_color_identity()
+@
+
+Or for PAR one could use a plot like the following with 10~nm-wide columns.
+
+<<>>=
+wl.range <- range(PAR())
+num.bands <- spread(PAR()) / 25 
+many.bands <- split_bands(wl.range, length.out = num.bands)
+@
+
+<<plot-sun-columns-2>>=
+ggplot(trim_wl(sun.spct, range = PAR())) +
+  stat_wb_column(color = "white", w.band = many.bands) +
+  labs(
+    y = expression(Spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
+    x = "Wavelength (nm)") +
+    scale_fill_identity()
+@
+
+
 %%%%
 \subsection{Task: using a log scale}\label{sec:plot:log}
 
@@ -382,7 +434,7 @@ We use once more the axis-labels saved above, but this time use the two-line lab
 opts_chunk$set(opts_fig_wide_square)
 @
 
-As we are re-scaling the data on the fly, we need to override the default \code{aes} as a whole, we have to specify both the $x$ and $y$ aesthetics.
+As we are re-scaling the data on the fly, we need to override the default \code{aes} as a whole, we have to specify both the $x$ and $y$ aesthetics. If we want to have a particular formatting for axis labels, we can write our own function and pass it as argument. We save to individual figures, one with spectral irradiance expressed on a photon or quantum basis, and one an energy basis.
 
 <<plot-par-multiple-0>>=
 num_one_dec <- function(x, ...) {
@@ -402,7 +454,7 @@ fig_sun.e1 <-
   labs(x = xlab_nm)
 @
 
-We can use function \code{multiplot} to make a single plot from two separate ggplot objects, and put them side by or on top of each other. We use different $y$-axis labels in the two cases to make better use of the available space.
+We use function \code{multiplot} to make a single plot from two separate ggplot objects, and put them side by or on top of each other. We use different $y$-axis labels in the two cases to make better use of the available space.
 
 <<plot-par-multiple-1>>=
 multiplot(fig_sun.q  + labs(y = ylab_umol_atop),
@@ -480,8 +532,8 @@ and all the aesthetics valid for the chosen \code{geom}. By overriding the defau
 <<plot-peaks-valleys-3>>=
 ggplot(data = sun.spct) +
     geom_line() +
-    stat_peaks(geom = "text", colour="red", span=31) +
-    stat_valleys(geom = "text", colour="blue", span=51)
+    stat_peaks(geom = "text", vjust = 0, colour="red", span=31) +
+    stat_valleys(geom = "text", vjust = 1, colour="blue", span=51)
 @
 
 We can use the default \code{geom}, \code{geom\_point}, but change a few additional aesthetics: we set \code{shape} to a character, and set its size to 6.
@@ -489,7 +541,7 @@ We can use the default \code{geom}, \code{geom\_point}, but change a few additio
 <<plot-peaks-4>>=
 ggplot(data = sun.spct) +
     geom_line() +
-    stat_peaks(colour="red", geom="point", shape="|", size=6, span=31)
+    stat_peaks(colour = "red", shape = "|", size = 6, span = 31)
 @
 
 We can add the same \code{stat} two or more times to a \code{ggplot} object, in this example, each time with a different \code{geom}. First we add points to mark the peaks, and afterwards add labels showing the wavelengths at which they are located using geom \code{"text"}. For the \code{shape}, or type of symbol, we use one that supports `fill', and set the \code{fill} to \code{"white"} but keep the border of the symbol \code{"red"} by setting \code{colour}, we also change the \code{size}. With the labels we use \code{vjust} to `justify' the text moving the labels vertically, so that they do not overlap the line depicting the spectrum\footnote{The default position of labels is to have them centred on the coordinates of the peak or valley. Unless we rotate the label, \code{vjust} can be used to shift the label along the $y$-axis, however, justification is a property of the text, not the plot, so the vertical direction is referenced to the position of the text of the label. A value of 0.5 indicates centering, a negative value `up' and a positive value `down'. For example a value of -1 puts the $x, y$ coordinates of the peak or valley at the lower edge of the `bounding box' of the text. For \code{hjust} values of -1 and 1 right and left justify the label with respect to the $x, y$ coordinates supplied. Values other than -1, 0.5, and 1, are valid input, but are rather tricky to use for \code{hjust} as the displacement is computed relative to the width of the bounding box of the label, the displacement being different for the same numerical value depending on the length of the label text.}
@@ -498,10 +550,10 @@ In addition we expand the $y$-axis scale so that all labels fall within the plot
 <<plot-peaks-5>>=
 ggplot(data = sun.spct) +
     geom_line() +
-    stat_peaks(colour="red", geom="point", shape=23,
-             fill="white", size=3, span=31) +
-    stat_peaks(colour="red", geom="text", vjust=-1, span=31) +
-    expand_limits(y=0.9)
+    stat_peaks(colour = "red", shape = 23,
+               fill = "white", size = 1.5, span = 31) +
+    stat_peaks(colour = "red", geom = "text", vjust = -1, span = 31) +
+    expand_limits(y = 0.9)
 @
 
 We continue with an example with rotated labels, using different colours for peaks and valleys. As we put peak labels above the spectrum and valleys bellow it, we need to use \code{hjust} values of opposite sign, but the exact values used were simply adjusted by trial and error until the figure looked as desired.
@@ -509,9 +561,9 @@ We continue with an example with rotated labels, using different colours for pea
 <<plot-peaks-valleys-5>>=
 ggplot(data = sun.spct) +
     geom_line() +
-    stat_peaks(geom = "text", angle=90, hjust=-0.5, colour="red", span=31) +
-    stat_valleys(geom = "text", angle=90, hjust=1, color="blue", span=51) +
-    expand_limits(y=1.0)
+    stat_peaks(geom = "text", angle = 90, hjust = -0.1, colour = "red", span = 31) +
+    stat_valleys(geom = "text", angle = 90, hjust = 1.1, color = "blue", span = 51) +
+    expand_limits(y = 1.0)
 @
 
 \begin{framed}
@@ -523,8 +575,8 @@ The labels mapped to aesthetic can be \emph{computed} on the fly.
 <<>>=
 ggplot(sun.spct) +
   geom_line() +
-  stat_peaks(span = NULL) +
-  stat_peaks(span = NULL, geom = "text", vjust = -0.5,
+  stat_peaks(span = NULL, color = "red") +
+  stat_peaks(span = NULL, geom = "text", vjust = -0.5, color = "red",
              aes(label = paste(..y.label.., "at", ..x.label.. , "nm"))) +
   expand_limits(y = c(NA, 0.9))
 @
@@ -536,13 +588,11 @@ ggplot(sun.spct) +
   geom_line() +
   stat_peaks(shape = 21, span = 25, size = 2) +
   stat_label_peaks(geom = "label_repel", span = 25,
-                   size = 3.5, nudge_y = 0.075,
-                   color = "white") +
+                   size = 3.5, nudge_y = 0.075, segment.colour = "grey20") +
   stat_valleys(shape = 21, span = 25, size = 2) +
   stat_label_valleys(geom = "label_repel", span = 25,
-                     size = 3.5, nudge_y = -0.075,
-                     color = "white") +
-  scale_fill_identity() +
+                     size = 3.5, nudge_y = -0.075, segment.colour = "grey20") +
+  scale_fill_identity() + scale_color_identity() +
   expand_limits(y = c(-0.08, 0.9))
 @
 
@@ -559,11 +609,20 @@ Several ggplot-compatible \emph{statistics} are defined in package \pkg{ggspectr
   \centering
   \begin{tabular}{lp{0.68\linewidth}}
     \toprule
-    stat & description \\
+    \emph{statistic} & \emph{description} \\
+    \midrule
+    \emph{Graphic elements} & \\
+    \midrule
+    stat\_wb\_box & Draw a box showing wavelength range and color \\
+    stat\_wb\_column & Draw a column with area equal to integral and color \\
+    stat\_wb\_hbar & Draw a bar showing mean spectral irradiance, wavelength range and color\\
+    stat\_wl\_strip & Draw bar with colours based wavelength (nm) or wavebands \\
+    \midrule
+    \textbf{Summary labels} & \\
     \midrule
     stat\_wb\_contribution & Contribution of the integral of each waveband to the integral under the whole \emph{plotted} curve \\
     stat\_wb\_relative & Integral for each waveband expressed relative to the sum of all wavebands\\
-    stat\_wb\_label & Label wavelength ranges or wavebands \\
+    stat\_wb\_label & Label with name of wavelength ranges or wavebands \\
     stat\_wb\_e\_irrad	& Energy irradiance for each waveband (\watt) \\
     stat\_wb\_e\_sirrad & Spectral energy irradiance for each waveband (\wattnm) \\
     stat\_wb\_q\_irrad	& Photon irradiance for each waveband (\umol) \\
@@ -572,7 +631,6 @@ Several ggplot-compatible \emph{statistics} are defined in package \pkg{ggspectr
     stat\_wb\_sirrad & Spectral irradiance for each wavebands (varies) \\
     stat\_wb\_total & Integral of the spectral quantity over wavelength for each waveband \\
     stat\_wb\_mean & Mean of the spectral quantity for each waveband \\
-    stat\_wl\_strip & Calculate colours from wavelength \\
     stat\_wl\_summary & Average area under curve for regions \\
     \bottomrule
   \end{tabular}
@@ -587,12 +645,21 @@ opts_chunk$set(opts_fig_wide)
 
 Stat \code{stat\_wb\_label} can be used to highlight a waveband in a plot of spectral data. The argument for \code{w.band} should be a \code{waveband} object, or a list of such objects. The argument for parameter \code{geom} should be supplied as a character string. The default \code{aes} provides defaults for different \emph{geoms}, and the aesthetics can be set also to some of the other computed values. The positions on the $x$-axis are calculated automatically assuming that it describes wavelengths in nanometres. The vertical position has defaults that are rarely the best, but that allow output that helps with manual positioning. The colour has a default value calculated from waveband definition, in addition x is by default set to the midpoint of the waveband along the wavelength limits. The default value of the labels is the `name' of the waveband as returned by \code{labels}.
 
-Here is an example for \PAR using defaults except for \code{w.band}.
+Here is an example for \PAR using defaults except for \code{w.band} and \code{color}.
 
 <<>>=
 ggplot(data = sun.spct) +
     geom_line() +
-    stat_wb_label(w.band = PAR())
+    stat_wb_label(w.band = PAR(), color = "black")
+@
+
+Using the color corresponding to the waveband.
+
+<<>>=
+ggplot(data = sun.spct) +
+    geom_line() +
+    stat_wb_label(w.band = PAR(), aes(color = ..wb.color..)) +
+    scale_color_identity()
 @
 
 The next example does the annotation using two different \emph{geoms}, \code{"rect"} for marking the region, and \code{"text"} for the labels. In this example, the order in which the graphical elements are added is important, as it determines the drawing order. In this case, it is what determines that the text is written on top of the rectangle instead of the rectangle covering the text.
@@ -600,22 +667,32 @@ The next example does the annotation using two different \emph{geoms}, \code{"re
 <<>>=
 ggplot(data = sun.spct) +
    geom_line() +
-   stat_wl_strip(w.band = PAR(), geom = "rect", ymax = 0.95, ymin = 0.85) +
-   stat_wb_label(w.band = PAR(), geom = "text", ypos.fixed = 0.9, color = "white") +
+   stat_wl_strip(w.band = PAR(), ymax = 0.95, ymin = 0.85) +
+   stat_wb_label(w.band = PAR(), ypos.fixed = 0.9, color = "white") +
    ylim(NA, 0.95) +
    scale_fill_identity()
 @
 
-Now an example that is more complex, and demonstrates the flexibility of plots produced with \pkg{ggplot2}. We add annotations for all the colors defined in the ISO standard. For each one we use, as above, two \emph{geoms}. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}.
+Or with automatic color settings, which in this cases results in the same plot.
+
+<<>>=
+ggplot(data = sun.spct) +
+   geom_line() +
+   stat_wl_strip(w.band = PAR(), ymax = 0.95, ymin = 0.85) +
+   stat_wb_label(w.band = PAR(), ypos.fixed = 0.9) +
+   ylim(NA, 0.95) +
+   scale_fill_identity() + scale_color_identity()
+@
+
+Now an example that is more complex, and demonstrates the flexibility of plots produced with \pkg{ggplot2}. We add annotations for all the colors defined in the ISO standard. For each one we use, as above, two \emph{geoms}. We can also see in this example that the annotations look nicer on a white background, which can be obtained with \code{theme\_bw}. In this case, the
+effect of automatic selection of black or white text is important.
 
 <<>>=
 ggplot(data = sun.spct) +
     geom_line() +
-    stat_wl_strip(w.band = VIS_bands(), geom = "rect", ymax = 1.05, ymin = 0.85) +
-    stat_wb_label(w.band = VIS_bands(),
-                 geom = "text", color = "white",
-                 ypos.fixed = 0.95, angle = 90) +
-    scale_fill_identity() +
+    stat_wl_strip(w.band = VIS_bands(), ymax = 1.05, ymin = 0.85) +
+    stat_wb_label(w.band = VIS_bands(), ypos.fixed = 0.95, angle = 90) +
+    scale_fill_identity() + scale_color_identity() +
     ylim(NA, 1.05)
 @
 
@@ -627,29 +704,29 @@ ggplot(data=sun.spct, unit.out = "photon") +
     geom_vline(xintercept=range(PAR()))
 @
 
-We change some of the aesthetics in the previous figure, and add a label using \code{stat\_wb\_label} described above.
+We change aesthetics to obtain dashed lines, and add a label using \code{stat\_wb\_label} as described above.
 
 <<plot-par-vline-4>>=
 ggplot(data=sun.spct, unit.out = "photon") +
     geom_line() +
     geom_vline(xintercept=range(PAR()), linetype="dashed") +
-    stat_wb_label(w.band = PAR())
+    stat_wb_label(w.band = PAR(), color = "black")
 @
 
 \subsection{Task: annotate a plot with waveband summary values as labels}
 
 Next we use calculated values in the label, first for a simple example with a single waveband.
 Because we use expressions to obtain superscripts we need to add \code{parse=TRUE} to the call.
-In addition as we are expressing the integral in photon based units, we also change the
-type of units used for plotting the spectral irradiance (multiplying by $1 \cdot 10^6$ to obtain values in \umol).
+We use photon based units for expressing both the spectral irradiance and the integral.
 
 <<>>=
-ggplot(sun.spct) +
+ggplot(sun.spct, unit.out = "photon") +
     geom_line() +
     stat_wl_summary(geom = "hline", color = "red") +
     stat_wl_summary(label.fmt = "Mean = %.3g", color = "red", vjust = -0.3)
 @
 
+With the two-spectra data object, we use \emph{facets} to plot each spectrum on a separate panel. By default, the $y$-scale is common to all panels.
 <<>>=
 ggplot(two_suns.spct) + aes(color = spct.idx) +
     geom_line() +
@@ -658,6 +735,7 @@ ggplot(two_suns.spct) + aes(color = spct.idx) +
     facet_grid(spct.idx~.)
 @
 
+Here we set free scales, so that they can differ between panels.
 <<>>=
 ggplot(two_suns.spct) + aes(color = spct.idx) +
     geom_line() +
@@ -666,22 +744,35 @@ ggplot(two_suns.spct) + aes(color = spct.idx) +
     facet_grid(spct.idx~., scales = "free_y")
 @
 
+
 <<>>=
 ggplot(yellow_gel.spct) +
-    stat_wb_mean(w.band = Plant_bands(), geom = "rect", alpha = 0.7) +
-    stat_wb_mean(w.band = Plant_bands(), angle = 90, hjust = 0, geom = "text", ypos.fixed = 0.1,
-                 aes(label = paste(..wb.name.., " = ", ..y.label.., sep = ""))) +
     geom_line() +
-    scale_fill_identity()
+    stat_wb_hbar(w.band = Plant_bands()) +
+    stat_wb_mean(w.band = Plant_bands(), angle = 90, hjust = 0, ypos.fixed = 0.1,
+                 aes(label = paste(..wb.name.., " = ", ..y.label.., sep = ""),
+                 color = "black")) +
+scale_color_identity()
 @
 
 <<>>=
 ggplot(sun.spct, unit.out = "photon") +
-    stat_wb_irrad(w.band = PAR(), geom = "rect", alpha = 0.5,
-                unit.in = "photon", time.unit = "second") +
-    stat_wb_irrad(w.band = PAR(), geom = "text",
+    geom_line() +
+    stat_wb_box(w.band = PAR()) +
+    stat_wb_irrad(w.band = PAR(),
                 unit.in = "photon", time.unit = "second",
                 aes(label = sprintf("%s = %.3g", ..wb.name.., ..yint.. * 1e6))) +
+    scale_color_identity() +
+    scale_fill_identity()
+@
+
+<<>>=
+ggplot(sun.spct, unit.out = "photon") +
+stat_wb_column(w.band = PAR(), alpha = 0.5) +
+    stat_wb_irrad(w.band = PAR(),
+                unit.in = "photon", time.unit = "second",
+                aes(label = sprintf("%s = %.3g", ..wb.name.., ..yint.. * 1e6),
+                    color = ..wb.color..)) +
     geom_line() +
     scale_color_identity() +
     scale_fill_identity()
@@ -689,9 +780,10 @@ ggplot(sun.spct, unit.out = "photon") +
 
 <<>>=
 ggplot(sun.spct, unit.out = "photon") +
-    stat_wb_q_irrad(w.band = VIS_bands(), geom = "rect", alpha = 0.5) +
-    stat_wb_q_irrad(w.band = VIS_bands(), geom = "text",
-                label.mult = 1e6, size = rel(2)) +
+    stat_wb_box(w.band = VIS_bands(),
+                    color = "white") +
+    stat_wb_q_irrad(w.band = VIS_bands(),
+                label.mult = 1e6, size = 2.5) +
     geom_line() +
     scale_color_identity() +
     scale_fill_identity()
@@ -699,10 +791,11 @@ ggplot(sun.spct, unit.out = "photon") +
 
 <<>>=
 ggplot(sun.spct, unit.out = "photon") +
-    stat_wb_q_sirrad(w.band = PAR(), geom = "rect", alpha = 0.5) +
-    stat_wb_q_sirrad(w.band = PAR(), geom = "text",
-                 aes(label = sprintf("Total %s = %.3g", ..wb.name.., ..yint.. * 1e6))) +
-    stat_wb_q_sirrad(w.band = PAR(), geom = "text",
+    stat_wb_column(w.band = PAR(), alpha = 0.5) +
+    stat_wb_q_irrad(w.band = PAR(),
+                aes(label = sprintf("Total %s = %.3g", ..wb.name.., ..yint.. * 1e6)),
+                ypos.mult = 0.55) +
+    stat_wb_q_sirrad(w.band = PAR(),
                 mapping = aes(label = sprintf("Mean %s = %.3g", ..wb.name.., ..ymean.. * 1e6)),
                 ypos.mult = 0.45) +
     geom_line() +
@@ -712,11 +805,10 @@ ggplot(sun.spct, unit.out = "photon") +
 
 <<>>=
 ggplot(sun.spct, unit.out = "photon") +
-    stat_wb_q_sirrad(w.band = VIS_bands(), geom = "rect", alpha = 0.5) +
-    stat_wb_q_irrad(w.band = VIS_bands(), angle = 90, geom = "text",
+    stat_wb_column(w.band = VIS_bands(), alpha = 0.45) +
+    stat_wb_q_irrad(w.band = VIS_bands(), angle = 90,
                   label.mult = 1e6, ypos.fixed = 1e-7, hjust = 0,
-                  aes(label = paste(..wb.name.., ..y.label.., sep = " = "),
-                      color = "black")) +
+                  aes(label = paste(..wb.name.., ..y.label.., sep = " = "))) +
     geom_line() +
     scale_color_identity() +
     scale_fill_identity()
@@ -725,28 +817,28 @@ ggplot(sun.spct, unit.out = "photon") +
 <<>>=
 my.bands <- split_bands(c(300,800), length.out = 10)
 ggplot(sun.spct) +
-    stat_wb_e_sirrad(w.band = my.bands, geom = "rect", alpha = 0.5) +
-    stat_wb_e_irrad(w.band = my.bands, angle = 90, geom = "text",
-                  ypos.fixed = 0.05, hjust = 0, color = "black") +
+    stat_wb_column(w.band = my.bands, color = NA, alpha = 0.75) +
+    stat_wb_e_irrad(w.band = my.bands, angle = 90,
+                  ypos.fixed = 0.05, hjust = 0) +
     geom_line() +
     scale_color_identity() +
     scale_fill_identity()
 @
 
-A plot describing ISO colors by themselves, with no $y$-data.
+% A plot describing ISO colors by themselves, with no $y$-data.
 
 <<plot-par-annotate-1a>>=
 ggplot(sun.spct) +
-    stat_wb_mean(w.band = PAR(), geom = "rect", alpha = 0.2) +
-    stat_wb_irrad(w.band = PAR(), geom = "text",
+    stat_wb_column(w.band = PAR(), alpha = 0.2) +
+    stat_wb_irrad(w.band = PAR(),
                   aes(label=paste("PAR:~", ..y.label..,
                               "*~mu*mol~m^{-2}~s^{-1}", sep="")),
                   ypos.mult = 0.5,
-                  colour="black",
                   parse=TRUE,
                   time.unit = "second",
                   unit.in = "energy") +
     geom_line() +
+    scale_color_identity() +
     scale_fill_identity()
 @
 
@@ -754,9 +846,9 @@ Using smaller rectangles for annotation, yields plots where the spectrum itself 
 
 <<plot-par-annotate-2>>=
 ggplot(sun.spct) +
-    stat_wl_strip(w.band = PAR(), geom = "rect",
+    stat_wl_strip(w.band = PAR(),
                   ymin = -0.05, ymax = 0) +
-    stat_wb_irrad(w.band = PAR(), geom = "text", size=4,
+    stat_wb_irrad(w.band = PAR(), size=4,
                   aes(label=paste("PAR:~", ..y.label..,
                               "*~mu*mol~m^{-2}~s^{-1}", sep="")),
                   ypos.fixed = 0.07,
@@ -772,9 +864,9 @@ A bigger rectangle better shows the range of wavelengths.
 
 <<plot-par-annotate-3>>=
 ggplot(sun.spct) +
-    stat_wl_strip(w.band = PAR(), geom = "rect", alpha = 0.2,
+    stat_wl_strip(w.band = PAR(),alpha = 0.2,
                   ymin = -Inf, ymax = +Inf) +
-    stat_wb_irrad(w.band = PAR(), geom = "text", size=4,
+    stat_wb_irrad(w.band = PAR(), size=4,
                   aes(label=paste("PAR:~", ..y.label..,
                               "*~mu*mol~m^{-2}~s^{-1}", sep="")),
                   colour="black",
@@ -789,10 +881,10 @@ This type of annotations can be also easily done for effective exposures or dose
 
 <<>>=
 ggplot(sun.spct, unit.out = "photon") +
-    geom_vline(xintercept=range(CIE()), linetype = "dashed") +
-    stat_wb_e_irrad(w.band = CIE(), geom = "text",
+    geom_vline(xintercept = range(CIE()), linetype = "dashed") +
+    stat_wb_e_irrad(w.band = CIE(), color = "black",
                 unit.in = "photon", time.unit = "second",
-                aes(label = sprintf("%s\n%.3g", ..wb.name.., ..yint..))) +
+                aes(label = sprintf("%s\n%.3g", ..wb.name.., ..yeff.. * 1e6))) +
     geom_line() +
     scale_color_identity() +
     scale_fill_identity()
@@ -811,16 +903,27 @@ filtered.spct <- rbindspct(filtered.lst, idfactor = "filter")
 opts_chunk$set(opts_fig_wide_square)
 @
 
-<<opts_fig_wide_square>>=
+<<>>=
 ggplot(filtered.spct, unit.out = "energy") +
-  stat_wb_e_irrad(w.band = CIE(), geom = "text",
+  stat_wb_hbar(w.band = CIE(), ypos.fixed = 28000) +
+  stat_wb_e_irrad(w.band = CIE(), color = "black",
                 unit.in = "energy", time.unit = "day",
-                aes(label = sprintf("CIE %.3g", ..yint..)),
                 ypos.fixed = 31000) +
   geom_line() +
   facet_wrap(~filter, ncol = 1) +
-  scale_color_identity() +
-  scale_fill_identity()
+  scale_color_identity()
+@
+
+<<>>=
+ggplot(filtered.spct, unit.out = "energy") +
+  geom_line() +
+  stat_wb_hbar(w.band = CIE(), ypos.fixed = 0, color = "red") +
+  stat_wb_e_irrad(w.band = CIE(), color = "red", size = 2,
+                unit.in = "energy", time.unit = "day", label.mult = 1e-3,
+                label.fmt = "CIE %3.2f kJ/day",
+                ypos.fixed = -3000) +
+  facet_wrap(~filter, ncol = 1) +
+  scale_color_identity()
 @
 
 <<echo=FALSE, include=FALSE, cache=FALSE>>=
@@ -842,7 +945,7 @@ We will first show how to generate the colour information from wavelengths by me
 my.data <- data.frame(x = 300:800)
 ggplot(my.data, aes(x)) +
     stat_wl_strip(ymin = -1, ymax = 1) +
-    scale_fill_identity() +
+    scale_fill_identity() + scale_color_identity() +
     scale_y_continuous(breaks = NULL)
 @
 
@@ -935,9 +1038,9 @@ We can also use other \code{geom}s like \code{geom\_area} in the next chunk, tog
 
 <<plot-tag-par-3>>=
 ggplot(par.sun.spct) +
- geom_area(color=NA, aes(fill=wb.color)) +
+ geom_area(color = NA, aes(fill = wb.color)) +
  geom_line() +
- scale_fill_identity(na.value=NA)
+ scale_fill_identity(na.value = NA)
 @
 
 We tag each observation in the solar spectrum with human vision colours as defined by ISO.
@@ -953,7 +1056,7 @@ Here we plot using colours by waveband---using the colour definitions by ISO---,
 <<plot-tag-vis-2>>=
 ggplot(tg.sun.spct) +
   geom_line() +
-  geom_point(aes(fill=wb.color), shape=21) +
+  geom_point(aes(fill = wb.color), shape = 21) +
   scale_fill_identity()
 @
 
@@ -961,9 +1064,9 @@ Using \code{geom\_area} we can fill the area under the curve according to the co
 
 <<plot-tag-vis-3>>=
 ggplot(tg.sun.spct) +
-  scale_fill_identity() +
+  scale_fill_identity() + scale_color_identity() +
   geom_line() +
-  geom_area(aes(fill=wb.color), alpha=0.75)
+  geom_spct(aes(fill = wb.color), alpha = 0.75)
 @
 
 In the next example we tag the solar spectrum with colours using the definitions of plant sensory `colours'.
@@ -976,18 +1079,18 @@ Here we plot the wavebands corresponding to plant sensory `colours', using the s
 
 <<plot-tag-plants-2>>=
 ggplot(pl.sun.spct) +
-geom_area(aes(fill=wb.color), alpha=0.75) +
+geom_spct(aes(fill = wb.color), alpha = 0.75) +
   geom_line() +
-  scale_fill_identity()
+  scale_fill_identity() + scale_color_identity()
 @
 
 We can also use the factor \code{wb.f} which has value \code{NA} outside the wavebands, changing the colour used for \code{NA} to \code{NA} which renders it invisible. We can change the labels used for the wavebands in two different way, when plotting by supplying a labels argument to the scale used, or when tagging the spectrum. The second approach is simpler when producing several different plots from the same spectral object, or when wanting to have consistent labels and names used also in derived results such as irradiance.
 
 <<plot-tag-plants-3>>=
 ggplot(pl.sun.spct) +
-  geom_area(aes(fill=wb.f)) +
+  geom_spct(aes(fill = wb.f)) +
   geom_line() +
-  scale_fill_grey(na.value=NA, name="",
+  scale_fill_grey(na.value = NA, name = "",
                   labels=c("UVB", "UVA", "Blue", "Green", "Red", "Far red"))
 @
 
@@ -996,37 +1099,37 @@ When using a factor we can play with the scale definitions and represent the wav
 When an spectrum has very few observations we can `fake' a longer spectrum by interpolation as a way of getting a more even fill. The example below is not run, in later examples we just use the example spectral data as is.
 
 <<plot-interpolate, eval=FALSE>>=
-dense.sun.spct <- interpolate_spct(sun.spct, length.out=800)
+dense.sun.spct <- interpolate_spct(sun.spct, length.out = 800)
 @
 
 We tag the VIS region of the spectrum with 150 narrow wavebands. As `hinges' are inserted, there is no gap, and usually there is no need to increase the length of the spectrum by interpolation. However, the longer spectrum should not be used for statistical calculations, not even plotting using \code{geom\_smooth}.
 
 <<plot-split-VIS-1>>=
-splt.sun.spct <- tag(sun.spct, split_bands(VIS(), length.out=150))
+splt.sun.spct <- tag(sun.spct, split_bands(VIS(), length.out = 150))
 @
 
 In the code above, we made a copy of \code{sun.spct} using a different name so as not hide the object in package \PB.
 
 <<plot-split-VIS-2>>=
 ggplot(splt.sun.spct) +
-    geom_area(aes(fill=wb.color), alpha=0.75) +
+    geom_spct(aes(fill = wb.color), alpha = 0.75) +
     geom_line() +
-    scale_fill_identity()
+    scale_fill_identity() + scale_color_identity()
 @
 
 In this other example we tag the whole spectrum, dividing it into 200 wavebands.
 
 <<plot-split-all-1>>=
-splt1.sun.spct <- tag(sun.spct, split_bands(sun.spct, length.out=200))
+splt1.sun.spct <- tag(sun.spct, split_bands(sun.spct, length.out = 200))
 @
 
 We use \code{geom\_area} and \code{fill}, and colour the area under the curve. This does not work with \code{geom\_line} because there would not be anything to fill, here we use \code{geom\_area} instead.
 
 <<split-all-2>>=
 ggplot(splt1.sun.spct) +
-    geom_area(aes(fill=wb.color), alpha=0.75) +
+    geom_spct(aes(fill = wb.color), alpha = 0.75) +
     geom_line() +
-    scale_fill_identity()
+    scale_fill_identity() + scale_color_identity()
 @
 
 The next example uses \code{geom\_point} and \code{color} to color the data points according to the waveband they are included in.
@@ -1034,7 +1137,7 @@ The next example uses \code{geom\_point} and \code{color} to color the data poin
 <<plot-split-all-4>>=
 ggplot(tg.sun.spct) +
     geom_line() +
-    geom_point(aes(color=wb.color)) +
+    geom_point(aes(color=wb.color), na.rm = TRUE) +
     scale_colour_identity()
 @
 
@@ -1044,7 +1147,7 @@ this case we need to use \code{scale\_color\_identity}.
 <<plot-split-all-5>>=
 ggplot(data=tg.sun.spct) +
     scale_color_identity() +
-    geom_point(aes(color=wl.color))  +
+    geom_point(aes(color = wl.color))  +
     geom_line()
 @
 
@@ -1090,14 +1193,14 @@ We now add to the plot created above a nearly continuous colour bar for the whol
 <<plot-wl-all-guide>>=
 wl.guide.spct <-
   wb2rect_spct(split_bands(sun.spct,
-                           length.out=200))
+                           length.out = 200))
 
 ggplot(data=sun.spct) +
   geom_line() +
-  geom_rect(data=wl.guide.spct,
+  geom_rect(data  =wl.guide.spct,
             aes(xmin = wl.low, xmax = wl.high,
                 ymin = y + 0.85, ymax = y + 0.9,
-                y = 0, fill=wb.color),
+                fill = wb.color),
             color = NA) +
   scale_fill_identity()
 @
@@ -1106,14 +1209,14 @@ This second example differs very little from the previous one, but by using a wa
 
 
 <<plot-wl-vis-guide>>=
-wl.guide.spct <- wb2rect_spct(split_bands(VIS(), length.out=200))
+wl.guide.spct <- wb2rect_spct(split_bands(VIS(), length.out = 200))
 
 ggplot(data=sun.spct) +
     geom_line() +
     geom_rect(data=wl.guide.spct,
             aes(xmin = wl.low, xmax = wl.high,
                 ymin = y + 0.85, ymax = y + 0.9,
-                y = 0, fill=wb.color),
+                fill=wb.color),
             color = NA) +
     scale_fill_identity()
 @
@@ -1130,7 +1233,7 @@ ggplot(data=sun.spct) +
     geom_rect(data=iso.guide.spct,
             aes(xmin = wl.low, xmax = wl.high,
                 ymin = y + 0.85, ymax = y + 0.9,
-                y = 0, fill=wb.color),
+                fill = wb.color),
             color = NA) +
     scale_fill_identity()
 @
@@ -1140,12 +1243,12 @@ We use as an example plant's sensory colours, to show the case when the waveband
 <<plot-plant-guide-1>>=
 plant.guide.spct <- wb2rect_spct(Plant_bands())
 
-ggplot(data=sun.spct) +
+ggplot(data = sun.spct) +
     geom_line() +
-    geom_rect(data=plant.guide.spct,
+    geom_rect(data = plant.guide.spct,
             aes(xmin = wl.low, xmax = wl.high,
                 ymin = y + 0.85, ymax = y + 0.9,
-                y = 0, fill=wb.color),
+                fill = wb.color),
             color = "white") +
     scale_fill_identity()
 @
@@ -1160,12 +1263,12 @@ ggplot(data=sun.spct) +
   geom_rect(data=plant.guide.spct,
             aes(xmin = wl.low, xmax = wl.high,
                 ymin = y + 0.85, ymax = y + 0.9,
-                y = 0, fill=wb.color),
+                fill = wb.color),
             color = "white") +
   geom_text(data=plant.guide.spct,
-            aes(y = y + 0.875, label = as.character(wb.f)),
-            color = "white", size=4) +
-  scale_fill_identity()
+            aes(y = y + 0.875, label = as.character(wb.f),
+            color = black_or_white(wb.color)), size = 3) +
+  scale_fill_identity() + scale_color_identity()
 @
 
 Here we add \code{alpha} or transparency to make the colours paler, and use black text and lines.
@@ -1175,12 +1278,12 @@ plant.guide.spct <- wb2rect_spct(Plant_bands())
 
 ggplot(data=sun.spct) +
   geom_line() +
-  geom_rect(data=plant.guide.spct,
+  geom_rect(data = plant.guide.spct,
        aes(xmin = wl.low, xmax = wl.high,
            ymin = y + 0.85, ymax = y + 0.9,
-           y = 0, fill=wb.color),
-       color = "black", alpha=0.4) +
-  geom_text(data=plant.guide.spct,
+           fill = wb.color),
+       color = "black", alpha = 0.4) +
+  geom_text(data = plant.guide.spct,
        aes(y = y + 0.875, label = as.character(wb.f)),
        color = "black", size=4) +
   scale_fill_identity()
@@ -1191,14 +1294,13 @@ We change the guide so that all rectangles are filled with the same shade of gre
 <<plot-plant-guide-4>>=
 plant.guide.spct <- wb2rect_spct(Plant_bands())
 
-ggplot(data=sun.spct) +
+ggplot(data = sun.spct) +
   geom_line() +
-  geom_rect(data=plant.guide.spct,
+  geom_rect(data = plant.guide.spct,
             aes(xmin = wl.low, xmax = wl.high,
-                ymin = y + 0.85, ymax = y + 0.9,
-                y = 0),
-            color = "black", fill="grey90") +
-  geom_text(data=plant.guide.spct,
+                ymin = y + 0.85, ymax = y + 0.9),
+            color = "black", fill = "grey90") +
+  geom_text(data = plant.guide.spct,
             aes(y = y + 0.875, label = as.character(wb.f)),
             color = "black", size=4)
 @
@@ -1211,14 +1313,14 @@ By changing the order in which the geoms are added compared to previous examples
 plant.guide.spct <- wb2rect_spct(Plant_bands())
 
 ggplot(data=sun.spct,
-         aes(x=w.length, y=s.e.irrad)) +
-  geom_rect(data=plant.guide.spct,
+         aes(x = w.length, y = s.e.irrad)) +
+  geom_rect(data = plant.guide.spct,
        aes(xmin = wl.low, xmax = wl.high,
            ymin = y, ymax = y + 0.85,
-           y = 0, fill=wb.color),
+           fill=wb.color),
        color = "white", alpha=0.5) +
   scale_fill_identity() +
-  geom_text(data=plant.guide.spct,
+  geom_text(data = plant.guide.spct,
        aes(y = y + 0.88, label = as.character(wb.f)),
        color = "black") +
   geom_line()
@@ -1233,10 +1335,9 @@ ggplot(data=sun.spct) +
   geom_line() +
   geom_rect(data=par.guide.spct,
             aes(xmin = wl.low, xmax = wl.high,
-                ymin = y - 0.1, ymax = y,
-                y = 0),
-            color = "black", fill="grey90") +
-  geom_text(data=par.guide.spct,
+                ymin = y - 0.1, ymax = y),
+            color = "black", fill = "grey90") +
+  geom_text(data = par.guide.spct,
             aes(y = y - 0.05, label = as.character(wb.f)),
             color = "black")
 @
@@ -1249,11 +1350,11 @@ par.guide1.spct <-
 
 ggplot(data=sun.spct) +
   geom_line() +
-  geom_segment(data=par.guide1.spct,
+  geom_segment(data = par.guide1.spct,
        aes(x = wl.low, xend = wl.high,
            y = y, yend = y),
        size = 1.5, color = "black") +
-  geom_text(data=par.guide1.spct,
+  geom_text(data = par.guide1.spct,
        aes(y = y + 0.05, label = as.character(wb.f)),
        color = "black", family="serif")
 @
@@ -1266,10 +1367,10 @@ plant.guide.spct <- wb2rect_spct(Plant_bands())
 
 ggplot(data=sun.spct) +
   geom_line() +
-  geom_vline(data=plant.boundaries.spct,
+  geom_vline(data = plant.boundaries.spct,
              aes(xintercept = w.length),
              linetype = "dotted") +
-  geom_text(data=plant.guide.spct,
+  geom_text(data = plant.guide.spct,
        aes(y = y + 0.88, label = as.character(wb.f)),
        color = "black")
 @
@@ -1282,12 +1383,12 @@ plant.guide.spct <- wb2rect_spct(Plant_bands())
 
 ggplot(data=sun.spct) +
   geom_line() +
-  geom_vline(data=plant.boundaries.spct,
-             aes(xintercept = w.length, color=wb.color),
-             size=1, linetype="dashed") +
-  geom_label(data=plant.guide.spct,
-       aes(y = y + 0.88, label = as.character(wb.f), color=wb.color),
-       size=4) +
+  geom_vline(data = plant.boundaries.spct,
+             aes(xintercept = w.length, color = wb.color),
+             size = 1, linetype = "dashed") +
+  geom_label(data = plant.guide.spct,
+       aes(y = y + 0.88, label = as.character(wb.f), color = wb.color),
+       size = 4) +
   scale_color_identity()
 @
 
@@ -1297,22 +1398,23 @@ Of course it is possible to combine tagged data spectra and tagged spectra creat
 my.sun.spct <- tag(sun.daily.spct, list(UVB(), UVA()))
 annotation.spct <- wb2rect_spct(list(UVB(), UVA()))
 fig_sun.uv1 <- ggplot(my.sun.spct,
-                      aes(x=w.length,
-                          y=s.e.irrad * 1e-3,
-                          fill=wb.f)) +
-  scale_fill_grey(na.value=NA, guide="none") +
-  geom_area() + geom_line() +
+                      aes(x = w.length,
+                          y = s.e.irrad * 1e-3,
+                          fill = wb.f)) +
+  scale_fill_grey(na.value = NA, guide = "none") +
+  geom_spct() +
+  geom_line() +
   labs(x = "Wavelength (nm)",
        y =  expression(atop(Spectral~~daily~~exposure,
                        (kJ~~m^{-2}~d^{-1}~nm^{-1}))),
        fill = "",
        title =
    "Unweighted solar radiation (daily accumulated spectrum)") +
-  geom_rect(data=annotation.spct,
-            aes(xmin=wl.low, xmax=wl.high, ymin=30, ymax=32)) +
-  geom_text(data=annotation.spct,
-            aes(label=as.character(wb.f), y=31),
-            color=c("black", "white"), size=4) +
+  geom_rect(data = annotation.spct,
+            aes(xmin = wl.low, xmax = wl.high, ymin = 30, ymax = 32)) +
+  geom_text(data = annotation.spct,
+            aes(label = as.character(wb.f), y = 31),
+            color=c("white", "black"), size = 4) +
   theme_bw()
 
 fig_sun.uv1
@@ -1324,15 +1426,14 @@ Possible variations are almost endless, so we invite the reader to continue expl
 par <- q_irrad(sun.spct, PAR()) * 1e6
 
 fig_sun.tgrect1 <-
-  ggplot(data=par.sun.spct,
-         aes(x=w.length, y=s.q.irrad * 1e6)) +
+  ggplot(data = par.sun.spct,
+         aes(x = w.length, y = s.q.irrad * 1e6)) +
   geom_line() +
-  geom_area(color=NA, alpha=0.3, aes(fill=wb.f))  +
-  scale_fill_grey(na.value=NA, guide="none") +
+  geom_spct(color = NA, alpha = 0.3, aes(fill = wb.f))  +
+  scale_fill_grey(na.value = NA, guide = "none") +
   labs(
     y = ylab_umol,
-    x = "Wavelength (nm)") #+
-#  stat_wb_irrad(w.band = PAR())
+    x = "Wavelength (nm)")
 
 fig_sun.tgrect1
 @
@@ -1342,20 +1443,20 @@ par.guide.spct <-
   wb2rect_spct(list('Photosynthetically active radiation' = PAR()))
 
 fig_sun.tgrect2 <-
-  ggplot(data=tg.sun.spct,
-         aes(x=w.length, y=s.e.irrad)) +
+  ggplot(data = tg.sun.spct,
+         aes(x = w.length, y = s.e.irrad)) +
   geom_line() +
   scale_color_identity() +
-  geom_point(aes(color=wl.color))  +
+  geom_point(aes(color = wl.color))  +
   labs(
     y = ylab_watt,
     x = "Wavelength (nm)") +
-  geom_segment(data=par.guide.spct,
+  geom_segment(data = par.guide.spct,
        aes(x = wl.low, xend = wl.high, y = y, yend = y),
        size = 1.5, color = "black") +
-  geom_text(data=par.guide.spct,
+  geom_text(data = par.guide.spct,
        aes(y = y + 0.05, label = as.character(wb.f)),
-       color = "black", family="serif")
+       color = "black", family = "serif")
 
 fig_sun.tgrect2 + theme_bw()
 @
@@ -1381,14 +1482,15 @@ sun.eff.cie.spct <-
               idfactor = "filter")
 
 fig_sun.cie0 <-
-  ggplot(data=sun.eff.cie.spct, aes(x=w.length, y=s.e.irrad, fill=wb.f)) +
+  ggplot(data = sun.eff.cie.spct,
+         aes(x = w.length, y = s.e.irrad, fill = wb.f)) +
   scale_fill_grey() +
-  geom_area() +
+  geom_spct() +
   labs(x = xlab_nm,
        y = expression(Effective~~spectral~~energy~~irradiance~~(W~m^{-2}~nm^{-1})),
        title = "CIE 1998 erythemal BSWF") +
   facet_grid(filter~.) +
-  labs(fill="") +
+  labs(fill = "") +
   xlim(NA, 400) +
   theme_bw() +
   theme(legend.position=c(0.90, 0.9))
@@ -1396,7 +1498,7 @@ fig_sun.cie0 <-
 fig_sun.cie0
 @
 
-There is one warning issued for each panel, as the use of \code{xlim} discards 400 observations for wavelengths longer than 400~\Unit(nm). One should be aware that these are estimated values and in practice stray light reduces the efficiency of the filters for blocking radiation, and the amount of stray light depends on many factors including the relative positions of plants, filter and sun.
+One should be aware that these are estimated values and in practice stray light reduces the efficiency of the filters for blocking radiation, and the amount of stray light depends on many factors including the relative positions of plants, filter and sun.
 
 A couple of details need to be remembered: the tagging has to be done before row-binding the spectra, as \code{tag} works only on spectra that have unique values for wavelengths and discards `repeated' rows if they are present. We use \code{theme(legend.position=c(0.90, 0.9))} to change where the legend or guide is positioned. In this case, we move the legend to a place within the plotting region. As we are using also \code{theme\_bw()} which resets the legend position to the default, the order in which they are added is significant.
 
@@ -1434,20 +1536,20 @@ cie.dt
 @
 
 <<plot-bar-cie-2>>=
-fig_cie_bars0 <- ggplot(data=cie.dt,
+fig_cie_bars0 <- ggplot(data = cie.dt,
                         aes(y = cie.irrad * 1e3,
                             x = filter,
                             fill = w.band)) +
-  scale_fill_brewer(palette="PRGn") +
-  geom_bar(stat="identity", colour="black") +
+  scale_fill_brewer(palette = "PRGn") +
+  geom_bar(stat = "identity", colour = "black") +
   labs(x = "Filter type",
        y = expression(Effective~~irradiance~~~(mW~m^{-2})),
        title = "CIE 1998 erythemal BSWF",
        fill = "") +
   theme_bw(13) +
-  theme(legend.position=c(0.85, 0.85)) +
-  theme(panel.grid.minor.x=element_blank(),
-        panel.grid.major.x=element_blank())
+  theme(legend.position = c(0.85, 0.85)) +
+  theme(panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank())
 
 fig_cie_bars0
 @
@@ -1455,22 +1557,21 @@ fig_cie_bars0
 The figure above is good for showing the relative contribution of UVB and UVA radiation to the total effect, and the size of the total effect. On the other hand if we would like to show how much the effective irradiance in the UVB and UVA decreases under each of the filters is better to avoid stacking of the bars, plotting them side by side using \code{position=position\_dodge()}. In addition we swap the aesthetics to which the two factors are linked.
 
 <<plot-bar-cie-3>>=
-fig_cie_bars1 <- ggplot(data=cie.dt,
+fig_cie_bars1 <- ggplot(data = cie.dt,
                         aes(y = cie.irrad * 1e3,
                             x = w.band,
-                            fill=filter)) +
-  geom_bar(stat="identity",
-           position=position_dodge(),
-           color="black") +
+                            fill = filter)) +
+  geom_col(position = position_dodge(),
+           color = "black") +
   scale_fill_brewer() +
   labs(x = "Wavelength band",
        y = expression(Effective~~irradiance~~~(mW~m^{-2})),
        title = "CIE 1998 erythemal BSWF",
        fill = "") +
   theme_bw() +
-  theme(legend.position=c(0.80, 0.85)) +
-  theme(panel.grid.minor.x=element_blank(),
-        panel.grid.major.x=element_blank())
+  theme(legend.position = c(0.80, 0.85)) +
+  theme(panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank())
 
 fig_cie_bars1
 @
@@ -1498,21 +1599,21 @@ for (i in 1:num.bands) {
 
 q.irrad.bands.sun <- q_irrad(sun.spct, many.bands)
 q.irrad.sun.spct <- data_frame(q.irrad = q.irrad.bands.sun,
-                                   w.length = w.length,
-                                   wb.color = wb.color,
-                                   wb.name = wb.name)
+                               w.length = w.length,
+                               wb.color = wb.color,
+                               wb.name = wb.name)
 @
 
 Now we can plot the data as bars, filling each bar with the corresponding colour. In this case we plot the bars using a continuous variable, wavelength, for the $x$-axis.
 
 <<plot-bar-qirrad-bands-1>>=
-fig_qirrad_bar <- ggplot(data=q.irrad.sun.spct,
+fig_qirrad_bar <- ggplot(data = q.irrad.sun.spct,
                         aes(y = q.irrad * 1e6,
                             x = w.length,
-                            fill=as.character(wb.color))) +
-  geom_bar(stat="identity",
-           color="black") +
-  scale_fill_identity(guide="none") +
+                            fill = as.character(wb.color))) +
+  geom_bar(stat = "identity",
+           color = "black") +
+  scale_fill_identity(guide = "none") +
   labs(x = xlab_nm,
        y = expression(Photon~~irradiance~~(mu*mol~m^{-2}~s^{-1})),
        fill = "") +
@@ -1543,15 +1644,16 @@ In the first example we use colors pre-defined in R.
 colours <- c("red", "green", "yellow", "white",
              "orange", "purple", "seagreen", "pink")
 rgb.values <- col2rgb(colours)
-color.data <- data.frame(colour=colours,
-                        R=rgb.values[1, ],
-                        G=rgb.values[2, ],
-                        B=rgb.values[3, ])
-ggtern(data=color.data,
-       aes(x=R, y=G, z=B, label=colour, fill=colour)) +
-       geom_point(shape=23, size=3) +
-  geom_text(hjust=-0.2) +
-  labs(x = "R", y="G", z="B") + scale_fill_identity()
+color.data <- data.frame(colour = colours,
+                        R = rgb.values[1, ],
+                        G = rgb.values[2, ],
+                        B = rgb.values[3, ])
+ggtern(data = color.data,
+       aes(x = R, y = G, z = B, label = colour, fill = colour)) +
+       geom_point(shape = 23, size = 3) +
+  geom_text(hjust = -0.2) +
+  labs(x = "R", y = "G", z = "B") + scale_fill_identity() +
+  theme_nomask()
 @
 
 In the second example, we calculate the colours for leaves as seen in sunlight.
@@ -1564,13 +1666,13 @@ color.values <- color(betula_reflected.mspct, type = "CC")
 rgb.values <- col2rgb(color.values[[2]])
 leaf.data <- data.frame(leaf = color.values[[1]],
                         color = color.values[[2]],
-                        R=rgb.values[1, ],
-                        G=rgb.values[2, ],
-                        B=rgb.values[3, ])
-ggtern(data=leaf.data,
-       aes(x=R, y=G, z=B, fill=color)) +
-       geom_point(shape=21, size=3) +
-  labs(x = "R", y="G", z="B") + scale_fill_identity()
+                        R = rgb.values[1, ],
+                        G = rgb.values[2, ],
+                        B = rgb.values[3, ])
+ggtern(data = leaf.data,
+       aes(x = R, y = G, z = B, fill = color)) +
+       geom_point(shape = 21, size = 3) +
+  labs(x = "R", y = "G", z = "B") + scale_fill_identity()
 @
 
 %In the third example, we use wavelengths in nanometres.

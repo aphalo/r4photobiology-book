@@ -59,7 +59,7 @@ Or selecting columns on the fly and then creating a \code{source\_spct} object f
 
 <<lasse-2>>=
 my.df <- read_excel(my.wbk.file, sheet = "front", skip = 17)[ , 7:8]
-my.spct <- na.omit(my.spct)
+my.df <- na.omit(my.df)
 my.spct <- source_spct(w.length = my.df[[1]], s.e.irrad = my.df[[2]] * 1e4)
 my.spct <- clip_wl(my.spct, range = c(290,800))
 @
@@ -171,11 +171,14 @@ jaz.spct <- read_oo_jazirrad("inout/spectrum.JazIrrad")
 jaz.spct
 @
 
-Function \code{read\_oojaz\_file} accepts the same arguments as function \code{read\_ooss\_file}.
+Function \code{read\_oo\_jazirrad} accepts the same arguments as function \code{read\_oo\_ssirrad}.
 
 <<oojz-io-02>>=
-jaz1.spct <- read_oo_jazirrad("inout/spectrum.JazIrrad",
-                            date = now())
+jaz1.spct <- read_oo_jazirrad("inout/spectrum.JazIrrad", date = now())
+@
+
+% prints only empty lines unless the chunk is split!
+<<oojz-io-03>>=
 jaz1.spct
 @
 
@@ -278,105 +281,4 @@ licor1.spct
 \subsection{Task: Import data from Bentham instruments and software}\label{sec:Ben:import}
 
 \index{foreign data!Bentham spectrometers}
-
-\section{Acquiring data directly from within R}
-
-In this section, the code is not run when compiling the text, as then producing a PDF would
-require instruments to be available.
-
-\subsection{Task: Acquiring data from Ocean Optics instruments and software}\label{sec:OO:ctrl}
-
-For\index{data acquisition!Ocean Optics spectrometers} the examples in this section to work, you will need to have Java and the \pkg{OmniDriver} runtime installed.
-In addition examples as shown assume that an Ocean Optics spectrometer is connected. The output
-will depend on the model(s) and configuration(s) of the instrument(s) connected. The plural is correct,
-you can acquire spectra from more than one instrument, and from instruments with more than
-one channel.
-
-Package \pkg{rOmniDriver} is just a thin wrapper on the low-level access functions supplied
-by the driver.
-The names for functions in package \pkg{rOmniDriver} are verbose, this is because we have respected the names used in the
-driver itself, written in Java. Thus was done so that information in the driver documentation can be
-found easily.
-
-First step is to load the package \pkg{rOmniDriver} which is a low level wrapper on the driver
-supplied by Ocean Optics for their instruments. The runtime is free, and is all what you need
-for simple tasks as documentation is available both from Ocean Optics web site and as R help.
-
-<<oo-acq-1, eval=FALSE>>=
-library(rOmniDrive)
-@
-
-After physically connecting the spectrometer through USB, the data connection needs to be
-initiated and the instrument id obtained. This function returns a `Java wrapper' object
-that will be used for all later operations and needs to be saved to variable. The second
-statement queries the number of spectrometers, or spectrometer modules in the case of the
-\emph{Jaz}.
-
-<<oo-acq-2, eval=FALSE>>=
-srs <- init_srs()
-num_srs <- number_srs()
-@
-
-Indexing starts at zero, contrary to R's way, so the first spectrometer has index `0', the
-second index `1', etc.
-
-We will now assume that only one spectrometer is attached to the computer, and just rely on the
-default index value of 0, which always points to the first available spectrometer. The next step,
-unless we always use the same instrument is to query for a description of the optical bench of
-the attached instrument.
-
-<<oo-acq-3, eval=FALSE>>=
-get_name(srs)
-get_serial_number(srs)
-get_bench(srs)
-@
-
-If you are writing a script that should work with different instruments, you may need to
-query whether a certain function is available or not in the attached instrument. On the
-other functions like those used for setting the integration time can be just assumed to
-be always available. Many functions come in pairs of \code{set} and \code{get}. The only
-thing to be careful with is that in some cases, the \code{set} functions can be silently
-ignored. For this reason, scripts have to written so that these functions are not assumed
-to always work. The most important case, setting the integration time, be be easily dealt
-with in to different ways: 1) being careful the set function is passed as argument an
-off-range time value, or even more reliably, 2) always using the corresponding get
-function after each call to set, to obtain the value actually stored in the memory of
-the spectrometer. Not following these steps can result in errors of any size, and render
-the data useless.
-
-<<oo-acq-4, eval=FALSE>>=
-set_integration_time(srs, time.usec = 100)
-get_integration_time(srs)
-@
-
-We can similarly set the number of scans to average.
-
-<<oo-acq-5, eval=FALSE>>=
-set_scans_to_avg(srs, 5)
-get_scans_to_avg(srs)
-@
-
-To obtain data we use function \code{get\_spectrum}
-
-<<oo-acq-6, eval=FALSE>>=
-counts <- get_spectrum(srs)
-@
-
-<<oo-acq-7, eval=FALSE>>=
-srs_close(srs)
-@
-
-More advanced tasks like downloading calibration data from a spectrometer are not
-yet implemented, but will be added soon.
-
-\subsection{Task: Acquiring data from sglux instruments and software}\label{sec:}
-
-\index{foreign data!sglux spectrometers}
-
-
-
-\subsection{Task: Acquiring data from YoctoPuce modules and servers}\label{sec:}
-
-\index{foreign data!YoctoPuce modules}
-
 

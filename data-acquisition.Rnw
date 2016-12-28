@@ -1,0 +1,132 @@
+<<echo=FALSE, cache=FALSE>>=
+set_parent('r4p.main.Rnw')
+opts_knit$set(concordance=TRUE)
+@
+
+\chapter{Data acquisition from within R}\label{chap:measurement}
+
+\section{Introduction}
+
+The tasks described in this chapter concern the acquisition of spectral and other data directly from sensors, spectrometers and other pieces of equipment. We also touch again here the question of reading raw counts data from files, but only when the aim is further processing into other spectral quantities using the same functions as for directly acquired data. In the current version of the handbook and packages we discuss only spectrometers from Ocean Optics, as these are only ones with which we have several years of use experience.
+
+\section{Packages and other software used in this chapter}
+
+For the examples in this section to work, you will need to have Java and the \pkg{OmniDriver} runtime installed.
+In addition examples as shown assume that an Ocean Optics spectrometer is connected. The output
+will depend on the model(s) and configuration(s) of the instrument(s) connected. The plural is correct,
+you can acquire spectra from more than one instrument, and from instruments with more than
+one channel.
+
+Package \pkg{rOmniDriver} is just a thin wrapper on the low-level access functions supplied
+by the driver.
+The names for functions in package \pkg{rOmniDriver} are verbose, this is because we have respected the names used in the
+driver itself, written in Java. Thus was done so that information in the driver documentation can be
+found easily.For executing the examples listed in this chapter you need first to load the following packages from the library:
+<<message=my.debug>>=
+library(photobiology)
+library(photobiologyWavebands)
+library(ggspectra)
+library(rOmniDriver)
+library(ooacquire)
+#library(Yoctopuce)
+library(lubridate)
+@
+
+\section{Adcquiring spectra with Ocean Optics spectrometers}
+
+\subsection{Task: Acquiring raw-counts data from Ocean Optics spectrometers}\label{sec:OO:ctrl}
+
+In this first example we use low-level functions, mapping directly in most cases to the OmniDrive Java API.
+
+First\index{data acquisition!Ocean Optics spectrometers} step is to load the package \pkg{rOmniDriver} which is a low level wrapper on the driver
+supplied by Ocean Optics for their instruments. The runtime is free, and is all what you need
+for simple tasks as documentation is available both from Ocean Optics web site and as R help.
+
+After physically connecting the spectrometer through USB, the data connection needs to be
+initiated and the instrument id obtained. This function returns a `Java wrapper' object
+that will be used for all later operations and needs to be saved to variable. The second
+statement queries the number of spectrometers, or spectrometer modules in the case of the
+\emph{Jaz}.
+
+<<oo-acq-2, eval=FALSE>>=
+srs <- init_srs()
+num_srs <- number_srs()
+@
+
+Indexing starts at zero, contrary to R's way, so the first spectrometer has index `0', the
+second index `1', etc.
+
+We will now assume that only one spectrometer is attached to the computer, and just rely on the
+default index value of 0, which always points to the first available spectrometer. The next step,
+unless we always use the same instrument is to query for a description of the optical bench of
+the attached instrument.
+
+<<oo-acq-3, eval=FALSE>>=
+get_name(srs)
+get_serial_number(srs)
+get_bench(srs)
+@
+
+If you are writing a script that should work with different instruments, you may need to
+query whether a certain function is available or not in the attached instrument. On the
+other hand, functions like those used for setting the integration time can be just assumed to
+be always available. Many functions come in pairs of \code{set} and \code{get} versions. The only
+thing to be careful with is that in some cases, the \code{set} functions can silently
+fail, ignoring the requested set operation. For this reason, scripts have to be written
+so that these functions are not assumed to always work. The most important case, setting
+the integration time, can be easily dealt with in two different ways: 1) being careful the
+set function is never passed as argument an
+off-range length of time value, or even more reliably, 2) always using the corresponding get
+function after each call to set, to obtain the value actually stored in the memory of
+the spectrometer. Not following these steps can result in errors of any size, and render
+the data useless as the calculated counts-per-second values will be wrong.
+
+<<oo-acq-4, eval=FALSE>>=
+set_integration_time(srs, time.usec = 100)
+get_integration_time(srs)
+@
+
+We can similarly set the number of scans to average.
+
+<<oo-acq-5, eval=FALSE>>=
+set_scans_to_avg(srs, 5)
+get_scans_to_avg(srs)
+@
+
+To obtain data we use function \code{get\_spectrum}
+
+<<oo-acq-6, eval=FALSE>>=
+counts <- get_spectrum(srs)
+@
+
+<<oo-acq-7, eval=FALSE>>=
+srs_close(srs)
+@
+
+Users will rarely use these functions on a regular basis. They will either use the predefined high level functions from package \pkg{ooacquire} or write similar functions themselves encapsulating the different steps of the acquisition and data processing.
+
+\subsection{Task: Acquiring spectral irradiance with Ocean Optics spectrometers}\label{sec:OO:irrad}
+
+
+\subsection{Task: Acquiring spectral transmittance with Ocean Optics spectrometers}\label{sec:OO:Tfr}
+
+
+\subsection{Task: Acquiring spectral reflectance with Ocean Optics spectrometers}\label{sec:OO:Rfr}
+
+
+\subsection{Task: Acquiring spectral absorptance with Ocean Optics spectrometers}\label{sec:OO:Afr}
+
+
+\section{sglux spectrometers and sensors}
+
+\subsection{Task: Acquiring spectral data with sglux instrument}\label{sec:}
+
+\index{foreign data!sglux spectrometers}
+
+\section{YoctoPuce modules}
+
+\subsection{Task: Acquiring data with YoctoPuce modules and servers}\label{sec:}
+
+\index{foreign data!YoctoPuce modules}
+
+

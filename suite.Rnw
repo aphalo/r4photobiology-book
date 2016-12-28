@@ -185,8 +185,8 @@ marked with a red bullet \rblt, and those at `beta' stage with a yellow bullet \
 \midrule
 \midrule
 \gblt & photobiologySun   &  data        & spectral data for solar radiation \\
-\gblt & photobiologyLamps &  data        & spectral data for lamps \\
-\gblt & photobiologyLEDs  &  data        & spectral data for LEDs \\
+\cran & photobiologyLamps &  data        & spectral data for lamps \\
+\cran & photobiologyLEDs  &  data        & spectral data for LEDs \\
 \gblt & photobiologyFilters  &  data     & transmittance data for filters \\
 \gblt & photobiologySensors  &  data     & response data for sensors \\
 \yblt & photobiologyReflectors  &  data  & reflectance data for materials \\
@@ -214,7 +214,7 @@ The suite is still under active development. Even those packages marked as `stab
 \section{The \lowercase{\textsf{r4photobiology}} repository}\label{sec:photoCRAN}
 % \lowercase needed for page headers
 
-Four of the packages are already available through CRAN\index{CRAN@\textsc{CRAN}}, the `Comprehensive R Archive Network'. For distributing other packages in the suite, I have created a repository at \url{http://r4photobiology.info/R}\index{r4photobiology!repository}. This repository follows the CRAN folder structure, so package installation can be done using normal R commands. Consequently dependencies are installed automatically and automatic updates are possible. The build most suitable for the current system and R version is also picked automatically if available. It is normally recommended that you do installs and updates on a clean R session (just after starting R or RStudio). For easy installation and updates of packages, the r4photobiology repository can be added to the list of repositories that R knows about.
+Seven of the packages are already available through CRAN\index{CRAN@\textsc{CRAN}}, the `Comprehensive R Archive Network'. For distributing other packages in the suite, I have created a repository at \url{http://r4photobiology.info/R}\index{r4photobiology!repository}. This repository follows the CRAN folder structure, so package installation can be done using normal R commands. Consequently dependencies are installed automatically and automatic updates are possible. The build most suitable for the current system and R version is also picked automatically if available. It is normally recommended that you do installs and updates on a clean R session (just after starting R or RStudio). For easy installation and updates of packages, the r4photobiology repository can be added to the list of repositories that R knows about.
 
 Whether you use RStudio or not it is possible to add the r4photobiology repository to the current session as follows, which will give you a menu of additional repositories to activate:
 
@@ -225,7 +225,7 @@ setRepositories(
   addURLs = c(r4photobiology = "http://www.r4photobiology.info/R"))
 @
 
-If you know the indexes in the menu you can use this code, where ‘1’ and ‘6’ are the entries in the menu in the command above.
+If you know the indexes in the menu you can use this code, where `1' and `6' are the entries in the menu in the command above.
 
 <<eval=FALSE, tidy=FALSE>>=
 setRepositories(
@@ -255,7 +255,7 @@ setRepositories()
 @
 and can be enabled and disabled.
 
-In RStudio, after adding the \textsf{r4photobiology} repository as shown above, the photobiology packages can be installed and uninstalled through the normal RStudio menus and dialogues, and will be listed after typing the first few characters of their names. For example when you type ‘photob’ in the packages field, all the packages with names starting with ‘photob’ will be listed.
+In RStudio, after adding the \textsf{r4photobiology} repository as shown above, the photobiology packages can be installed and uninstalled through the normal RStudio menus and dialogues, and will be listed after typing the first few characters of their names. For example when you type `photob' in the packages field, all the packages with names starting with `photob' will be listed.
 
 They can be also installed at the R command prompt with the following command:
 <<eval=FALSE>>=
