@@ -98,6 +98,8 @@ geocode("Viikinkaari 1, 00790 Helsinki, Finland", output = "latlona")
 %%%%
 \section{Task: calculating the length of the photoperiod}\label{sec:astro:photoperiod}
 
+\Attention{} Critical daylengths for plant responses are determined by a threshold irradiance, which almost never corresponds to the irradiance at the time of sunset or sunrise. The value of this threshold also depends on the species. Consequently critical daylengths determined under controlled environment conditions with abrupt transition between light and darkness, do not correspond to the astronomical daylength \autocite{Francis1970}. Critical day lengths observed in field experiments based on astronomical daylength will more easily allow the prediction of phenophase transitions for plants growing in the field. As, a threshold irradiance is what triggers the transitions, to some extent cloudiness, shading and other disturbances to the daylight field may affect the apparent critical daylength \autocite{Francis1970}.
+
 Functions\index{day length}\index{night length}\index{photoperiod}\index{scotoperiod} \code{day\_length} and \code{night\_length} have the same parameter signature. They are vectorized for the \code{date} parameter and for \code{geocode} with multiple rows, and in the this last case also \code{tz} is vectorized.
 
 Calculating the length of the current day is easy. We use the Greenwich meridian, and 60 degrees in the Northern and Southern hemispheres. We use function \code{today} from package \pkg{lubridate}.

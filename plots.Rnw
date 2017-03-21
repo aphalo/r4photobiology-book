@@ -398,7 +398,7 @@ Or for PAR one could use a plot like the following with 10~nm-wide columns.
 
 <<>>=
 wl.range <- range(PAR())
-num.bands <- spread(PAR()) / 25 
+num.bands <- spread(PAR()) / 25
 many.bands <- split_bands(wl.range, length.out = num.bands)
 @
 
@@ -1471,15 +1471,15 @@ This task is here simply to show that there is nothing special about plotting sp
 opts_chunk$set(opts_fig_wide_square)
 @
 
-<<plot-eff-cie-1>>=
-sun.eff.cie.nf.spct <-
-    tag(sun.spct * CIE(), UV_bands())
-sun.eff.cie.pe.spct <-
-    tag(sun.spct * polyester.spct * CIE(), UV_bands())
+<<plot-eff-cie-1, eval=FALSE>>=
+sun.eff.cie.nf.spct <- sun.spct * CIE()
+sun.eff.cie.pe.spct <- sun.spct * polyester.spct * CIE()
 sun.eff.cie.spct <-
     rbindspct(list('no filter' = sun.eff.cie.nf.spct,
                    'polyester' = sun.eff.cie.pe.spct),
               idfactor = "filter")
+# tag does not accept unsorted wls, but rbindspct now untags the spectra to bind
+sun.eff.cie.spct <- tag(sun.eff.cie.spct, UV_bands())
 
 fig_sun.cie0 <-
   ggplot(data = sun.eff.cie.spct,
