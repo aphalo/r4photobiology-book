@@ -1640,7 +1640,7 @@ library(ggtern)
 
 In the first example we use colors pre-defined in R.
 
-<<plot-tern-1>>=
+<<plot-tern-1, eval=FALSE>>=
 colours <- c("red", "green", "yellow", "white",
              "orange", "purple", "seagreen", "pink")
 rgb.values <- col2rgb(colours)
@@ -1658,7 +1658,7 @@ ggtern(data = color.data,
 
 In the second example, we calculate the colours for leaves as seen in sunlight.
 
-<<plot-tern-2>>=
+<<plot-tern-2, eval=FALSE>>=
 betula_reflected.mspct <-
   convolve_each(as.reflector_mspct(Betula_ermanii.mspct),
                 sun.spct)

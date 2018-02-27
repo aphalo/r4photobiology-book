@@ -108,7 +108,13 @@ names(daylight2013.mspct)
 <<CIE-fluorescents>>=
 Fs.5nm.mspct <- colorSpec2mspct(Fs.5nm)
 names(Fs.5nm.mspct)
+@
+
+<<CIE-fluorescents-01>>=
 plot(Fs.5nm.mspct[["F1"]])
+@
+
+<<CIE-fluorescents-02>>=
 plot(Fs.5nm.mspct[["F11"]])
 @
 
@@ -127,7 +133,7 @@ color_chart(color(390:829), ncol = 20, text.color = NA)
 
 <<>>=
 wls <- 400:699
-color_chart(w_length2rgb(wls, color.name = as.character(wls)), 
+color_chart(w_length2rgb(wls, color.name = as.character(wls)),
             ncol = 10, use.names = TRUE, text.size = 3)
 @
 

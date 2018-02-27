@@ -196,7 +196,7 @@ my_luminaire.spct <- fscale(my_luminaire.spct,
                         f = q_irrad,
                         w.band = PAR(),
                         target = 250e-6)
-setScaled(red_lamp.spct, FALSE) # to avoid warnings
+setScaled(my_luminaire.spct, FALSE) # to avoid warnings
 class(my_luminaire.spct)
 @
 

@@ -85,7 +85,8 @@ with_tz(ymd_hm("20140320 00:00", tz = "Asia/Tokyo"), tzone = "America/Buenos_Air
 
 For\index{geographic coordinates}\index{geocode}\index{latitude}\index{longitude} astronomical calculations we also need as argument geographical coordinates. One can supply latitude and longitude values, acquired with a GPS instrument or read from a map. However, when the location is searchable through Google Maps, it is also possible to obtain the coordinates on-the-fly. A query can be run from within R using packages \pkg{RgoogleMaps}, or \pkg{ggmap}, as done here---of course this requires internet access. When inputting coordinate values manually, they should in degrees as numeric values (in other words the fractional part is given as part of floating point number in degrees, and not as separate integers representing minutes and seconds of degree). Latitudes N are given by positive numbers and and latitudes S by negative numbers. Longitudes W of Greenwich are given as positive numbers and longitudes E of Greenwich as negative numbers. The latitude and longitude must be in variables named \code{lat} and \code{lon} in a data frame. A third variable, \code{address}, is recognized and copied unchanged to the output. The address is optionally included in the search result from Google maps. The address returned is not necessarily the searched term, and is useful when using partial addresses as search terms, as the hit, may not be the intended location.
 
-<<astro-geocode-1, message=my.debug, cache=cache>>=
+<<astro-geocode-1, message=my.debug, cache=cache, eval=FALSE>>=
+# not evaluated as Google set tight limit on queries
 geocode("Helsinki")
 geocode("Viikinkaari 1, 00790 Helsinki, Finland")
 geocode("Viikinkaari 1, 00790 Helsinki, Finland", output = "latlona")
@@ -102,17 +103,19 @@ geocode("Viikinkaari 1, 00790 Helsinki, Finland", output = "latlona")
 
 Functions\index{day length}\index{night length}\index{photoperiod}\index{scotoperiod} \code{day\_length} and \code{night\_length} have the same parameter signature. They are vectorized for the \code{date} parameter and for \code{geocode} with multiple rows, and in the this last case also \code{tz} is vectorized.
 
-Calculating the length of the current day is easy. We use the Greenwich meridian, and 60 degrees in the Northern and Southern hemispheres. We use function \code{today} from package \pkg{lubridate}.
+Calculating the length of the current day is easy. We use the Greenwich meridian, and 60 degrees in the Northern and Southern hemispheres. We use function \code{today} from package \pkg{lubridate}. The function accepts both dates and
+times.
 
 <<>>=
 day_length(today(), geocode = data.frame(lat = 60, lon = 0))
+day_length(now(), geocode = data.frame(lat = 60, lon = 0))
 @
 
 <<>>=
 day_length(today(), geocode = data.frame(lat = -60, lon = 0))
 @
 
-In the case of daylength calculations the longitude is almost irrelevant, and defaults to zero degrees. As the date defaults to `today' the code above can be simplified.
+In the case of daylength calculations the longitude is almost irrelevant, and defaults to zero degrees. As the date defaults to `now()' in UTC the code above can be simplified, but depending on the time of day there maybe a shift by one day.
 
 <<>>=
 day_length(geocode = data.frame(lat = -60, lon = 0))
@@ -121,7 +124,8 @@ day_length(geocode = data.frame(lat = -60, lon = 0))
 Function \code{geocode} from package \pkg{ggmap} returns suitable values in a \code{data.frame} based on search term(s). The returned value is a data frame, which can be passed as argument for parameter \code{geocode}.  The use of Google search has some restrictions that you will need to check before any intense or commercial use of their service.
 
 <<message=my.debug>>=
-my.city <- geocode('Helsinki', output = "latlona")
+# my.city <- geocode('Helsinki', output = "latlona")
+my.city <- data.frame(lon = 24.93838, lat = 60.16986, address = "Helsinki, Finland")
 my.city
 @
 
@@ -282,7 +286,8 @@ Function\index{sun!position in the sky} \code{sun\_angles}, which is a modified 
 As in earlier examples, we use \code{geocode} to obtain the latitude and longitude of cities, although for precise calculations for large cities using a street address or at least a postal code in addition to the name of the city is preferable. The calculations below are for Buenos Aires on two different dates, by use of the optional argument \code{tz} we request the results to be expressed in local time for Buenos Aires.
 
 <<astro-geocode-2, message=my.debug, cache=cache>>=
-geocode_BA <- geocode("Buenos Aires")
+# geocode_BA <- geocode("Buenos Aires")
+geocode_BA <- data.frame(lon = -58.38156, lat = -34.60368)
 day_night(ymd("2013-12-21"),
           geocode = geocode_BA,
           tz = "America/Buenos_Aires")
@@ -300,8 +305,8 @@ day_night(ymd("2013-12-21"),
 Next,\Advanced{twilight} we calculate day length  based on different definitions of twilight for Helsinki, at the equinox:
 
 <<astro-geocode-4, message=my.debug, cache=cache>>=
-geocode_He <- geocode("Helsinki")
-geocode_He
+# geocode_He <- geocode("Helsinki")
+geocode_He <- data.frame(lon = 24.93838, lat = 60.16986)
 day_length(ymd("2013-09-21"),
           geocode = geocode_He)
 day_length(ymd("2013-09-21"),
@@ -328,17 +333,15 @@ day_length(ymd("2013-09-21"),
 Function \code{sun\_angles}\index{sun!position in the sky} not only returns solar elevation, it returns all the angles defining the position of the sun. The time argument to \code{sun\_angles} is internally converted to UTC (universal time coordinates, which is equal to GMT) time zone, so time defined for any time zone is valid input. The time zone used by default for the output can vary as described in page \pageref{alert:time:zone}, so it is more reliable specify the time coordinates used for the output with parameter \code{tz}, using arguments valid for pacakge \code{lubridate}---which is used internally by package \pkg{photobiology}.
 
 <<astro-geocode-5, message=my.debug, cache=cache>>=
-geocode_Jo <- geocode("80100 Joensuu, Finland")
-geocode_Jo
 my_time <- ymd_hms("2014-05-29 18:00:00", tz="EET")
 sun_angles(my_time,
-           geocode = geocode_Jo)
+           geocode = geocode_He)
 @
 
 If we do not supply a time as argument, \code{sun\_angles} calculates the current position of the sun---or at the time indicated by the computer. In this case giving the position of the sun in the sky of Joensuu at the time this .PDF file was generated.
 
 <<>>=
-sun_angles(geocode = geocode_Jo)
+sun_angles(geocode = geocode_He)
 @
 
 \section{Task: plotting sun elevation through a day}
@@ -350,9 +353,9 @@ opts_chunk$set(opts_fig_wide_full)
 @
 
 <<astro-6, cache=cache>>=
-hours <- seq(from = ymd("2014-06-23", tz = "EET"),
-             by = "3 min",
-             length.out = 24 * 20)
+hours <- seq(from = ymd("2014-06-23", tz = "UTC"),
+             by = "1 min",
+             length.out = 24 * 60)
 angles_He <- sun_angles(hours,
                         geocode = geocode_He)
 head(angles_He)
@@ -367,7 +370,7 @@ twilight <-
                        "Nautical twilight",
                        "Astronomical twilight"),
              time = rep(ymd_hms("2014-06-23 12:00:00",
-                                tz="EET"),
+                                tz="UTC"),
                         4) )
 @
 
@@ -383,10 +386,12 @@ ggplot(angles_He,
            x=twilight$time, y=twilight$angle,
            label=twilight$label, vjust=-0.4, size=4) +
   labs(y = "Solar elevation at Helsinki (degrees)",
-       x = "Time EEST")
+       x = "Time UTC")
 @
 
 We\Advanced{azimuth} draw a plot of solar azimuths through a day, using the data frames created above.
+
+%% BUG in package code!!
 
 <<astro-8-azimuth>>=
 ggplot(angles_He,
@@ -395,7 +400,7 @@ ggplot(angles_He,
   scale_y_continuous(breaks = c(0,90,180,270,360),
                      limits = c(-20,380)) +
   labs(y = "Solar azimuth at Helsinki (degrees)",
-       x = "Time EEST")
+       x = "Time UTC")
 @
 
 \section{Task: plotting day or night length through the year}
@@ -403,9 +408,12 @@ ggplot(angles_He,
 We use function \code{day\_night()} to calculate simulataneously several values, although this function is slower it returns a data frame that makes coding easier. We create a \code{days} vector, and create a vector of geocodes by searching city names. We take advantage of vectorization to obtain a dataframe. We add a factor with the names of the locations.
 
 <<astro-12a>>=
-days <- seq(from = ymd("2016-01-01"), to = ymd("2016-12-31"), by = 7)
+days <- seq(from = ymd("2016-01-01"), to = ymd("2016-12-31"), by = 1)
 cities <- c("Ivalo, Finland", "Helsinki, Finland", "Athens, Greece")
-geocodes <- geocode(cities, output = "latlona")
+# geocodes <- geocode(cities, output = "latlona")
+geocodes <- data.frame(lon = c(27.53971, 24.93838, 23.72754), 
+                       lat = c(68.65764, 60.16986, 37.98381),
+                       address = c("ivalo, inari, finland", "helsinki, finland", "athens, greece"))
 times <-
    day_night(date = days,
              geocode = geocodes,
@@ -440,7 +448,7 @@ The breaks in the lines are the result of the changes between winter and summer 
 <<astro-12c>>=
 ggplot(times,
        aes(x = day, y = sunrise, colour=address)) +
-  geom_line() + geom_point() +
+  geom_line() +
   scale_y_continuous(breaks=c(0,6,12), limits=c(0,14)) +
   labs(x = "Date", y = "Local time at sunrise (h)", colour="Location")
 @

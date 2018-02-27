@@ -414,8 +414,10 @@ with the Stefan-Boltzmann constant $\sigma=5.6705\times 10^{-8}$ W m$^{-2}$ K$^{
 \centering
 %\includegraphics[width=0.8\textwidth]{figures/fig_sun}
 <<fig-sun,echo=FALSE>>=
-plot(Gueymard_AM0.spct, range = c(119, 2500), annotations = "colour.guide")
-plot(Gueymard_AM0.spct, range = c(290, 800), annotations = "colour.guide")
+plot(sun_reference.mspct$Gueymard.AM0, 
+     range = c(119, 2500), annotations = "colour.guide")
+plot(sun_reference.mspct$Gueymard.AM0, 
+     range = c(290, 800), annotations = "colour.guide")
 @
 \caption[Extraterrestrial solar spectrum]{Extraterrestrial solar spectrum after \autocite{Gueymard2004}. Contrast with Fig.\ \ref{fig_sun_ground}.}\label{fig_sun}
 \end{figure*}
@@ -445,8 +447,10 @@ At the Earth's surface, the incident radiation or \emph{\gls{global:rad}} has tw
 \centering
 %\includegraphics[width=0.8\textwidth]{figures/fig_sun}
 <<fig-sun-ground,echo=FALSE>>=
-plot(ASTM_G173_global.spct, range = c(119, 2500), annotations = "colour.guide")
-plot(ASTM_G173_global.spct, range = c(290, 800), annotations = "colour.guide")
+plot(sun_reference.mspct$ASTM.G173.global, 
+     range = c(119, 2500), annotations = "colour.guide")
+plot(sun_reference.mspct$ASTM.G173.global, 
+     range = c(290, 800), annotations = "colour.guide")
 @
 \caption[Ground level solar spectrum]{Ground level solar spectrum AM1.5 (1.5 air mass, solar zenith angle 48$^\circ\,19\prime$) according to ASTM G173-03 \autocite{ASTM2012}. Contrast with Fig.\ \ref{fig_sun}.}\label{fig_sun_ground}
 \end{figure*}
