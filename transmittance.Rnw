@@ -30,56 +30,88 @@ An equivalent problem due to scattering occurs when measuring reflectance. Depen
 
 If you are not familiar with the phenomena described above, and the different ways in which optical properties of filters and reflectors can be characterized, please, read the introductory chapter in Part A, before attempting the calculation described below.
 
-\section{Task: absorbance and transmittance}\label{sec:transmittance}
+\section{Task: absorbance, absorptance and transmittance}\label{sec:transmittance}
 
-\textbf{Transmittance}\index{transmittance}\Attention{} is defined as:
-\begin{equation}
-\tau(\lambda) = \frac{I}{I_0} = \frac{\sirr}{\sirr[0]} = \frac{\spfd}{\spfd[0]}
+The same symbol $A$ is in common use for both absorbance and absorptance, two different physical quantities. This added to the similarity of their names, can lead to confusion and serious mistakes. We will use $A$ for absorptance, and $\mathbb{A}$ for absorbance.
+
+Most objects and materials both reflect and absorb radiation. This results in two possible definitions for transmittance ($T$), called total- and internal-transmittance.
+
+\begin{equation}\label{equ:Tt:R:A}
+  T_\mathrm{total} = \frac{T}{R + A + T}
+\end{equation}
+while,
+\begin{equation}\label{equ:Ti:A}
+  T_\mathrm{internal} = \frac{T}{A + T}.
 \end{equation}
 
-Given this simple relation $\tau(\lambda)$ can be calculated as a division between two "source\_spct" objects. This gives the correct answer, but as an object of class "source.scpt".
+\textbf{Total transmittance}\index{transmittance} is defined as
+\begin{equation}
+T_\mathrm{total}(\lambda) = \frac{\sirr}{\sirr[0]} = \frac{\spfd}{\spfd[0]},
+\end{equation}
+where $\sirr[0]$ is the irradiance at the illuminated plane and $I$ is the irradiance at the exit plane. When considering \emph{spectral} transmittance, there is no difference between photon and energy, as we are concerned only with ratios.
+
+Given this simple equation $T(\lambda)$ can be calculated as a ratio between two \code{source\_spct} objects. This gives the correct answer, but as an object of class "source.scpt".
 
 <<eval=FALSE>>=
 tau <- spc_above / spc_below
 @
 
-\textbf{Absorptance}\index{absorptance}\Attention{} is just $1 - \tau(\lambda)$, but should be distinguished from \textbf{absorbance}\index{absorbance} ($A(\lambda)$) which is measured on a logarithmic scale:
-
+\textbf{Internal transmittance}\index{transmittance} is defined as
 \begin{equation}
-A(\lambda) = -{\log}_{10} \frac{I}{I_0}\label{eq:absorbance}
+T_\mathrm{internal}(\lambda) = \frac{\sirr}{\sirr[0]\prime} = \frac{\spfd}{\spfd[0]\prime},
+\end{equation}
+where $\sirr[0]\prime$ is the flux through illuminated plane and $I$ is the irradiance at the exit plane. As above, there is no difference between photon and energy, as we are concerned only with ratios.
+
+In practice $\sirr[0]\prime$ cannot be measured directly, we need to measure both $T_\mathrm{total}(\lambda)$ and $R_\mathrm{total}(\lambda)$ in addition to $\sirr[0]$.
+\begin{equation}
+  \sirr[0]\prime = \sirr[0] \cdot (1 - R(\lambda))
+\end{equation}
+
+Given this equations $T(\lambda)$ can be calculated from three \code{source\_spct} objects. Once again this gives the correct answer, but as an object of class \code{source.scpt}.
+
+\textbf{Absorptance}\index{absorptance}\Attention{} can be calculated as
+\begin{equation}\label{equ:A:from:T}
+  A(\lambda) = 1 - T_\mathrm{internal}(\lambda)
+\end{equation}
+
+If we know only $T_\mathrm{total}(\lambda)$, we face two unknowns, and it is impossible to calculate $A(\lambda)$, but we can obtain $A(\lambda) + R(\lambda)$ instead.
+\begin{equation}\label{equ:AR:from:T}
+  A(\lambda) + R(\lambda) = 1 - T_\mathrm{total}(\lambda)
+\end{equation}
+but if we know both $R(\lambda)$ and $T(\lambda)$, we can calculate $A(\lambda)$ as
+\begin{equation}\label{equ:A:from:TR}
+  A(\lambda)  = 1 - (T_\mathrm{total}(\lambda) + R(\lambda))
+\end{equation}
+
+\textbf{Absorbance}\index{absorbance} ($\mathbb{A}(\lambda)$) is expressed on a logarithmic scale
+
+\begin{equation}\label{eq:absorbance}
+\mathbb{A}(\lambda) = -{\log}_{10} \frac{\sirr}{\sirr[0]\prime} = -{\log}_{10} \frac{\spfd}{\spfd[0]\prime}
 \end{equation}
 
 \begin{framed}
-\ilAttention In chemistry 10 is always used as the base of the logarithm, but in other contexts sometimes $\mathrm{e}$ is used as base. In the \rpsuite{} absorbance is always calculate according to equation \ref{eq:absorbance} using ${\log}_{10}$. User input during construction of \code{filter\_spct} objects from spectral absorbance data is also assumed to be expressed in this same way.
+\ilAttention In chemistry, when calculating $\mathbb{A}$ 10 is always used as the base of the logarithm, but in other contexts sometimes $\mathrm{e}$ is used as base. In the \rpsuite{} absorbance is always based on equation \ref{eq:absorbance} using ${\log}_{10}$. User-supplied spectral absorbance data arguments passed as argument to the constructors of \code{filter\_spct} are also assumed to be expressed in this same $log_10$ base.
 \end{framed}
 
-Given the simple equation, $A(\lambda)$ can be also easily calculated using the operators for spectra. This gives the correct answer, but in an object of class "source.scpt".
-
-The conversion between $\tau(\lambda)$ and $A(\lambda)$ is:
-
+The conversion between $T_\mathrm{internal}(\lambda)$ and $\mathbb{A}(\lambda)$ is
 \begin{equation}
-A(\lambda) = -{\log}_{10} \tau(\lambda)
+\mathbb{A}(\lambda) = -{\log}_{10} T_\mathrm{internal}(\lambda)
 \end{equation}
-
-which in S language is:
-
+which in R or S language can be programmed as:
 <<eval=FALSE>>=
-my_T2A <- function(x) {-log10(x)}
+my_T2A <- function(x) {-log10(x)}.
 @
 
-The conversion between  $A(\lambda)$ and $\tau(\lambda)$ is:
-
+The reverse conversion between $\mathbb{A}(\lambda)$  and  $T_\mathrm{internal}(\lambda)$ is
 \begin{equation}
-\tau(\lambda) = 10^{-A(\lambda)}
+T_\mathrm{internal}(\lambda) = 10^{-\mathbb{A}(\lambda)}
 \end{equation}
-
-which in S language is:
-
+which in R or S language can be programmed as
 <<eval=FALSE>>=
-my_A2T <- function(x) {10^-x}
+my_A2T <- function(x) {10^-x}.
 @
 
-Instead of these functions, the package \PB defines generic functions and specialized functions, that can be used on numeric vectors and on \code{filter\_spct} objects. The functions defined above could be directly applied to vectors but doing this on a column in a \code{filter\_spct} is more cumbersome. As the spectra objects are data.tables, one can add a new column, say with transmittances to a copy of the filter data as is shown in the next section.
+Instead of these functions, package \PB provides generic methods, that can be used on numeric vectors and on \code{filter\_spct} objects. The functions defined above could be directly applied to vectors but doing this on a column in a \code{filter\_spct} is more cumbersome. As the spectra objects are tibbles, one can add a new column, say with transmittances to a copy of the filter data as is shown in the next section.
 
 
 %%%%
@@ -90,7 +122,7 @@ Using \code{filter\_spct} objects, the calculations become very simple.
 <<>>=
 my_gg400.spct <- filters.mspct$GG400
 T2A(my_gg400.spct)
-a.gg400.spct <- T2A(my_gg400.spct, action="replace")
+a.gg400.spct <- T2A(my_gg400.spct, action = "replace")
 @
 
 As in addition to the \code{T2A} method for \code{filter\_spct} there is a \code{T2A} method available for numeric vectors.
@@ -109,7 +141,7 @@ T2A(0.001)
 %%%%
 \section{Task: spectral transmittance from spectral absorbance}
 
-Please, see section \ref{sec:trans:T2A} for more details in the description of the method \code{T2A} which does the opposite conversion than the method \code{A2T} needed for this task, but which works similarly.
+Please, see section \ref{sec:trans:T2A} for more details in the description of the method \code{T2A} which does the reverse conversion than the method \code{A2T} needed for this task, but which works similarly.
 
 <<>>=
 A2T(a.gg400.spct)

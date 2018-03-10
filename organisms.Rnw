@@ -5,21 +5,45 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Example data for organisms}\label{chap:photoreceptors}
 
-%\begin{abstract}
-%  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on the photobiology of organisms.
-%\end{abstract}
+\section{Packages used in this chapter}
+
+For accessing the example data listed in this chapter you need first to load the following packages from the library:
+<<message=my.debug>>=
+library(photobiology)
+library(photobiologyPlants)
+@
+
+\section{Introduction}
+
+In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on the photobiology of organisms.
 
 \section{Plants}
 
-\subsection{Data: Surface properties of organs}
+\subsection{Data: Optical properties of organs}
+
+<<>>=
+summary(Betula_ermanii.mspct)
+@
+
+<<>>=
+summary(Solidago_altissima.mspct)
+@
 
 \subsection{Data: Photoreceptors}
 
+<<>>=
+UVR8_Glasgow.spct
+CRY2.mspct
+phytochrome.spct
+@
+
 \subsection{Data: Photosynthesis}
 
-\subsection{Data: Damage}
+<<>>=
+summary(McCree_photosynthesis.mspct)
+@
 
-\subsection{Data: Metabolites}
+\subsection{Data: Mass pigments and other metabolites}
 
 \section{Animals, including humans}
 

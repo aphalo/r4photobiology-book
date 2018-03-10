@@ -184,23 +184,23 @@ As the current implementation uses \code{ggplot} `statistic's, waveband irradian
 
 Normalization consists in scaling a spectrum so that the spectral quantity takes a given value, usually one, at a certain wavelength. See section \ref{sec:algo:normalization} on page \pageref{sec:algo:normalization} for a more detailed explanation.
 
-<<plot-sun-normalizet-0>>=
+<<plot-sun-normalize-0>>=
 plot(normalize(sun.spct))
 @
 
-<<plot-sun-normalizet-1>>=
+<<plot-sun-normalize-1>>=
 plot(normalize(sun.spct, norm = "max"))
 @
 
-<<plot-sun-normalizet-2>>=
+<<plot-sun-normalize-2>>=
 plot(normalize(sun.spct, norm = 700))
 @
 
-<<plot-sun-normalizet-3>>=
+<<plot-sun-normalize-3>>=
 plot(normalize(sun.spct, norm = "max"), range = VIS())
 @
 
-<<plot-sun-normalizet-4>>=
+<<plot-sun-normalize-4>>=
 plot(normalize(sun.spct, norm = "max", range = Red()),
      range = VIS(), w.band = VIS_bands())
 @
@@ -502,7 +502,6 @@ same arguments as methods \code{peaks} and \code{valleys} described in section \
 We reuse once more \code{fig\_sun.e} saved in section \ref{sec:plot:spc} and we start with the simple example of highlighting the overall maximum in a spectrum. By default \code{geom\_point} is used.
 
 <<plot-peaks-1>>=
-<<>>=
 ggplot(data = sun.spct) +
     geom_line() +
     stat_peaks(span=NULL)
@@ -586,12 +585,12 @@ We conclude with a more elaborate plot, with the peaks labelled with wavelengths
 <<plot-peaks-valleys-6>>=
 ggplot(sun.spct) +
   geom_line() +
-  stat_peaks(shape = 21, span = 25, size = 2) +
+  stat_peaks(shape = 21, span = 33, size = 2) +
   stat_label_peaks(geom = "label_repel", span = 25,
                    size = 3.5, nudge_y = 0.075, segment.colour = "grey20") +
-  stat_valleys(shape = 21, span = 25, size = 2) +
-  stat_label_valleys(geom = "label_repel", span = 25,
-                     size = 3.5, nudge_y = -0.075, segment.colour = "grey20") +
+  # stat_valleys(shape = 21, span = 25, size = 2) +
+  # stat_label_valleys(geom = "label_repel", span = 25,
+  #                    size = 3.5, nudge_y = -0.075, segment.colour = "grey20") +
   scale_fill_identity() + scale_color_identity() +
   expand_limits(y = c(-0.08, 0.9))
 @
@@ -1593,7 +1592,7 @@ wb.name <- wb.color <- character(num.bands)
 
 for (i in 1:num.bands) {
   w.length[i] <- midpoint(many.bands[[i]])
-  wb.color[i] <- color(many.bands[[i]], type="CMF")
+  wb.color[i] <- color_of(many.bands[[i]], type="CMF")
   wb.name[i] <- labels(many.bands[[i]])[["name"]]
 }
 
@@ -1627,14 +1626,14 @@ In the case of the example spectrum with equal wavelength steps, one could have 
 \section{Task: plotting colours in Maxwell's triangle}\label{sec:max:tri}
 
 \subsection{Human vision: RGB}
-Given\index{color!Maxwell's triangle} a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with method \code{color} (see section \ref{sec:color:wl}), from a waveband (see section \ref{sec:color:range}), for a wavelength range by first constructing a \code{wavband} object (see section \ref{sec:color:range}), and from a spectrum (see section \ref{sec:color:spc}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geometries, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
+Given\index{color!Maxwell's triangle} a color definition, we can convert it to RGB values by means of R's function \code{col2rgb}. We can obtain a color definition for monochromatic light from its wavelength with method \code{color\_of} (see section \ref{sec:color:wl}), from a waveband (see section \ref{sec:color:range}), for a wavelength range by first constructing a \code{wavband} object (see section \ref{sec:color:range}), and from a spectrum (see section \ref{sec:color:spc}). The RGB values can be used to locate the position of any colour on Maxwell's triangle, given a set of chromaticity coordinates defining the triangle. In the first example we use some of R's predefined colors. We use the function \code{ggtern} from the package of the same name. It is based on \code{ggplot} and to produce a ternary diagram we need to use \code{ggtern} instead of \code{ggplot}. Geometries, aesthetics, stats and faceting function normally in most cases. Of course, being a ternary plot, the aesthetics \code{x}, \code{y}, and \code{z} should be all assigned to variables in the data.
 
 <<echo=FALSE, include=FALSE>>=
 opts_chunk$set(opts_fig_wide_square)
 @
 
 We need to load \pkg{ggtern} here because at the moment it conflicts with \pkg{ggspectra} as it redefines \code{ggplot} in a way that does not match its current definition in \pkg{ggplot2} as an S3  method.
-<<>>=
+<<eval=FALSE>>=
 library(ggtern)
 @
 
@@ -1662,7 +1661,7 @@ In the second example, we calculate the colours for leaves as seen in sunlight.
 betula_reflected.mspct <-
   convolve_each(as.reflector_mspct(Betula_ermanii.mspct),
                 sun.spct)
-color.values <- color(betula_reflected.mspct, type = "CC")
+color.values <- color_of(betula_reflected.mspct, type = "CC")
 rgb.values <- col2rgb(color.values[[2]])
 leaf.data <- data.frame(leaf = color.values[[1]],
                         color = color.values[[2]],
@@ -1679,7 +1678,7 @@ ggtern(data = leaf.data,
 %
 %<<plot-tern-3>>=
 %w.lengths <- c(420, 500, 530, 600, 630, 670)
-%rgb.values <- col2rgb(color(w.lengths))
+%rgb.values <- col2rgb(color_of(w.lengths))
 %wl.data <- data.frame(colour=w.lengths,
 %                        R=rgb.values[1, ],
 %                        G=rgb.values[2, ],
@@ -1702,6 +1701,7 @@ ggtern(data = leaf.data,
 <<plot-clean>>=
 try(detach(package:ggtern))
 try(detach(package:ggspectra))
+#try(detach(package:ggtern))
 try(detach(package:photobiologyReflectors))
 try(detach(package:photobiologyPlants))
 try(detach(package:photobiologyFilters))

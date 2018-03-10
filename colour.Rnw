@@ -38,40 +38,40 @@ One use of these functions is to generate realistic colour for `key' on plots of
 %%%%
 \section{Task: calculating an RGB colour from a single wavelength}\label{sec:color:wl}
 
-Method\index{colour!calculation from wavelength} \code{color} can be used in this case. If a vector of wavelengths is supplied as argument, then a vector of \code{color}s, of the same length, is returned. Here are some examples of calculation of R color definitions for monochromatic light:
+Method\index{colour!calculation from wavelength} \code{color\_of} can be used in this case. If a vector of wavelengths is supplied as argument, then a vector of \code{color}s, of the same length, is returned. Here are some examples of calculation of R color definitions for monochromatic light:
 
 <<>>=
-color(550) # green
-color(630) # red
-color(380) # UVA
-color(750) # far red
-color(c(550, 630, 380, 750)) # vectorized
+color_of(550) # green
+color_of(630) # red
+color_of(380) # UVA
+color_of(750) # far red
+color_of(c(550, 630, 380, 750)) # vectorized
 @
 
 %%%%
 \section{Task: calculating an RGB colour for a range of wavelengths}\label{sec:color:range}
 
-Method\index{colour!calculation from wavelength range} \code{color} can be used also in this case, but we need to supply the range of wavelengths as a \code{waveband} object. The details of how to construct a \code{waveband} object are described in This function assumes a flat energy spectral irradiance curve within the range. Some examples:
+Method\index{colour!calculation from wavelength range} \code{color\_of} can be used also in this case, but we need to supply the range of wavelengths as a \code{waveband} object. The details of how to construct a \code{waveband} object are described in This function assumes a flat energy spectral irradiance curve within the range. Some examples:
 Examples for wavelength ranges:
 
 <<>>=
-color(waveband(c(400,700)))
-color(PAR())
-color(Yellow())
+color_of(waveband(c(400,700)))
+color_of(PAR())
+color_of(Yellow())
 @
 
 %%%%
 \section{Task: calculating an RGB colour for spectrum}\label{sec:color:spc}
 
-Method\index{colour!calculation from spectrum} \code{color} is also defined for spectral objects.
+Method\index{colour!calculation from spectrum} \code{color\_of} is also defined for spectral objects.
 
 Examples for spectra, in this case the solar spectrum:
 
 <<>>=
-color(sun.spct)
-color(sun.spct, type = "CMF") # colour matching function
-color(sun.spct, type = "CC")  # colour coordinates
-color(sun.spct * yellow_gel.spct)
+color_of(sun.spct)
+color_of(sun.spct, type = "CMF") # colour matching function
+color_of(sun.spct, type = "CC")  # colour coordinates
+color_of(sun.spct * yellow_gel.spct)
 @
 
 \section{Standard CIE illuminants}
@@ -128,7 +128,7 @@ opts_chunk$set(opts_fig_wide)
 @
 
 <<>>=
-color_chart(color(390:829), ncol = 20, text.color = NA)
+color_chart(color_of(390:829), ncol = 20, text.color = NA)
 @
 
 <<>>=

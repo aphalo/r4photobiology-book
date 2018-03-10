@@ -93,6 +93,7 @@ Package \pkg{photobiology} can be thought as a framework defining a way of stori
  \tikzstyle{base}=[dashed,fill=gray!20]
  \tikzstyle{contrib}=[dashed,fill=yellow!50]
   \centering
+  \sffamily\mdseries\small
   \begin{tikzpicture}[%
   grow via three points={one child at (0.5,-0.7) and
   two children at (0.5,-0.7) and (0.5,-1.4) and
@@ -103,6 +104,7 @@ Package \pkg{photobiology} can be thought as a framework defining a way of stori
       child { node {generic\textunderscore spct}
           child { node {raw\textunderscore spct}}
           child { node {cps\textunderscore spct}}
+          child { node {calibration\textunderscore spct}}
           child { node {source\textunderscore spct}}
           child { node {response\textunderscore spct}}
           child { node {filter\textunderscore spct}}
@@ -122,6 +124,7 @@ Package \pkg{photobiology} can be thought as a framework defining a way of stori
       child { node {generic\textunderscore mspct}
           child { node {raw\textunderscore mspct}}
           child { node {cps\textunderscore mspct}}
+          child { node {calibration\textunderscore mspct}}
           child { node {source\textunderscore mspct}}
           child { node {response\textunderscore mspct}}
           child { node {filter\textunderscore mspct}}
@@ -130,17 +133,18 @@ Package \pkg{photobiology} can be thought as a framework defining a way of stori
           child { node {chroma\textunderscore mspct}}
     };
   \end{tikzpicture}
-   \vspace{4ex}
+%   \vspace{4ex}
 
- \begin{tikzpicture}[%
-  grow via three points={one child at (0.5,-0.7) and
-  two children at (0.5,-0.7) and (0.5,-1.4)},
-  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
-  \node [base] {list}
-      child { node {waveband}
-    };
-  \end{tikzpicture}
-  \caption[Object classes used in the packages]{Object classes used in the packages. Objects of \texttt{\textunderscore spct} classes are used to store spectra, in most cases a single spectrum. Objects of \texttt{\textunderscore mspct} classes can be used to store \emph{collections} of \texttt{\textunderscore spct} objects, in most cases all belonging to the same class. Objects of class \texttt{waveband} contain information used for quantification: boundaries of a wavelength range and, optionally, spectral weighting functions. Gray-filled boxes represent classes defined in base R, yellow-filled boxes represent classes defined by contributed packages available through \gls{CRAN}, and blue-filled boxes represent classes defined in package \PB.}\label{fig:photobio:classes}
+% \begin{tikzpicture}[%
+%  grow via three points={one child at (0.5,-0.7) and
+%  two children at (0.5,-0.7) and (0.5,-1.4)},
+%  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+%  \node [base] {list}
+%      child { node {waveband}
+%    };
+%  \end{tikzpicture}
+  \caption[Object classes used to store spectral data]{Object classes used to store spectral data. Objects of \texttt{\textunderscore spct} classes are used to store spectra, in most cases a single spectrum. Objects of \texttt{\textunderscore mspct} classes can be used to store \emph{collections} of \texttt{\textunderscore spct} objects, in most cases all belonging to the same class. Gray-filled boxes represent classes defined in base R, yellow-filled boxes represent classes defined by contributed packages available through \gls{CRAN}, and blue-filled boxes represent classes defined in package \PB.}\label{fig:photobio:classes}
+  % Objects of class \texttt{waveband} contain information used for quantification: boundaries of a wavelength range and, optionally, spectral weighting functions.
 \end{figure}
 
 <<suite-design-example, eval=FALSE>>=
@@ -160,42 +164,34 @@ The suite also includes data for the users to try options and ideas, and helper 
 The suite consists in several packages\index{r4photobiology!packages}. The main package is \pkg{photobiology} which contains all the generally useful functions, including many used in the other, more specialized, packages (Table \ref{tab:suite}).
 
 \begin{table}
-\newcommand{\gblt}{\textcolor{green}{$\bullet$}}
-\newcommand{\yblt}{\textcolor{yellow}{$\bullet$}}
-\newcommand{\rblt}{\textcolor{red}{$\bullet$}}
-\newcommand{\cran}{\textrm{\textsc{cran}}}
 %\newcommand{\gblt}{{$\bullet$}}
 %\newcommand{\yblt}{{$\bullet$}}
 %\newcommand{\rblt}{{$\bullet$}}
-\caption[Packages in the suite]{Packages in the \textsf{r4photobiology} suite. Packages not yet released are
-marked with a red bullet \rblt, and those at `beta' stage with a yellow bullet \yblt, those relatively stable with a green bullet \gblt, and those in CRAN with the label \cran\ in the first column of the table.}\label{tab:suite}
+\caption[Packages in the suite]{Packages in the \textsf{r4photobiology} suite. Packages available through the \texttt{r4photobiology} repository at \url{http://r.r4photobiology.info/} are labelled \rphotorepo\ and those in CRAN with the label \cran\ in the first column of the table.}\label{tab:suite}
 \centering
 \sffamily\mdseries
 \begin{small}
-\begin{tabular}{clll}
+\begin{tabular}{cllp{30mm}}
 \toprule
  & Package           &  Type        & Contents \\
 \midrule
-\gblt & photobiologyAll   &  dummy          & loads other packages of the suite\\
-\cran & photobiology      &  funs + classes & basic functions, class definitions,\\
-      &                   &                 & class methods and example data \\
-\cran & photobiologyInOut     &  functions  & data import/export functions \\
+\rphotorepo & r4photobiology   &  dummy   & loads the core packages \\
+\cran & photobiology      &  funs + classes & functions, class definitions and methods \\
+\cran & photobiologyInOut     &  functions  & data import/export \\
 \cran & photobiologyWavebands   &  definitions & quantification of radiation \\
-\cran & ggspectra  & functions       & extensions to package \pkg{ggplot2} \\
+\cran & ggspectra  & methods  & plotting of spectral data \\
 \midrule
+\cran & photobiologySun   &  data        & solar and daylight \\
+\cran & photobiologyLamps &  data        & emission by light bulbs \\
+\cran & photobiologyLEDs  &  data        & emission by LEDs \\
+\cran & photobiologyFilters  &  data     & transmission of filters \\
+\cran & photobiologySensors  &  data     & response of sensors \\
+\rphotorepo & photobiologyReflectors  &  data  & reflection by materials \\
 \midrule
-\gblt & photobiologySun   &  data        & spectral data for solar radiation \\
-\cran & photobiologyLamps &  data        & spectral data for lamps \\
-\cran & photobiologyLEDs  &  data        & spectral data for LEDs \\
-\gblt & photobiologyFilters  &  data     & transmittance data for filters \\
-\gblt & photobiologySensors  &  data     & response data for sensors \\
-\yblt & photobiologyReflectors  &  data  & reflectance data for materials \\
+\cran & photobiologyPlants  & funs + data & plants' responses \\
 \midrule
-\cran & photobiologyPlants  & funs + data & photobiology of plants \\
-\midrule
-\midrule
-\gblt & rOmniDriver      & driver API & Ocean Optics spectrometers \\
-\gblt & ooacquire        & data acquistion & Ocean Optics spectrometers \\
+\rphotorepo & rOmniDriver      & driver API & Ocean Optics spectrometers \\
+\rphotorepo & ooacquire        & data acquistion & Ocean Optics spectrometers \\
 \bottomrule
 \end{tabular}
 \end{small}
@@ -214,7 +210,7 @@ The suite is still under active development. Even those packages marked as `stab
 \section{The \lowercase{\textsf{r4photobiology}} repository}\label{sec:photoCRAN}
 % \lowercase needed for page headers
 
-Seven of the packages are already available through CRAN\index{CRAN@\textsc{CRAN}}, the `Comprehensive R Archive Network'. For distributing other packages in the suite, I have created a repository at \url{http://r4photobiology.info/R}\index{r4photobiology!repository}. This repository follows the CRAN folder structure, so package installation can be done using normal R commands. Consequently dependencies are installed automatically and automatic updates are possible. The build most suitable for the current system and R version is also picked automatically if available. It is normally recommended that you do installs and updates on a clean R session (just after starting R or RStudio). For easy installation and updates of packages, the r4photobiology repository can be added to the list of repositories that R knows about.
+Ten of the packages are already available through CRAN\index{CRAN@\textsc{CRAN}}, the `Comprehensive R Archive Network'. For distributing additional packages in the suite, I have created a repository at \url{http://r.r4photobiology.info/}\index{r4photobiology!repository}. This repository follows the CRAN folder structure, so once ``known'' to R, installation works as usual and dependencies are installed automatically. The build most suitable for the current system and R version is also picked automatically if available. It is normally recommended that you do installs and updates on a clean R session (just after starting R or RStudio with no project loaded). For easiest installation and updates of the extra packages in the suite, the r4photobiology repository can be added to the list of repositories that R knows about. In most cases you can skip this step, as all core packages of the suite are distributed through CRAN. The packages that cannot be distributed through CRAN are those that require the proprietary drivers from Ocean Optics.
 
 Whether you use RStudio or not it is possible to add the r4photobiology repository to the current session as follows, which will give you a menu of additional repositories to activate:
 
@@ -222,16 +218,16 @@ Whether you use RStudio or not it is possible to add the r4photobiology reposito
 setRepositories(
   graphics = getOption("menu.graphics"),
   ind = NULL,
-  addURLs = c(r4photobiology = "http://www.r4photobiology.info/R"))
+  addURLs = c(r4photobiology = "http://r.r4photobiology.info/"))
 @
 
-If you know the indexes in the menu you can use this code, where `1' and `6' are the entries in the menu in the command above.
+If you know the indexes in the menu you can use this code, where `1' and `6' are the entries in the menu in the command above. Because of changes in the default R repositories, `6' may become `5' of some other number in the future.
 
 <<eval=FALSE, tidy=FALSE>>=
 setRepositories(
   graphics = getOption("menu.graphics"),
   ind = c(1, 6),
-  addURLs = c(r4photobiology = "http://www.r4photobiology.info/R"))
+  addURLs = c(r4photobiology = "http://r.r4photobiology.info/"))
 @
 
 Be careful not to issue this command more than once per R session, otherwise the list of repositories gets corrupted by having two repositories with the same name.
@@ -242,7 +238,7 @@ Easiest is to create a text file and name it `\code{.Rprofile}', unless it alrea
 utils::setRepositories(
   graphics = getOption("menu.graphics"),
   ind = c(1, 6),
-  addURLs = c(r4photobiology = "http://www.r4photobiology.info/R"))
+  addURLs = c(r4photobiology = "http://r.r4photobiology.info/"))
 @
 
 The \code{.Rprofile} file located in the current folder is \emph{sourced} (i.e.\ executed) at R start up. It is also possible to have such a file affecting all of the user's R sessions, but its location is operating system dependent, it is in most cases what the OS considers the current user's \textit{HOME} directory or folder (e.g. `My Documents' in recent versions of MS-Windows). If you are using RStudio, after setting up this file, installation and updating of the packages in the suite can take place exactly as for any other package archived at CRAN.

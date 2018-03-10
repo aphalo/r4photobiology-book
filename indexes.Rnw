@@ -58,5 +58,6 @@ This returns a different value because, the wavebands are un-weighted, while wei
 try(detach(package:hsdar))
 try(detach(package:photobiologyPlants))
 try(detach(package:ggspectra))
+try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 @

@@ -3,7 +3,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Math operators and functions}\label{chap:baseoper}
+\chapter{Arithmetic operators and mathematical functions}\label{chap:baseoper}
 
 %\begin{abstract}
 %  In this chapter we describe math functions and operators for spectra and wavebands. Many of these are specializations of the generic operators and functions existing in R.
@@ -23,12 +23,189 @@ library(photobiologyFilters)
 
 The suite uses object-oriented programming for its higher level `user-friendly' syntax. Objects are implemented using ``S3'' classes. The two main distinct kinds of objects are different types of spectra, and wavebands. Spectral objects contain, as their name implies, spectral data. Wavebands contain the information needed to calculate summaries integrating a range of wavelengths, or for convoluting spectral data with a weighting function. In this chapter we do not describe functions for calculating such summaries, but instead we describe the use of the usual math operators and functions with spectra and wavebands.
 
-\section{Operators and operations between two spectra}
+Most of the physical quantities used to describe radiation or radiation and matter interactions can be expressed using different bases. This is not just a scale change for units, but different scales base on a transformation. Examples are transmittance ($T$) and absorbance ($A$), involving a logarithmic transformation, or energy- and photon-irradiance involving a transformation based on the relationship between wavelength an energy per light quantum or photon. The suite functions and methods use as default transmittance and energy irradiance. This defaults can be changed by the user by setting R options (see section \ref{sec:oper:options} on page \pageref{sec:oper:options} for details).
+
+Definitions of object classes in the suite are based on physical quantities, ignoring basis of expression. Furthermore, data are automatically converted to the current default basis of expression before operations are carried out or functions called. Most functions have a parameter that allows overriding the default setting, but this is not possible for operators. In some cases it is crucial to be aware of the difference between a conversion applied to operands or arguments, and a conversion applied to the returned value.
+
+In addition conversions can be applied explicitly as described in the next section.
+
+\section{Conversion between units of expression}
+
+Several methods are provided for conversion of spectra from one base of expression to a different one. We exemplify this in detail for the conversion of spectral irradiance between energy- and photon-based units, and more briefly for its reverse and for other physical quantities as these different methods have a consistent interface.
+
+\subsection{Task: conversion of irradiance from energy to photon base}\label{sec:base:e2q}
+
+\begin{framed}
+\ilAttention{} The\index{spectral data!energy to photon base conversion}\index{spectral data!photon to energy base conversion} energy of a quantum of radiation\index{radiation quantum}\index{photon} in a vacuum, \quantum, depends on the wavelength\index{wavelength}, $\lambda$, or frequency\index{frequency}\footnote{Wavelength and frequency are related to each other by the speed of light, according to $\nu = c / \lambda$ where $c$ is speed of light in vacuum. Consequently there are two equivalent formulations for equation \ref{equ:energy}.}, $\nu$,
+%
+\begin{equation}
+\quantum = h \cdot \nu = h \cdot \frac{c}{\lambda} \label{equ:energy}
+\end{equation}
+%
+with the Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecond and speed of light in vacuum $c=2.998\times 10^{8}$ \msecond. When dealing with numbers of photons, the equation (\ref{equ:energy}) can be extended by using Avogadro's number\index{Avogadro's number} $N_\mathrm{A}=6.022\times 10^{23}$ mol$^{-1}$. Thus, the energy of one mole of photons, \molequanta, is
+%
+\begin{equation}
+\molequanta = h' \cdot \nu = h' \cdot \frac{c}{\lambda} \label{equ:molenergy}
+\end{equation}
+%
+with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}.
+\end{framed}
+
+\subsubsection{\code{numeric} vectors}
+
+Function \code{as\_quantum} converts \watt into \textit{number of photons} per square meter per second, and \code{as\_quantum\_mol} does the same conversion but returns \mol. Function \code{as\_quantum} is based on the equation \ref{equ:energy} while \code{as\_quantum\_mol} uses equation \ref{equ:molenergy}. To obtain \umol we multiply by $10^6$:
+
+<<>>=
+as_quantum_mol(550, 200) * 1e6
+@
+
+The calculation above is for monochromatic light (200 \watt at 550 \Unit{nm}).
+
+The functions are vectorized, so they can be applied to whole spectra (when data are available as vectors), to convert \wattnm to \molnm:
+
+<<>>=
+head(sun.spct$s.e.irrad, 10)
+s.q.irrad <- with(sun.spct,
+                  as_quantum_mol(w.length, s.e.irrad))
+head(s.q.irrad, 10)
+@
+
+However, it is safer to operate directly on objects of class \code{source\_spct} as shown in the next section.
+
+\subsubsection{\code{source\_spct} objects}
+
+When calling method \code{e2q} for a \code{source\_spct} object a new member variable (or column) named \code{s.q.irrad} is added to the source spectrum, unless it is already present in the object in which case values are not recalculated. By default the existing \code{s.e.irrad} is retained, to avoid repeated back and forth conversions.
+
+<<>>=
+e2q(sun.spct)
+@
+
+To override the default, and force the deletion of the pre-existing variable \code{s.e.irrad}, we pass to method \code{e2q}'s parameter \code{action} as argument \code{"replace"}. The default argument \code{"add"} retains \code{s.e.irrad}.
+
+<<>>=
+e2q(sun.spct, action = "add")
+e2q(sun.spct, action = "replace")
+@
+
+Method \code{e2q} can be used as a roundabout way of removing a \code{s.e.irrad} variable from a \code{source\_spct} object containing both \code{s.e.irrad} and \code{s.q.irrad} variables.
+
+\subsection{Task: conversion of responsivity from energy to photon base}
+
+\subsubsection{\code{response\_spct} objects}
+
+In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \code{e2q} as for \code{source\_spct} objects, the appropriate conversion is applied when the class of the argument is a \code{response\_spct} object.
+
+<<>>=
+ccd.spct
+q2e(ccd.spct)
+@
+
+\subsection{Task: conversion irradiance from photon to energy base}\label{sec:base:q2e}
+
+This is the reverse conversion to that described by equation \ref{equ:molenergy} on page \pageref{equ:molenergy}.
+Function \code{as\_energy} is the inverse function of \code{as\_quantum\_mol}. Method \code{q2e} applies the reverse conversion than method \code{e2q}. Please see previous sections for the more detailed description of the companion method \code{e2q}.
+
+\subsubsection{\code{numeric} vectors}
+
+In the handbook \citetitle{Aphalo2012} \autocite{Aphalo2012} it is written: ``Example 1: red light at 600~nm has about 200 \kjmole, therefore, 1~$\mymu$mol photons has 0.2~J. Example 2: \UVB radiation at 300~nm has about 400 \kjmole, therefore, 1~$\mymu$mol photons has 0.4~J. Equations \ref{equ:energy} and \ref{equ:molenergy} are valid for all kinds of electromagnetic waves.'' Let's re-calculate the exact values---as the output from \code{as\_energy} is expressed in \jmole we multiply the result by $10^{-3}$ to obtain \kjmole:
+
+<<>>=
+as_energy(600, 1) * 1e-3
+as_energy(300, 1) * 1e-3
+@
+
+Because of vectorization we can also operate on a whole spectrum:
+
+<<>>=
+s.e.irrad <- with(sun.spct, as_energy(w.length, s.q.irrad))
+@
+
+However, it is safer to operate directly on objects of class \code{source\_spct} as shown in the next section.
+
+\subsubsection{\code{source\_spct} objects}
+
+Function \code{q2e} is the reverse of \code{e2q}, converting spectral photon irradiance in \molnm to spectral energy irradiance in \wattnm. As for \code{e2q} \code{action = "add"} is the default.
+
+<<>>=
+q2e(sun.spct)
+q2e(sun.spct, action = "add")
+q2e(sun.spct, action = "replace")
+@
+
+\subsection{Task: conversion of responsivity from photon to energy base}
+
+In the case of response spectra expressed per mol photons, as the energy unit is a divisor, the conversion is done with the inverse of the factor used for irradiance. Although the method name is \code{q2e} as for \code{source\_spct} objects, the appropriate conversion is applied when the class of the argument is a \code{response\_spct} object. Please see previous sections for the more detailed description of the companion method \code{e2q}.
+
+\subsection{Task: conversion of transmittance into absorptance}
+
+\begin{framed}
+\ilAttention{} Most objects and materials both reflect and absorb radiation. This results in two possible definitions for transmittance ($T$), called total- and internal-transmittance.
+
+\begin{equation}\label{equ:Tt:R:A}
+  T_\mathrm{total} = \frac{T}{R + A + T}
+\end{equation}
+while,
+\begin{equation}\label{equ:Ti:A}
+  T_\mathrm{internal} = \frac{T}{A + T}.
+\end{equation}
+
+If we know $T_\mathrm{internal}$ we can obtain $A$ as
+\begin{equation}\label{equ:A:from:T}
+  A = 1 - T_\mathrm{internal}
+\end{equation}
+
+If we know only $T_\mathrm{total}$, we face two unknowns, and it is impossible to calculate $A$, but we can obtain $A + R$ instead.
+\begin{equation}\label{equ:A:from:T}
+  A + R  = 1 - T_\mathrm{total}
+\end{equation}
+\end{framed}
+
+Objects of class \code{filter\_spct} use attribute \code{Tfr.type} to keep track of the quantity stored, and conversion should in principle only succeed for $T_\mathrm{internal}$. This is not enforced, and the value returned by the conversion of $T_\mathrm{total}$ is $A + R$ because $A + R$ is an useful approximation to $A$ when $R \ll A$---users need to be aware of this when assessing the validity of the returned value.
+
+<<>>=
+getTfrType(yellow_gel.spct)
+T2Afr(yellow_gel.spct)
+@
+
+As described above for \code{e2q} all conversion methods have an \code{action} parameter with default argument \code{"add"} controlling the inclusion or not of the original data in the returned spectrum.
+
+<<>>=
+T2Afr(yellow_gel.spct, action = "replace")
+@
+
+\subsection{Task: conversion of transmittance into absorbance}
+
+The same considerations as for \code{T2Afr} apply to \code{T2A}, as absorbance is a $\log_{10}$ transformation of absorptance.
+
+<<>>=
+T2A(yellow_gel.spct)
+@
+
+\subsection{Task: conversion of absorptance into transmittance}
+
+The reverse conversion of \code{T2Afr} is \code{Afr2T}. If the \code{Tfr.type} is retained, the original values will be retained after conversion followed by back-conversion, except for possible rounding errors in the computations.
+
+<<eval=FALSE>>=
+# not yet implemented!
+Afr2T(T2Afr(yellow_gel.spct))
+@
+
+\subsection{Task: conversion of absorbance into transmittance}
+
+The same considerations as for \code{Afr2T} apply to \code{A2T}, as absorbance is a $\log_{10}$ transformation of absorptance.
+
+<<>>=
+A2T(T2A(yellow_gel.spct))
+@
+
+\section{Arithmetic operators and mathematical functions for spectra}
+
+Base R defines a complete set of operators and math- and trigonometric functions for numeric vectors. Specializations for the object classes defined in the suite have been implemented, except for those related to spherical trigonometry. In this section we use only a few of them in the examples.
 
 \begin{table}
 \newcommand{\Nrd}{\textcolor{red}{\small N}}
 \newcommand{\Ygrn}{\textcolor{green}{\small Y}}
-\caption[Binary operators]{Binary operators and operands. Validity and class of result. All operations marked `\Ygrn' are allowed, those marked `\Nrd' are forbidden and return \code{NA} and issue a warning.}\label{tab:operators}\vspace{0.75ex}
+\caption[Binary operators]{Binary operators and their operands. Validity and class of result. All operations marked `\Ygrn' are allowed, those marked `\Nrd' are forbidden and return \code{NA} issuing a warning.}\label{tab:operators}\vspace{0.75ex}
 \centering
 \begin{tabular}{lcccccll}
 \toprule
@@ -62,23 +239,49 @@ source\_spct & \Nrd & \Nrd &\Ygrn  & \Nrd & \Nrd & waveband (BSWF) & source\_spc
 \end{tabular}
 \end{table}
 
-All operations\index{mathematical operators}\index{spectral data!mathematical operations} with spectral objects affect only the required components listed in Table \ref{tab:operators}, redundant components are always deleted\footnote{e.g.\ equivalent quantities expressed in different types of units, such as spectral energy irradiance and spectral photon irradiance}, while unrecognized components, including all factors and character variables, are preserved only when one of the operands is a numeric vector of any length. There will be seldom need to add numerical components to spectral objects, and the user should take into account that the paradigm of the suite is that data from each spectral measurement is stored as a separate object. However, it is allowed, and possibly useful to have factors as components with levels identifying different bands, or color vectors with RGB values. Such ancillary information is useful for presentation and plotting and can be added with functions described in Chapter \ref{chap:plotting}. Exceptionally, objects can contain spectral data from several measurements and an additional factor indexing them. Such objects cannot be directly used with operators and summary functions, but can be a convenient format for storing related spectra.
+All operations\index{mathematical operators}\index{spectral data!mathematical operations} and mathematical functions\index{mathematical functions}\index{spectral data!mathematical functions} on spectral objects affect only the spectral quantities listed in Table \ref{tab:operators}, redundant components are deleted\footnote{e.g.\ equivalent quantities expressed in different types of units, such as spectral energy irradiance and spectral photon irradiance}, while unrecognized components, including all factors and character variables, are preserved only when one of the operands to a binary operation is a numeric vector and for unary operators and functions. There will be seldom need to add numerical components to spectral objects, and the user should take into account that the paradigm of the suite is that data from each spectral measurement event is stored as a separate object. However, it is allowed, and possibly useful to have factors as components with levels identifying different bands, or color vectors with RGB values. Such ancillary information is useful for presentation and plotting and can be added with functions described in Chapter \ref{chap:plotting}. Exceptionally, objects can contain spectral data from several measurements and an additional factor indexing them. Such objects cannot be directly used with operators and summary functions, but can be a convenient format for storing related spectra.
 
-Binary maths operators  (\verb|+|, \verb|-|, \verb|*|, \verb|/|), and unary math operators (\verb|+|, \verb|-|) are defined for spectral objects as well functions (\verb|log|, \verb|log|10,\verb|sqrt|). Using operators is an easy and familiar way of doing calculations, but operators are rather inflexible (they can take at most two arguments, the operands) and performance is usually slower than with functions with additional parameters that allow optimizing the algorithm. Which operations are legal between different combinations of operands depends on the laws of Physics, but in cases in which exceptions might exist, they are allowed. This means that some mistakes can be prevented, but other may happen either with a warning or silently. So, although a class system provides a safer environment for calculations, it is not able to detect all possible `nonsensical' calculations. The user must be aware that sanity checks and good understanding of the algorithms are still a prerequisite for reliable results.
+All binary arithmetic operators  (\verb|+|, \verb|-|, \verb|*|, \verb|^|, \verb|/|, \verb|%/%| and \verb|%%|), and unary arithmetic operators (\verb|+|, \verb|-|) are defined for spectral objects as well as most math functions such as \verb|log|, \verb|log|10, and \verb|sqrt|. Using operators is an easy and familiar way of doing calculations, but operators are rather inflexible (they can take at most two arguments, the operands).
 
-Table \ref{tab:operators} list the available operators and the operands accepted as legal, together with the class of the objects returned. Only in extreme cases errors will be triggered, in most cases when errors occur an operation between two \code{reflector\_spct} yields a \code{reflector\_spct} object, and operations between a \code{filter\_spct} object and a \code{source\_spct}, between a \code{reflector\_spct} and a \code{source\_spct}, or between two \code{source\_spct} objects yield \code{source\_spct} objects. The object returned contains data only for the overlapping region of wavelengths. The objects do NOT need to have values at the same wavelengths, as interpolation is handled transparently. All four basic maths operations are supported with any combination of spectra, and the user is responsible for deciding which calculations make sense and which not. Operations can be concatenated and combined. The unary negation operator is also implemented.
+Which operations are legal between different combinations of types of spectra passed as operands depends on the laws of Physics, but in cases in which exceptions might exist, they do not trigger errors. This means that some mistakes can be prevented, but others may happen either with a warning or silently. So, although a class system provides a safer environment for calculations than using ``naked'' vectors, it is not able to detect all possible attempts to perform `nonsensical' calculations. The user must apply sanity checks to both inputs and returned values, and have a good understanding of the underlying optics laws as a prerequisite for reliable calculation results.
 
-We can convolute the emission spectrum of a light source and the transmittance spectrum of a filter by simply multiplying them.
+In contrast to operators defined in R itself, operations between two spectra are meaningful even if they contain data measured at a different set of wavelength values and the additional computations needed are handled automatically by our operators and functions. First of all, the object returned contains data only for the overlapping region of wavelengths (i.e.\ extrapolation is not automatic, and ``trimming'' is applied instead). Secondly, the objects do NOT need to have values at the same wavelengths, as interpolation is handled transparently (i.e.\ interpolation is automatic). All four basic maths operations are supported with any combination of spectra, and the user is responsible for deciding which calculations make sense and which not. Operations can be concatenated and combined, and default precedence modified by means of parentheses. The unary negation operator is also implemented for spectra.
+
+Table \ref{tab:operators} lists the available operators and the classes of operands accepted as legal, together with the class of the objects returned.
+
+As first example we convolute the emission spectrum of a light source and the transmittance spectrum of a filter by simply multiplying the two spectral objects.
 
 <<>>=
 sun.spct * polyester.spct
 @
 
+As a second example we compute the logarithm of the spectral energy irradiance.
+
+<<>>=
+log10(sun.spct)
+@
+
+Arithmetic operators and mathematical functions by default carry out operations using a given base of expression for their spectral operands and arguments irrespective of how the data are stored. For example the default is to use energy units when operating on spectral irradiance. This behaviour can be changed by means of R options (see section \ref{sec:oper:options} on page \pageref{sec:oper:options}). Convenience functions make setting and unsetting these options easier.
+
+<<>>=
+photon_as_default()
+sun.spct^2 / 10
+unset_radiation_unit_default()
+@
+
+Unsetting, of course is needed only to restore the default before the next statement. For single statements ``using'' functions are even more convenient.
+
+<<>>=
+using_photon(sun.spct^2 / 10)
+@
+
+In what follows we describe the use of operators without changing the default bases of expression, but they can be used in the same way with a different default set through options.
+
 \section{Operators and operations between a spectrum and a numeric vector}
 
-The same four basic math operators plus power (`\verb|^|') are defined for operations between a spectrum and a numeric vector, possibly of length one. Recycling rules apply for the numeric vector. Normal R type conversions also take place, so a logical vector can substitute for a numeric one´. These operations do not alter \code{w.length}, just the other \textit{required} components such as spectral irradiance and transmittance. The optional components are deleted as they can be recalculated if needed. Unrecognized `user' components are left unchanged.
+All arithmetic operators are also defined for operations between a spectrum and a numeric vector, possibly of length one. Recycling rules apply for the numeric vector. Normal R type conversions also take place, so a logical vector can substitute for a numeric one. These operations do not alter \code{w.length}, just the other \textit{required} spectral quantity such as spectral irradiance and transmittance. The optional components with same data expressed differently are deleted as they can be recalculated if needed. Unrecognized `user' components such as factors or character vectors are left unchanged.
 
-For example we can divide a spectrum by a numeric value (a vector of length 1, which gets recycle). The value returned is a spectral object of the same type as the spectral argument.
+For example we can divide a spectrum by a numeric value (a vector of length 1, which gets recycled). When one operand is numeric, the value returned is a spectral object of the same type as the spectral operand or argument.
 
 <<>>=
 sun.spct / 2
@@ -88,27 +291,43 @@ sun.spct * 2
 
 \section{Math functions taking a spectrum as argument}
 
-Logarithms\index{mathematical functions}\index{spectral data!mathematical functions} (\code{log, log10}), square root (\code{sqrt}) and exponentiation (\code{exp}) are defined for spectra. These functions are not applied on \code{w.length}, but instead to the other mandatory component \code{s.e.irrad}, \code{Rfr} or \code{Tfr}. Any optional numeric components are discarded. Other user-supplied components remain unchanged.
+Logarithms\index{mathematical functions}\index{spectral data!mathematical functions} (\code{logb, log, log2, log10}), square root (\code{sqrt}), exponentiation (\code{exp}), absolute value (\code{abs}) and all ``round'' functions \code{round}, \code{signif}, \code{abs}, \code{trunc}, \code{celing} and \code{floor} are defined for spectra. These functions are not applied on \code{w.length}, but instead to the spectral quantity such as \code{s.e.irrad}, \code{Rfr} or \code{Tfr}. Any optional numeric member variables containing the same data differently expressed are discarded. User-defined member variables are retained unaltered.
 
 <<>>=
 log10(sun.spct)
 @
 
+\section{Comparison operators}
+
+There are no re-definitions for spectra of R's comparison operators. Base R's operators are applied when operand are spectra and operate on all columns returning a \code{matrix} of \code{logical} values.
+
 \section{Task: Simulating spectral irradiance under a filter}
 
-Package \pkg{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \pkg{photobiology} makes available one example solar spectrum. Using these data we will simulate the filtered solar spectrum.
+Package \pkg{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \pkg{photobiology} makes available one example solar spectrum. Using these data we will simulate a filtered solar spectrum.
 
 <<>>=
 sun.spct * filters.mspct$GG400
 @
 
-The GG440 data is for internal transmittance, consequently the results above would be close to the truth only for filters treated with an anti-reflection multicoating. Let's assume a filter with 9\% reflectance across all wavelengths (a coarse approximation for uncoated glass):
+The GG440 data is for internal transmittance, consequently the results above would be close to the truth only for filters treated with anti-reflection multicoating. Schott provides reflectance data for the filters, and this is stored in a comment.
 
 <<>>=
-sun.spct * filters.mspct$GG400 * (100 - 9) / 100
+cat(comment(filters.mspct$GG400))
 @
 
-Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work, even when, as in this example, the wavelength values do not coincide between the two spectra.
+We use the ``reflectance factor'' available in the comment, which should give us a good approximation for a clean filter.
+
+<<>>=
+sun.spct * filters.mspct$GG400 * 0.918
+@
+
+Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work, even when, as in this example, the wavelength values do not coincide between the two spectra. The simple approach used is to take the union of all wavelength values and add all missing values by interpolation to each spectrum before applying the operator.
+
+<<>>=
+nrow(sun.spct)
+nrow(filters.mspct$GG400)
+nrow(sun.spct * filters.mspct$GG400)
+@
 
 %%%%
 \section{Task: Uniform scaling of a spectrum}\label{sec:base:scale}
@@ -120,14 +339,14 @@ sun.spct
 sun.spct * 2
 @
 
-All four basic binary operators (\code{+, -, *, /}) can be used in the same way. By default all calculations are done using energy based units, and only values in these units returned. If the operands need conversion, they are silently converted before applying the operator. The default behaviour can be switched into doing operations and returning values in photon-based units by setting an R option, using the normal R \code{options} mechanism.
+All four basic binary operators (\code{+, -, *, /}) can be used in the same way. By default all calculations are done using energy based units, and only values in these units returned. If the operands need conversion, they are silently converted before applying the operator. The default behaviour can be switched into doing operations and returning values in photon-based units by setting an R option, using the normal R \code{options} mechanism or the convenience functions \code{photon\_as\_default()} and \code{energy\_as\_default()}.
 
 %%%%
 \subsection{Task: Arithmetic operations within one spectrum}\label{sec:base:internal}
 
-As spectral objects behave in many respects as data frames it is possible to do calculations involving columns as usual, e.g.\ using \code{with} or explicit selectors. A non-nonsensical example follows using R syntax on a data frame, returning a vector.
+As spectral objects behave in many respects as data frames it is possible to do calculations involving columns as usual, e.g.\ using \code{with()} or explicit selectors. A nonsensical example follows using R's \verb|$| operator to extract \code{numeric} vectors. The mathematical operators have in this case numeric vectors as operands, returning a numeric vector as result.
 
-Using data frame syntax on a data frame, data table or spectral object, returning a vector:
+The same member-variable extraction syntax applies to data frames, tibbles and spectral objects.
 
 <<eval=FALSE>>=
 # not run
@@ -142,7 +361,7 @@ with(sun.spct, s.e.irrad^2 / w.length)
 
 \subsection{Task: Using operators on underlying vectors}\label{sec:base:binoper}
 
-If data for two spectra are available for the same wavelength values, then we can simply use the built in R math operators on the component vectors. These operators are vectorised, which means that an addition between two vectors adds the elements at the same index position in the two vectors with data, in this case for two different spectra.
+If data for two spectra are available for the same wavelength values, then we can simply use the built in R math operators on the component numeric vectors. These operators are vectorized, which means that an addition between two vectors adds the elements at the same index position in the two vectors with data, in this case for two different spectra.
 
 However, we can achieve the same result, with simpler syntax, using spectral objects and the corresponding operators.
 
@@ -154,158 +373,63 @@ sun.spct + sun.spct
 e2q(sun.spct + sun.spct)
 @
 
-In both cases only spectral energy irradiance is calculated during the summing operation, while in the second example, it is simple to convert the returned spectral energy irradiance values into spectral photon irradiance. The class of the returned spectrum depends on the classes of the operands.  In this case returned objects are \code{source\_spct}.
+In both cases only spectral energy irradiance is calculated during the summing operation, while in the second example, it is simple to convert the returned spectral energy irradiance values into spectral photon irradiance.
 
-The function \code{oper\_spectra} takes the operator to use as an argument, and this abstraction both simplifies the package code, and also makes it easy for users to add other operators if needed:
-
-<<eval=FALSE>>=
-# not run
-out.data <- oper_spectra(spc1$w.length, spc2$w.length,
-                         spc1$s.e.irrad, spc2$s.e.irrad,
-                         bin.oper=`^`)
-@
-
-and yields one spectrum to a power of a second one. Such additional functions are not predefined, as I cannot think of any use for them. \code{oper\_spectra} is used internally to define the functions for the four basic maths operators, and the corresponding operators.
-
-\subsection{Task: conversion from energy to photon base}\label{sec:base:e2q}
-
-\begin{framed}
-\ilAttention{} The\index{spectral data!energy to photon base conversion}\index{spectral data!photon to energy base conversion} energy of a quantum of radiation\index{radiation quantum}\index{photon} in a vacuum, \quantum, depends on the wavelength\index{wavelength}, $\lambda$, or frequency\index{frequency}\footnote{Wavelength and frequency are related to each other by the speed of light, according to $\nu = c / \lambda$ where $c$ is speed of light in vacuum. Consequently there are two equivalent formulations for equation \ref{equ:energy}.}, $\nu$,
-%
-\begin{equation}
-\quantum = h \cdot \nu = h \cdot \frac{c}{\lambda} \label{equ:energy}
-\end{equation}
-%
-with the Planck constant\index{Planck constant} $h=6.626\times 10^{-34}$ \jsecond and speed of light in vacuum $c=2.998\times 10^{8}$ \msecond. When dealing with numbers of photons, the equation (\ref{equ:energy}) can be extended by using Avogadro's number\index{Avogadro's number} $N_\mathrm{A}=6.022\times 10^{23}$ mol$^{-1}$. Thus, the energy of one mole of photons, \molequanta, is
-%
-\begin{equation}
-\molequanta = h' \cdot \nu = h' \cdot \frac{c}{\lambda} \label{equ:molenergy}
-\end{equation}
-%
-with $h'=h\cdot N_\mathrm{A}=3.990\times 10^{-10}$ \Unit{J\,s\,mol^{-1}}.
-\end{framed}
-
-\subsubsection{\code{numeric} vectors}
-
-Function \code{as\_quantum} converts \watt into \textit{number of photons} per square meter per second, and \code{as\_quantum\_mol} does the same conversion but returns \mol. Function \code{as\_quantum} is based on the equation \ref{equ:energy} while \code{as\_quantum\_mol} uses equation \ref{equ:molenergy}. To obtain \umol we multiply by $10^6$:
+In some cases we may need to apply the mathematical operations to operands expressed in photon units rather than just converting the result into photon units. As mentioned above, we can set an R option to alter the default behaviour of operators and functions. However, it is also possible to change the behaviour for a single statement.
 
 <<>>=
-as_quantum_mol(550, 200) * 1e6
+using_photon(sun.spct + sun.spct)
 @
 
-The calculation above is for monochromatic light (200 \watt at 550 \Unit{nm}).
+The class of the returned object depends on the classes of the operands.  In this case the returned object is a \code{source\_spct} as both operands also belong to this same class.
 
-The functions are vectorised, so they can be applied to whole spectra (when data are available as vectors), to convert \wattnm to \molnm:
+\subsection{Task: Using options to change default behaviour of maths operators and functions}\label{sec:oper:options}
 
-<<>>=
-head(sun.spct$s.e.irrad, 10)
-s.q.irrad <- with(sun.spct,
-                  as_quantum_mol(w.length, s.e.irrad))
-head(s.q.irrad, 10)
-@
+As briefly mentioned above, the basis of expression used as default for the different physical quantities can be set by means of R options. Table \ref{tab:options} lists all the recognized options\index{R options}, and their default values. Within the suite all functions have a default value which is used when the R options are not set. Options are set using base R's function \code{options}, and queried with functions \code{options} and \code{getOption}. Using options can result in more compact and terse code, but the user should clearly document the use of non-default values for options to avoid surprising the reader of the code. In addition to base R'a functions, convenience functions are defined in the suite.
 
-\subsubsection{\code{source\_spct} objects}
-
-Once again, easiest is to use spectral objects. The default is to add \code{s.q.irrad} to the source spectrum, unless it is already present in the object in which case values are not recalculated. It can also be used as a roundabout way of removing a \code{s.e.irrad} column, which could be useful in some cases.
-
-<<>>=
-e2q(sun.spct, byref = FALSE)
-@
-
-\code{e2q} has a parameter \code{action}, with default \code{"add"}. Another valid argument value is \code{"replace"}.
-
-<<>>=
-sun.spct
-e2q(sun.spct, "replace", byref = FALSE)
-@
-
-\subsubsection{\code{response\_spct} objects}
-
-In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \code{e2q} as for \code{source\_spct} objects, the appropriate conversion is applied.
-
-\subsection{Task: conversion from photon to energy base}\label{sec:base:q2e}
-
-\code{as\_energy} is the inverse function of \code{as\_quantum\_mol}:
-
-\subsubsection{\code{numeric} vectors}
-
-In the handbook \citetitle{Aphalo2012} \autocite{Aphalo2012} it is written: ``Example 1: red light at 600~nm has about 200 \kjmole, therefore, 1~$\mymu$mol photons has 0.2~J. Example 2: \UVB radiation at 300~nm has about 400 \kjmole, therefore, 1~$\mymu$mol photons has 0.4~J. Equations \ref{equ:energy} and \ref{equ:molenergy} are valid for all kinds of electromagnetic waves.'' Let's re-calculate the exact values---as the output from \code{as\_energy} is expressed in \jmole we multiply the result by $10^{-3}$ to obtain \kjmole:
-
-<<>>=
-as_energy(600, 1) * 1e-3
-as_energy(300, 1) * 1e-3
-@
-
-Because of vectorization we can also operate on a whole spectrum:
-
-<<>>=
-s.e.irrad <- with(sun.data, as_energy(w.length, s.q.irrad))
-@
-
-\subsubsection{\code{source\_spct} objects}
-
-Function \code{q2e} is the reverse of \code{e2q}, converting spectral photon irradiance in \molnm to spectral energy irradiance in \wattnm . It can also be used as a roundabout way of removing a \code{s.q.irrad} column, which could be useful in some cases.
-
-<<>>=
-q2e(sun.spct, "replace", byref = FALSE)
-@
-
-As we have seen above by default \code{q2e} and \code{e2q} return a modified copy of the spectrum as a new object. This is safe, but inefficient in use of memory and computing resources. We first copy the data to a new object, and delete the \code{s.e.irrad} variable, so that we can test the use of the functions by reference.
-When parameter \code{byref} is given \code{TRUE} as argument the original spectrum is modified.
-
-<<>>=
-my_sun.spct <- sun.spct
-q2e(my_sun.spct, byref = TRUE)
-@
-
-\subsubsection{\code{response\_spct} objects}
-
-In the case of response spectra expressed per energy unit, as the energy unit is a divisor, the conversion is done with the inverse of the factor in equation \ref{equ:energy}. Although the method name is \code{q2e} as for \code{source\_spct} objects, the appropriate conversion is applied.
-
-\subsubsection{Task: Using options to change default behaviour of maths operators and functions}\label{sec:oper:options}
-
-Table \ref{tab:options} lists all the recognized options\index{R options}, and their default values. Within the suite all functions have a default value which is used when the options are undefined. Options are set using base R's function \code{options}, and queried with functions \code{options} and \code{getOption}. Using options can result in more compact and terse code, but the user should clearly document the use of non-default values for options to avoid surprising the reader of the code.
-
-\begin{table}
+\begin{sidewaystable}
 \caption[Options]{Options affecting calculations by functions and operators in the \PB package and their possible values. Options controlling the printing of the returned values are also listed.\label{tab:options}}\vspace{0.75ex}
 
 \centering
-\begin{footnotesize}
-\begin{tabular}{lll}
+\begin{small}
+\begin{tabular}{llll}
 \toprule
-\textbf{Option} & \textbf{default} & \textbf{function} \\
+\textbf{Option} & \textbf{default} & \textbf{effect} & \textbf{function calls}\\
 \midrule
-\textbf{Base R} & & \\
+\textbf{Base R} & & & \\
 \addlinespace
-digits & 7 & $d - 3$ used by \code{summary} \\
+digits & 7 & $d - 3$ used by \code{summary} & \code{options(digits = 7)} \\
 \midrule
-\textbf{Package \pkg{tibble}} & & \\
+\textbf{Package \pkg{tibble}} & & & \\
 \addlinespace
-tibble.print\_max & $n_\mathrm{max}$ = 20 & nrow(\emph{spct}) $> n_\mathrm{max}$ print $n_\mathrm{min}$ lines \\
-tibble.print\_min & $n_\mathrm{min}$ = 10 & nrow(\emph{spct}) $> n_\mathrm{max}$ print $n_\mathrm{min}$ lines \\
+tibble.print\_max & $n_\mathrm{max}$ = 20 & if nrow(\emph{spct}) $> n_\mathrm{max}$ & \code{options(tibble.print\_max = 20)}\\
+tibble.print\_min & $n_\mathrm{min}$ = 10 & print $n_\mathrm{min}$ lines &  \code{options(tibble.print\_min = 10)}\\
 \midrule
-\textbf{R4photobioloy suite} & & \\
+\textbf{R4photobioloy suite} & & & \\
 \addlinespace
-photobiology.radiation.unit & \code{"energy"} & output (\wattnm) \\
-                            & \code{"photon"} & output (\molnm) \\
-photobiology.filter.qty & \code{"transmittance"} & output ($/1$) \\
-                        & \code{"absorptance"} & output ($/1$) \\
-                        & \code{"absorbance"} & output (a.u. $\log_{10}$ base) \\
-photobiology.use.hinges & \code{NULL} & guess automatically \\
-                        & \code{TRUE} & do insert hinges \\
-                        & \code{FALSE} & do not insert hinges \\
+photobiology.radiation.unit & \code{"energy"} & $E(\lambda)$ (\wattnm) & \code{energy\_as\_default()}, \code{using\_energy()}\\
+                            & \code{"photon"} & $Q(\lambda)$ (\molnm) & \code{photon\_as\_default()}, \code{using\_photon()} \\
+                            & not set & $E(\lambda)$ (\wattnm) & \code{unset\_radiation\_unit\_default()} \\
+photobiology.filter.qty & \code{"transmittance"} & $T(\lambda)$ ($/1$)  & \code{Tfr\_as\_default()}, \code{using\_Tfr()}\\
+                        & \code{"absorptance"} & $Afr(\lambda)$ ($/1$)  & \code{Afr\_as\_default()}, \code{using\_Afr()} \\
+                        & \code{"absorbance"} & $A(\lambda)$ (a.u. $\log_{10}$ base)  & \code{A\_as\_default()}, \code{using\_A()} \\
+                            & not set & $T(\lambda)$ ($/1$) & \code{unset\_filter\_qty\_default()}\\
+photobiology.use.hinges & \code{TRUE} & do insert hinges &   \code{options(photobiology.use.hinges = TRUE)}\\
+                        & \code{FALSE} & do not insert hinges &   \code{options(photobiology.use.hinges = FALSE)}\\
+                        & not set & guess automatically &  \code{options(photobiology.use.hinges = NULL)}\\
 % photobiology.auto.hinges.limit & 0.5 & wavelength step (nm) \\
-% photobiology.waveband.trim & \code{TRUE} & trim or exclude \\
+photobiology.waveband.trim & \code{TRUE} & trim to data &  \code{options(photobiology.waveband.trim = TRUE)} \\
+                           & \code{FALSE} & exclude &  \code{options(photobiology.waveband.trim = FALSE)} \\
+                           & not set & trim to data & \code{options(photobiology.waveband.trim = NULL)}  \\
 % photobiology.use.cached.mult & \code{FALSE} & cache intermediate results or not % \\
 % photobiology.verbose & \code{FALSE} & give verbose output or not \\
 \bottomrule
 \end{tabular}
-\end{footnotesize}
-\end{table}
+\end{small}
+\end{sidewaystable}
 
-The behaviour of the operators\index{operators!behaviour} defined in this package depends on the value of two global options. If we would like the operators to
-operate on spectral photon irradiance and return spectral photon irradiance instead of spectral energy irradiance,
-this behaviour can be set, and will remain active until unset or reset.
+The behaviour of the operators\index{operators!behaviour} defined in this package depends on the value of two global options. If we would like the operators to operate on spectral photon irradiance and return spectral photon irradiance instead of spectral energy irradiance,
+this behaviour can be set, and will remain active until unset or reset. Method print always prints objects as is, irrespective of options set.
 
 <<>>=
 options(photobiology.radiation.unit = "photon")
@@ -315,43 +439,53 @@ sun.spct * UVB()
 @
 
 \begin{framed}
-\ilAttention{} For filters, an option controls whether transmittance, the default, or absorbance is use in the operations, and the controls the returned quantity. It is important to remember that absorbance, $A$, is always expressed on a logarithmic scale, while transmittance, $T$, is always expressed on a linear scale. So to simulate the effect of stacking two layers of polyester film, we need to sum, or in this case as there are two layers of the same material, multiply by two the spectral absorbance values, while we need to multiply the spectral transmittances of stacked filters, or use a power when the layers are identical.
+\ilAttention{} For filters, an option controls whether transmittance, the default, absorptance or absorbance is used as operands. It is important to remember that absorbance, $A$, is always expressed on a logarithmic scale, while transmittance, $T$, and absorptance are always expressed on a linear scale. So to simulate the effect of stacking two layers of polyester film, we need to sum, or in this case as there are two layers of the same material, multiply by two the spectral absorbance values, while we need to multiply the spectral transmittances of stacked filters, or use a power when the layers are identical.
 \end{framed}
 
 <<>>=
-options(photobiology.filter.qty = "absorbance")
+polyester.spct ^ 2
+A_as_default()
 polyester.spct * 2
-options(photobiology.filter.qty = "transmittance")
+A2T(polyester.spct * 2)
+unset_filter_qty_default()
 polyester.spct ^ 2
 @
 
-Either option can be unset, by means of the \code{NULL} value\footnote{If you are planning to continue working through the examples in later sections, do reset the options as shown in this chunk, as otherwise, the results of later calculations will differ from those shown.}.
+and for a single statement, more concisely,
+
 <<>>=
+using_A(polyester.spct ^ 2)
+@
+
+R options is general are set with function \code{options}, and unset by setting them to the \code{NULL} value.
+
+<<>>=
+options(photobiology.radiation.unit = "photon")
+polyester.spct * 2
 options(photobiology.radiation.unit = NULL)
-options(photobiology.filter.qty = NULL)
 @
 
 \sloppy
 The proper use of trimming of wavebands is important, and option \code{photobiology.waveband.trim} makes changing the behaviour of the \code{trim\_spct} function and other functions accepting wavebands easier. The need to carefully assess the validity of trimming and how it can affect the interpretation of results is further discussed in Chapter \ref{chap:uw:irrad} and Chapter \ref{chap:wt:irrad}.
 
-Other options affect the optimization of performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \pkg{dplyr} affect printing of output (Table \ref{tab:options}).
+%Other options affect the optimization of performance vs.\ precision of calculations and can be useful especially when processing huge numbers of spectra. Some options defined in base R and package \pkg{dplyr} affect printing of output (Table \ref{tab:options}).
 
 \section{Wavebands}\label{sec:wb:objects}
 
-\subsection{How are wavebands stored?}
+\subsection{Mathematical operators}
 
-Wavebands are derived from R lists. All valid R operations for lists can be also used with \code{waveband} objects. However, there are \code{waveband}-specific specializations of generic R methods.
+Wavebands are derived from R lists. All valid R operations for lists can be also used with \code{waveband} objects. However, there are \code{waveband}-specific specializations of generic R operators.
 
-\subsection{Operators and functions}
+\subsection{Task: Compute weighted spectral quantities}
 
-Multiplying any spectrum by an un-weighted waveband, is equivalent to trimming with \code{fill} set to \code{NA} (see section \ref{sec:base:trim}.
+Multiplying any spectrum by an un-weighted waveband, is equivalent to trimming using method \code{trim\_spct} with \code{fill} set to \code{NULL} (see section \ref{sec:base:trim}).
 
 <<>>=
 is_effective(UVA())
 sun.spct * UVA()
 @
 
-Multiplying a \code{source\_spct} object by a weighted waveband convolutes the spectrum with weights, yielding effective spectral irradiance.
+Multiplying a \code{source\_spct} object by a weighted waveband convolutes the spectrum with weights, yielding effective spectral irradiance. As in the previous example the previous example the returned spectrum is also trimmed to the boundaries of the waveband.
 
 <<>>=
 is_effective(CIE())

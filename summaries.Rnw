@@ -293,21 +293,21 @@ head(which(find_peaks(sun.spct$s.e.irrad)))
 
 Extracting peaks and valleys, is more conveniently done with functions \code{peaks} and \code{valleys}. Function \code{get\_peaks} described in this section, is used internally in package \pkg{photobiology}. It returns a \code{data.frame} object with columns \code{x}, \code{y} and \code{labels}, with \code{labels}. The other arguments are as described above.
 
-<<plot-peaks-0>>=
+<<find-peaks-0>>=
 head(with(sun.spct,
           get_peaks(w.length, s.e.irrad, span = 31)))
 @
 
 With \code{span = NULL} only the tallest peak is returned.
 
-<<plot-peaks-1>>=
+<<find-peaks-1>>=
 head(with(sun.spct,
           get_peaks(w.length, s.e.irrad, span = NULL)))
 @
 
 The equivalent function for finding valleys is \code{get\_valleys} taking the same parameters as \code{get\_peaks} but returning the wavelengths at which the valleys are located.
 
-<<plot-valleys-2>>=
+<<find-valleys-2>>=
 head(with(sun.spct,
           get_valleys(w.length, s.e.irrad, span = 51)))
 @

@@ -92,9 +92,31 @@ geocode("Viikinkaari 1, 00790 Helsinki, Finland")
 geocode("Viikinkaari 1, 00790 Helsinki, Finland", output = "latlona")
 @
 
-\subsection{Algorithms and peculiarities}
+\subsection{Algorithm and peculiarities of time data}
 
-\Advanced{algorithms for astronomical calculations}The code uses the well known algorithms by Meeus \autocite{Meeus1998} implemented in the R language as a translation of code used in NOAA's calculation worksheets. We have compared the results from our functions against the NOAA on-line calculator. Julian day calculations do not use the same algorithms as NOAA, but instead, use the \code{julian} function from base R and time zone and daylight saving times based on package \pkg{lubridate}. Handling of time zones and daylight saving times is very tricky for past dates, as country boundaries have changed as well as legislation over the years and centuries. The further back in history one goes, the less reliable calculations expressed in local time become. Of course UTC times, and local solar time values can be trusted for any epoch for which the algorithm is valid. The algorithm is precise enough to ensure valid results into the far past, but the calculation of julian dates may be less or more precise in R than other implementations. Agreement with the NOAA calculator is good as far back as we have tested, dates about 1000 years before now.
+\Advanced{algorithms for astronomical calculations}The code uses the well known algorithms by Meeus \autocite{Meeus1998} implemented in the R language as a translation of code used in NOAA's calculation worksheets. Julian day calculations limit the precision of the NOAA worksheets. We do not use the same algorithms as NOAA for computing Julian dates, but instead, use the \code{julian} function from base R and time zone and daylight saving times based on package \pkg{lubridate}. We have compared the results from our functions against the NOAA on-line calculator at \url{https://www.esrl.noaa.gov/gmd/grad/solcalc/}, which is more precise than the worksheets, and the match of results is very good---within 0.02 degrees for elevation (0.02 / 90 = 0.22\textperthousand), and within 0.06 degrees (0.06 / 360 = 0.17\textperthousand) for azimuth for Greenwich. In general precision of the algorithm for timing of events decreases for polar regions due to the tangential path of the sun with respect to the horizon. The apparent position of the sun for an observer also slightly depends on refraction in the atmosphere which in turn depends on weather conditions. The algorithm optionally adds such a correction based on an average atmosphere.
+
+Handling of time zones and daylight saving times is very tricky for past dates, as country boundaries have changed as well as legislation over the years and centuries. The further back in history one goes, the less reliable calculations expressed in local time become. Of course UTC times, and local solar time values can be trusted for any epoch for which the algorithm is valid. The algorithm is precise enough to ensure valid results into the far past, but the calculation of julian dates may be less or more precise in R than other implementations. Agreement with the NOAA calculator is good as far back as we have tested, dates about 1000 years before now. The algorithm as currently implemented can be expected to be extremely accurate for years 1800--2100 and sufficiently accurate for years -2000--3000 and probably still usable with further gradual decrease in precision for an even broader range of years.
+
+R is not very good at handling B.C. dates, and \pkg{lubridate} date parsers silently fail with negative dates decoding them as positive dates. This limitation can be worked around by subtraction of years from an A.C. date.
+
+<<>>=
+sun_angles(ymd_hm("0001-05-10 6:00") - years(2001), 
+           geocode = data.frame(lat = 50, lon = 0))
+@
+
+We have optimized the performance of our implementation of Meeus algorithm within the R language. Meeus algorithm for the computation of the position of the sun can be thought as composed of computations that are time-invariant and computations that depend only on time: the local equation of time needs to be computed only once per geographic location. Our functions, as is almost the norm in R, are vectorized for their arguments. When the argument passed is a vector of times or dates, a very frequent case, the time-independent part of the calculations is computed only once. Consequently, for maximum computation efficiency users must make use of vectorization of times to avoid repeated calculation of the costly time-invariant but location-dependent part of the algorithm.
+
+The difference in performance between Meeus' algorithm and the one used in earlier versions of the package is huge. On my laptop the example below computes day length at Greenwich for each day of the year for 6\,001 years in less than 20 seconds---i.e.\ computing day lengths for about 110\,000 days per second.
+
+<<eval=FALSE>>=
+dates <- seq(from = ymd("3000-01-01") - years(6000),
+             to = ymd("3000-12-31"), 
+             by = "day")
+
+day_lengths <- numeric(length(dates))
+system.time(day_lengths <- day_length(dates))
+@
 
 %%%%
 \section{Task: calculating the length of the photoperiod}\label{sec:astro:photoperiod}
@@ -278,11 +300,6 @@ day_night(today(tzone = "UTC"),
                 tz = "UTC")
 @
 
-\begin{example}
-\caption[Astronomical calculations]{Astronomical calculations of the sun position}
-Function\index{sun!position in the sky} \code{sun\_angles}, which is a modified version of function \code{sunAngle} from package \pkg{ode} is used to calculate the elevation of the sun at given time and geographical coordinates. To calculate the times corresponding to a given solar elevation, the algorithm first searches for the local solar noon by finding the maximal solar elevation, and then searches for sunrise in the first half of the day and for sunset in the second half local solar day. Sunset and sunrise are by default based on a solar elevation angle equal to zero. However, an argument can be passed to parameter \code{twilight} to set the angle according to different conventions---civil, nautical, astronomical---, by giving one or two values for the angles. Day and night durations are calculated as time durations between sunrise and sunset (the default) or dusk and dawn or some other angle. The algorithm currently used is valid for years 1950--2050.
-\end{example}
-
 As in earlier examples, we use \code{geocode} to obtain the latitude and longitude of cities, although for precise calculations for large cities using a street address or at least a postal code in addition to the name of the city is preferable. The calculations below are for Buenos Aires on two different dates, by use of the optional argument \code{tz} we request the results to be expressed in local time for Buenos Aires.
 
 <<astro-geocode-2, message=my.debug, cache=cache>>=
@@ -352,10 +369,10 @@ Function\index{sun!position in the sky!plot} \code{sun\_angles} described above 
 opts_chunk$set(opts_fig_wide_full)
 @
 
-<<astro-6, cache=cache>>=
-hours <- seq(from = ymd("2014-06-23", tz = "UTC"),
+<<astro-6, cache=FALSE>>=
+hours <- seq(from = ymd_hm("2010-06-21 00:00", tz = "EET"),
              by = "1 min",
-             length.out = 24 * 60)
+             length.out = 48 * 60)
 angles_He <- sun_angles(hours,
                         geocode = geocode_He)
 head(angles_He)
@@ -369,9 +386,7 @@ twilight <-
              label = c("Horizon", "Civil twilight",
                        "Nautical twilight",
                        "Astronomical twilight"),
-             time = rep(ymd_hms("2014-06-23 12:00:00",
-                                tz="UTC"),
-                        4) )
+             time = min(hours))
 @
 
 We draw a plot of solar elevations through a day, using the data frames created above.
@@ -384,7 +399,7 @@ ggplot(angles_He,
              aes(yintercept = angle, linetype=factor(label))) +
   annotate(geom="text",
            x=twilight$time, y=twilight$angle,
-           label=twilight$label, vjust=-0.4, size=4) +
+           label=twilight$label, vjust=-0.4, hjust = 0, size=4) +
   labs(y = "Solar elevation at Helsinki (degrees)",
        x = "Time UTC")
 @
@@ -411,7 +426,7 @@ We use function \code{day\_night()} to calculate simulataneously several values,
 days <- seq(from = ymd("2016-01-01"), to = ymd("2016-12-31"), by = 1)
 cities <- c("Ivalo, Finland", "Helsinki, Finland", "Athens, Greece")
 # geocodes <- geocode(cities, output = "latlona")
-geocodes <- data.frame(lon = c(27.53971, 24.93838, 23.72754), 
+geocodes <- data.frame(lon = c(27.53971, 24.93838, 23.72754),
                        lat = c(68.65764, 60.16986, 37.98381),
                        address = c("ivalo, inari, finland", "helsinki, finland", "athens, greece"))
 times <-

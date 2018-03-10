@@ -250,7 +250,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 \publishers{Available through \href{https://leanpub.com/r4photobiology}{Leanpub}}
 
-\uppertitleback{\copyright\ 20012--2016 by the authors\\
+\uppertitleback{\copyright\ 20012--2018 by the authors\\
 Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative Commons licenses} as indicated, or when not explicitly indicated, under the \href{http://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0 license}.}
 
 \lowertitleback{Typeset with \href{http://www.latex-project.org/}{\hologo{XeLaTeX}}\ in Lucida Bright and \textsf{Lucida Sans} using the KOMA-Script book class.\\
@@ -356,7 +356,7 @@ main_ls <- c(ls(), "main_ls")
 <<child-photochemistry, child='photochemistry.Rnw', eval=incl_chaps>>=
 @
 
-<<child-algorithms, child='algorithms.Rnw', eval=TRUE>>=
+<<child-algorithms, child='algorithms.Rnw', eval=incl_chaps>>=
 @
 
 \part{Tools used for calculations}\label{part:tools}
@@ -374,11 +374,11 @@ rm(list = setdiff(current_ls, main_ls))
 
 \part{Cookbook of calculations}\label{part:cookbook}
 
-<<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
-@
-
 <<flag, eval=FALSE, echo=FALSE>>=
 incl_ckbk <- FALSE
+@
+
+<<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-baseoper, child='baseoper.Rnw', eval=incl_ckbk>>=

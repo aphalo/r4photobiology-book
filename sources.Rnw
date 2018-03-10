@@ -5,14 +5,10 @@ opts_knit$set(concordance=TRUE)
 
 \chapter{Radiation sources}\label{chap:sources}
 
-%\begin{abstract}
-%  In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on light sources useful for photobiological research.
-%\end{abstract}
-
 \section{Packages used in this chapter}
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
-<<eval=FALSE,message=my.debug>>=
+<<message=my.debug>>=
 library(photobiology)
 library(photobiologySun)
 library(photobiologyLamps)
@@ -21,6 +17,8 @@ library(photobiologyLEDs)
 
 %%%%
 \section{Introduction}\label{sec:sources:intro}
+
+In this chapter we catalogue example data available in our R packages and supply pointers to some other sources of data on light sources useful for photobiological research.
 
 %%%%
 \section{Data: extraterrestrial solar radiation spectra}\label{sec:et:solar}
@@ -49,15 +47,44 @@ library(photobiologyLEDs)
   \item The global irradiance spectrum can be considered to be more relevant for plant photobiology and horticulture.
 \end{itemize}
 
+<<>>=
+summary(sun_reference.mspct)
+@
+
+<<>>=
+sun_may_morning.spct
+@
+
+<<>>=
+sun_hourly_june.spct
+@
+
+<<>>=
+sun_hourly_august.spct
+@
+
 \section{Data: radiation within plant canopies}
 
+<<>>=
+summary(gap.mspct)
+@
 
 \section{Data: radiation in water bodies}
 
-\section{Data: incandescent lamps}\label{sec:lamps:incand}
+\section{Data: lamps}\label{sec:lamps:incand}\label{sec:lamps:discharge}
 
-%%%%
-\section{Data: discharge lamps}\label{sec:lamps:discharge}
+<<>>=
+summary(lamps.mspct)
+@
+
+<<>>=
+summary(qp_uvb313_temp.mspct)
+@
 
 %%%%
 \section{Data: LEDs}\label{sec:lamps:led}
+
+<<>>=
+summary(leds.mspct)
+@
+

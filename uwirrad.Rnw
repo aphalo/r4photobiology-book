@@ -19,11 +19,12 @@ opts_knit$set(concordance=TRUE)
 
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<message=my.debug>>=
+library(lubridate)
 library(photobiology)
 library(photobiologyWavebands)
 library(photobiologyLamps)
 library(photobiologyLEDs)
-library(lubridate)
+library(photobiologySun)
 @
 
 %%%%
@@ -45,7 +46,7 @@ uvb <- UVB()
 uvb
 @
 
-As seen above, there is a specialized \code{print} method for \code{wavebands}. \code{waveband} methods returning wavelength values in nm are \code{min}, \code{max}, \code{range}, \code{midpoint}, and \code{spread}. Method \code{labels} returns the name and label stored in the waveband, and method \code{color} returns a color definition calculated from the range of wavelengths.
+As seen above, there is a specialized \code{print} method for \code{wavebands}. \code{waveband} methods returning wavelength values in nm are \code{min}, \code{max}, \code{range}, \code{midpoint}, and \code{spread}. Method \code{labels} returns the name and label stored in the waveband, and method \code{color\_of} returns a color definition calculated from the range of wavelengths.
 
 <<>>=
 red <- Red()
@@ -56,7 +57,7 @@ range(red)
 midpoint(red)
 spread(red)
 labels(red)
-color(red)
+color_of(red)
 @
 
 The argument \code{standard} can be used to choose a given alternative definition\footnote{When available, the definition in the ISO standard is the default.}:\label{pag:UVB:stds}
@@ -134,7 +135,7 @@ It is also possible to also provide the limits of the region to be covered by th
 split_bands(c(400,600), length.out=2)
 @
 
-in all cases code{range} is used to find the list boundaries, so we can also split the region defined by an existing \code{waveband} object into smaller wavebands,
+in all cases \code{range} is used to find the list boundaries, so we can also split the region defined by an existing \code{waveband} object into smaller wavebands,
 <<>>=
 split_bands(PAR(), length.out=3)
 @
@@ -152,10 +153,16 @@ split_bands(list(c(400,500), c(600,700)))
 split_bands(list(blue=c(400,500), PAR=c(400,700)))
 @
 
-Package \PBWB also predefines some useful constructors of lists of wavebands, currently \code{VIS\_bands}, \code{UV\_bands} and \code{Plant\_bands}.
+Package \PBWB also predefines some useful constructors of lists of frequently used sets of wavebands, currently \code{VIS\_bands}, \code{UV\_bands}, and \code{IR\_bands} and \code{Plant\_bands}.
 
 <<>>=
 UV_bands()
+@
+
+Further list-of-waveband constructors are application specific---i.e.\ for satellite instruments like \code{Landsat\_bands}. In this example for the third Landsat mission.
+
+<<>>=
+Landsat_bands(std = "L3")
 @
 
 %%%%
@@ -617,9 +624,34 @@ integrate_spct(overlapBG.spct) /
     (integrate_spct(green.spct) + integrate_spct(blue.spct)) * 1e2
 @
 
+\section{Collections of spectra}
+
+The methods described above are also implemented for collections of spectra. When applied to a \code{source\_mspct} object they return a data-frame compatible \code{tibble} containing the summaries. We use as example a time series of spectral irradiance measurements in a forest gap.
+
 <<>>=
-try(detach(package:lubridate))
+q_irrad(gap.mspct, VIS_bands())
+@
+
+<<>>=
+q_ratio(gap.mspct, VIS_bands(), VIS())
+@
+
+We can also selectively copy metadata from the individual spectra in the collection to the returned data frame.
+
+<<>>=
+q_ratios.tb <- q_ratio(leds.mspct[led_engin], VIS_bands(), VIS(), 
+                       attr2tb = "what.measured",
+                       idx = "type")
+names(q_ratios.tb)
+cat(q_ratios.tb$what.measured, sep = "\n\n")
+q_ratios.tb
+@
+
+
+<<>>=
+try(detach(package:photobiologySun))
 try(detach(package:photobiologyLamps))
+try(detach(package:photobiologyLEDs))
 try(detach(package:photobiologyWavebands))
 try(detach(package:photobiology))
 try(detach(package:lubridate))
