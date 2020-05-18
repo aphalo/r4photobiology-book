@@ -38,7 +38,7 @@ The number of rows printed can be also controlled through an explicit argument t
 
 In the case of the \code{summary} method\index{spectral data!summary}, specializations for \code{source\_spct} and \ldots are provided. But for other spectral objects, the \code{summary} method for \code{data.table} is called. For the \code{summary} specializations defined, the corresponding \code{print} method specializations are also defined.
 
-<<>>=
+<<summary-spct>>=
 summary(sun.spct)
 @
 
@@ -46,7 +46,7 @@ summary(sun.spct)
 
 Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{integrate\_spct}\index{spectral data!integral} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operates on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed as a total per spectrum. See section \ref{sec:algo:integration} for details on the integration algorithm used and an explanation of why in most cases adding up the spectral values leads to wrong estimates.
 
-<<>>=
+<<integrate-spct>>=
 integrate_spct(sun.spct)
 @
 
@@ -54,7 +54,7 @@ integrate_spct(sun.spct)
 
 Package \PB provides specific functions for frequently used quantities, but in addition `general purpose' function is available to add flexibility for special cases. Function \code{average\_spct}\index{spectral data!average} takes into account each individual wavelength step, so it returns valid results even for spectra measured at arbitrary and varying wavelength steps. This function operate on all \code{numeric} variables contained in a spectral object except for \code{w.length}. The returned value is expressed per nanometre.
 
-<<>>=
+<<average-spct>>=
 average_spct(sun.spct)
 @
 
@@ -63,17 +63,17 @@ average_spct(sun.spct)
 
 Functions \code{max}\index{spectral data!wavelength max}, \code{min}\index{spectral data!wavelength min}, \code{range}\index{spectral data!wavelength range}, \code{midpoint}\index{spectral data!wavelength midpoint} when used with an object of class \code{generic\_spct} (or a derived class) return the result of applying these functions to the \code{w.length} component of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
 
-<<>>=
+<<wl-summaries01>>=
 range(sun.spct)
 midpoint(sun.spct)
 max(sun.spct)
 min(sun.spct)
 @
 
-Functions \code{spread} are \code{stepsize}\index{spectral data!wavelength stepsize} are generics defined in package \PB. \code{spread}\index{spectral data!wavelength spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
+Functions \code{expanse} anad \code{stepsize}\index{spectral data!wavelength stepsize} are generics defined in package \PB. \code{expanse}\index{spectral data!wavelength spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
 
-<<>>=
-spread(sun.spct)
+<<wl-summaries02>>=
+expanse(sun.spct)
 stepsize(sun.spct)
 @
 
@@ -81,32 +81,32 @@ stepsize(sun.spct)
 
 R method \code{class} can be used with any R object, including spectra.
 
-<<>>=
+<<class-spct01>>=
 class(sun.spct)
 class(polyester.spct)
 @
 
 The method \code{class\_spct} is a convenience wrapped on \code{class} which returns only class attributes corresponding to spectral classes defined in package \PB.
 
-<<>>=
+<<class-spct02>>=
 class_spct(sun.spct)
 class_spct(polyester.spct)
 @
 
 The method \code{is.any\_spct} is a synonym of \code{is.generic\_spct} as \code{generic\_spct} is the base class from which all spectral classes are derived.
-<<>>=
+<<class-spct03>>=
 is.any_spct(sun.spct)
 is.any_spct(polyester.spct)
 @
 
 Equivalent methods exist for all the classes defined in package \PB. We show two examples below, with a radiation source and a filter.
 
-<<>>=
+<<class-spct04>>=
 is.source_spct(sun.spct)
 is.source_spct(polyester.spct)
 @
 
-<<>>=
+<<class-spct05>>=
 is.filter_spct(sun.spct)
 is.filter_spct(polyester.spct)
 @
@@ -115,42 +115,42 @@ is.filter_spct(polyester.spct)
 
 Both\index{spectral data!metadata attributes} \code{response\_spct} and \code{source\_spct} objects have an attribute \code{time.unit} that can be queried.
 
-<<>>=
+<<attr-spct01>>=
 getTimeUnit(sun.spct)
 @
 
-<<>>=
+<<attr-spct02>>=
 is_effective(sun.spct * CIE())
 is_effective(sun.spct * UV())
 @
 
-<<>>=
+<<attr-spct03>>=
 getBSWFUsed(sun.spct * CIE())
 @
 
 Normalization and scaling can be applied to different types of spectral objects. See sections \ref{sec:algo:normalization} on page \pageref{sec:algo:normalization} and \ref{sec:algo:scaling} on page \pageref{sec:algo:scaling} for an explanation of these operations.
 
-<<>>=
+<<attr-spct04>>=
 sun.norm.spct <- normalize(sun.spct, norm = 600)
 is_normalized(sun.norm.spct)
 getNormalized(sun.norm.spct)
 @
 
-<<>>=
+<<attr-spct05>>=
 sun.scaled.spct <- fscale(sun.spct, f = "mean")
 is_scaled(sun.scaled.spct)
 @
 
 We now consider \code{filter\_spct} objects (see Chapter \ref{chap:trans:refl} for an explanation of the meaning of these attributes and how they affect calculations).
 
-<<>>=
+<<attr-spct06>>=
 getTfrType(polyester.spct)
 @
 
 and  \code{reflector\_spct} objects.
 
-<<>>=
-getRfrType(gold.spct)
+<<attr-spct07>>=
+getRfrType(metals.mspct$gold)
 @
 
 \section{Task: Query how spectral data contained is expressed}
@@ -158,7 +158,7 @@ getRfrType(gold.spct)
 We first consider the case of \code{source.spct} objects.
 If an object contains the same data expressed differently, it is possible, as in the example for both statement to return true.
 
-<<>>=
+<<attr-spct08>>=
 head(sun.spct)
 is_energy_based(sun.spct)
 is_photon_based(sun.spct)
@@ -166,7 +166,7 @@ is_photon_based(sun.spct)
 
 If we delete the energy based spectral data, the result of the test changes.
 
-<<>>=
+<<attr-spct09>>=
 my.spct <- sun.spct
 my.spct$s.e.irrad <- NULL
 head(my.spct)
@@ -176,7 +176,7 @@ is_photon_based(my.spct)
 
 We now consider \code{filter\_spct} objects.
 
-<<>>=
+<<attr-spct10>>=
 is_transmittance_based(polyester.spct)
 is_absorbance_based(polyester.spct)
 @
@@ -185,14 +185,14 @@ is_absorbance_based(polyester.spct)
 
 All\index{spectral data!normalization\index{spectral data!re-scaling}} spectral objects (\code{generic\_spct} and derived types) can be queried whether they are the result of the normalization or re-scaling of another spectrum. In the case of normalization, the normalization wavelength in nanometres is returned, otherwise a logical value.
 
-<<>>=
+<<is-transf01>>=
 is_normalized(sun.spct)
 is_scaled(sun.spct)
 @
 
 \code{source\_spct} objects can be queried to learn if they are the result of a calculation involving a weighting function.
 
-<<>>=
+<<is-transf02>>=
 is_effective(sun.spct)
 @
 
@@ -200,19 +200,19 @@ is_effective(sun.spct)
 
 Method\index{spectral data!plot} \code{plot} is defined for \code{waveband} objects, and can be used to visually check their properties. Plotting is discussed in detail in chapter \ref{chap:plotting}.
 
-<<>>=
-plot(sun.spct)
+<<sum-plot-spct01>>=
+autoplot(sun.spct)
 @
 
-<<>>=
-plot(polyester.spct)
+<<sum-plot-spct02>>=
+autoplot(polyester.spct)
 @
 
 \section{Task: Other R's methods}
 
 Methods \code{names} and \code{comment} should work as usual. In the case of the comment attribute, most operations on spectral objects preserve comments, sometimes with additions, or by merging of comments from operands. Comments are optional, so for some objects \code{comment} may return a \code{NULL}. As some comments contain new line characters, to get them printed nicely we need to use \code{cat}.
 
-<<>>=
+<<methods-other-spct01>>=
 names(sun.spct)
 cat(comment(sun.spct))
 @
@@ -225,20 +225,20 @@ We first show the use of function \code{peaks} that returns a subset of the spec
 
 Using default \code{span} and then a relatively large value of 51.
 
-<<>>=
+<<peaks-spct01>>=
 peaks(lamps.mspct$philips.tl12)
 peaks(lamps.mspct$philips.tl12, span = 51)
 @
 
 Using \code{NULL} as argument for span is interpreted as meaning the whole wavelength range of the spectral data, and always returns only the highest values in the spectrum.
 
-<<>>=
+<<peaks-spct02>>=
 peaks(lamps.mspct$philips.tl12, span = NULL)
 @
 
 Using threshold we can limit the search for peaks to only part of the $y$-range of the data. This is useful when peaks in ``low ares'' of the curve are of no interest.
 
-<<>>=
+<<peaks-spct03>>=
 peaks(sun.spct,
       span=31,
       ignore_threshold=0.2)
@@ -249,26 +249,26 @@ peaks(sun.spct,
 
 It is also possible to convert how the returned spectral irradiance is expressed.
 
-<<>>=
+<<peaks-spct04>>=
 peaks(lamps.mspct$philips.tl12, unit.out = "photon")
 @
 
 All the examples earlier in this section also apply to other types of spectra, and to \code{valleys} in addition to \code{peaks}.
 
-<<>>=
-valleys(filters.mspct$KG5)
-peaks(filters.mspct$KG5, filter.qty = "absorbance")
+<<peaks-spct05>>=
+valleys(filters.mspct$Schott_KG5)
+peaks(filters.mspct$Schott_KG5, filter.qty = "absorbance")
 @
 
 A \code{peaks} method is also defined in this package for numeric vectors, returning the values at the peaks.
 
-<<>>=
+<<peaks-spct06>>=
 peaks(sun.spct$s.e.irrad)
 @
 
 The parameters of the numeric specializations behave in the same way as in the case of spectra. As an example we use \code{span}.
 
-<<>>=
+<<peaks-spct07>>=
 peaks(sun.spct$s.e.irrad, span = NULL)
 @
 
@@ -278,13 +278,13 @@ Low level functions for finding peaks and valleys in numeric vectors are also de
 
 Function \code{find\_peaks}, takes as argument a \code{numeric} vector, and returns a logical vector of the same length, with \code{TRUE} for local maxima and \code{FALSE} for all other observations. Infinite values are discarded.
 
-<<>>=
+<<peaks-spct11>>=
 head(find_peaks(sun.spct$s.e.irrad))
 @
 
 To obtain the indexes, one can use R's function \code{which}.
 
-<<>>=
+<<peaks-spct12>>=
 head(which(find_peaks(sun.spct$s.e.irrad)))
 @
 
@@ -326,7 +326,7 @@ In the example below, we will fit a non-linear function to the peak. In the firs
   I = d + a \cdot \mathrm{e}^{-0.5 \cdot ((\lambda - c) / b)^2}
 \end{equation}
 
-<<>>=
+<<fit-nls-peak01>>=
 peak <- peaks(lamps.mspct$germicidal, span = NULL)[1, "w.length"]
 wl.tmp <- seq(round(peak - 5), round(peak + 5), length.out = 101)
 neighbourhood.spct <- clip_wl(lamps.mspct$germicidal, range = wl.tmp)
@@ -340,17 +340,17 @@ peak
 
 In this case the fitted position of the peak was close to the pixel with maximum reading as the wavelength resolution of the instrument is good. The result suggests a small wavelength calibration error for the spectrometer that can be calculated as:
 
-<<>>=
+<<fit-nls-peak02>>=
 signif(fit$m$getPars()[["c1"]], 7) - 253.6517 # nm
 @
 
-<<>>=
+<<fit-nls-peak03>>=
 predicted <- predict(fit, data.frame(w.length = wl.tmp))
 fitted_peak.spct <- source_spct(w.length  = wl.tmp,
                                 s.e.irrad = predicted)
 @
 
-<<>>=
+<<fit-nls-peak04>>=
 ggplot(data = fitted_peak.spct) +
   geom_line(data = fitted_peak.spct, colour = "blue") +
   geom_point(data = neighbourhood.spct, colour = "red", size = 3) +

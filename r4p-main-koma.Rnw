@@ -10,14 +10,14 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 %\usepackage{color}
 \usepackage{scrlayer-scrpage}
 
-\usepackage{chapterthumb}
+%\usepackage{chapterthumb}
 \pagestyle{scrheadings}
 %\AddLayersToPageStyle{@everystyle@}{chapterthumb}
-\AddLayersToPageStyle{headings}{chapterthumb}
-\addtokomafont{chapterthumb}{\bfseries}
-\renewcommand*{\chapterthumbwidth}{.036\paperheight}
-\renewcommand*{\chapterthumbskip}{.034\paperheight}
-\renewcommand*{\chapterthumbformat}{\thechapter}
+%\AddLayersToPageStyle{headings}{chapterthumb}
+%\addtokomafont{chapterthumb}{\bfseries}
+%\renewcommand*{\chapterthumbwidth}{.036\paperheight}
+%\renewcommand*{\chapterthumbskip}{.034\paperheight}
+%\renewcommand*{\chapterthumbformat}{\thechapter}
 
 % We set the Lucida OTF fonts as default
 %\usepackage{luatextra}
@@ -26,18 +26,18 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 \setsansfont{Lucida Sans OT}
 \setmonofont{Lucida Console DK}%[Scale=MatchLowercase]
 \setmathfont{Lucida Bright Math OT}
-\linespread{1.25} % increase line spacing as we use in-line math and code
+\linespread{1.05} % increase line spacing as we use in-line math and code
 
 % We set up some other symbol fonts
-\newfontfamily\wingdingsfont{Wingdings}
-\newcommand\wingdings[1]{{\wingdingsfont\symbol{#1}}}
-
-\newfontfamily\wingdingsfontdos{Wingdings2}
-\newcommand\wingdingsdos[1]{{\wingdingsfontdos\symbol{#1}}}
-
-\newfontfamily\wingdingsfonttres{Wingdings3}
-\newcommand\wingdingstres[1]{{\wingdingsfonttres\symbol{#1}}}
-
+%\newfontfamily\wingdingsfont{Wingdings}
+%\newcommand\wingdings[1]{{\wingdingsfont\symbol{#1}}}
+%
+%\newfontfamily\wingdingsfontdos{Wingdings2}
+%\newcommand\wingdingsdos[1]{{\wingdingsfontdos\symbol{#1}}}
+%
+%\newfontfamily\wingdingsfonttres{Wingdings3}
+%\newcommand\wingdingstres[1]{{\wingdingsfonttres\symbol{#1}}}
+%
 %\newfontfamily\meteoconsfont{Meteocons}
 %\newcommand\meteocons[1]{{\meteoconsfont\symbol{#1}}}
 %\newcommand\meteosun{\metecons{"0042}}
@@ -51,14 +51,14 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 \newcommand\Advanced[1]{\marginpar{\centering\Huge\colorbox{black}{\textcolor{white}{\typicons{"E04E}}}}\index{#1}}
 
 % set language
-\usepackage{polyglossia}
-\setdefaultlanguage[variant = british, ordinalmonthday = false]{english}
+%\usepackage{polyglossia}
+%\setdefaultlanguage[variant = british, ordinalmonthday = false]{english}
 
 % \usepackage{gitinfo2} % remember to setup Git hooks
 
 \usepackage{hologo}
 
-%\usepackage[british]{babel}
+\usepackage[british]{babel}
 \usepackage{csquotes}
 
 \usepackage{graphicx}
@@ -77,6 +77,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 % Hypertext
 
+%\usepackage{hyperref}
 \usepackage[unicode,hyperindex,bookmarks,pdfview=FitB,colorlinks,%backref,
             pdftitle={R for Photobiology: Theory and recipes for common calculations},%
             pdfkeywords={photobiology, R, spectrum, data analysis, plotting, sunset, sunrise, day length, vision},%
@@ -84,13 +85,13 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
             pdfauthor={Pedro J. Aphalo, Andreas Albert, T. Matthew Robson, Titta K. Kotilainen}%
             ]{hyperref}
 
-\hypersetup{colorlinks,breaklinks,
-             urlcolor=blue,
-             linkcolor=blue,
-             citecolor=blue,
-             filecolor=blue,
-             menucolor=blue}
-
+%\hypersetup{colorlinks,breaklinks,
+%             urlcolor=blue,
+%             linkcolor=blue,
+%             citecolor=blue,
+%             filecolor=blue,
+%             menucolor=blue}
+%
 %\makeindex
 
 %\maxsecnumdepth{subsection}
@@ -101,7 +102,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 \usepackage{r4photobiology}
 
 %\usepackage{glossaries}
-\usepackage{imakeidx}
+%\usepackage{imakeidx}
 
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,arrows,trees}
@@ -152,9 +153,9 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 %%% Adjust graphic design
 
 % New float "example" and corresponding "list of examples"
-%\DeclareNewTOC[type=example,types=examples,float,counterwithin=chapter]{loe}
-\DeclareNewTOC[name=Box,listname=List of Text Boxes, type=example,types=examples,float,counterwithin=chapter,%
-]{lotxb}
+\DeclareNewTOC[type=example,types=examples,float,counterwithin=chapter]{loe}
+%\DeclareNewTOC[name=Box,listname=List of Text Boxes, type=example,types=examples,float,counterwithin=chapter,%
+%]{lotxb}
 
 % changing the style of float captions
 \addtokomafont{caption}{\sffamily\small}
@@ -189,12 +190,12 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 \renewcommand{\floatpagefraction}{0.70}
 \renewcommand{\dbltopfraction}{0.90}
 \renewcommand{\dblfloatpagefraction}{0.70}
-
+%
 % Some font changes
 \setkomafont{title}{\sffamily\mdseries\Huge}
 \setkomafont{subtitle}{\sffamily\mdseries\LARGE}
 \setkomafont{chapter}{\sffamily\bfseries\LARGE}
-
+%
 \newcommand{\blankpage}{
 \newpage
 \thispagestyle{empty}
@@ -208,17 +209,17 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 \usepackage{lipsum}
 \newcommand{\placeHolder}{Missing for now\ldots}
 
-%\newcommand{\gls}[1]{} % until start building the glossary.
-\usepackage{glossaries}%[acronym]
+\newcommand{\gls}[1]{} % until start building the glossary.
+%\usepackage{glossaries}%[acronym]
 
 
 %\renewcommand{\glossarypreamble}{\begin{multicols}{2}}
 %\renewcommand{\glossarypostamble}{\end{multicols}}
-\glstoctrue
-\makeglossaries
-\loadglsentries{r4p_glossary_tr}
+%\glstoctrue
+%\makeglossaries
+%\loadglsentries{r4p_glossary_tr}
 
-\makeindex
+%\makeindex
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -227,14 +228,14 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 % customize chapter format:
 \KOMAoption{headings}{twolinechapter}
 %\renewcommand*\chapterformat{{\fbox{\Huge\thechapter}\hspace{1em}}}
-\renewcommand*\chapterformat{{\colorbox{\chapterthumbboxcolor}{\color{\chapterthumbcolor}{\Huge\thechapter}}\hspace{1em}}}
+%\renewcommand*\chapterformat{{\colorbox{\chapterthumbboxcolor}{\color{\chapterthumbcolor}{\Huge\thechapter}}\hspace{1em}}}
 
 % customize dictum format:
 \setkomafont{dictumtext}{\itshape\small}
 \setkomafont{dictumauthor}{\normalfont}
 \renewcommand*\dictumwidth{0.7\linewidth}
 \renewcommand*\dictumauthorformat[1]{--- #1}
-%\renewcommand*\dictumrule{}
+\renewcommand*\dictumrule{}
 
 %%% START OF FRONT MATTER TEXT
 
@@ -269,7 +270,7 @@ library(methods)
 library(knitr)
 opts_knit$set(child.command = 'include')
 opts_knit$set(self.contained=FALSE)
-opts_knit$set(concordance=TRUE)
+opts_knit$set(concordance=FALSE)
 opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='pdf', cache=FALSE) #, dev='cairo_pdf'
 opts_chunk$set(tidy=FALSE)
 options(replace.assign=TRUE,width=50,encoding="UTF-8")
@@ -292,10 +293,10 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- TRUE
-incl_chaps <- FALSE || incl_all
-incl_ckbk <- FALSE || incl_all
-incl_acq <- FALSE || incl_all
+incl_all <- FALSE
+incl_chaps <- TRUE || incl_all
+incl_ckbk <- TRUE || incl_all
+incl_acq <- TRUE || incl_all
 incl_data <- FALSE || incl_all
 eval_diag <- FALSE
 
@@ -334,12 +335,12 @@ main_ls <- c(ls(), "main_ls")
 \newpage
 \listoffigures
 
-\newpage
-\listofexamples
+%\newpage
+%\listofexamples
 
 \include{preface.tr}
 
-\include{abbreviations.tr}
+%\include{abbreviations.tr}
 
 \mainmatter
 
@@ -367,18 +368,9 @@ main_ls <- c(ls(), "main_ls")
 <<child-suite, child='suite.Rnw', eval=incl_chaps>>=
 @
 
-<<echo=FALSE, include=FALSE>>=
-current_ls <- ls()
-rm(list = setdiff(current_ls, main_ls))
-@
-
 \part{Cookbook of calculations}\label{part:cookbook}
 
-<<flag, eval=FALSE, echo=FALSE>>=
-incl_ckbk <- FALSE
-@
-
-<<child-construction, child='construction.Rnw', eval=incl_ckbk>>=
+<<child-constr, child='construction.Rnw', eval=incl_ckbk>>=
 @
 
 <<child-baseoper, child='baseoper.Rnw', eval=incl_ckbk>>=
@@ -461,9 +453,9 @@ rm(list = setdiff(current_ls, main_ls))
 
 \printbibliography
 
-\printglossary
+%\printglossary
 
-\printindex
+%\printindex
 
 \part{Appendix}
 

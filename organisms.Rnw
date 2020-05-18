@@ -32,9 +32,9 @@ summary(Solidago_altissima.mspct)
 \subsection{Data: Photoreceptors}
 
 <<>>=
-UVR8_Glasgow.spct
-CRY2.mspct
-phytochrome.spct
+summary(UVR8s.mspct)
+summary(CRYs.mspct)
+summary(PHYs.mspct)
 @
 
 \subsection{Data: Photosynthesis}

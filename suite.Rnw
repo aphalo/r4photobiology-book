@@ -9,7 +9,7 @@ set_parent('r4p.main.Rnw')
 opts_knit$set(concordance=TRUE)
 @
 
-\chapter{Photobiology R packages}\label{chap:suite}
+\chapter{R for Photobiology packages}\label{chap:suite}
 
 %\begin{abstract}
 %  In this chapter we describe the suite of R packages for photobiological calculations `\textsf{r4photobiology}', and explain how to install them.
@@ -255,15 +255,14 @@ In RStudio, after adding the \textsf{r4photobiology} repository as shown above, 
 
 They can be also installed at the R command prompt with the following command:
 <<eval=FALSE>>=
-install.packages(c("photobiologyAll", "ggspectra"))
+install.packages(c("r4photobiology", "ggspectra"))
 @
-
 
 and updated with:
 <<eval=FALSE>>=
 update.packages()
 @
 
-
 The added repository will persist only during the current R session. Adding it permanently requires editing the R configuration file, as discussed above. Take into consideration that \texttt{.Rprofile} is read by R itself, and will take effect whether you use RStudio or not. It is possible to have an user-account wide .Rprofile file, and a different one on those folders needing different settings. Many other R options can also be modified by means of commands in the .Rprofile file.
 
+\newpage

@@ -255,10 +255,20 @@ As first example we convolute the emission spectrum of a light source and the tr
 sun.spct * polyester.spct
 @
 
-As a second example we compute the logarithm of the spectral energy irradiance.
+As a second example we compute the logarithm of the spectral energy irradiance. The returned values are not valid for irradiance. So we need to either disable the validity temporarily in the case of a complex computation that does return irradiance values or convert the data to a \code{generic\_spct} object.
 
 <<>>=
-log10(sun.spct)
+log10(as.generic_spct(sun.spct))
+@
+
+Disabling checks may also improve performance. It is good to check any spectral object created with checks disabled, after re-enabling them.
+
+<<>>=
+disable_check_spct()
+z <- 10^log10(sun.spct)
+enable_check_spct()
+check_spct(z)
+z
 @
 
 Arithmetic operators and mathematical functions by default carry out operations using a given base of expression for their spectral operands and arguments irrespective of how the data are stored. For example the default is to use energy units when operating on spectral irradiance. This behaviour can be changed by means of R options (see section \ref{sec:oper:options} on page \pageref{sec:oper:options}). Convenience functions make setting and unsetting these options easier.
@@ -306,27 +316,27 @@ There are no re-definitions for spectra of R's comparison operators. Base R's op
 Package \pkg{phobiologyFilters} makes available many different filter spectra, from which we choose Schott filter GG400. Package \pkg{photobiology} makes available one example solar spectrum. Using these data we will simulate a filtered solar spectrum.
 
 <<>>=
-sun.spct * filters.mspct$GG400
+sun.spct * filters.mspct$Schott_GG400
 @
 
 The GG440 data is for internal transmittance, consequently the results above would be close to the truth only for filters treated with anti-reflection multicoating. Schott provides reflectance data for the filters, and this is stored in a comment.
 
 <<>>=
-cat(comment(filters.mspct$GG400))
+cat(comment(filters.mspct$Schott_GG400))
 @
 
 We use the ``reflectance factor'' available in the comment, which should give us a good approximation for a clean filter.
 
 <<>>=
-sun.spct * filters.mspct$GG400 * 0.918
+sun.spct * filters.mspct$Schott_GG400 * 0.918
 @
 
 Calculations related to filters will be explained in detail in chapter \ref{chap:filters}. This is just an example of how the operators work, even when, as in this example, the wavelength values do not coincide between the two spectra. The simple approach used is to take the union of all wavelength values and add all missing values by interpolation to each spectrum before applying the operator.
 
 <<>>=
 nrow(sun.spct)
-nrow(filters.mspct$GG400)
-nrow(sun.spct * filters.mspct$GG400)
+nrow(filters.mspct$Schott_GG400)
+nrow(sun.spct * filters.mspct$Schott_GG400)
 @
 
 %%%%

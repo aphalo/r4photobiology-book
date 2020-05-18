@@ -106,10 +106,10 @@ black_body_peak_wl <- function(Tabs) {
 It can be used to plot the temperature dependence of the location of the wavelength at which radiance is at its maximum:
 
 <<tidy=FALSE>>=
-ggplot(data=data.frame(Tabs=c(2000,7000)), aes(x=Tabs)) +
-  stat_function(fun=black_body_peak_wl) +
-  labs(x="Temperature (K)",
-       y="Wavelength at peak of emission (nm)")
+ggplot(data=data.frame(Tabs = c(2000,7000)), aes(x = Tabs)) +
+  stat_function(fun = black_body_peak_wl) +
+  labs(x = "Temperature (K)",
+       y = "Wavelength at peak of emission (nm)")
 @
 
 <<>>=

@@ -33,13 +33,13 @@ Another complication is that it is not always clear if a given SWF definition is
 
 Several constructors for SWF-based \code{waveband} objects are supplied. Most of them have parameters, in most cases with default arguments, so that different common uses and misuses in the literature can be reproduced. For example, function \code{GEN.G()} is predefined in package \PBWB as a convenience function for Green's formulation of Caldwell's generalized plant action spectrum (GPAS) \autocite{Green1974}:
 
-<<>>=
+<<wb-norm-wl01>>=
 e_irrad(sun.spct, GEN.G())
 @
 
 The code above uses the default normalization wavelength of 300~nm, which is almost universally used nowadays, but not the value used in the original publication \autocite{Caldwell1971}. Any arbitrary wavelength (nm), within the range of the waveband is accepted as \code{norm} argument:
 
-<<>>=
+<<wb-norm-wl02>>=
 range(GEN.G())
 e_irrad(sun.spct, GEN.G(280))
 @
@@ -50,14 +50,14 @@ e_irrad(sun.spct, GEN.G(280))
 
 Please,\index{wavebands!pre-defined} consult the documentation of package \PBWB for a list of predefined constructor functions for weighted wavebands. Here we will present just a few examples of their use. We usually think of weighted irradiances as being defined only by the weighting function, however, as mentioned above, in many cases different normalization wavelengths are in use, and the result of calculations depends very strongly on which wavelength is used for normalization. In a few cases different mathematical formulations are available for the `same' SWF, and the differences among them can be also important. In such cases separate functions are provided for each formulation (e.g.\ \code{GEN.N} and \code{GEN.T} for Green's and Thimijan's formulations of Caldwell's GPAS).
 
-<<>>=
+<<wb-eff-01>>=
 GEN.G()
 GEN.T()
 @
 
 We can use one of the predefined functions to create a new \code{waveband} object, which as any other R object can be assigned to a variable:
 
-<<>>=
+<<wb-eff-02>>=
 cie <- CIE()
 cie
 @
@@ -73,7 +73,7 @@ Although the constructors are flexible, and can automatically handle both defini
 
 When defining a new weighted \code{waveband}, we need to supply to the constructor more information than in the case on un-weighted wavebands. We start with a simple `toy' example:
 
-<<tidy=FALSE>>=
+<<wb-define01, tidy=FALSE>>=
 toy.wb <- waveband(c(400,700), weight="SWF",
                        SWF.e.fun=function(wl){(wl / 550)^2},
                        norm=550, SWF.norm=550,
@@ -90,25 +90,25 @@ In the example above the constructor generates automatically the SWF to use with
 
 We\index{irradiance!weighted}\index{irradiance!effective}\index{wavebands!spectral weighting functions} can use the \code{waveband} object defined above in calculations:
 
-<<>>=
+<<eff-irrad01>>=
 e_irrad(sun.spct, toy.wb)
 @
 
 Just in the same way as we can use those created with the specific constructors, including using anonymous objects created on the fly:
 
-<<>>=
+<<eff-irrad02>>=
 e_irrad(sun.spct, CIE())
 @
 
 or lists of wavebands, such as
 
-<<>>=
+<<eff-irrad03>>=
 e_irrad(sun.spct, list(GEN.G(), GEN.T()))
 @
 
 or
 
-<<>>=
+<<eff-irrad04>>=
 e_irrad(sun.spct, list(GEN.G(280), GEN.G(300)))
 @
 
@@ -119,7 +119,7 @@ Nothing prevents the user from defining his or her own \code{waveband} object co
 
 All what is needed is to use function \code{q\_irrad} instead of \code{e\_irrad}. However, one should think carefully if such a calculation is what is needed, as in some research fields it is rarely used, even when from the theoretical point of view would be in most cases preferable.
 
-<<>>=
+<<eff-irrad10>>=
 q_irrad(sun.spct, GEN.G())
 @
 
@@ -130,13 +130,13 @@ q_irrad(sun.spct, GEN.G())
 
 To\index{exposure!effective}\index{exposure!daily} calculate daily exposure values, if we have available spectral daily exposure (time-integrated spectral irradiance for a whole day) we need to apply the same code as used above, but using the spectral daily exposure instead of spectral irradiance as starting point:
 
-<<>>=
+<<eff-irrad21>>=
 e_irrad(sun.daily.spct, GEN.G())
 @
 
 the output from the code above is in units of \jday, the code below returns the same result in the more common units of \kjday:
 
-<<>>=
+<<eff-irrad22>>=
 e_irrad(sun.daily.spct, GEN.G()) * 1e-3
 @
 by comparing these result to those for effective irradiances above, it can be seen that the \code{time.unit} attribute of the spectral data is copied to the result, allowing us to distinguish irradiance values (\code{time.unit="second"}) from daily exposure values (\code{time.unit="day"}).
@@ -147,7 +147,7 @@ To calculate daily exposure values, from a known constant irradiance, we need to
 
 We start by scaling the normalized lamp spectrum to a known irradiance, in this case we assume, total UV irradiance from the unfiltered lamp is 1 \watt.
 
-<<>>=
+<<eff-fluence01>>=
 qpanel_lamp.spct <- fscale(lamps.mspct$qpanel.uvb313,
                            f = e_irrad,
                            w.band = UV(),
@@ -155,14 +155,14 @@ qpanel_lamp.spct <- fscale(lamps.mspct$qpanel.uvb313,
 setScaled(qpanel_lamp.spct, FALSE) # to avoid warnings
 @
 
-<<>>=
+<<eff-fluence02>>=
 fluence(qpanel_lamp.spct, GEN.G(),
         exposure.time = duration(6, "hours"))
 @
 
 the output from the code above is in units of \jday, the code below returns the same result in the more common units of \kjday:
 
-<<>>=
+<<eff-fluence03>>=
 fluence(qpanel_lamp.spct, GEN.G(),
         exposure.time = duration(6, "hours")) * 1e-3
 @

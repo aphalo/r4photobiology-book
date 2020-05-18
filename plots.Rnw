@@ -37,6 +37,9 @@ library(photobiologyReflectors)
 library(ggspectra)
 @
 
+<<ggrepel-version-test>>=
+good_label_repel <- packageVersion('ggrepel') != "0.8.0"
+@
 <<echo=FALSE, include=FALSE, cache=FALSE>>=
 opts_chunk$set(opts_fig_wide)
 @
@@ -98,73 +101,73 @@ Package \pkg{ggspectra}\index{spectral data!automatic plot} defines specializati
 The defaults arguments cater the exploratory plotting of spectra, returning a plot that is heavily annotated, and using the most common units of expression. The two plots that follow show spectral irradiance, and spectral daily exposure, respectively. The objects plotted contain meta data that informs the time unit, so applying the same \code{plot} method, yields two plots with different units in the $y$-axis label.
 
 <<plot-sun-default-0>>=
-plot(sun.spct)
+autoplot(sun.spct)
 @
 
 <<plot-sun-default-1>>=
-plot(sun.daily.spct)
+autoplot(sun.daily.spct)
 @
 
 The parameter \code{unit} can be set to \code{"photon"} to obtain a plot depicting spectral photon irradiance. This works irrespective of whether the \code{source\_spct} object contains spectral data expressed in photon or energy units---data are converted as needed.
 
 <<plot-sun-default-2>>=
-plot(sun.spct, unit.out = "photon")
+autoplot(sun.spct, unit.out = "photon")
 @
 
 A list of wave bands, or a single wave band, to be used for annotation can be supplied through the \code{bands} parameter. A \code{NULL} waveband results in no waveband labels, while the next example shows how to obtain the total irradiance.
 
 <<plot-sun-default-3>>=
-plot(sun.spct, w.band = PAR(), unit.out = "photon")
+autoplot(sun.spct, w.band = PAR(), unit.out = "photon")
 @
 
 <<plot-sun-default-4>>=
-plot(sun.spct, w.band = NULL)
+autoplot(sun.spct, w.band = NULL)
 @
 
 <<plot-sun-default-5>>=
-plot(sun.spct, w.band = waveband(sun.spct))
+autoplot(sun.spct, w.band = waveband(sun.spct))
 @
 
 Of course the arguments to these parameters can be supplied in different combinations, and combined with other functions as needed. This last example shows how to plot using photon-based units, selecting only a specific region of the spectrum, annotated with the red and far-red photon irradiances, using Prof.\ Harry Smith's definitions for these two wavebands using 20-nm wide bands.
 
 <<plot-sun-default-6>>=
-plot(trim_wl(sun.spct, waveband(c(600,800))),
+autoplot(trim_wl(sun.spct, waveband(c(600,800))),
      w.band = list(Red("Smith20"), Far_red("Smith20")), unit.out = "photon")
 @
 
 The next two examples show how to annotate an irradiance spectrum plot by equal sized wavebands.
 
 <<plot-sun-default-7>>=
-plot(sun.spct,
+autoplot(sun.spct,
      w.band = split_bands(c(300,800), length.out = 5), unit.out = "photon")
 @
 
 <<plot-sun-default-8>>=
-plot(trim_wl(sun.spct, PAR()),
+autoplot(trim_wl(sun.spct, PAR()),
      w.band=split_bands(PAR(), length.out = 6), unit.out = "photon")
 @
 
 <<plot-sun-default-9>>=
-plot(sun.spct,
+autoplot(sun.spct,
      w.band = split_bands(c(300,800), length.out = 5), unit.out = "photon")
 @
 
 Which annotations are included, depends on the argument supplied, as exemplified below.
 
 <<plot-sun-default-10>>=
-plot(sun.spct,
+autoplot(sun.spct,
      annotations = c("=", "color.guide", "segments", "labels"),
      w.band = VIS_bands("ISO"))
 @
 
 <<plot-sun-default-11>>=
-plot(sun.spct,
+autoplot(sun.spct,
      annotations = c("-", "summaries"),
      w.band = VIS_bands("ISO"))
 @
 
 <<plot-sun-default-12>>=
-plot(sun.spct,
+autoplot(sun.spct,
      annotations = c("+", "peak.labels", "segments"),
      w.band = VIS_bands("ISO"))
 @
@@ -172,36 +175,38 @@ plot(sun.spct,
 There are additional meta-data values stored in \code{source\_spct} objects related to re-scaling, normalization and weighting of the spectral data. These all affect axis labels, and in the case of weighting, the name of the spectral weighting function is added to the plot as an annotation. The following examples exemplify some of these, plus the use of \code{range} to limit the range of wavelengths included in the plot.
 
 <<plot-sun-default-13>>=
-plot(sun.spct * CIE(), range = c(290,400))
+autoplot(sun.spct * CIE(), range = c(290,400))
 @
 
 \begin{framed}
 \noindent
-As the current implementation uses \code{ggplot} `statistic's, waveband irradiance annotations respect global aesthetics and facets. If used for simultaneous plotting in the same panel of several spectra (stored \emph{longitudinally} in a single R object), then the \emph{summaries} annotation should not be used as the values would be over-plotted and ambiguous.
+As the current implementation uses \code{ggplot} `statistic's, waveband irradiance annotations respect global aesthetics and facets. If used for simultaneous plotting in the same panel of several spectra (stored \emph{longitudinally} in a single R object), then the \emph{summaries} annotation will be disabled by default and should not be added as the values would be over-plotted and ambiguous.
 \end{framed}
+
+While the argument passed to \code{range} is used to trim the spectrum before plotting using interpolation if necessary, the argument passed to \code{ylim} is used to set the limits of the $y$ scale of the \code{ggplot} object.
 
 \subsection{Task: plotting of normalized \code{source\_spct} objects}\label{sec:plot:source:spc}
 
 Normalization consists in scaling a spectrum so that the spectral quantity takes a given value, usually one, at a certain wavelength. See section \ref{sec:algo:normalization} on page \pageref{sec:algo:normalization} for a more detailed explanation.
 
 <<plot-sun-normalize-0>>=
-plot(normalize(sun.spct))
+autoplot(normalize(sun.spct))
 @
 
 <<plot-sun-normalize-1>>=
-plot(normalize(sun.spct, norm = "max"))
+autoplot(normalize(sun.spct, norm = "max"))
 @
 
 <<plot-sun-normalize-2>>=
-plot(normalize(sun.spct, norm = 700))
+autoplot(normalize(sun.spct, norm = 700))
 @
 
 <<plot-sun-normalize-3>>=
-plot(normalize(sun.spct, norm = "max"), range = VIS())
+autoplot(normalize(sun.spct, norm = "max"), range = VIS())
 @
 
 <<plot-sun-normalize-4>>=
-plot(normalize(sun.spct, norm = "max", range = Red()),
+autoplot(normalize(sun.spct, norm = "max", range = Red()),
      range = VIS(), w.band = VIS_bands())
 @
 
@@ -210,11 +215,11 @@ plot(normalize(sun.spct, norm = "max", range = Red()),
 The defaults arguments cater the exploratory plotting of spectra, returning a plot that is heavily annotated. The two plots that follow show spectral response, expressed on an energy or photon basis. We use as example the action spectrum of photosynthesis in leaves.
 
 <<plot-response-1>>=
-plot(McCree_photosynthesis.mspct$oats)
+autoplot(McCree_photosynthesis.mspct$oats)
 @
 
 <<plot-response-2>>=
-plot(McCree_photosynthesis.mspct$oats, unit.out = "photon")
+autoplot(McCree_photosynthesis.mspct$oats, unit.out = "photon")
 @
 
 For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}. As for other \code{plot} methods described in this chapter normalization and scaling meta-data are reflected in the plot axis-labels.
@@ -224,32 +229,32 @@ For details on how to modify the wavebands used for labels and summaries, and cu
 The defaults arguments cater the exploratory plotting of spectra, returning a plot that is heavily annotated, and using the most common units of expression. The three plots that follow show spectral transmittance, spectral absorptance and spectral absorbance, respectively. The objects plotted contain meta data that informs wether transmittance is expressed as \emph{internal} or \emph{total}, so applying the same \code{plot} method, will produce plots with different units in the $y$-axis label in these two cases. The difference between internal and total transmittance is explained in section \ref{sec:transmittance}.
 
 <<plot-filter-1>>=
-plot(yellow_gel.spct)
+autoplot(yellow_gel.spct)
 @
 
 <<plot-filter-2>>=
-plot(yellow_gel.spct, plot.qty = "absorbance")
+autoplot(yellow_gel.spct, plot.qty = "absorbance")
 @
 
 Beware that \emph{absorptance} being the complement to \emph{internal transmittance} can be calculated only from transmittance alone if it is expressed as internal. If total transmittance is available, then reflectance must be also known before absorptance can be calcaluated. For this reason we use different spectral data for this example. We also illustrate how we can force the range of wavelengths included in the plot to match the range of another spectral object.
 
 <<plot-filter-3>>=
-plot(filters.mspct$GG495, range = yellow_gel.spct)
+autoplot(filters.mspct$Schott_GG495, range = yellow_gel.spct)
 @
 
 <<plot-filter-4>>=
-plot(filters.mspct$GG495, plot.qty = "absorptance",
+autoplot(filters.mspct$Schott_GG495, plot.qty = "absorptance",
      range = yellow_gel.spct)
 @
 
 By default transmittance and absorptance are expressed as fractions of one. However, plotting of values expressed as percentages is also possible.
 
 <<plot-filter-5>>=
-plot(yellow_gel.spct, pc.out = TRUE)
+autoplot(yellow_gel.spct, pc.out = TRUE)
 @
 
 <<plot-filter-6>>=
-plot(filters.mspct$GG495, plot.qty = "absorptance",
+autoplot(filters.mspct$Schott_GG495, plot.qty = "absorptance",
      pc.out = TRUE, range = yellow_gel.spct)
 @
 
@@ -260,11 +265,11 @@ For details on how to modify the wavebands used for labels and summaries, and cu
 At the moment, the only \code{plot.qty} supported is \emph{reflectance}.
 
 <<plot-reflector-1>>=
-plot(gold.spct)
+autoplot(metals.mspct$gold)
 @
 
 <<plot-reflector-2>>=
-plot(gold.spct, pc.out = TRUE)
+autoplot(metals.mspct$gold, pc.out = TRUE)
 @
 
 For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}.
@@ -274,41 +279,55 @@ For details on how to modify the wavebands used for labels and summaries, and cu
 We will use as example the spectral properties of a plant leaf. This method is the most flexible with respect to the quantity plotted, as \code{object\_spct} objects contain more than one spectral quantity, and as $R + A + T = 1$, the three quantities are always available for plotting. By default, all three are plotted.
 
 <<plot-object-1>>=
-plot(Solidago_altissima.mspct$upper_adax)
+autoplot(Solidago_altissima.mspct$upper_adax)
 @
 
 The default for \code{plot.qty} is \code{"all"} (meaning Rrf, Tfr, and Afr).
 <<plot-object-2>>=
-plot(Solidago_altissima.mspct$upper_adax, plot.qty = "all")
+autoplot(Solidago_altissima.mspct$upper_adax, plot.qty = "all")
 @
 
 When the three quantities are plotted, the default is to stack them, but this can be changed.
 <<plot-object-2a>>=
-plot(Solidago_altissima.mspct$upper_adax, plot.qty = "all", stacked = FALSE)
+autoplot(Solidago_altissima.mspct$upper_adax, plot.qty = "all", stacked = FALSE)
 @
 
 The three quantities can also be plotted individually, as well as absorbance.
 
 <<plot-object-3>>=
-plot(Solidago_altissima.mspct$upper_adax, plot.qty = "reflectance")
+autoplot(Solidago_altissima.mspct$upper_adax, plot.qty = "reflectance")
 @
 <<plot-object-4>>=
-plot(Solidago_altissima.mspct$upper_adax, plot.qty = "absorptance")
+autoplot(Solidago_altissima.mspct$upper_adax, plot.qty = "absorptance")
 @
 <<plot-object-5>>=
-plot(Solidago_altissima.mspct$upper_adax, plot.qty = "transmittance")
+autoplot(Solidago_altissima.mspct$upper_adax, plot.qty = "transmittance")
 @
 <<plot-object-6>>=
-plot(Solidago_altissima.mspct$upper_adax, plot.qty = "absorbance")
+autoplot(Solidago_altissima.mspct$upper_adax, plot.qty = "absorbance")
 @
 
 As for \code{filter\_spct} and \code{reflector\_spct} quantities can be plotted as percentages. We give only one example here.
 
 <<plot-object-7>>=
-plot(Solidago_altissima.mspct$upper_adax, pc.out = TRUE)
+autoplot(Solidago_altissima.mspct$upper_adax, pc.out = TRUE)
 @
 
 For details on how to modify the wavebands used for labels and summaries, and customization of annotations, please see the previous section \ref{sec:plot:source:spc} on page \pageref{sec:plot:source:spc}.
+
+\subsection{Task: plotting collections of spectra}\label{sec:plot:generic:mspct}
+
+The different \code{plot()} methods described above are also defined for collections of spectra.
+
+<<plot-mpsct-01>>=
+autoplot(filters.mspct[c("Schott_UG1", "Schott_GG435")], range = c(280, 800))
+@
+
+These methods can also be used with collections of spectra created on-the-fly by combining other spectra as described in Chapter \ref{chap:baseoper} starting on page \pageref{chap:baseoper}.
+
+<<plot-mpsct-02>>=
+autoplot(convolve_each(filters.mspct[c("Schott_UG1", "Schott_GG435")], sun.spct), range = c(280, 800))
+@
 
 %%%%
 \section[Plotting spectra with ggplot]{Plotting spectra with \code{ggplot}}\label{sec:plot:spc}
@@ -380,7 +399,7 @@ It is also possible to split a range of wavelengths into a list of wavebands and
 
 <<>>=
 wl.range <- c(250, 800)
-num.bands <- spread(wl.range) / 25
+num.bands <- expanse(wl.range) / 25
 many.bands <- split_bands(wl.range, length.out = num.bands)
 @
 
@@ -398,7 +417,7 @@ Or for PAR one could use a plot like the following with 10~nm-wide columns.
 
 <<>>=
 wl.range <- range(PAR())
-num.bands <- spread(PAR()) / 25
+num.bands <- expanse(PAR()) / 25
 many.bands <- split_bands(wl.range, length.out = num.bands)
 @
 
@@ -582,7 +601,7 @@ ggplot(sun.spct) +
 
 We conclude with a more elaborate plot, with the peaks labelled with wavelengths and color using a repulsive \emph{geom} from package \pkg{ggrepel}.
 
-<<plot-peaks-valleys-6>>=
+<<plot-peaks-valleys-6, eval=good_label_repel>>=
 ggplot(sun.spct) +
   geom_line() +
   stat_peaks(shape = 21, span = 33, size = 2) +
@@ -760,7 +779,7 @@ ggplot(sun.spct, unit.out = "photon") +
     stat_wb_box(w.band = PAR()) +
     stat_wb_irrad(w.band = PAR(),
                 unit.in = "photon", time.unit = "second",
-                aes(label = sprintf("%s = %.3g", ..wb.name.., ..yint.. * 1e6))) +
+                aes(label = sprintf("%s = %.3g", ..wb.name.., ..wb.yint.. * 1e6))) +
     scale_color_identity() +
     scale_fill_identity()
 @
@@ -770,7 +789,7 @@ ggplot(sun.spct, unit.out = "photon") +
 stat_wb_column(w.band = PAR(), alpha = 0.5) +
     stat_wb_irrad(w.band = PAR(),
                 unit.in = "photon", time.unit = "second",
-                aes(label = sprintf("%s = %.3g", ..wb.name.., ..yint.. * 1e6),
+                aes(label = sprintf("%s = %.3g", ..wb.name.., ..wb.yint.. * 1e6),
                     color = ..wb.color..)) +
     geom_line() +
     scale_color_identity() +
@@ -792,10 +811,10 @@ ggplot(sun.spct, unit.out = "photon") +
 ggplot(sun.spct, unit.out = "photon") +
     stat_wb_column(w.band = PAR(), alpha = 0.5) +
     stat_wb_q_irrad(w.band = PAR(),
-                aes(label = sprintf("Total %s = %.3g", ..wb.name.., ..yint.. * 1e6)),
+                aes(label = sprintf("Total %s = %.3g", ..wb.name.., ..wb.yint.. * 1e6)),
                 ypos.mult = 0.55) +
     stat_wb_q_sirrad(w.band = PAR(),
-                mapping = aes(label = sprintf("Mean %s = %.3g", ..wb.name.., ..ymean.. * 1e6)),
+                mapping = aes(label = sprintf("Mean %s = %.3g", ..wb.name.., ..wb.ymean.. * 1e6)),
                 ypos.mult = 0.45) +
     geom_line() +
     scale_color_identity() +
@@ -883,7 +902,7 @@ ggplot(sun.spct, unit.out = "photon") +
     geom_vline(xintercept = range(CIE()), linetype = "dashed") +
     stat_wb_e_irrad(w.band = CIE(), color = "black",
                 unit.in = "photon", time.unit = "second",
-                aes(label = sprintf("%s\n%.3g", ..wb.name.., ..yeff.. * 1e6))) +
+                aes(label = sprintf("%s\n%.3g", ..wb.name.., ..wb.yeff.. * 1e6))) +
     geom_line() +
     scale_color_identity() +
     scale_fill_identity()
@@ -1520,7 +1539,7 @@ We assemble a data table by concatenating the irradiance and adding factors for 
 defining the factors, we use \code{levels} to make sure that the levels are ordered as we would like to plot them.
 
 <<plot-bar-cie-1>>=
-cie.dt <- data_frame(
+cie.dt <- tibble(
   cie.irrad = c(cie.nf.irrad, cie.pe.irrad),
   filter = factor(rep(c('none', 'polyester'), c(2,2)),
                   levels=c('none', 'polyester')),
@@ -1701,6 +1720,7 @@ ggtern(data = leaf.data,
 <<plot-clean>>=
 try(detach(package:ggtern))
 try(detach(package:ggspectra))
+try(detach(package:ggrepel))
 #try(detach(package:ggtern))
 try(detach(package:photobiologyReflectors))
 try(detach(package:photobiologyPlants))

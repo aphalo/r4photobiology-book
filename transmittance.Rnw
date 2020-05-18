@@ -120,7 +120,7 @@ Instead of these functions, package \PB provides generic methods, that can be us
 Using \code{filter\_spct} objects, the calculations become very simple.
 
 <<>>=
-my_gg400.spct <- filters.mspct$GG400
+my_gg400.spct <- filters.mspct$Schott_GG400
 T2A(my_gg400.spct)
 a.gg400.spct <- T2A(my_gg400.spct, action = "replace")
 @
@@ -128,7 +128,7 @@ a.gg400.spct <- T2A(my_gg400.spct, action = "replace")
 As in addition to the \code{T2A} method for \code{filter\_spct} there is a \code{T2A} method available for numeric vectors.
 
 <<>>=
-my_gg400.spct <- filters.mspct$GG400
+my_gg400.spct <- filters.mspct$Schott_GG400
 my_gg400.spct$A <- T2A(my_gg400.spct$Tfr)
 my_gg400.spct
 @
@@ -155,11 +155,11 @@ When we multiply a \code{source\_spct} by a \code{filter\_spct} we obtain as a r
 
 <<>>=
 class(sun.spct)
-class(filters.mspct$GG400)
+class(filters.mspct$Schott_GG400)
 @
 
 <<>>=
-filtered_sun.spct <- sun.spct * filters.mspct$GG400
+filtered_sun.spct <- sun.spct * filters.mspct$Schott_GG400
 class(filtered_sun.spct)
 head(filtered_sun.spct)
 @
@@ -169,7 +169,7 @@ The result of the calculation can be directly used as an argument, for example, 
 <<>>=
 q_irrad(sun.spct, UV()) * 1e6
 q_irrad(filtered_sun.spct, UV()) * 1e6
-q_irrad(sun.spct * filters.mspct$GG400, UV()) * 1e6
+q_irrad(sun.spct * filters.mspct$Schott_GG400, UV()) * 1e6
 @
 
 <<>>=
@@ -206,10 +206,13 @@ To conclude the chapter, we show how combining different operations described in
 If we want to predict the output of a light source composed of different lamps or LEDs we can add the individual spectral irradiance, but using data measured from the target positions of each individual light source. If we want then to add the effect of a filter we must multiply by the filter transmittance. Bellow we simulate a (bad?) light source for plant cultivation.
 
 We first would need to scale the normalized spectral irradiance for each LED based on their relative relative absolute output. For simplicity, we assume they will powered so that they will output equal amounts of energy as visible radiation. Even under this assumption, as the width of emission peaks depend on the type of LED, we need to scale these data. We will scale them using defaults.
+We reset the scaled attribute as operations with scaled spectra are limited by design!!!
 
 <<>>=
 red_led.spct <- fscale(leds.mspct$NHXRGB090_R)
+setScaled(red_led.spct, FALSE)
 blue_led.spct <- fscale(leds.mspct$NHXRGB090_B)
+setScaled(blue_led.spct, FALSE)
 @
 
 We next assume that we use five red LEDs for each blue LED, and protect them with a sheet of clear Plexiglas.
@@ -217,7 +220,7 @@ We next assume that we use five red LEDs for each blue LED, and protect them wit
 <<>>=
 my_luminaire.spct <-
   (red_led.spct * 5 + blue_led.spct) *
-      filters.mspct$Clear_0A000_XT
+      filters.mspct$Evonik_Clear_0A000_XT
 class(my_luminaire.spct)
 @
 
