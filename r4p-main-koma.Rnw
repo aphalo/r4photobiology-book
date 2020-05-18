@@ -2,63 +2,19 @@
 titlepage,headings=small,fontsize=10pt,index=totoc,bibliography=totoc,%
 captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
-%%% We use OTF fonts through XeLaTeX
-
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage{unicode-math}
-
-%\usepackage{color}
+\usepackage{color}
 \usepackage{scrlayer-scrpage}
 
-%\usepackage{chapterthumb}
 \pagestyle{scrheadings}
-%\AddLayersToPageStyle{@everystyle@}{chapterthumb}
-%\AddLayersToPageStyle{headings}{chapterthumb}
-%\addtokomafont{chapterthumb}{\bfseries}
-%\renewcommand*{\chapterthumbwidth}{.036\paperheight}
-%\renewcommand*{\chapterthumbskip}{.034\paperheight}
-%\renewcommand*{\chapterthumbformat}{\thechapter}
-
-% We set the Lucida OTF fonts as default
-%\usepackage{luatextra}
-\usepackage{fontspec}
-\setmainfont{Lucida Bright OT}
-\setsansfont{Lucida Sans OT}
-\setmonofont{Lucida Console DK}%[Scale=MatchLowercase]
-\setmathfont{Lucida Bright Math OT}
-\linespread{1.05} % increase line spacing as we use in-line math and code
-
-% We set up some other symbol fonts
-%\newfontfamily\wingdingsfont{Wingdings}
-%\newcommand\wingdings[1]{{\wingdingsfont\symbol{#1}}}
-%
-%\newfontfamily\wingdingsfontdos{Wingdings2}
-%\newcommand\wingdingsdos[1]{{\wingdingsfontdos\symbol{#1}}}
-%
-%\newfontfamily\wingdingsfonttres{Wingdings3}
-%\newcommand\wingdingstres[1]{{\wingdingsfonttres\symbol{#1}}}
-%
-%\newfontfamily\meteoconsfont{Meteocons}
-%\newcommand\meteocons[1]{{\meteoconsfont\symbol{#1}}}
-%\newcommand\meteosun{\metecons{"0042}}
-%\newcommand\meteosolidsun{\metecons{"0031}}
-
-\newfontfamily\typiconsfont{Typicons}
-\newcommand\typicons[1]{{\typiconsfont\symbol{#1}}}
-\newcommand\typiattn{\typicons{"E136}}
-\newcommand\Attention[1]{\marginpar{\centering\Huge\colorbox{yellow}{\typicons{"E136}}}\index{#1}}
-\newcommand\ilAttention{\noindent\colorbox{yellow}{\Huge\typicons{"E136}}\xspace}
-\newcommand\Advanced[1]{\marginpar{\centering\Huge\colorbox{black}{\textcolor{white}{\typicons{"E04E}}}}\index{#1}}
-
 % set language
-%\usepackage{polyglossia}
-%\setdefaultlanguage[variant = british, ordinalmonthday = false]{english}
+\usepackage{polyglossia}
+\setdefaultlanguage[variant = british, ordinalmonthday = false]{english}
 
 % \usepackage{gitinfo2} % remember to setup Git hooks
 
 \usepackage{hologo}
 
-\usepackage[british]{babel}
+%\usepackage[british]{babel}
 \usepackage{csquotes}
 
 \usepackage{graphicx}
@@ -68,17 +24,30 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 \usepackage[style=authoryear-comp,giveninits,sortcites,maxcitenames=2,%
     mincitenames=1,maxbibnames=10,minbibnames=10,backref,uniquename=mininit,%
-    uniquelist=minyear,sortgiveninits=true,backend=biber]{biblatex}%,refsection=chapter
+    uniquelist=minyear,sortgiveninits=true,backend=biber]{biblatex}
+
+\newcommand{\href}[2]{\emph{#2} (\url{#1})}
+
+\usepackage{framed}
+
+\usepackage{abbrev}
+\usepackage{r4p-book}
+
+\usepackage{imakeidx}
+
+% this is to reduce spacing above and below verbatim, which is used by knitr
+% to show returned values
+\usepackage{etoolbox}
+\makeatletter
+\preto{\@verbatim}{\topsep=-5pt \partopsep=-4pt \itemsep=-2pt}
+\makeatother
 
 \addbibresource{rbooks.bib}
 \addbibresource{handbook.bib}
 \addbibresource{guidelines.bib}
 \addbibresource{andreas.bib}
 
-% Hypertext
-
-%\usepackage{hyperref}
-\usepackage[unicode,hyperindex,bookmarks,pdfview=FitB,colorlinks,%backref,
+\usepackage[unicode,hyperindex,bookmarks,pdfview=FitB,%backref,colorlinks,
             pdftitle={R for Photobiology: Theory and recipes for common calculations},%
             pdfkeywords={photobiology, R, spectrum, data analysis, plotting, sunset, sunrise, day length, vision},%
             pdfsubject={Photobiology},%
@@ -219,7 +188,10 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 %\makeglossaries
 %\loadglsentries{r4p_glossary_tr}
 
-%\makeindex
+\makeindex[title=General index]
+\makeindex[name=rindex,title=Alphabetic index of \Rlang names]
+\makeindex[name=rcatsidx,title=Index of \Rlang names by category]
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -239,11 +211,11 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 %%% START OF FRONT MATTER TEXT
 
-\extratitle{A handbook of theory and recipes}
+\extratitle{A handbook of theory and computations}
 
 \title{R for Photobiology}
 
-\subtitle{Theory and recipes for common calculations}
+\subtitle{A handbook of theory and computations}
 
 \author{Pedro J. Aphalo \and Andreas Albert \and T. Matthew Robson \and Titta K. Kotilainen}
 
@@ -251,7 +223,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 \publishers{Available through \href{https://leanpub.com/r4photobiology}{Leanpub}}
 
-\uppertitleback{\copyright\ 20012--2018 by the authors\\
+\uppertitleback{\copyright\ 2012--2020 by the authors\\
 Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative Commons licenses} as indicated, or when not explicitly indicated, under the \href{http://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0 license}.}
 
 \lowertitleback{Typeset with \href{http://www.latex-project.org/}{\hologo{XeLaTeX}}\ in Lucida Bright and \textsf{Lucida Sans} using the KOMA-Script book class.\\
@@ -271,9 +243,9 @@ library(knitr)
 opts_knit$set(child.command = 'include')
 opts_knit$set(self.contained=FALSE)
 opts_knit$set(concordance=FALSE)
-opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='pdf', cache=FALSE) #, dev='cairo_pdf'
-opts_chunk$set(tidy=FALSE)
-options(replace.assign=TRUE,width=50,encoding="UTF-8")
+opts_chunk$set(fig.path='figure/pos-', fig.align='center', fig.show='hold', size="footnotesize", dev='cairo_pdf', dev.args=list(family='ArialMT'), cache=FALSE) #
+opts_chunk$set(tidy=FALSE,size='footnotesize')
+#options(replace.assign=TRUE,width=50,encoding="UTF-8")
 @
 
 <<match-setup, include=FALSE>>=
@@ -293,10 +265,10 @@ opts_chunk$set(opts_fig_narrow)
 @
 
 <<own-set-up, echo=FALSE, include=FALSE, cache=FALSE>>=
-incl_all <- FALSE
-incl_chaps <- TRUE || incl_all
-incl_ckbk <- TRUE || incl_all
-incl_acq <- TRUE || incl_all
+incl_all <- TRUE
+incl_chaps <- FALSE || incl_all
+incl_ckbk <- FALSE || incl_all
+incl_acq <- FALSE || incl_all
 incl_data <- FALSE || incl_all
 eval_diag <- FALSE
 
@@ -455,7 +427,11 @@ rm(list = setdiff(current_ls, main_ls))
 
 %\printglossary
 
-%\printindex
+\printindex
+
+\printindex[rcatsidx]
+
+\printindex[rindex]
 
 \part{Appendix}
 

@@ -28,20 +28,24 @@ The packages and to some extent this book manuscript are gradually becoming more
 \textbf{Status as of 2018-10-09.} I have continued revising the packages but with code-breaking changes only related to the names of some of the values computed in the ggplot statistics. A few examples were affected by these changes and have been revised.
 \end{shaded}
 
-This handbook describes how to use R as a tool for doing calculations related to research in photobiology. Photobiology is the branch of science that studies the interactions of living organisms with visible and ultraviolet radiation. Many of the most frequently used calculations are either related to the characterization of radiation and of the responses of organisms to radiation. We emphasize the first of these aspects as in many cases the characterization of the responses of organisms to radiation differ little from the characterization of similar responses elicited through other physical or chemical stimuli.
-Many of the examples in this handbook make use of the `r4photobiology'  suite of R packages, but the use of other packages is also described.
 
-The biophysical theory needed to understand the purpose and use of the different calculations is presented in the chapters of Part~\ref{part:theory} (p.~\pageref{part:theory} ss.). This first part is simple and concise, and full understanding of the subject matter will require previous experience or further reading \autocite[e.g.][]{Aphalo2012,Bjoern2015}.
+\begin{shaded}
+\noindent
+\textbf{Status as of 2020-05-18.} I have continued revising the packages but with very few code-breaking. A change in package `tibble' made necessary changes in two lines of example code.
+\end{shaded}
 
-The software used in the examples including a suite of R packages developed by one of the authors is described in Part~~\ref{part:tools} (p.~\pageref{part:tools} ss.). However, as several up-to-date texts suitable for learning the R language are available, we assume that readers either already have experience with R, or will familiarize with R using other books \autocite[e.g.][]{Aphalo2016,Horton2015a,Paradis2005,Peng2016}.
+This handbook describes how to use R as a tool for doing calculations related to research in photobiology and other related fields. Photobiology is the branch of science that studies the interactions of living organisms with visible and ultraviolet radiation. Many of the most frequently used calculations are either related to the characterization of radiation and of the responses of organisms to radiation. We use a broad definition of photobiology that includes the light environment of organisms and its description as well as characterization and design of treatment conditions. We briefly touch on atmospheric radiation physics and optics. We emphasize the spectral characterization of visible and ultraviolet radiation in relation to photobiology but many of the principles and tools are relevant to spectral measurements in other disciplines like chemistry, biochemistry, meteorology and remote sensing.
 
-A cookbook with recipes for different calculation tasks is included as Part~\ref{part:cookbook} (p.~\pageref{part:cookbook} ss.). These tasks cover a wide range of subjects but emphasis is on spectral data and their manipulation and how on to obtain from them different summary quantities relevant to different organisms. These calculations include in many cases weighted spectral data. Calculations of day length, times of sunset and sunrise, twilight, and the position of the sun are also described. Finally calculations related to colour vision are briefly described.
+The R-code examples in this handbook make frequent use of the `r4photobiology' suite of R packages, developed by the author. Other packages are also described: XXX.
 
-Part~\ref{part:foreign} (p.~\pageref{part:foreign} ss.) includes chapters dedicated to reading and writing data in \emph{foreign} formats, including direct acquisition from spectrometer and other measuring instruments. Part~\ref{part:data} (p.~\pageref{part:data} ss.) gives a brief overview of the data sets included in the suite.
+The basic theory needed to understand the purpose and use of the different calculations is presented in Part~\ref{part:theory} (p.~\pageref{part:theory} ss.). This first part is simple and concise, and full understanding of the subject matter will require previous experience or further reading \autocite[e.g.][]{Aphalo2012,Bjoern2015}.
+R packages and data analysis work flows are described in Part~~\ref{part:tools} (p.~\pageref{part:tools} ss.). 
+Specific computations are described together with R-code examples in Part~\ref{part:cookbook} (p.~\pageref{part:cookbook} ss.). 
+Part~\ref{part:foreign} (p.~\pageref{part:foreign} ss.) includes chapters dedicated to reading and writing data in \emph{foreign} formats, including direct acquisition from spectrometer and other measuring instruments. Part~\ref{part:data} (p.~\pageref{part:data} ss.) gives a brief overview of the data sets available in R packages and in on-line repositories.
 
 Although this handbook includes many different recipes, it is not comprehensive in covering all the functionality of the packages. The packages themselves include \emph{User Guides} and help pages describing their functionality in detail. The documentation is available as a web site at \url{http://docs.r4photobiology.info}. A series of articles describing specific aspects of the use of the suite is being published in the \href{http://uv4plants.org/publications/uv4plants-bulletin-published-issues/}{UV4Plants Bulletin}.
 
-This handbook assumes that readers are already familiar with the R language and in Part~I that they are familiar with Physics and Mathematics, including calculus and geometry.
+This handbook assumes that readers are already familiar with the R language and in Part~I that they are familiar with Physics and Mathematics, including basic calculus and geometry.
 
 \section{Typographical conventions}
 
@@ -55,6 +59,6 @@ We\Advanced{} use the icon exemplified in the page margin next to this paragraph
 
 We thank Stefano Catola, Paula Salonen, David Israel, Neha Rai, Tendry Randriamanana, Saara Hartikainen, Christian Bianchi-Str{\o}mme, Fang Wang and \ldots for very useful comments and suggestions on the draft manuscript and examples used in training schools. The friendly and generous R community also deserves a big `Thank you!'.
 
-Helsinki, August 2016.
+Helsinki, August 2020.
 
 The authors. 
