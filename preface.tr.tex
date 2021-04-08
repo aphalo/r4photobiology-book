@@ -31,7 +31,12 @@ The packages and to some extent this book manuscript are gradually becoming more
 
 \begin{shaded}
 \noindent
-\textbf{Status as of 2020-05-18.} I have continued revising the packages but with very few code-breaking. A change in package `tibble' made necessary changes in two lines of example code.
+\textbf{Status as of 2020-05-18.} I have continued revising the packages but with very few code-breaking changes. A change in package `tibble' made necessary changes in two lines of example code.
+\end{shaded}
+
+\begin{shaded}
+\noindent
+\textbf{Status as of 2021-04-08.} I have continued revising the packages but with very few code-breaking changes. The data previously included in package \pkg{photobiologyReflectors} are nor in package \pkg{photobiologyFilters}. The updates to the packages have to some extent modified the results of computations, such columns names or how plots looks. Most of these changes are small. On the other, the updates have added functionality that either makes coding some operations simpler, or allow some new computations. These improvements are not yet reflected in the code examples in the book at this time.
 \end{shaded}
 
 This handbook describes how to use R as a tool for doing calculations related to research in photobiology and other related fields. Photobiology is the branch of science that studies the interactions of living organisms with visible and ultraviolet radiation. Many of the most frequently used calculations are either related to the characterization of radiation and of the responses of organisms to radiation. We use a broad definition of photobiology that includes the light environment of organisms and its description as well as characterization and design of treatment conditions. We briefly touch on atmospheric radiation physics and optics. We emphasize the spectral characterization of visible and ultraviolet radiation in relation to photobiology but many of the principles and tools are relevant to spectral measurements in other disciplines like chemistry, biochemistry, meteorology and remote sensing.
@@ -39,8 +44,8 @@ This handbook describes how to use R as a tool for doing calculations related to
 The R-code examples in this handbook make frequent use of the `r4photobiology' suite of R packages, developed by the author. Other packages are also described: XXX.
 
 The basic theory needed to understand the purpose and use of the different calculations is presented in Part~\ref{part:theory} (p.~\pageref{part:theory} ss.). This first part is simple and concise, and full understanding of the subject matter will require previous experience or further reading \autocite[e.g.][]{Aphalo2012,Bjoern2015}.
-R packages and data analysis work flows are described in Part~~\ref{part:tools} (p.~\pageref{part:tools} ss.). 
-Specific computations are described together with R-code examples in Part~\ref{part:cookbook} (p.~\pageref{part:cookbook} ss.). 
+R packages and data analysis work flows are described in Part~~\ref{part:tools} (p.~\pageref{part:tools} ss.).
+Specific computations are described together with R-code examples in Part~\ref{part:cookbook} (p.~\pageref{part:cookbook} ss.).
 Part~\ref{part:foreign} (p.~\pageref{part:foreign} ss.) includes chapters dedicated to reading and writing data in \emph{foreign} formats, including direct acquisition from spectrometer and other measuring instruments. Part~\ref{part:data} (p.~\pageref{part:data} ss.) gives a brief overview of the data sets available in R packages and in on-line repositories.
 
 Although this handbook includes many different recipes, it is not comprehensive in covering all the functionality of the packages. The packages themselves include \emph{User Guides} and help pages describing their functionality in detail. The documentation is available as a web site at \url{http://docs.r4photobiology.info}. A series of articles describing specific aspects of the use of the suite is being published in the \href{http://uv4plants.org/publications/uv4plants-bulletin-published-issues/}{UV4Plants Bulletin}.

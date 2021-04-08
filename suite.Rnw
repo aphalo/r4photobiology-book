@@ -184,9 +184,8 @@ The suite consists in several packages\index{r4photobiology!packages}. The main 
 \cran & photobiologySun   &  data        & solar and daylight \\
 \cran & photobiologyLamps &  data        & emission by light bulbs \\
 \cran & photobiologyLEDs  &  data        & emission by LEDs \\
-\cran & photobiologyFilters  &  data     & transmission of filters \\
+\cran & photobiologyFilters  &  data     & transmission and reflection\\
 \cran & photobiologySensors  &  data     & response of sensors \\
-\rphotorepo & photobiologyReflectors  &  data  & reflection by materials \\
 \midrule
 \cran & photobiologyPlants  & funs + data & plants' responses \\
 \midrule

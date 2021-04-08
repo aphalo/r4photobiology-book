@@ -20,7 +20,6 @@ library(ggplot2)
 library(ggspectra)
 library(photobiologyLamps)
 library(photobiologyFilters)
-library(photobiologyReflectors)
 library(polynom)
 @
 
@@ -369,7 +368,6 @@ I will try here the use of Prunty's equations.
 
 
 <<>>=
-try(detach(package:photobiologyReflectors))
 try(detach(package:photobiologyFilters))
 try(detach(package:photobiologyLamps))
 try(detach(package:ggspectra))

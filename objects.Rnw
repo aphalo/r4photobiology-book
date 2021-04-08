@@ -11,7 +11,6 @@ For accessing the example data listed in this chapter you need first to load the
 <<message=my.debug>>=
 library(photobiology)
 library(photobiologyFilters)
-# library(photobiologyReflectors)
 @
 
 %%%%
