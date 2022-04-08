@@ -209,9 +209,9 @@ We first would need to scale the normalized spectral irradiance for each LED bas
 We reset the scaled attribute as operations with scaled spectra are limited by design!!!
 
 <<>>=
-red_led.spct <- fscale(leds.mspct$NHXRGB090_R)
+red_led.spct <- fscale(leds.mspct$Norlux_NHXRGB090S00S_red)
 setScaled(red_led.spct, FALSE)
-blue_led.spct <- fscale(leds.mspct$NHXRGB090_B)
+blue_led.spct <- fscale(leds.mspct$Norlux_NHXRGB090S00S_blue)
 setScaled(blue_led.spct, FALSE)
 @
 
@@ -228,10 +228,9 @@ We now assume that the PAR photon irradiance on a horizontal plane below the lum
 
 <<>>=
 my_luminaire.spct <- fscale(my_luminaire.spct,
-                        f = q_irrad,
-                        w.band = PAR(),
-                        target = 250e-6)
-setScaled(my_luminaire.spct, FALSE) # to avoid warnings
+                            f = q_irrad,
+                            w.band = PAR(),
+                            target = 250e-6)
 class(my_luminaire.spct)
 @
 

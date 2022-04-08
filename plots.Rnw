@@ -1335,7 +1335,7 @@ ggplot(data=sun.spct,
        aes(xmin = wl.low, xmax = wl.high,
            ymin = y, ymax = y + 0.85,
            fill=wb.color),
-       color = "white", alpha=0.5) +
+       color = "white", alpha=0.33) +
   scale_fill_identity() +
   geom_text(data = plant.guide.spct,
        aes(y = y + 0.88, label = as.character(wb.f)),
@@ -1500,7 +1500,7 @@ sun.eff.cie.spct <- tag(sun.eff.cie.spct, UV_bands())
 
 fig_sun.cie0 <-
   ggplot(data = sun.eff.cie.spct,
-         aes(x = w.length, y = s.e.irrad, fill = wb.f)) +
+         aes(x = w.length, y = s.e.irrad, fill = filter)) +
   scale_fill_grey() +
   geom_spct() +
   labs(x = xlab_nm,
@@ -1615,10 +1615,10 @@ for (i in 1:num.bands) {
 }
 
 q.irrad.bands.sun <- q_irrad(sun.spct, many.bands)
-q.irrad.sun.spct <- data_frame(q.irrad = q.irrad.bands.sun,
-                               w.length = w.length,
-                               wb.color = wb.color,
-                               wb.name = wb.name)
+q.irrad.sun.spct <- tibble(q.irrad = q.irrad.bands.sun,
+                           w.length = w.length,
+                           wb.color = wb.color,
+                           wb.name = wb.name)
 @
 
 Now we can plot the data as bars, filling each bar with the corresponding colour. In this case we plot the bars using a continuous variable, wavelength, for the $x$-axis.

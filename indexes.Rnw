@@ -14,6 +14,7 @@ opts_knit$set(concordance=TRUE)
 For executing the examples listed in this chapter you need first to load the following packages from the library:
 <<message=my.debug>>=
 library(photobiology)
+library(photobiologyWavebands)
 library(ggspectra)
 library(photobiologyPlants)
 library(hsdar)
@@ -39,7 +40,7 @@ We now calculate a similar index by integrating reflectance for two wavebands,
 
 <<>>=
 normalized_diff_ind(Solidago_altissima.mspct$upper_adax,
-                    waveband(c(700, 1100)),
+                    waveband(c(700, 1000)),
                     waveband(c(400, 700)),
                     reflectance)
 @

@@ -223,7 +223,7 @@ captions=tableheading,captions=nooneline,numbers=noenddot]{scrbook}
 
 \publishers{Available through \href{https://leanpub.com/r4photobiology}{Leanpub}}
 
-\uppertitleback{\copyright\ 2012--2020 by the authors\\
+\uppertitleback{\copyright\ 2012--2022 by the authors\\
 Licensed under one of the \href{http://creativecommons.org/licenses/}{Creative Commons licenses} as indicated, or when not explicitly indicated, under the \href{http://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0 license}.}
 
 \lowertitleback{Typeset with \href{http://www.latex-project.org/}{\hologo{XeLaTeX}}\ in Lucida Bright and \textsf{Lucida Sans} using the KOMA-Script book class.\\

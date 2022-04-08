@@ -227,14 +227,14 @@ Functions \code{interpolate\_spct} and \code{interpolate\_spectrum} allow interp
 In this example we generate interpolated data for the range 280~nm to 300~nm at 1~nm steps, by default output values outside the wavelength range of the input are set to \code{NA}s unless a different argument is provided for parameter \code{fill}:
 
 <<>>=
-interpolate_spct(sun.spct, seq(290, 300, by=0.1))
-interpolate_spct(sun.spct, seq(290, 300, by=0.1), fill=0.0)
+interpolate_spct(sun.spct, seq(290, 300, by = 0.1))
+interpolate_spct(sun.spct, seq(290, 300, by = 0.1), fill = 0.0)
 @
 
 \code{interpolate\_spct} accepts any spectral object, and returns an object of the same type as its input.
 
 <<>>=
-interpolate_spct(polyester.spct, seq(290, 300, by=0.1))
+interpolate_spct(polyester.spct, seq(290, 300, by = 0.1))
 @
 
 Function \code{interpolate\_spectrum} takes numeric vectors as arguments, but is otherwise functionally equivalent.
@@ -394,9 +394,9 @@ For both functions, even if we supply a \emph{weighting function} (SWF), a lot o
 
 <<>>=
 waveband(c(250, 400),
-         weight="SWF", SWF.e.fun=CIE_e_fun, SWF.norm=298,
-         norm=298, hinges=c(249.99, 250, 298, 328, 399.99, 400),
-         wb.name="CIE98.298", wb.label="CIE98")
+         weight = "SWF", SWF.e.fun = CIE_e_fun, SWF.norm = 298,
+         norm = 298, hinges = c(249.99, 250, 298, 328, 399.99, 400),
+         wb.name = "CIE98.298", wb.label = "CIE98")
 @
 
 

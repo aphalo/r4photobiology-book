@@ -97,12 +97,9 @@ opts_chunk$set(opts_fig_wide)
 
 <<echo = FALSE, eval=FALSE>>=
 flat.spct <- source_spct(w.length = 250:900, s.e.irrad = 1)
-plot(flat.spct, annotations = NULL) +
+autoplot(flat.spct, annotations = NULL) +
     geom_line() +
-    stat_wl_summary(range = PAR(), geom = "rect", alpha = 0.15, color="blue", fill="blue") +
-    # stat_wb_e_irrad(w.band = PAR(), geom = "text", ypos.fixed = 0.5,
-    #                 color = "white", label.fmt = "PAR: %3.0f") +
-    annotate(geom = "text", x = 550, y = 0.5, color = "black", size = 6,
+    stat_wl_summary(range = PAR(), geom = "rect", alpha = 0.15, color="blue", fill="blue") + annotate(geom = "text", x = 550, y = 0.5, color = "black", size = 6,
              label = "integral(E(lambda)~d*lambda, 400, 700)",
              parse = TRUE) +
     xlab(expression(Wavelength~~lambda~~(nm))) +
@@ -258,7 +255,7 @@ In Fig.\ \ref{fig:leds:scaled} we demonstrate scaling according to equation \ref
 \begin{figure}
   \centering
 <<echo=FALSE>>=
-my_leds.mspct <- leds.mspct[c("Q36_4000K", "LZ1_10DB00")]
+my_leds.mspct <- leds.mspct[c("Nichia_unknown_757", "LedEngin_LZ1_10DB00_460nm")]
 my_leds_par.mspct <- fscale(my_leds.mspct, f = e_irrad, w.band = PAR())
 my_leds_par.spct <- rbindspct(my_leds_par.mspct, idfactor = "LED")
 ggplot(my_leds_par.spct) + aes(linetype = LED) + stat_wb_mean(w.band = PAR(), alpha = 0.1) + geom_line() + theme_bw() + theme(legend.position="top") + scale_fill_identity() + scale_color_identity()
@@ -285,10 +282,16 @@ Where $\mathcal{E}(\lambda)$ is the spectral effectiveness.
 \begin{figure}
   \centering
 <<echo=FALSE>>=
-my_leds.mspct <- leds.mspct[c("Q36_4000K", "LZ1_10DB00")]
-my_leds_450.mspct <- normalize(my_leds.mspct)
+my_leds_450.mspct <- leds.mspct[c("Nichia_unknown_757",
+                                  "LedEngin_LZ1_10DB00_460nm")]
 my_leds_450.spct <- rbindspct(my_leds_450.mspct, idfactor = "LED")
-ggplot(my_leds_450.spct) + aes(linetype = LED) + stat_wb_mean(w.band = PAR(), alpha = 0.1) + geom_line() + theme_bw() + theme(legend.position="top") + scale_fill_identity() + scale_color_identity()
+ggplot(my_leds_450.spct) +
+  aes(linetype = LED) +
+  stat_wb_column(w.band = PAR(), alpha = 0.2, color = "grey") +
+  geom_line() +
+  theme_bw() +
+  theme(legend.position = "top") +
+  scale_fill_identity()
 @
   \caption[Normalization at peak]{Normalization of the emission spectra of a blue and a white LED to one at peak of maximum emission. The areas of the faint rectangles represent the PAR irradiance integral under each of the two curves.}\label{fig:leds:normalized}
 \end{figure}
@@ -309,7 +312,7 @@ Contrary to detectors in digital photographic cameras which have square pixels a
 
 A detector pixel in a charge-coupled-device (CCD) can be thought of as a ``bucket'' or well collecting incoming photons. The integration time, is the time during which photons are collected by the pixels. At the end of this period the charge accumulated in each pixel is read. After the reading is taken, the ``buckets'' are emptied to get them ready for the next reading. Array detectors in miniature spectrometers can have detector arrays with from 128 to nearly 4000 pixels. Optical filters may be placed on the detector or at the spectrometer entrance.
 
-Depending on the quantity to be measured, different entrance optics, either directly attached or connected through a optical fibre, are used. For irradiance, a cosine diffusor is required. For surface reflectance special probes are available with a relatively narrow angle of acceptance and integrating spheres allowing measurement of scattered plus directly transmitted  radiation and specular plus scattered (total) reflectance. In the case of liquid samples, cuvette holders are used and also in this case, turbid suspensions will scatter light and will require special equipment. 
+Depending on the quantity to be measured, different entrance optics, either directly attached or connected through a optical fibre, are used. For irradiance, a cosine diffusor is required. For surface reflectance special probes are available with a relatively narrow angle of acceptance and integrating spheres allowing measurement of scattered plus directly transmitted  radiation and specular plus scattered (total) reflectance. In the case of liquid samples, cuvette holders are used and also in this case, turbid suspensions will scatter light and will require special equipment.
 
 Being array-detector spectrometers by necessity single monochromator instruments they present less than ideal signal:noise ratio (SNR) characteristics and are frequently afflicted by relatively high stray light levels. The electrical dynamic range of array detectors vary from instrument to instrument but depending on the range of wavelengths of interest may be limited by the dynamic range of the signal being measured and the different sensitivity of the detector to different wavelengths as the whole spectrum is acquired at once using the same settings. An additional problem, not exclusive of array spectrometers is the shape of the \emph{slit function} which depends on the width and alignment of the instrument's entrance slit. The ``annomalies'' in slit function may decrease the effective wavelength resolution of spectrometers and introduce a small bias in cases of tail asymmetry.
 
@@ -335,7 +338,7 @@ The theoretical dynamic range in a single measurement is rarely achieved. Real v
 
 The overall dynamic range of a spectrometer is much larger than for a single measurement, and is mainly given by the range of usable integration times and background optical and electrical noise. One way of reducing the dark noise is to cool either the detector or the whole spectrometer which allows the use of longer integration times and consequently the measurement of weaker light signals, such as fluorescence.
 
-The dynamic range for a single measurement can be increased by \emph{bracketing} the integration time used. In other words we measure under the same illumination conditions using the equivalent of what in photography would be called exposure values. The longer integration time will result in a spectrum with some regions clipped (overexposed). By merging the spectra, using the long integration reading for the ``darker'' regions of the spectrum, and the short one for the brighter parts we may increase the effective dynamic range by an order of magnitude, or even more. However, one should be careful with this approach as the reading from pixels near those saturated (clipped) can be affected by charge leaking from them. 
+The dynamic range for a single measurement can be increased by \emph{bracketing} the integration time used. In other words we measure under the same illumination conditions using the equivalent of what in photography would be called exposure values. The longer integration time will result in a spectrum with some regions clipped (overexposed). By merging the spectra, using the long integration reading for the ``darker'' regions of the spectrum, and the short one for the brighter parts we may increase the effective dynamic range by an order of magnitude, or even more. However, one should be careful with this approach as the reading from pixels near those saturated (clipped) can be affected by charge leaking from them.
 
 \subsubsection{Stray light}
 
@@ -350,7 +353,7 @@ In the case than the pixel resolution is better or similar to the optical resolu
 \subsubsection{Wavelength calibration}
 
 The correspondence between pixel positions and wavelengths is calibrated by comparison of certain known emission lines in lamps or sunlight. The wavelength will drift as a function of temperature, but the effect is relatively small unless the temperature change is large. In the case of array spectrometers, as they lack moving parts or a scanning mechanism, the wavelength calibration is quite stable in time as long as the temperature is the same. Ocean Optics provides a wavelength calibration but with the functions in package \pkg{ooacquire} either a calibration stored in the instrument's EEPROM or one supplied by the user can be used.
-  
+
 \subsubsection{Irradiance calibration}
 
 The sensitivity of each pixel to light from a suitable broad spectrum calibration lamp can be used to obtain a coefficient for each pixel to convert the output into irradiance or fluence values. These quantities are absolute quantities and consequently their measurement requires an absolute calibration against a light source and optical bench set up for which the irradiance or fluence are known with enough accuracy.

@@ -118,6 +118,7 @@ Because of vectorization we can also operate on a whole spectrum:
 
 <<>>=
 s.e.irrad <- with(sun.spct, as_energy(w.length, s.q.irrad))
+head(s.e.irrad)
 @
 
 However, it is safer to operate directly on objects of class \code{source\_spct} as shown in the next section.

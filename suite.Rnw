@@ -74,7 +74,7 @@ Given the expected audience of both students and biologists, rather than data an
       \item[maths operators and functions] Used to combine and/or transform spectral data, and in some cases to apply weights defined by wavebands.
       \item[\code{apply} methods] Used to apply functions individual spectra stored in collections of spectra.
       \item[summary methods and functions] Different summary functions return different quantities through integration over wavelengths and take as arguments spectra and wavebands.
-      \item[\code{plot} methods] Simplify the construction of specialized plots of spectral data.
+      \item[\code{autoplot} methods] Simplify the construction of specialized plots of spectral data.
       \item[foreign data exchange functions] For importing data output by measuring instruments and exchanging data with other R packages.
     \end{description}
   \end{framed}

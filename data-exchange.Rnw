@@ -372,8 +372,8 @@ gap_fda.spct <-
 We plot three spectra using plot method from package \pkg{ggspectra}.
 
 <<r-export-fda-9>>=
-plot(gap_fda.spct,
-     annotations = c("color.guide", "boxes", "labels")) +
+autoplot(gap_fda.spct,
+         annotations = c("color.guide", "boxes", "labels")) +
   aes(linetype = method)
 @
 

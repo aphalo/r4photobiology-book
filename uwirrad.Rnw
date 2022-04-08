@@ -46,16 +46,16 @@ uvb <- UVB()
 uvb
 @
 
-As seen above, there is a specialized \code{print} method for \code{wavebands}. \code{waveband} methods returning wavelength values in nm are \code{min}, \code{max}, \code{range}, \code{midpoint}, and \code{spread}. Method \code{labels} returns the name and label stored in the waveband, and method \code{color\_of} returns a color definition calculated from the range of wavelengths.
+As seen above, there is a specialized \code{print} method for \code{wavebands}. \code{waveband} methods returning wavelength values in nm are \code{wl\_min}, \code{wl\_max}, \code{wl\_range}, \code{wl\_midpoint}, and \code{wl\_expanse}. Method \code{labels} returns the name and label stored in the waveband, and method \code{color\_of} returns a color definition calculated from the range of wavelengths.
 
 <<>>=
 red <- Red()
 red
-min(red)
-max(red)
-range(red)
-midpoint(red)
-spread(red)
+wl_min(red)
+wl_max(red)
+wl_range(red)
+wl_midpoint(red)
+wl_expanse(red)
 labels(red)
 color_of(red)
 @
@@ -89,7 +89,7 @@ A \code{waveband} can be created based on any R object for which function \code{
 waveband(c(400,700))
 waveband(400:700)
 waveband(sun.spct)
-wb_total <- waveband(sun.spct, wb.name="total")
+wb_total <- waveband(sun.spct, wb.name = "total")
 @
 
 <<>>=
@@ -98,10 +98,10 @@ e_irrad(sun.spct, wb_total)
 
 A \code{waveband} can also be created based on extreme wavelengths expressed in nm.
 <<tidy=FALSE>>=
-wb1 <- new_waveband(500,600)
+wb1 <- new_waveband(500, 600)
 wb1
 e_irrad(sun.spct, wb1)
-wb2 <- new_waveband(500,600, wb.name="my.colour")
+wb2 <- new_waveband(500, 600, wb.name = "my.colour")
 wb2
 e_irrad(sun.spct, wb2)
 @
@@ -114,43 +114,44 @@ Lists\index{wavebands!list of} of wavebands can be created by grouping \code{wav
 <<>>=
 UV.list <- list(UVC(), UVB(), UVA())
 UV.list
+e_irrad(sun.spct, UV.list)
 @
 in which case wavebands can be non-contiguous and/or overlapping.
 
 In addition function \code{split\_bands} can be used to create a list of contiguous wavebands by supplying a numeric vector of wavelength boundaries in nanometres,
 
 <<>>=
-split_bands(c(400,500,600))
+split_bands(c(400, 500, 600))
 @
 
 or with longer but more meaningful names,
 
 <<>>=
-split_bands(c(400,500,600), short.names=FALSE)
+split_bands(c(400, 500, 600), short.names = FALSE)
 @
 
 It is also possible to also provide the limits of the region to be covered by the list of wavebands and the number of (equally spaced) wavebands desired:
 
 <<>>=
-split_bands(c(400,600), length.out=2)
+split_bands(c(400, 600), length.out = 2)
 @
 
 in all cases \code{range} is used to find the list boundaries, so we can also split the region defined by an existing \code{waveband} object into smaller wavebands,
 <<>>=
-split_bands(PAR(), length.out=3)
+split_bands(PAR(), length.out = 3)
 @
 
 or split a whole spectrum\footnote{This is not restricted to \code{source\_spct} objects as all other classes of \code{\_\_\_.spct} objects also have \code{range} methods defined.} into equally sized regions,
 
 <<>>=
-split_bands(sun.spct, length.out=3)
+split_bands(sun.spct, length.out = 3)
 @
 
 It is also possible to supply a list of wavelength ranges\footnote{When using a list argument, even overlapping and non-contiguous wavelength ranges are valid input}, and, when present, names are copied from the input list to the output list:
 
 <<>>=
-split_bands(list(c(400,500), c(600,700)))
-split_bands(list(blue=c(400,500), PAR=c(400,700)))
+split_bands(list(c(400, 500), c(600, 700)))
+split_bands(list(blue = c(400, 500), PAR = c(400, 700)))
 @
 
 Package \PBWB also predefines some useful constructors of lists of frequently used sets of wavebands, currently \code{VIS\_bands}, \code{UV\_bands}, and \code{IR\_bands} and \code{Plant\_bands}.
@@ -179,7 +180,7 @@ Let's assume that we want to calculate photosynthetically active radiation (PAR)
 $\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{e\_irrad} returning energy irradiance. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
 
 <<>>=
-e_irrad(sun.spct, waveband(c(400,700)))
+e_irrad(sun.spct, waveband(c(400, 700)))
 @
 
 or using the \code{PAR} waveband constructor, defined in package \PBWB as a convenience function,
@@ -196,8 +197,8 @@ e_irrad(sun.spct)
 
 If a waveband extends outside of the wavelength range of the spectral data, spectral irradiance for unavailable wavelengths is assumed to be zero:
 <<tidy=FALSE>>=
-e_irrad(sun.spct, waveband(c(100,400)))
-e_irrad(sun.spct, waveband(c(100,250)))
+e_irrad(sun.spct, waveband(c(100, 400)))
+e_irrad(sun.spct, waveband(c(100, 250)))
 @
 
 Both \code{e\_irrad} and \code{q\_irrad} accept, in addition to a waveband as second argument, a list of wavebands. In this case, the returned value is a numeric vector of the same length as the list.
@@ -216,7 +217,7 @@ For example when using function \code{PAR()}, the code above becomes:
 with(sun.spct,
      energy_irradiance(w.length, s.e.irrad, PAR()))
 with(sun.spct,
-     energy_irradiance(w.length, s.e.irrad, PAR(), unit.in="energy"))
+     energy_irradiance(w.length, s.e.irrad, PAR(), unit.in = "energy"))
 @
 
 where \code{sun.spct} is a data frame. However, the data can also be stored in separate numeric vectors of equal length.
@@ -230,7 +231,7 @@ which allows us to use:
 
 <<>>=
 with(sun.spct,
-     energy_irradiance(w.length, s.q.irrad, PAR(), unit.in="photon"))
+     energy_irradiance(w.length, s.q.irrad, PAR(), unit.in = "photon"))
 
 @
 
@@ -253,12 +254,12 @@ Let's assume that we want to calculate photosynthetically active radiation (PAR)
 $\lambda_1 = 700 \mathrm{nm}$. In this example we will use example data for sunlight to calculate $\irr[400\,\mathrm{nm} < \lambda < 700\,\mathrm{nm}]$. The function used for this task when working with spectral objects is \code{q\_irrad}, returning photon irradiance in \mol. The "names" of the returned valued is set according to the waveband used, and \code{sun.spct} is a \code{source\_spct} object.
 
 <<>>=
-q_irrad(sun.spct, waveband(c(400,700)))
+q_irrad(sun.spct, waveband(c(400, 700)))
 @
 
 to obtain the photon irradiance expressed in \umol we multiply the returned value by $1 \times 10^6$:
 <<>>=
-q_irrad(sun.spct, waveband(c(400,700))) * 1e6
+q_irrad(sun.spct, waveband(c(400, 700))) * 1e6
 @
 
 or using the \code{PAR} waveband constructor, defined in package \PBWB as a convenience function,
@@ -277,7 +278,7 @@ For example when using function \code{PAR()}, the code above becomes:
 
 <<>>=
 with(sun.spct,
-     photon_irradiance(w.length, s.e.irrad, PAR()), unit.in="energy")  * 1e6
+     photon_irradiance(w.length, s.e.irrad, PAR()), unit.in = "energy")  * 1e6
 with(sun.spct,
      photon_irradiance(w.length, s.e.irrad, PAR()))  * 1e6
 @
@@ -301,12 +302,12 @@ as the value returned is in \mol we multiply it by $1 \times 10^6$ to obtain \um
 
 A named list can be used to override the names used for the output:
 <<>>=
-q_irrad(sun.spct, list(R=Red(), G=Green(), B=Blue())) * 1e6
+q_irrad(sun.spct, list(R = Red(), G = Green(), B = Blue())) * 1e6
 @
 
 Even when using a single waveband:
 <<tidy=FALSE>>=
-q_irrad(sun.spct, list('ultraviolet-B'=UVB())) * 1e6
+q_irrad(sun.spct, list('ultraviolet-B' = UVB())) * 1e6
 @
 
 \begin{small}
@@ -314,7 +315,7 @@ The examples above, can be easily rewritten using functions \code{e\_irrad}, \co
 
 For example, the second example above becomes:
 <<>>=
-e_irrad(sun.spct, list(R=Red(), G=Green(), B=Blue()))
+e_irrad(sun.spct, list(R = Red(), G = Green(), B = Blue()))
 @
 
 or
@@ -322,7 +323,7 @@ or
 <<>>=
 with(sun.spct,
      energy_irradiance(w.length, s.e.irrad,
-                       list(R=Red(), G=Green(), B=Blue())))
+                       list(R = Red(), G = Green(), B = Blue())))
 @
 
 \end{small}
@@ -353,14 +354,14 @@ fluence(sun.spct,
 We assume that PAR photon irradiance is known for the experimental conditions, and is equal to 20 \umol. From this value and the normalized spectrum we can reconstruct actual spectral irradiance for the experiment.
 
 <<>>=
-red_lamp.spct <- fscale(lamps.mspct$philips.tld36w.15,
+red_lamp.spct <- fscale(lamps.mspct$Philips.FT.TLD.36W.15,
                         f = q_irrad,
                         w.band = PAR(),
                         target = 20e-6)
-setScaled(red_lamp.spct, FALSE) # to avoid warnings
+q_irrad(red_lamp.spct, PAR())
 @
 
-In the example above we used a waveband object defining a range of wavelengths, however, a waveband object describing a BSWF could also have been used in its place.
+In the example above we used a waveband object defining a range of wavelengths, however, a waveband object describing a BSWF could also have been used in its place. If \code{target = 1} the spectrum is marked as scaled, but otherwise we assume that the intention is to simulate and actual spectra corresponding to the target value for a summary,
 
 <<>>=
 fluence(red_lamp.spct, w.band = list(Red("Smith10"), Red("Smith20"), Red("ISO")),
@@ -390,7 +391,7 @@ q_ratio(sun.spct, Red("Smith10"), Far_red("Smith10"))
 In the case of ratios whether spectral irradiance has been normalized or linearly scaled, or not, does not affect the result.
 
 <<>>=
-q_ratio(lamps.mspct$philips.tld36w.15, Red("Smith10"), Far_red("Smith10"))
+q_ratio(lamps.mspct$Philips.FT.TLD.36W.15, Red("Smith10"), Far_red("Smith10"))
 q_ratio(red_lamp.spct, Red("Smith10"), Far_red("Smith10"))
 @
 
@@ -502,19 +503,19 @@ It\index{wavebands!create new by splitting} can be of interest to split the tota
 When working with \code{source\_spct} objects, the best way to achieve this is to combine the use of the functions \code{e\_irrad} and \code{split\_bands} already described above, for example,
 
 <<>>=
-e_irrad(sun.spct, split_bands(c(400, 500, 600, 700)))
+e_irrad(sun.spct, split_bands(c(400, 500, 600, 700), short.names = FALSE))
 @
 
 or
 
 <<>>=
-e_irrad(sun.spct, split_bands(PAR(), length.out=3))
+e_irrad(sun.spct, split_bands(PAR(), length.out = 3, short.names = FALSE))
 @
 
 or
 
 <<>>=
-my_bands <- split_bands(PAR(), length.out=3)
+my_bands <- split_bands(PAR(), length.out = 3, short.names = FALSE)
 e_irrad(sun.spct, my_bands)
 @
 
@@ -531,11 +532,11 @@ irradiances <- e_irrad(sun.spct, my_bands)
 irradiances / sum(irradiances)
 @
 
-The examples above use short names, the default, but longer names are also available,
+The examples above use long names, but the default is to use short names,
 
 <<>>=
-e_irrad(sun.spct, split_bands(c(400, 500, 600, 700), short.names=FALSE))
-e_irrad(sun.spct, split_bands(PAR(), short.names=FALSE, length.out=3))
+e_irrad(sun.spct, split_bands(c(400, 500, 600, 700)))
+e_irrad(sun.spct, split_bands(PAR(), length.out=3))
 @
 
 With spectral data stored in numeric vectors, we can use function \code{energy\_irradiance} together with function \code{split\_bands} or we can use the convenience function \code{split\_energy\_irradiance} to obtain to energy of each of the regions delimited by the values in nm supplied in a numeric vector:
@@ -604,14 +605,17 @@ The first case assumes that we use the same photon irradiance for both sources, 
 The first step is to scale both spectra so that the photon irradiance is the same, in this case equal to one.
 
 <<>>=
-green.spct <- fscale(leds.mspct$NHXRGB090_G,
+green.spct <- fscale(leds.mspct$Norlux_NHXRGB090S00S_green,
                      range = c(400, 700),
                      f = "total",
                      unit.out = "photon")
-blue.spct <- fscale(leds.mspct$NHXRGB090_B,
+green.spct <- interpolate_wl(green.spct, w.length.out = 400:700)
+
+blue.spct <- fscale(leds.mspct$Norlux_NHXRGB090S00S_blue,
                     range = c(400, 700),
                     f = "total",
                     unit.out = "photon")
+blue.spct <- interpolate_wl(blue.spct, w.length.out = 400:700)
 
 overlapBG.s.q.irrad <- ifelse(green.spct$s.q.irrad < blue.spct$s.q.irrad,
                               green.spct$s.q.irrad,
@@ -639,7 +643,7 @@ q_ratio(gap.mspct, VIS_bands(), VIS())
 We can also selectively copy metadata from the individual spectra in the collection to the returned data frame.
 
 <<>>=
-q_ratios.tb <- q_ratio(leds.mspct[led_engin], VIS_bands(), VIS(), 
+q_ratios.tb <- q_ratio(leds.mspct[LedEngin_leds], VIS_bands(), VIS(),
                        attr2tb = "what.measured",
                        idx = "type")
 names(q_ratios.tb)

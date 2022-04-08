@@ -60,20 +60,20 @@ average_spct(sun.spct)
 %%%%
 \section{Task: Summaries related to wavelength}\label{sec:summaries:wavelength}
 
-Functions \code{max}\index{spectral data!wavelength max}, \code{min}\index{spectral data!wavelength min}, \code{range}\index{spectral data!wavelength range}, \code{midpoint}\index{spectral data!wavelength midpoint} when used with an object of class \code{generic\_spct} (or a derived class) return the result of applying these functions to the \code{w.length} component of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
+Functions \code{wl\_max}\index{spectral data!wavelength max}, \code{wl\_min}\index{spectral data!wavelength min}, \code{wl\_range}\index{spectral data!wavelength range}, \code{wl\_midpoint}\index{spectral data!wavelength midpoint} when used with an object of class \code{generic\_spct} (or a derived class) return the result of applying these functions to the \code{w.length} component of these objects, returning always values expressed in nanometres as long as the objects have been correctly created.
 
 <<wl-summaries01>>=
-range(sun.spct)
-midpoint(sun.spct)
-max(sun.spct)
-min(sun.spct)
+wl_range(sun.spct)
+wl_midpoint(sun.spct)
+wl_max(sun.spct)
+wl_min(sun.spct)
 @
 
-Functions \code{expanse} anad \code{stepsize}\index{spectral data!wavelength stepsize} are generics defined in package \PB. \code{expanse}\index{spectral data!wavelength spread} returns maximum less minimum wavelengths values in nanometres, while \code{stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
+Functions \code{wl\_expanse} anad \code{wl\_stepsize}\index{spectral data!wavelength stepsize} are generics defined in package \PB. \code{wl\_expanse}\index{spectral data!wavelength spread} returns maximum less minimum wavelengths values in nanometres, while \code{wl\_stepsize} returns a numeric vector of length two with the maximum and the minimum wavelength step between observations, also in nanometers.
 
 <<wl-summaries02>>=
-expanse(sun.spct)
-stepsize(sun.spct)
+wl_expanse(sun.spct)
+wl_stepsize(sun.spct)
 @
 
 \section{Task: Finding the class of an object}\label{sec:summaries:class}
@@ -133,11 +133,13 @@ Normalization and scaling can be applied to different types of spectral objects.
 sun.norm.spct <- normalize(sun.spct, norm = 600)
 is_normalized(sun.norm.spct)
 getNormalized(sun.norm.spct)
+getNormalization(sun.norm.spct)
 @
 
 <<attr-spct05>>=
 sun.scaled.spct <- fscale(sun.spct, f = "mean")
 is_scaled(sun.scaled.spct)
+getScaled(sun.scaled.spct)
 @
 
 We now consider \code{filter\_spct} objects (see Chapter \ref{chap:trans:refl} for an explanation of the meaning of these attributes and how they affect calculations).
@@ -225,14 +227,14 @@ We first show the use of function \code{peaks} that returns a subset of the spec
 Using default \code{span} and then a relatively large value of 51.
 
 <<peaks-spct01>>=
-peaks(lamps.mspct$philips.tl12)
-peaks(lamps.mspct$philips.tl12, span = 51)
+peaks(lamps.mspct$Philips.FT.TL.40W.12)
+peaks(lamps.mspct$Philips.FT.TL.40W.12, span = 111)
 @
 
 Using \code{NULL} as argument for span is interpreted as meaning the whole wavelength range of the spectral data, and always returns only the highest values in the spectrum.
 
 <<peaks-spct02>>=
-peaks(lamps.mspct$philips.tl12, span = NULL)
+peaks(lamps.mspct$Philips.FT.TL.40W.12, span = NULL)
 @
 
 Using threshold we can limit the search for peaks to only part of the $y$-range of the data. This is useful when peaks in ``low ares'' of the curve are of no interest.
@@ -249,7 +251,7 @@ peaks(sun.spct,
 It is also possible to convert how the returned spectral irradiance is expressed.
 
 <<peaks-spct04>>=
-peaks(lamps.mspct$philips.tl12, unit.out = "photon")
+peaks(lamps.mspct$Philips.FT.TL.40W.12, unit.out = "photon")
 @
 
 All the examples earlier in this section also apply to other types of spectra, and to \code{valleys} in addition to \code{peaks}.
@@ -326,9 +328,9 @@ In the example below, we will fit a non-linear function to the peak. In the firs
 \end{equation}
 
 <<fit-nls-peak01>>=
-peak <- peaks(lamps.mspct$germicidal, span = NULL)[1, "w.length"]
+peak <- peaks(lamps.mspct$Generic.germicidal, span = NULL)[1, "w.length"]
 wl.tmp <- seq(round(peak - 5), round(peak + 5), length.out = 101)
-neighbourhood.spct <- clip_wl(lamps.mspct$germicidal, range = wl.tmp)
+neighbourhood.spct <- clip_wl(lamps.mspct$Generic.germicidal, range = wl.tmp)
 fit <- nls(s.e.irrad ~ d + a1*exp(-0.5*((w.length-c1)/b1)^2),
            start=list(a1=3.1, b1=1, c1=peak, d=0),
            data=neighbourhood.spct)
@@ -370,6 +372,7 @@ I will try here the use of Prunty's equations.
 <<>>=
 try(detach(package:photobiologyFilters))
 try(detach(package:photobiologyLamps))
+try(detach(package:photobiologyLEDs))
 try(detach(package:ggspectra))
 try(detach(package:ggplot2))
 try(detach(package:photobiologyWavebands))

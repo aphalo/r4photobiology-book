@@ -111,11 +111,11 @@ names(Fs.5nm.mspct)
 @
 
 <<CIE-fluorescents-01>>=
-plot(Fs.5nm.mspct[["F1"]])
+autoplot(Fs.5nm.mspct[["F1"]])
 @
 
 <<CIE-fluorescents-02>>=
-plot(Fs.5nm.mspct[["F11"]])
+autoplot(Fs.5nm.mspct[["F11"]])
 @
 
 \section{A sample of colours}

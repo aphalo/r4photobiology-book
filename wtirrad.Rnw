@@ -40,7 +40,7 @@ e_irrad(sun.spct, GEN.G())
 The code above uses the default normalization wavelength of 300~nm, which is almost universally used nowadays, but not the value used in the original publication \autocite{Caldwell1971}. Any arbitrary wavelength (nm), within the range of the waveband is accepted as \code{norm} argument:
 
 <<wb-norm-wl02>>=
-range(GEN.G())
+wl_range(GEN.G())
 e_irrad(sun.spct, GEN.G(280))
 @
 
@@ -148,11 +148,11 @@ To calculate daily exposure values, from a known constant irradiance, we need to
 We start by scaling the normalized lamp spectrum to a known irradiance, in this case we assume, total UV irradiance from the unfiltered lamp is 1 \watt.
 
 <<eff-fluence01>>=
-qpanel_lamp.spct <- fscale(lamps.mspct$qpanel.uvb313,
+qpanel_lamp.spct <- fscale(lamps.mspct$QPanel.FT.UVB313.40W,
                            f = e_irrad,
                            w.band = UV(),
                            target = 1)
-setScaled(qpanel_lamp.spct, FALSE) # to avoid warnings
+setScaled(qpanel_lamp.spct, FALSE) # remove the mark of scaled to allow computations
 @
 
 <<eff-fluence02>>=

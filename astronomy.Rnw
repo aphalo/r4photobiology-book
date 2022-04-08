@@ -101,17 +101,17 @@ Handling of time zones and daylight saving times is very tricky for past dates, 
 R is not very good at handling B.C. dates, and \pkg{lubridate} date parsers silently fail with negative dates decoding them as positive dates. This limitation can be worked around by subtraction of years from an A.C. date.
 
 <<>>=
-sun_angles(ymd_hm("0001-05-10 6:00") - years(2001), 
+sun_angles(ymd_hm("0001-05-10 6:00") - years(2001),
            geocode = data.frame(lat = 50, lon = 0))
 @
 
 We have optimized the performance of our implementation of Meeus algorithm within the R language. Meeus algorithm for the computation of the position of the sun can be thought as composed of computations that are time-invariant and computations that depend only on time: the local equation of time needs to be computed only once per geographic location. Our functions, as is almost the norm in R, are vectorized for their arguments. When the argument passed is a vector of times or dates, a very frequent case, the time-independent part of the calculations is computed only once. Consequently, for maximum computation efficiency users must make use of vectorization of times to avoid repeated calculation of the costly time-invariant but location-dependent part of the algorithm.
 
-The difference in performance between Meeus' algorithm and the one used in earlier versions of the package is huge. On my laptop the example below computes day length at Greenwich for each day of the year for 6\,001 years in less than 20 seconds---i.e.\ computing day lengths for about 110\,000 days per second.
+The difference in performance between Meeus' algorithm and the one used in earlier versions of the package is huge. On my laptop the example below computes day length at Greenwich for each day of the year for 6\,001 years in less than 5 seconds---i.e.\ computing day lengths for about 440\,000 days per second.
 
 <<eval=FALSE>>=
 dates <- seq(from = ymd("3000-01-01") - years(6000),
-             to = ymd("3000-12-31"), 
+             to = ymd("3000-12-31"),
              by = "day")
 
 day_lengths <- numeric(length(dates))

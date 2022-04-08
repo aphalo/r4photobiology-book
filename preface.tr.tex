@@ -36,10 +36,15 @@ The packages and to some extent this book manuscript are gradually becoming more
 
 \begin{shaded}
 \noindent
-\textbf{Status as of 2021-04-08.} I have continued revising the packages but with very few code-breaking changes. The data previously included in package \pkg{photobiologyReflectors} are nor in package \pkg{photobiologyFilters}. The updates to the packages have to some extent modified the results of computations, such columns names or how plots looks. Most of these changes are small. On the other, the updates have added functionality that either makes coding some operations simpler, or allow some new computations. These improvements are not yet reflected in the code examples in the book at this time.
+\textbf{Status as of 2021-04-08.} I have continued revising the packages but with very few code-breaking changes. The data previously included in package \pkg{photobiologyReflectors} are now in package \pkg{photobiologyFilters}. The updates to the packages have to some extent modified the results of computations, such columns names or how plots looks. Most of these changes are small. On the other hand, the updates have added functionality that either makes coding some operations simpler, or allow some new computations. These improvements are not yet reflected in the code examples in the book.
 \end{shaded}
 
-This handbook describes how to use R as a tool for doing calculations related to research in photobiology and other related fields. Photobiology is the branch of science that studies the interactions of living organisms with visible and ultraviolet radiation. Many of the most frequently used calculations are either related to the characterization of radiation and of the responses of organisms to radiation. We use a broad definition of photobiology that includes the light environment of organisms and its description as well as characterization and design of treatment conditions. We briefly touch on atmospheric radiation physics and optics. We emphasize the spectral characterization of visible and ultraviolet radiation in relation to photobiology but many of the principles and tools are relevant to spectral measurements in other disciplines like chemistry, biochemistry, meteorology and remote sensing.
+\begin{shaded}
+\noindent
+\textbf{Status as of 2022-04-09.} I have continued revising the packages with no code-breaking changes except for the naming conventions used for spectra in packages \pkg{photobiologyLamps} and \pkg{photobiologyLEDs}. The updates to the packages have slightly altered the labelling of plots. The updates have also added functionality that makes coding some operations and creating plots simpler. These improvements are not yet fully reflected in the code examples in the book. All code examples have been tested and in a few cases edited to account for code-breaking changes.
+\end{shaded}
+
+This handbook describes how to use R as a tool for doing calculations related to research in photobiology and other related fields. Photobiology is the branch of science that studies the interactions of living organisms with visible and ultraviolet radiation. Many of the most frequently used calculations are either related to the characterization of radiation and of the responses of organisms to radiation. We use a broad definition of photobiology that includes the light environment of organisms and its description as well as characterization and design of treatment conditions. We briefly touch on atmospheric radiation physics and optics. We emphasize the spectral characterization of visible and ultraviolet radiation in relation to photobiology but many of the principles and tools are relevant to spectral measurements in other disciplines like chemistry, biochemistry, meteorology and remote sensing. Astronomical calculations for the sun have been also implemented.
 
 The R-code examples in this handbook make frequent use of the `r4photobiology' suite of R packages, developed by the author. Other packages are also described: XXX.
 
@@ -48,7 +53,7 @@ R packages and data analysis work flows are described in Part~~\ref{part:tools} 
 Specific computations are described together with R-code examples in Part~\ref{part:cookbook} (p.~\pageref{part:cookbook} ss.).
 Part~\ref{part:foreign} (p.~\pageref{part:foreign} ss.) includes chapters dedicated to reading and writing data in \emph{foreign} formats, including direct acquisition from spectrometer and other measuring instruments. Part~\ref{part:data} (p.~\pageref{part:data} ss.) gives a brief overview of the data sets available in R packages and in on-line repositories.
 
-Although this handbook includes many different recipes, it is not comprehensive in covering all the functionality of the packages. The packages themselves include \emph{User Guides} and help pages describing their functionality in detail. The documentation is available as a web site at \url{http://docs.r4photobiology.info}. A series of articles describing specific aspects of the use of the suite is being published in the \href{http://uv4plants.org/publications/uv4plants-bulletin-published-issues/}{UV4Plants Bulletin}.
+Although this handbook includes many different recipes, it is not comprehensive in covering all the functionality of the packages. The packages themselves include \emph{User Guides} and help pages describing their functionality in detail. The documentation is available as a web site at \url{https://docs.r4photobiology.info} and updates are announced in the blog at \url{https://www.r4photobiology.info}. A series of articles describing specific aspects of the use of the suite is being published in the \href{http://uv4plants.org/publications/uv4plants-bulletin-published-issues/}{UV4Plants Bulletin}.
 
 This handbook assumes that readers are already familiar with the R language and in Part~I that they are familiar with Physics and Mathematics, including basic calculus and geometry.
 
@@ -64,6 +69,6 @@ We\Advanced{} use the icon exemplified in the page margin next to this paragraph
 
 We thank Stefano Catola, Paula Salonen, David Israel, Neha Rai, Tendry Randriamanana, Saara Hartikainen, Christian Bianchi-Str{\o}mme, Fang Wang and \ldots for very useful comments and suggestions on the draft manuscript and examples used in training schools. The friendly and generous R community also deserves a big `Thank you!'.
 
-Helsinki, August 2020.
+Helsinki, April 2022.
 
 The authors. 
