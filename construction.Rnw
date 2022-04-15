@@ -144,7 +144,7 @@ If spectral irradiance data is in \wattnm, and the wavelength in nm, as is the c
 Macam spectroradiometers, the data can be used directly and functions in the package will return irradiances in \watt.
 
 If, for example, the spectral irradiance data output by a spectroradiometer is expressed in \mwattnm,
-and the wavelengths are in Ångstrom then to obtain correct results when using any of the packages in the suite, we need to rescale the data before creating a new object.
+and the wavelengths are in Ångstrom then to obtain correct results when using any of the packages in the suite, we need to re-scale the data before creating a new object.
 
 <<example-1, eval=FALSE>>=
 # not run
@@ -251,8 +251,8 @@ A future version of the package will include a \code{smooth\_spectrum} function,
 \ilAttention{} In R we call binding to the operation of joining two data frames or in our case spectra without reorganizing them. We call the operation row-binding when one spectrum is bound below another one so that the new object has a number of rows that is the sum of the number of rows of the original spectra. For the operation to succeed the two spectra should have the same number columns and with the same names. To be able to recognize which rows originate from which of the bound spectra we need to add an factor to server as \emph{index}. Frequently row-binding of spectra is helpful when plotting.
 \end{framed}
 
-Package \PB provides function \code{rbinspct} for
-row-binding spectra, with the necessary checks for consistency of the bound spectra. When the aim is that the returned object retains its class attributes, and other spectrum related attributes like the time unit, function \code{rbind} from base R, should NOT be used. In the example below we can see this with the help of functio \code{nrow}.
+Package \PB provides function \code{rbindspct} for
+row-binding spectra, with the necessary checks for consistency of the bound spectra. When the aim is that the returned object retains its class attributes, and other spectrum related attributes like the time unit, function \code{rbind} from base R, should NOT be used. In the example below we can see this with the help of function \code{nrow}.
 
 <<>>=
 # STOPGAP
