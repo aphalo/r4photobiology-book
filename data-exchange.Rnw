@@ -207,7 +207,7 @@ colorSpec2mspct(Hoya)
 
 <<r-import-cspct-3>>=
 fluorescent.spct <- colorSpec2spct(Fs.5nm)
-plot(fluorescent.spct, annotations = c("peaks", "color.guide")) + aes(linetype = spct.idx)
+autoplot(fluorescent.spct, annotations = c("peaks", "color.guide")) + aes(linetype = spct.idx)
 @
 
 <<r-import-cspct-4>>=

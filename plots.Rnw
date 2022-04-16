@@ -91,7 +91,7 @@ of a background.
 If you are not familiar with package \pkg{ggplot2} and plotting using the \emph{grammar of graphics}, please read the chapter on plotting in the book \emph{Learning R \ldots{}as your learnt your mother tongue} \autocite{Aphalo2016}.
 
 %%%%
-\section{Using \texttt{plot()} methods with spectra}
+\section{Using \texttt{autoplot()} methods with spectra}
 
 Package \pkg{ggspectra}\index{spectral data!automatic plot} defines specializations of the generic \code{plot} function of R. These methods are available for all the different spectral object classes defined in package \pkg{photobiology} except for \code{generic\_spct}. They return a \code{ggplot} object, to which additional layers can be added if desired. An example of it simplest use follows in the next task. As all the spectral objects have spectral quantities expressed in known units, and an attribute indicating the time unit, the axis labels are produced automatically. If summaries are added, the units in their labels are also produced automatically. The plots produced can be to some extent tailored through options or by adding or replacing \code{ggplot} layers, the intention is for these methods to be a total that is simple, but that caters for the majority of the most frequent tasks.
 
@@ -316,15 +316,27 @@ For details on how to modify the wavebands used for labels and summaries, and cu
 
 \subsection{Task: plotting collections of spectra}\label{sec:plot:generic:mspct}
 
-The different \code{plot()} methods described above are also defined for collections of spectra.
+The \code{autoplot()} method described above also have specializations for collections of spectra. By default they create a plot with a single panel and one line per spectrum.
 
 <<plot-mpsct-01>>=
 autoplot(filters.mspct[c("Schott_UG1", "Schott_GG435")], range = c(280, 800))
 @
 
-These methods can also be used with collections of spectra created on-the-fly by combining other spectra as described in Chapter \ref{chap:baseoper} starting on page \pageref{chap:baseoper}.
+These methods support plotting using one panel per spectrum in the collection.
 
 <<plot-mpsct-02>>=
+autoplot(filters.mspct[c("Schott_UG1", "Schott_GG435")], range = c(280, 800), facets = TRUE)
+@
+
+The data from the spectra can be combined on-the-fly. For example, we can plot the approximate transmittance of a stack of two filters. For this we need to plot the product of the transmittances.
+
+<<plot-mpsct-03>>=
+autoplot(filters.mspct[c("Schott_UG1", "Schott_BG39")], range = c(280, 800), plot.data = "prod")
+@
+
+These methods can also be used with collections of spectra created on-the-fly by combining other spectra as described in Chapter \ref{chap:baseoper} starting on page \pageref{chap:baseoper}.
+
+<<plot-mpsct-04>>=
 autoplot(convolve_each(filters.mspct[c("Schott_UG1", "Schott_GG435")], sun.spct), range = c(280, 800))
 @
 

@@ -97,7 +97,7 @@ Two examples of multiple spectra. Note bellow the use of double square brackets,
 <<CIE-daylight-1>>=
 daylight1964.mspct <- colorSpec2mspct(daylight1964)
 names(daylight1964.mspct)
-plot(daylight1964.mspct[[1]])
+autoplot(daylight1964.mspct[[1]])
 @
 
 <<CIE-daylight-2>>=
